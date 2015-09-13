@@ -1,6 +1,6 @@
 
 # Youtube-dl-gui
-A GUI Client for youtube-dl written in javafx and Mdl theme.
+A GUI Client for youtube-dl written in gwt and Mdl theme.
 
 #Installation
 Coming soon v1 alpha release
