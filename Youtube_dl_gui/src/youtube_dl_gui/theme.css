@@ -1,3 +1,4 @@
 .menu-button--fix {
-    vertical-align: text-top;
+    vertical-align: middle;
+    padding-bottom: 5px;
 }

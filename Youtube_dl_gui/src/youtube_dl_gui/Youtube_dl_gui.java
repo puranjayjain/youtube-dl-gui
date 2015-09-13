@@ -59,9 +59,6 @@ public class Youtube_dl_gui extends Application {
         stage.setTitle("Youtube Downloader");
         scene = new Scene(new Browser(), 750, 500, Color.web("#D32F2F"));
         stage.setScene(scene);
-        // apply CSS style
-//        scene.getStylesheets().add("webviewsample/BrowserToolbar.css");
-        // show stage
         stage.show();
     }
 
@@ -86,7 +83,6 @@ class Browser extends Region {
         smallView.setPrefSize(120, 80);
 
         webEngine.load(Youtube_dl_gui.class.getResource("index.html").toExternalForm());
-        webEngine.setUserStyleSheetLocation(getClass().getResource("roboto.css").toExternalForm());
         getChildren().add(browser);
     }
 
