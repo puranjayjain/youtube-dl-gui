@@ -1,3 +1,109 @@
+/** {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+*:before {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+*:after {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}*/
+
 .menu-button--fix {
     vertical-align: baseline;
+}
+
+/*login button youtube fix*/
+.mdl-layout__drawer>.mdl-layout-title {
+    padding-left: 0;
+}
+
+.mdl-layout-title > .mdl-button {
+    display: block;
+    margin: 15px auto;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.page-content {
+    padding: 16px;
+}
+
+/*downloading now card*/
+.download-card {
+    margin-top: 16px;
+}
+
+.download-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: inline-block;  
+    vertical-align: middle;        
+    margin-left: 16px;    
+    width: 120px;
+}
+
+.download-card ul:first-of-type {   
+    margin-bottom: 16px;
+    width: calc(100% - 300px);
+}
+
+.download-card ul:first-of-type li h5 {
+    margin: 4px 0 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 24px;
+}
+
+.download-card ul li h6 {
+    margin: 0;
+}
+
+.mdl-progress {
+    width: 100%;
+    position: relative;
+    display: block;
+}
+
+/*progress indicator*/
+
+.mdl-progress .bar1:after {
+    color: #fff;
+    -webkit-transform: scale(1) translate(-12px, 13px);
+    transform: scale(1) translate(-12px, 13px);
+    content: attr(data-value) " ";
+    position: absolute;
+    top: 0;
+    left: calc(100% - 5px);
+    width: 32px;
+    height: 26px;
+    text-align: center;
+    font-size: 10px;
+}
+
+.mdl-progress .bar1:before {
+    -webkit-transform: rotate(-225deg) scale(1) translate(17px, 0);
+    transform: rotate(-225deg) scale(1) translate(17px, 0);
+    content: "";
+    position: absolute;
+    top: 0;
+    left: calc(100% - 5px);
+    width: 26px;
+    height: 26px;
+    margin-left: 3px;
+    border-radius: 50% 50% 50% 0;
+    background-color: #F44336;
+}
+/*start a new donwload button*/
+.new-download-button {
+    position: fixed;
+    right: 25px;
+    bottom: 16px;    
+    z-index: 5;
 }

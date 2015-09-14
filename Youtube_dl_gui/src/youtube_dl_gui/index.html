@@ -20,7 +20,7 @@
         <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
             <header class="mdl-layout__header">
                 <div class="mdl-layout__header-row">
-                    <span class="mdl-layout-title">Title</span>
+                    <span class="mdl-layout-title">Downloading Now</span>
                     <!-- Add spacer, to align navigation to the right -->
                     <div class="mdl-layout-spacer"></div>
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable
@@ -37,25 +37,67 @@
                 </div>
             </header>
             <div class="mdl-layout__drawer">
-                <span class="mdl-layout-title">Title</span>
-                <nav class="mdl-navigation">
-                    <a class="mdl-navigation__link" href="">Link</a>
-                    <a class="mdl-navigation__link" href="">Link</a>
-                    <a class="mdl-navigation__link" href="">Link</a>
-                    <a class="mdl-navigation__link" href="">Link</a>
+                <span class="mdl-layout-title">
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">
+                        Login To Youtube
+                    </button>
+                </span>
+                <nav class="mdl-navigation">                    
                 </nav>
             </div>
             <main class="mdl-layout__content">
                 <div class="page-content">
-                    foo                    
+                    <div class="download-card">
+                        <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored download-button">
+                            <img src="pause.png" alt=""/>
+                        </button>
+                        <ul>
+                            <li>
+                                <h5>The singh is blidgdfgdgdfg dfg dg gdgdgdfgfdng</h5>
+                            </li>
+                            <li>
+                                <div id="p1" class="mdl-progress mdl-js-progress"></div>
+                            </li>
+                        </ul>
+                        <ul>
+                            <li><h6>
+                                    576.34KiB/s
+                                </h6></li>
+                            <li>ETA 01:03</li>
+                        </ul>
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                            cancel
+                        </button>
+                    </div>
+                    <div class="download-card">
+                        <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored download-button">
+                            <img src="pause.png" alt=""/>
+                        </button>
+                        <ul>
+                            <li>
+                                <h5>The singh is blidgdfgdgdfg dfg dg gdgdgdfgfdng</h5>
+                            </li>
+                            <li>
+                                <div id="p2" class="mdl-progress mdl-js-progress"></div>
+                            </li>
+                        </ul>
+                        <ul>
+                            <li><h6>
+                                    576.34KiB/s
+                                </h6></li>
+                            <li>ETA 01:03</li>
+                        </ul>
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                            cancel
+                        </button>
+                    </div>
                 </div>
             </main>
+            <!--start a new download button-->
+            <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored new-download-button">
+                <img src="add.png" alt=""/>
+            </button>
         </div>
-        <script type="text/javascript">
-            //fix to add menu buton
-            window.onload = function () {
-                document.querySelector('.mdl-layout__drawer-button').innerHTML = "<img class=\"menu-button--fix\" src=\"menu.png\" alt\"\"/>";
-            };
-        </script>
+        <script src="base.js" type="text/javascript"></script>
     </body>
 </html>
