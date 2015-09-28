@@ -81,6 +81,14 @@ class Browser extends Region {
         getStyleClass().add("browser");
 
         smallView.setPrefSize(120, 80);
+        smallView.setMinWidth(100);
+        // process page loading
+        webEngine.getLoadWorker().stateProperty().addListener((ObservableValue<? extends State> ov, State oldState, State newState) -> {
+            if (newState == State.SUCCEEDED) {
+                JSObject win = (JSObject) webEngine.executeScript("window");
+                win.setMember("app", new JavaApp());
+            }
+        });
 
         webEngine.load(Youtube_dl_gui.class.getResource("index.html").toExternalForm());
         getChildren().add(browser);

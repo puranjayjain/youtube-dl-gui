@@ -16,7 +16,8 @@ function load_menu_items() {
         "Settings",
         "hr",
         "Help",
-        "About Us"
+        "About Us",
+        "Exit"
     ];
     //populate sub menu
     var template = "";
@@ -26,12 +27,20 @@ function load_menu_items() {
             template += "<hr />";
         }
         else {
-            template += "<a class=\"mdl-navigation__link\" href=\"\">" + menu_items[i] + "</a>";
+            template += "<a class=\"mdl-navigation__link nav-button__" + menu_items[i].replace(" ", "").toLowerCase() + "\" href=\"#\">" + menu_items[i] + "</a>";
         }
     }
     document.querySelector(".mdl-navigation").innerHTML = template;
+    addEventsMenu();
 }
 
+//add events to menu buttons 
+function addEventsMenu() {
+    document.querySelector('.nav-button__exit').addEventListener('click', function () {
+        app.exit();
+        return false;
+    });
+}
 //progress bar update
 document.querySelector('#p1').addEventListener('mdl-componentupgraded', function () {
     var value = 69;
@@ -55,5 +64,4 @@ document.querySelector('#p2').addEventListener('mdl-componentupgraded', function
         }
     });
 });
-
 //start a new download button

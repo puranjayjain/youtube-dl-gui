@@ -31,6 +31,7 @@
 
 .page-content {
     padding: 16px;
+    min-width: 170px;
 }
 
 /*downloading now card*/
@@ -105,5 +106,10 @@
     position: fixed;
     right: 25px;
     bottom: 16px;    
-    z-index: 5;
+    z-index: 2;
+}
+
+/*cancel download button*/
+.mdl-button--accent.mdl-button--accent.mdl-button--raised.download-cancel {
+    background-color: #D32F2F;
 }
