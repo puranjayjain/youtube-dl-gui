@@ -12,6 +12,10 @@ Coming soon v1 alpha release
 
 JRE 1.8+, download it [here](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html)
 
+#Major changes
+
+There is much thought given to the future of this app and so it is being considered to be moved to electron as opposed to javafx for better cross platform support.
+
 #License
  - [Material Design Light](https://github.com/google/material-design-lite) 
  © Google, 2015. Licensed under an Apache-2 license.
