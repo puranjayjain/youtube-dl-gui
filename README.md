@@ -1,6 +1,6 @@
 
 # Youtube-dl-gui
-A GUI Client for youtube-dl written in JavaFx and Mdl theme.
+A GUI Client for youtube-dl written in JavaFx and Mdl theme. The process of conversion towards electron has begun as electron 1.0 as been released.
 
 #Installation
 Coming soon v1 alpha release
