@@ -14,7 +14,7 @@
   ],
   "main": "dist/js/index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "electron src/electron_main.js"
   },
   "author": "Puranjay Jain <puranjay.jain@st.niituniversity.in>",
   "license": "MIT",
