@@ -1,0 +1,39 @@
+{
+  "name": "youtube-dl-gui",
+  "version": "0.0.0",
+  "description": "A GUI Client for youtube-dl written in react, electron and material themes",
+  "keywords": [
+    "youtube",
+    "dl",
+    "gui",
+    "node",
+    "electron",
+    "crossplatform",
+    "react",
+    "download"
+  ],
+  "main": "dist/js/index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Puranjay Jain <puranjay.jain@st.niituniversity.in>",
+  "license": "MIT",
+  "devDependencies": {
+    "electron-prebuilt": "^1.0.2"
+  },
+  "dependencies": {
+    "material-ui": "^0.15.0",
+    "react": "^15.0.2",
+    "react-dom": "^15.0.2",
+    "react-tap-event-plugin": "^1.0.0",
+    "youtube-dl": "^1.11.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/puranjayjain/Youtube-dl-gui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/puranjayjain/Youtube-dl-gui/issues"
+  },
+  "homepage": "https://puranjayjain.github.io/youtube-dl-gui"
+}
