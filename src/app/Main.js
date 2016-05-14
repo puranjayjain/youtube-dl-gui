@@ -6,10 +6,12 @@
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
-import {deepOrange500} from 'material-ui/styles/colors';
+
 import FlatButton from 'material-ui/FlatButton';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
+// import override light theme and dark theme we have created along with the provider
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import light from '../themes/light';
 
 const styles = {
   container: {
@@ -18,11 +20,7 @@ const styles = {
   },
 };
 
-const muiTheme = getMuiTheme({
-  palette: {
-    accent1Color: deepOrange500,
-  },
-});
+const muiTheme = light();
 
 class Main extends React.Component {
   constructor(props, context) {
