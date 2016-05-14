@@ -1,48 +1,46 @@
 /**
  * In this file, we create a React component
- * which incorporates components providedby material-ui.
+ * which incorporates components provided by material-ui.
  */
 
-import React from 'react';
-import RaisedButton from 'material-ui/RaisedButton';
-import Dialog from 'material-ui/Dialog';
+import React from 'react'
 
-import FlatButton from 'material-ui/FlatButton';
+// import necessary components
+import RaisedButton from 'material-ui/RaisedButton'
+import Dialog from 'material-ui/Dialog'
+import FlatButton from 'material-ui/FlatButton'
+import RaisedButton from 'material-ui/RaisedButton'
 
 // import override light theme and dark theme we have created along with the provider
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import light from '../themes/light';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import light from '../themes/light'
 
-const styles = {
-  container: {
-    textAlign: 'center',
-    paddingTop: 200,
-  },
-};
+// import our components
+import Sidebar from '../app/sidebar'
 
-const muiTheme = light();
+const muiTheme = light()
 
 class Main extends React.Component {
   constructor(props, context) {
-    super(props, context);
-    this.handleRequestClose = this.handleRequestClose.bind(this);
-    this.handleTouchTap = this.handleTouchTap.bind(this);
+    super(props, context)
+    this.handleRequestClose = this.handleRequestClose.bind(this)
+    this.handleTouchTap = this.handleTouchTap.bind(this)
 
     this.state = {
       open: false,
-    };
+    }
   }
 
   handleRequestClose() {
     this.setState({
       open: false,
-    });
+    })
   }
 
   handleTouchTap() {
     this.setState({
       open: true,
-    });
+    })
   }
 
   render() {
@@ -52,11 +50,12 @@ class Main extends React.Component {
         secondary={true}
         onTouchTap={this.handleRequestClose}
       />
-    );
+    )
 
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
-        <div style={styles.container}>
+        <div>
+          <Sidebar />
           <Dialog
             open={this.state.open}
             title="Super Secret Password"
@@ -74,8 +73,8 @@ class Main extends React.Component {
           />
         </div>
       </MuiThemeProvider>
-    );
+    )
   }
 }
 
-export default Main;
+export default Main
