@@ -1,8 +1,11 @@
 import React from 'react'
 import { ReactDOM, render } from 'react-dom'
 import injectTapEventPlugin from 'react-tap-event-plugin'
-import Main from './Main' // Our custom react component
 import { Router, Route, IndexRoute, Link, IndexLink, hashHistory } from 'react-router'
+
+// All the views and inner views
+import Main from './Main'
+import Settings from '../views/settings'
 
 //Needed for onTouchTap
 //Can go away when react 1.0 release
@@ -37,6 +40,7 @@ render((
   <Router history={hashHistory}>
     <Route path="/" component={Main}>
       <IndexRoute component={Index}/>
+      <Route path="/settings" component={Settings}/>
       <Route path="/about" component={About}/>
     </Route>
   </Router>
