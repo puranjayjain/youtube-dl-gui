@@ -8,9 +8,12 @@ A GUI Client for youtube-dl written in react, electron and material themes.
 Coming soon v1 alpha release
 
 # Features
-Most of these Features are match the ones found here [https://github.com/rg3/youtube-dl/blob/master/README.md#options](https://github.com/rg3/youtube-dl/blob/master/README.md#options)
+Most of these features match the ones found [here](https://github.com/rg3/youtube-dl/blob/master/README.md#options)
 
-If you think a feature is something you want please file a new issue [here](https://github.com/puranjayjain/Youtube-dl-gui/issues)
+If you think a feature is missing or needs improvement please file a new issue or +1 an existing one [here](https://github.com/puranjayjain/Youtube-dl-gui/issues)
+
+## Our options (these are found in our app exclusively)
+- [x] Dark theme support
 
 ## Download Options:
 - [ ] rate-limit
