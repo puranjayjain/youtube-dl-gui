@@ -103,7 +103,7 @@ class Settings extends React.Component {
 }
 
 Settings.propTypes = {
-  muiTheme: PropTypes.object.isRequired,
+  muiTheme: PropTypes.object.isRequired
 }
 
 export default muiThemeable()(Settings)

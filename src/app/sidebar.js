@@ -17,7 +17,7 @@ const drawerStyle = {
   overflow: 'hidden'
 }
 
-const title = 'All'
+let title = 'All'
 
 export default class Sidebar extends React.Component {
 
@@ -58,10 +58,11 @@ export default class Sidebar extends React.Component {
         else {
           cHash = _this.capitalize(cHash.toLowerCase())
         }
-        _this.title = cHash
+        title = cHash
         _this.refs.AppBar.props.title = cHash
-        console.log(_this)
-        console.log(_this.title)
+        // force update it's look
+        // FIXME changet this to something standard. happening due to a bug https://github.com/callemall/material-ui/issues/4274
+        _this.refs.AppBar.forceUpdate()
       }
     })(this))
   }
