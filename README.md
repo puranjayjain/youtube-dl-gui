@@ -17,7 +17,7 @@ If you think a feature is missing or needs improvement please file a new issue o
 
 ## Download Options:
 - [ ] rate-limit
-- [ ] retries
+- [x] retries
 - [ ] fragment-retries
 - [ ] buffer-size
 

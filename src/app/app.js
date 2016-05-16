@@ -39,6 +39,7 @@ class About extends React.Component {
 render((
   <Router history={hashHistory}>
     <Route path="/" component={Main}>
+    // TODO add a first run logic to initiate the settings for the first time
       <IndexRoute component={Index}/>
       <Route path="/settings" component={Settings}/>
       <Route path="/about" component={About}/>

@@ -8,6 +8,7 @@ import FlatButton from 'material-ui/FlatButton'
 
 // import override light theme and dark theme we have created along with the provider
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import light from '../themes/light'
 import dark from '../themes/dark'
 
@@ -16,7 +17,7 @@ import Sidebar from './sidebar'
 
 const muiTheme = dark()
 
-class Main extends React.Component {
+export default class Main extends React.Component {
   constructor(props, context) {
     super(props, context)
   }
@@ -32,5 +33,3 @@ class Main extends React.Component {
     )
   }
 }
-
-export default Main
