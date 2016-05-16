@@ -17,6 +17,8 @@ const drawerStyle = {
   overflow: 'hidden'
 }
 
+const title = 'All'
+
 export default class Sidebar extends React.Component {
 
   constructor(props) {
@@ -39,10 +41,39 @@ export default class Sidebar extends React.Component {
     this.handleClose()
   }
 
+  // capitalize the first letter of string
+  capitalize = (s) => {
+    return s && s[0].toUpperCase() + s.slice(1);
+  }
+  componentDidMount = () => {
+    // window hash change function
+    window.addEventListener('hashchange', (function(_this) {
+      return function() {
+        let cHash = window.location.hash
+        let regExp = /\w+/g
+        cHash = cHash.match(regExp)[0]
+        if (cHash === '' || cHash === '_k') {
+          cHash = 'All'
+        }
+        else {
+          cHash = _this.capitalize(cHash.toLowerCase())
+        }
+        _this.title = cHash
+        _this.refs.AppBar.props.title = cHash
+        console.log(_this)
+        console.log(_this.title)
+      }
+    })(this))
+  }
+
   render() {
     return (
       <div>
-        <AppBar title="Title" onLeftIconButtonTouchTap={this.handleToggle}/>
+        <AppBar
+          ref="AppBar"
+          title={title}
+          onLeftIconButtonTouchTap={this.handleToggle}
+        />
         <Drawer containerStyle={drawerStyle} docked={false} open={this.state.open} onRequestChange={(open) => this.setState({open})}>
           <Menu onItemTouchTap={this.changePage}>
             <MenuItem primaryText="All" value="/" leftIcon={< AllInclusive />} />

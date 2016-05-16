@@ -4,6 +4,7 @@ import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card'
 import muiThemeable from 'material-ui/styles/muiThemeable'
 import {List, ListItem} from 'material-ui/List'
 import Subheader from 'material-ui/Subheader'
+import TextField from 'material-ui/TextField'
 import Divider from 'material-ui/Divider'
 import Toggle from 'material-ui/Toggle'
 
@@ -33,7 +34,7 @@ class Settings extends React.Component {
   }
 
   render() {
-    const styles = {
+    const style = {
       container: {
         display: 'flex',
         width: '100%'
@@ -52,21 +53,25 @@ class Settings extends React.Component {
         display: 'flex',
         flex: 1,
         flexDirection: 'column'
+      },
+      innerText: {
+        width: 'calc(100% - 2em)',
+        margin: 'auto 1em'
       }
     }
 
     return (
-      <div style={styles.container}>
-        <div style={styles.toc}>
+      <div style={style.container}>
+        <div style={style.toc}>
           <List>
-            <ListItem primaryText="Settings" />
-            <ListItem primaryText="Help & feedback" />
-            <Divider />
-            <ListItem primaryText="Sign out" />
+            <Subheader>Jump To</Subheader>
+            <ListItem primaryText="Theme" />
+            <ListItem primaryText="Download Options" />
+            <ListItem primaryText="Filesystem Options" />
           </List>
         </div>
-        <div style={styles.main}>
-          <Card style={styles.card}>
+        <div style={style.main}>
+          <Card style={style.card}>
             <List>
               <Subheader>Theme</Subheader>
               <ListItem
@@ -80,11 +85,14 @@ class Settings extends React.Component {
               />
             </List>
           </Card>
-          <Card style={styles.card}>
+          <Card style={style.card}>
             <List>
-              <Subheader>Theme</Subheader>
-              <ListItem
-                primaryText="Use Dark Theme"
+              <Subheader>Download Options</Subheader>
+              <TextField
+                style={style.innerText}
+                hintText="(default is 10),supports integer or infinite"
+                floatingLabelText="Maximum Number of retries"
+                value={stored.download.retries.data}
               />
             </List>
           </Card>
