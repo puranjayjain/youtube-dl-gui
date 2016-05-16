@@ -8,7 +8,7 @@ import FlatButton from 'material-ui/FlatButton'
 
 // import override light theme and dark theme we have created along with the provider
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-// import light from '../themes/light'
+import light from '../themes/light'
 import dark from '../themes/dark'
 
 // import our components

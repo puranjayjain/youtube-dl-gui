@@ -8,7 +8,9 @@ import Toggle from 'material-ui/Toggle'
 // the storage helper
 import Storage from '../helpers/storage'
 
-let stored = {}
+let stored = {
+  theme: {}
+}
 
 export default class Settings extends React.Component {
 
@@ -16,7 +18,7 @@ export default class Settings extends React.Component {
     super(props, context)
     // initiate all the settings from storage here in order of being displayed
     // NOTE - are camelcased e.g dark-theme becomes darkTheme
-    stored = new Storage('darkTheme', true)
+    stored.theme.darkTheme = new Storage('darkTheme', true)
   }
 
   render() {
@@ -27,7 +29,7 @@ export default class Settings extends React.Component {
           primaryText="Use Dark Theme"
           rightToggle= {
             <Toggle
-              defaultToggled = {true}
+              defaultToggled = {stored.theme.darkTheme.data}
             />
           }
         />
