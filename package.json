@@ -27,7 +27,7 @@
     "babelify": "^7.3.0",
     "browser-sync": "^2.12.8",
     "browserify": "^13.0.1",
-    "electron-prebuilt": "^1.0.2",
+    "electron-prebuilt": "^1.1.0",
     "eslint": "^2.10.1",
     "gulp": "^3.9.1",
     "gulp-notify": "^2.2.0",
