@@ -3,7 +3,7 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 
 const tableData = [
   {
-    fileName: 'John Smith',
+    fileName: 'John Smith dsffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
     downloaded: 'Employed',
     status: 'downloading',
     size: '94 Mb',
