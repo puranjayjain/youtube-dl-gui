@@ -15,17 +15,45 @@ import dark from '../themes/dark'
 // import our components
 import Sidebar from './sidebar'
 
-const muiTheme = dark()
+// the storage helper
+import Storage from '../helpers/storage'
+
+let muiTheme
+
+let darkTheme = {}
 
 export default class Main extends React.Component {
   constructor(props, context) {
     super(props, context)
+
+    // theme settings
+    darkTheme = new Storage('darkTheme', true)
+    // load the default theme
+    this.updateTheme()
+    // TODO add observables to update the theme on settings update
+  }
+
+  updateTheme = () => {
+    // set muiTheme according to setting
+    if (darkTheme.data) {
+      muiTheme = dark()
+    }
+    else {
+      muiTheme = light()
+    }
   }
 
   render() {
+    const style = {
+      position: 'absolute',
+      height: '100%',
+      width: '100%',
+      background: muiTheme.baseTheme.palette.alternateTextColor
+    }
+
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
-        <div>
+        <div style={style}>
           <Sidebar />
           {this.props.children}
         </div>
