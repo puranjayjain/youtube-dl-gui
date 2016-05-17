@@ -45,24 +45,32 @@ export default class Sidebar extends React.Component {
   capitalize = (s) => {
     return s && s[0].toUpperCase() + s.slice(1);
   }
+
+  // update page title according to route
+  updateTitle = () => {
+    let cHash = window.location.hash
+    const regExp = /\w+/g
+    cHash = cHash.match(regExp)[0]
+    if (cHash === '' || cHash === '_k') {
+      cHash = 'All'
+    }
+    else {
+      cHash = this.capitalize(cHash.toLowerCase())
+    }
+    title = cHash
+    this.refs.AppBar.props.title = cHash
+    // force update it's look
+    // FIXME changet this to something standard. happening due to a bug https://github.com/callemall/material-ui/issues/4274
+    this.refs.AppBar.forceUpdate()
+  }
+
   componentDidMount = () => {
+    // on page load
+    this.updateTitle()
     // window hash change function
     window.addEventListener('hashchange', (function(_this) {
       return function() {
-        let cHash = window.location.hash
-        let regExp = /\w+/g
-        cHash = cHash.match(regExp)[0]
-        if (cHash === '' || cHash === '_k') {
-          cHash = 'All'
-        }
-        else {
-          cHash = _this.capitalize(cHash.toLowerCase())
-        }
-        title = cHash
-        _this.refs.AppBar.props.title = cHash
-        // force update it's look
-        // FIXME changet this to something standard. happening due to a bug https://github.com/callemall/material-ui/issues/4274
-        _this.refs.AppBar.forceUpdate()
+        _this.updateTitle()
       }
     })(this))
   }
