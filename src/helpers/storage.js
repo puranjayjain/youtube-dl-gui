@@ -5,8 +5,17 @@ export default class Storage {
   constructor(key, init) {
     this._key = key
     // if the storage object is not already present then create it with the default value
-    if (!this.data) {
+    if (!this.dataExists) {
       this.data = init
+    }
+  }
+
+  get dataExists() {
+    if (localStorage.getItem(this._key) === null) {
+      return false
+    }
+    else {
+      return true
     }
   }
 
