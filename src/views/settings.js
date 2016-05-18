@@ -5,6 +5,7 @@ import muiThemeable from 'material-ui/styles/muiThemeable'
 import {List, ListItem} from 'material-ui/List'
 import Subheader from 'material-ui/Subheader'
 import TextField from 'material-ui/TextField'
+import Checkbox from 'material-ui/Checkbox'
 import Divider from 'material-ui/Divider'
 import Toggle from 'material-ui/Toggle'
 
@@ -60,7 +61,7 @@ class Settings extends React.Component {
         flex: 1,
         marginTop: '1em',
         marginRight: '1em',
-        background: this.props.muiTheme.palette.primary9Color
+        background: this.props.muiTheme.palette.alternateTextColor
       },
       toc: {
         width: '250px',
@@ -124,10 +125,10 @@ class Settings extends React.Component {
               <Subheader>Filesystem Options</Subheader>
               <ListItem
                 primaryText="Use only video ID in file name"
-                rightToggle= {
-                  <Toggle
-                    defaultToggled = {JSON.parse(stored.filesystem.id.data)}
-                    onToggle = {this.onIdToggle}
+                leftCheckbox= {
+                  <Checkbox
+                    defaultChecked = {JSON.parse(stored.filesystem.id.data)}
+                    onCheck = {this.onIdToggle}
                   />
                 }
               />
@@ -139,10 +140,10 @@ class Settings extends React.Component {
               />
               <ListItem
                 primaryText="Restrict filenames to only ASCII characters"
-                rightToggle= {
-                  <Toggle
-                    defaultToggled = {JSON.parse(stored.filesystem.restrict.data)}
-                    onToggle = {this.onIdToggle}
+                leftCheckbox = {
+                  <Checkbox
+                    defaultChecked = {JSON.parse(stored.filesystem.restrict.data)}
+                    onCheck = {this.onIdToggle}
                   />
                 }
               />

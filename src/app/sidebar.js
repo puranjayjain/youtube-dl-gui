@@ -6,7 +6,6 @@ import Divider from 'material-ui/Divider'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
-import Tooltip from 'material-ui/internal/Tooltip'
 
 // icons
 import AllInclusive from 'material-ui/svg-icons/places/all-inclusive'
@@ -20,7 +19,8 @@ const style = {
   fab: {
     position: 'fixed',
     bottom: '25px',
-    right: '20px'
+    right: '20px',
+    zIndex: 2
   },
   drawer: {
     overflow: 'hidden'
@@ -103,7 +103,7 @@ export default class Sidebar extends React.Component {
             <MenuItem primaryText="About" value="/about" leftIcon={< Help />} />
           </Menu>
         </Drawer>
-        <FloatingActionButton secondary={true} style={style.fab} tooltip="Add url to download">
+        <FloatingActionButton secondary={true} style={style.fab}>
           <ContentAdd />
         </FloatingActionButton>
       </div>

@@ -14,6 +14,7 @@ export default function light() {
       primary2Color: red700,
       primary9Color: red900,
       accent1Color: deepPurple500,
+      background1Color: 'whitesmoke',
       pickerHeaderColor: red500,
     },
   })

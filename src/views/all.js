@@ -18,6 +18,10 @@ const tableData = [
   }
 ]
 
+const style = {
+  whiteSpace: 'normal'
+}
+
 export default class All extends React.Component {
   render() {
     return (
@@ -44,7 +48,7 @@ export default class All extends React.Component {
           >
             {tableData.map( (row, index) => (
               <TableRow>
-                <TableRowColumn>{row.fileName}</TableRowColumn>
+                <TableRowColumn style={style}>{row.fileName}</TableRowColumn>
                 <TableRowColumn>{row.downloaded}</TableRowColumn>
                 <TableRowColumn>{row.status}</TableRowColumn>
                 <TableRowColumn>{row.size}</TableRowColumn>

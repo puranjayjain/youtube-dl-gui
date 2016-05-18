@@ -48,7 +48,7 @@ export default class Main extends React.Component {
       position: 'absolute',
       height: '100%',
       width: '100%',
-      background: muiTheme.baseTheme.palette.alternateTextColor
+      background: muiTheme.baseTheme.palette.background1Color
     }
 
     return (
