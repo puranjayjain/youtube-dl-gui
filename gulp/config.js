@@ -26,7 +26,11 @@ module.exports = {
       entries: src + '/app/app.js',
       dest: dest,
       outputName: 'app.js'
-    }],
+    }, {
+      entries: src + '/background/downloader.js',
+      dest: dest,
+      outputName: 'downloader.js'
+    }, ],
     extensions: ['.js'],
   }
 };

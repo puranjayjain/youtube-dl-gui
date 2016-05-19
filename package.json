@@ -10,7 +10,9 @@
     "electron",
     "crossplatform",
     "react",
-    "download"
+    "download",
+    "downloader",
+    "ytd"
   ],
   "main": "dist/js/index.html",
   "scripts": {
@@ -36,7 +38,8 @@
     "require-dir": "^0.3.0",
     "underscore": "^1.8.3",
     "vinyl-source-stream": "^1.1.0",
-    "watchify": "^3.7.0"
+    "watchify": "^3.7.0",
+    "webworkify": "^1.2.1"
   },
   "dependencies": {
     "material-ui": "^0.15.0",
