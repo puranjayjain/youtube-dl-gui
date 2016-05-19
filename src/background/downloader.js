@@ -10,6 +10,6 @@ module.exports = (self) => {
     setInterval(() => {
       let r = startNum / Math.random() - 1
       self.postMessage([startNum, r])
-    }, 500)
+    }, 1000)
   })
 }

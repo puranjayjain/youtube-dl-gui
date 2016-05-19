@@ -16,7 +16,7 @@
   ],
   "main": "dist/js/index.html",
   "scripts": {
-    "start": "electron src/electron_main.js"
+    "start": "electron electron_main.js"
   },
   "author": "Puranjay Jain <puranjay.jain@st.niituniversity.in>",
   "license": "MIT",
@@ -38,8 +38,7 @@
     "require-dir": "^0.3.0",
     "underscore": "^1.8.3",
     "vinyl-source-stream": "^1.1.0",
-    "watchify": "^3.7.0",
-    "webworkify": "^1.2.1"
+    "watchify": "^3.7.0"
   },
   "dependencies": {
     "material-ui": "^0.15.0",
