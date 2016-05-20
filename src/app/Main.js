@@ -39,8 +39,7 @@ export default class Main extends React.Component {
   // pass location context down the tree
   getChildContext() {
     return {
-      location: this.props.location,
-      history: this.props.history
+      location: this.props.location
     }
   }
 
@@ -77,6 +76,5 @@ export default class Main extends React.Component {
 
 // passing the location route to children
 Main.childContextTypes = {
-  location: React.PropTypes.object,
-  history: React.PropTypes.object
+  location: React.PropTypes.object
 }

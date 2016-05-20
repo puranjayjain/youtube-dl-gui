@@ -1,6 +1,7 @@
-import React from 'react'
+import React, {PropTypes} from 'react'
 import { Router, Route, IndexRoute, hashHistory } from 'react-router'
 
+import muiThemeable from 'material-ui/styles/muiThemeable'
 import AppBar from 'material-ui/AppBar'
 import Drawer from 'material-ui/Drawer'
 import Divider from 'material-ui/Divider'
@@ -18,8 +19,7 @@ const style = {
   overflow: 'hidden'
 }
 
-export default class Sidebar extends React.Component {
-
+class Sidebar extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -46,9 +46,26 @@ export default class Sidebar extends React.Component {
   }
 
   // check if that menu item should have the active class
-  isActive = () => {
-    if (this.context.history.isActive(this.context.location.pathname)) {
-      return 'active'
+  isActive = (to) => {
+    if (this.context.location.pathname === to) {
+      return {
+        background: this.props.muiTheme.palette.primary1Color,
+        color: this.props.muiTheme.palette.alternateTextColor
+      }
+    }
+    else {
+      return ''
+    }
+  }
+
+  // check if that icon should have the active class
+  isActiveIcon = (to) => {
+    console.log(this.context.location.pathname);
+    if (this.context.location.pathname === to) {
+      return {
+        fill: this.props.muiTheme.palette.textColor,
+        color: this.props.muiTheme.palette.textColor
+      }
     }
     else {
       return ''
@@ -76,12 +93,12 @@ export default class Sidebar extends React.Component {
         />
         <Drawer containerStyle={style} docked={false} open={this.state.open} onRequestChange={(open) => this.setState({open})}>
           <Menu onItemTouchTap={this.changePage}>
-            <MenuItem className={this.isActive()} primaryText="All" value="/" leftIcon={< AllInclusive />} />
-            <MenuItem className={this.isActive()} primaryText="Downloading" value="/downloading" leftIcon={< FileDownload />} />
-            <MenuItem className={this.isActive()} primaryText="Downloaded" value="/downloaded" leftIcon={< Done />} />
-            <Divider/>
-            <MenuItem className={this.isActive()} primaryText="Settings" value="/settings" leftIcon={< Settings />} />
-            <MenuItem className={this.isActive()} primaryText="About" value="/about" leftIcon={< Help />} />
+            <MenuItem innerDivStyle={this.isActive('/')} primaryText="All" value="/" leftIcon={<AllInclusive style={this.isActiveIcon('/')} />} />
+            <MenuItem innerDivStyle={this.isActive('/downloading')} primaryText="Downloading" value="/downloading" leftIcon={<FileDownload style={this.isActiveIcon('/downloading')} />} />
+            <MenuItem innerDivStyle={this.isActive('/downloaded')} primaryText="Downloaded" value="/downloaded" leftIcon={<Done style={this.isActiveIcon('/downloaded')} />} />
+            <Divider />
+            <MenuItem innerDivStyle={this.isActive('/settings')} primaryText="Settings" value="/settings" leftIcon={<Settings style={this.isActiveIcon('/settings')} />} />
+            <MenuItem innerDivStyle={this.isActive('/about')} primaryText="About" value="/about" leftIcon={<Help style={this.isActiveIcon('/about')} />} />
           </Menu>
         </Drawer>
       </div>
@@ -90,6 +107,11 @@ export default class Sidebar extends React.Component {
 }
 
 Sidebar.contextTypes = {
-  location: React.PropTypes.object.isRequired,
-  history: React.PropTypes.object.isRequired
+  location: React.PropTypes.object.isRequired
 }
+
+Sidebar.propTypes = {
+  muiTheme: PropTypes.object.isRequired
+}
+
+export default muiThemeable()(Sidebar)
