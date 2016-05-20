@@ -60,7 +60,6 @@ class Sidebar extends React.Component {
 
   // check if that icon should have the active class
   isActiveIcon = (to) => {
-    console.log(this.context.location.pathname);
     if (this.context.location.pathname === to) {
       return {
         fill: this.props.muiTheme.palette.textColor,

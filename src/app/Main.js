@@ -44,6 +44,7 @@ export default class Main extends React.Component {
   }
 
   updateTheme = () => {
+    console.log(darkTheme.data)
     // set muiTheme according to setting
     if (darkTheme.data) {
       muiTheme = dark()
