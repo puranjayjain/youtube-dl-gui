@@ -29,7 +29,7 @@
     "babelify": "^7.3.0",
     "browser-sync": "^2.12.8",
     "browserify": "^13.0.1",
-    "electron-prebuilt": "^1.1.0",
+    "electron-prebuilt": "^1.1.1",
     "eslint": "^2.10.2",
     "gulp": "^3.9.1",
     "gulp-notify": "^2.2.0",
