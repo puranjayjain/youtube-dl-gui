@@ -1,4 +1,5 @@
 import React from 'react'
+import { Router, Route, IndexRoute, hashHistory } from 'react-router'
 
 import AppBar from 'material-ui/AppBar'
 import Drawer from 'material-ui/Drawer'
@@ -16,8 +17,6 @@ import Help from 'material-ui/svg-icons/action/help'
 const style = {
   overflow: 'hidden'
 }
-
-let title = 'All'
 
 export default class Sidebar extends React.Component {
 
@@ -46,33 +45,25 @@ export default class Sidebar extends React.Component {
     return s && s[0].toUpperCase() + s.slice(1);
   }
 
-  // update page title according to route
-  updateTitle = () => {
-    let cHash = window.location.hash
-    const regExp = /\w+/g
-    cHash = cHash.match(regExp)[0]
-    if (cHash === '' || cHash === '_k') {
-      cHash = 'All'
+  // check if that menu item should have the active class
+  isActive = () => {
+    if (this.context.history.isActive(this.context.location.pathname)) {
+      return 'active'
     }
     else {
-      cHash = this.capitalize(cHash.toLowerCase())
+      return ''
     }
-    title = cHash
-    this.refs.AppBar.props.title = cHash
-    // force update it's look
-    // FIXME changet this to something standard. happening due to a bug https://github.com/callemall/material-ui/issues/4274
-    this.refs.AppBar.forceUpdate()
   }
 
-  componentDidMount = () => {
-    // on page load
-    this.updateTitle()
-    // window hash change function
-    window.addEventListener('hashchange', (function(_this) {
-      return function() {
-        _this.updateTitle()
-      }
-    })(this))
+  // get page title according to the page
+  getPageTitle = () => {
+    const title = this.capitalize(this.context.location.pathname.replace('/', ''))
+    if (title === '') {
+      return 'All'
+    }
+    else {
+      return title
+    }
   }
 
   render() {
@@ -80,20 +71,25 @@ export default class Sidebar extends React.Component {
       <div>
         <AppBar
           ref="AppBar"
-          title={title}
+          title={this.getPageTitle()}
           onLeftIconButtonTouchTap={this.handleToggle}
         />
         <Drawer containerStyle={style} docked={false} open={this.state.open} onRequestChange={(open) => this.setState({open})}>
           <Menu onItemTouchTap={this.changePage}>
-            <MenuItem primaryText="All" value="/" leftIcon={< AllInclusive />} />
-            <MenuItem primaryText="Downloading" value="/downloading" leftIcon={< FileDownload />} />
-            <MenuItem primaryText="Downloaded" value="/downloaded" leftIcon={< Done />} />
+            <MenuItem className={this.isActive()} primaryText="All" value="/" leftIcon={< AllInclusive />} />
+            <MenuItem className={this.isActive()} primaryText="Downloading" value="/downloading" leftIcon={< FileDownload />} />
+            <MenuItem className={this.isActive()} primaryText="Downloaded" value="/downloaded" leftIcon={< Done />} />
             <Divider/>
-            <MenuItem primaryText="Settings" value="/settings" leftIcon={< Settings />} />
-            <MenuItem primaryText="About" value="/about" leftIcon={< Help />} />
+            <MenuItem className={this.isActive()} primaryText="Settings" value="/settings" leftIcon={< Settings />} />
+            <MenuItem className={this.isActive()} primaryText="About" value="/about" leftIcon={< Help />} />
           </Menu>
         </Drawer>
       </div>
     )
   }
+}
+
+Sidebar.contextTypes = {
+  location: React.PropTypes.object.isRequired,
+  history: React.PropTypes.object.isRequired
 }

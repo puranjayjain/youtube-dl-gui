@@ -36,6 +36,14 @@ export default class Main extends React.Component {
     // TODO add observables to update the theme on settings update
   }
 
+  // pass location context down the tree
+  getChildContext() {
+    return {
+      location: this.props.location,
+      history: this.props.history
+    }
+  }
+
   updateTheme = () => {
     // set muiTheme according to setting
     if (darkTheme.data) {
@@ -65,4 +73,10 @@ export default class Main extends React.Component {
       </MuiThemeProvider>
     )
   }
+}
+
+// passing the location route to children
+Main.childContextTypes = {
+  location: React.PropTypes.object,
+  history: React.PropTypes.object
 }
