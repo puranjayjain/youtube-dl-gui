@@ -1,15 +1,19 @@
 // a web worker instance of this file which will be used for interaction with node youtube dl
+importScripts('../require.js')
 
-import fs from 'fs'
-import youtubedl from 'youtube-dl'
+// import fs from 'fs'
+// import youtubedl from 'youtube-dl'
 
-module.exports = (self) => {
-  self.addEventListener('message', (ev) => {
-    const startNum = parseInt(ev.data) // ev.data=4 from main.js
+// onmessage = (e) => {
+//   console.log('Message received from main script')
+//   postMessage('yolo' + e.data)
+// }
 
-    setInterval(() => {
-      let r = startNum / Math.random() - 1
-      self.postMessage([startNum, r])
-    }, 1000)
-  })
-}
+require({
+        baseUrl: './'
+    },
+    ['require', 'fs', 'youtube-dl'],
+    (require, fs, youtubedl) => {
+        postMessage('yolo' + e.data)
+    }
+)
