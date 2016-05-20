@@ -46,6 +46,7 @@
     "react-dom": "^15.0.2",
     "react-router": "^2.4.1",
     "react-tap-event-plugin": "^1.0.0",
+    "requirejs": "^2.2.0",
     "youtube-dl": "^1.11.1"
   },
   "repository": {

@@ -15,6 +15,9 @@ import dark from '../themes/dark'
 // import our components
 import Sidebar from './sidebar'
 
+// import subviews if any
+import Addurl from '../subviews/addurl'
+
 // the storage helper
 import Storage from '../helpers/storage'
 
@@ -57,6 +60,7 @@ export default class Main extends React.Component {
         <div style={style}>
           <Sidebar />
           {this.props.children}
+          <Addurl />
         </div>
       </MuiThemeProvider>
     )

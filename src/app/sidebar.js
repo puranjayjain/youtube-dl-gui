@@ -5,7 +5,6 @@ import Drawer from 'material-ui/Drawer'
 import Divider from 'material-ui/Divider'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
-import FloatingActionButton from 'material-ui/FloatingActionButton'
 
 // icons
 import AllInclusive from 'material-ui/svg-icons/places/all-inclusive'
@@ -13,18 +12,9 @@ import FileDownload from 'material-ui/svg-icons/file/file-download'
 import Done from 'material-ui/svg-icons/action/done'
 import Settings from 'material-ui/svg-icons/action/settings'
 import Help from 'material-ui/svg-icons/action/help'
-import ContentAdd from 'material-ui/svg-icons/content/add'
 
 const style = {
-  fab: {
-    position: 'fixed',
-    bottom: '25px',
-    right: '20px',
-    zIndex: 2
-  },
-  drawer: {
-    overflow: 'hidden'
-  }
+  overflow: 'hidden'
 }
 
 let title = 'All'
@@ -93,7 +83,7 @@ export default class Sidebar extends React.Component {
           title={title}
           onLeftIconButtonTouchTap={this.handleToggle}
         />
-        <Drawer containerStyle={style.drawer} docked={false} open={this.state.open} onRequestChange={(open) => this.setState({open})}>
+        <Drawer containerStyle={style} docked={false} open={this.state.open} onRequestChange={(open) => this.setState({open})}>
           <Menu onItemTouchTap={this.changePage}>
             <MenuItem primaryText="All" value="/" leftIcon={< AllInclusive />} />
             <MenuItem primaryText="Downloading" value="/downloading" leftIcon={< FileDownload />} />
@@ -103,9 +93,6 @@ export default class Sidebar extends React.Component {
             <MenuItem primaryText="About" value="/about" leftIcon={< Help />} />
           </Menu>
         </Drawer>
-        <FloatingActionButton secondary={true} style={style.fab}>
-          <ContentAdd />
-        </FloatingActionButton>
       </div>
     )
   }
