@@ -1,5 +1,4 @@
 // import the base theme
-import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import {
   red500,
   red700,
@@ -8,7 +7,7 @@ import {
 } from 'material-ui/styles/colors'
 
 export default function light() {
-  return getMuiTheme({
+  return {
     palette: {
       primary1Color: red500,
       primary2Color: red700,
@@ -17,5 +16,5 @@ export default function light() {
       background1Color: 'whitesmoke',
       pickerHeaderColor: red500,
     },
-  })
+  }
 }

@@ -1,6 +1,4 @@
 // import the base theme
-import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme'
-import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import {
   red500,
   red700,
@@ -11,7 +9,7 @@ import {
 } from 'material-ui/styles/colors'
 
 export default function dark() {
-  return getMuiTheme(darkBaseTheme, {
+  return {
     palette: {
       primary1Color: red500,
       primary2Color: red700,
@@ -22,5 +20,5 @@ export default function dark() {
       background1Color: '#272727',
       pickerHeaderColor: red500
     }
-  })
+  }
 }

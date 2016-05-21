@@ -39,6 +39,8 @@ class Settings extends React.Component {
   onDarkThemeToggle = () => {
     // update the stored dark theme
     stored.theme.darkTheme.data = JSON.stringify(!JSON.parse(stored.theme.darkTheme.data))
+    // HACK a simple location reload will suffice
+    location.reload()
   }
 
   onIdToggle = () => {

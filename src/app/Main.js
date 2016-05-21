@@ -1,5 +1,5 @@
-import React from 'react'
-import { render } from 'react-dom'
+import React, {PropTypes} from 'react'
+import {render} from 'react-dom'
 
 // import necessary components
 import RaisedButton from 'material-ui/RaisedButton'
@@ -7,6 +7,7 @@ import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
 
 // import override light theme and dark theme we have created along with the provider
+import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import light from '../themes/light'
@@ -21,37 +22,45 @@ import Addurl from '../subviews/addurl'
 // the storage helper
 import Storage from '../helpers/storage'
 
-let muiTheme
-
-let darkTheme = {}
-
 export default class Main extends React.Component {
   constructor(props, context) {
     super(props, context)
+  }
 
-    // theme settings
-    darkTheme = new Storage('darkTheme', true)
-    // load the default theme
-    this.updateTheme()
-    // TODO add observables to update the theme on settings update
+  state = {
+    muiTheme: '',
+    darkTheme: new Storage('darkTheme', true)
   }
 
   // pass location context down the tree
   getChildContext() {
     return {
-      location: this.props.location
+      location: this.props.location,
+      muiTheme: this.state.muiTheme
     }
   }
 
   updateTheme = () => {
-    console.log(darkTheme.data)
     // set muiTheme according to setting
-    if (darkTheme.data) {
-      muiTheme = dark()
+    if (JSON.parse(this.state.darkTheme.data)) {
+      this.setState({
+        muiTheme: getMuiTheme(darkBaseTheme, dark())
+      })
     }
     else {
-      muiTheme = light()
+      this.setState({
+        muiTheme: getMuiTheme(light())
+      })
     }
+  }
+
+  componentWillMount() {
+    this.updateTheme()
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log('update');
+    this.updateTheme()
   }
 
   render() {
@@ -60,11 +69,11 @@ export default class Main extends React.Component {
       height: '100%',
       width: '100%',
       overflow: 'auto',
-      background: muiTheme.baseTheme.palette.background1Color
+      background: this.state.muiTheme.baseTheme.palette.background1Color
     }
 
     return (
-      <MuiThemeProvider muiTheme={muiTheme}>
+      <MuiThemeProvider muiTheme={this.state.muiTheme}>
         <div style={style}>
           <Sidebar />
           {this.props.children}
@@ -77,5 +86,6 @@ export default class Main extends React.Component {
 
 // passing the location route to children
 Main.childContextTypes = {
-  location: React.PropTypes.object
+  location: PropTypes.object.isRequired,
+  muiTheme: PropTypes.object.isRequired
 }
