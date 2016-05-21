@@ -3,6 +3,7 @@ import React, {PropTypes} from 'react'
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card'
 import muiThemeable from 'material-ui/styles/muiThemeable'
 import {List, ListItem} from 'material-ui/List'
+import Menu from 'material-ui/Menu'
 import Subheader from 'material-ui/Subheader'
 import TextField from 'material-ui/TextField'
 import Checkbox from 'material-ui/Checkbox'
@@ -38,19 +39,19 @@ class Settings extends React.Component {
   // functions to do the settings update work
   onDarkThemeToggle = () => {
     // update the stored dark theme
-    stored.theme.darkTheme.data = JSON.stringify(!JSON.parse(stored.theme.darkTheme.data))
-    // HACK a simple location reload will suffice
-    location.reload()
+    stored.theme.darkTheme.toggleData()
+    // update the theme on the parent
+    this.props.updateTheme()
   }
 
+  // update the id setting
   onIdToggle = () => {
-    // update the id setting
-    stored.filesystem.id.data = JSON.stringify(!JSON.parse(stored.filesystem.id.data))
+    stored.filesystem.id.toggleData()
   }
 
+  //  Restrict filenames to only ASCII characters, and avoid "&" and spaces in filenames
   onRestrictToggle = () => {
-    //  Restrict filenames to only ASCII characters, and avoid "&" and spaces in filenames
-    stored.filesystem.restrict.data = JSON.stringify(!JSON.parse(stored.filesystem.restrict.data))
+    stored.filesystem.restrict.toggleData()
   }
 
   render() {
@@ -83,12 +84,12 @@ class Settings extends React.Component {
     return (
       <div style={style.container}>
         <div style={style.toc}>
-          <List>
+          <Menu >
             <Subheader>Jump To</Subheader>
             <ListItem primaryText="Theme" />
             <ListItem primaryText="Download Options" />
             <ListItem primaryText="Filesystem Options" />
-          </List>
+          </Menu>
         </div>
         <div style={style.main}>
           <Card style={style.card}>
@@ -158,7 +159,7 @@ class Settings extends React.Component {
 }
 
 Settings.propTypes = {
-  muiTheme: PropTypes.object.isRequired
+  muiTheme: PropTypes.object
 }
 
 export default muiThemeable()(Settings)

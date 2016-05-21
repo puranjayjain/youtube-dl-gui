@@ -58,11 +58,6 @@ export default class Main extends React.Component {
     this.updateTheme()
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log('update');
-    this.updateTheme()
-  }
-
   render() {
     const style = {
       position: 'absolute',
@@ -75,8 +70,10 @@ export default class Main extends React.Component {
     return (
       <MuiThemeProvider muiTheme={this.state.muiTheme}>
         <div style={style}>
-          <Sidebar />
-          {this.props.children}
+          <Sidebar/>
+          {this.props.children && React.cloneElement(this.props.children, {
+            updateTheme: this.updateTheme
+          })}
           <Addurl />
         </div>
       </MuiThemeProvider>
@@ -86,6 +83,7 @@ export default class Main extends React.Component {
 
 // passing the location route to children
 Main.childContextTypes = {
-  location: PropTypes.object.isRequired,
-  muiTheme: PropTypes.object.isRequired
+  location: PropTypes.object,
+  muiTheme: PropTypes.object,
+  updateTheme: PropTypes.func
 }
