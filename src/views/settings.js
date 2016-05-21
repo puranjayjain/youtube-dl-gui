@@ -11,7 +11,7 @@ import Divider from 'material-ui/Divider'
 import Toggle from 'material-ui/Toggle'
 
 // the storage helper
-import Storage from '../helpers/storage'
+import Storage from '../helpers/Storage'
 
 let stored = {
   theme: {},

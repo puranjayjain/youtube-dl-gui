@@ -6,11 +6,11 @@ import { Router, Route, IndexRoute, hashHistory } from 'react-router'
 // All the views and inner views
 import Main from './Main'
 
-import All from '../views/all'
-import Downloading from '../views/downloading'
-import Downloaded from '../views/downloaded'
-import Settings from '../views/settings'
-import About from '../views/about'
+import All from '../views/All'
+import Downloading from '../views/Downloading'
+import Downloaded from '../views/Downloaded'
+import Settings from '../views/Settings'
+import About from '../views/About'
 
 //Needed for onTouchTap
 //Can go away when react 1.0 release

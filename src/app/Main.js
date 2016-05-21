@@ -14,13 +14,13 @@ import light from '../themes/light'
 import dark from '../themes/dark'
 
 // import our components
-import Sidebar from './sidebar'
+import Sidebar from './Sidebar'
 
 // import subviews if any
-import Addurl from '../subviews/addurl'
+import Addurl from '../subviews/Addurl'
 
 // the storage helper
-import Storage from '../helpers/storage'
+import Storage from '../helpers/Storage'
 
 export default class Main extends React.Component {
   constructor(props, context) {
