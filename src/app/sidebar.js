@@ -16,7 +16,12 @@ import Settings from 'material-ui/svg-icons/action/settings'
 import Help from 'material-ui/svg-icons/action/help'
 
 const style = {
-  overflow: 'hidden'
+  drawer: {
+    overflow: 'hidden'
+  },
+  appbar: {
+    zIndex: 1
+  }
 }
 
 class Sidebar extends React.Component {
@@ -42,7 +47,7 @@ class Sidebar extends React.Component {
 
   // capitalize the first letter of string
   capitalize = (s) => {
-    return s && s[0].toUpperCase() + s.slice(1);
+    return s && s[0].toUpperCase() + s.slice(1)
   }
 
   // check if that menu item should have the active class
@@ -89,8 +94,9 @@ class Sidebar extends React.Component {
           ref="AppBar"
           title={this.getPageTitle()}
           onLeftIconButtonTouchTap={this.handleToggle}
+          style={style.appbar}
         />
-        <Drawer containerStyle={style} docked={false} open={this.state.open} onRequestChange={(open) => this.setState({open})}>
+        <Drawer containerStyle={style.drawer} docked={false} open={this.state.open} onRequestChange={(open) => this.setState({open})}>
           <Menu onItemTouchTap={this.changePage}>
             <MenuItem innerDivStyle={this.isActive('/')} primaryText="All" value="/" leftIcon={<AllInclusive style={this.isActiveIcon('/')} />} />
             <MenuItem innerDivStyle={this.isActive('/downloading')} primaryText="Downloading" value="/downloading" leftIcon={<FileDownload style={this.isActiveIcon('/downloading')} />} />

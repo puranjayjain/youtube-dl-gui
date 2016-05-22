@@ -24,6 +24,10 @@ If you think a feature is missing or needs improvement please file a new issue o
 - [x] restrict-filenames
 - [ ] no-part
 
+## Authentication Options:
+- [x] username
+- [x] password
+
 ## Our options (these are found in our app exclusively)
 - [x] Dark theme support
 
