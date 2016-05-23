@@ -25,6 +25,8 @@ export default class EmptyPlaceHolder extends React.Component {
         justifyContent: 'center',
         flexDirection: 'column',
         display: 'flex',
+        minWidth: '325px',
+        minHeight: '325px',
         opacity: this.state.emptyPlaceHolder ? '1' : '0'
       },
       icon: {
@@ -32,6 +34,12 @@ export default class EmptyPlaceHolder extends React.Component {
         width: '18vh',
         fill: this.context.muiTheme.palette.amber500Color,
         color:  this.context.muiTheme.palette.amber500Color
+      },
+      h2: {
+        margin: '0 auto 0.43em 6.1vh'
+      },
+      h3: {
+        marginTop: 0
       }
     }
 
@@ -43,7 +51,12 @@ export default class EmptyPlaceHolder extends React.Component {
           style={style.backdrop}
         >
           <CreateNewFolder style={style.icon} />
-          looks empty to me
+          <h2 style={style.h2}>
+            It's empty here
+          </h2>
+          <h3 style={style.h3}>
+            Start downloading something to fill it!
+          </h3>
         </Paper>
       </ReactCSSTransitionGroup>
     )
