@@ -7,13 +7,8 @@ import Paper from 'material-ui/Paper'
 import CreateNewFolder from 'material-ui/svg-icons/file/create-new-folder'
 
 export default class EmptyPlaceHolder extends React.Component {
-  constructor(props, context) {
-    super(props, context)
-    console.log(this);
-  }
-
   state = {
-    emptyPlaceHolders: false
+    emptyPlaceHolder: false
   }
 
   render() {
@@ -24,13 +19,13 @@ export default class EmptyPlaceHolder extends React.Component {
         height: '50vh',
         width: '50vh',
         background: this.context.muiTheme.palette.primary1Color,
-        left: '50%',
-        top: '50%',
-        transform: 'translate(-50%,-50%)',
-        display: 'flex',
+        left: 'calc(50% - 25vh)',
+        top: 'calc(50% - 25vh)',
         alignItems: 'center',
         justifyContent: 'center',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        display: 'flex',
+        opacity: this.state.emptyPlaceHolder ? '1' : '0'
       },
       icon: {
         height: '18vh',
@@ -41,16 +36,16 @@ export default class EmptyPlaceHolder extends React.Component {
     }
 
     return (
-        <ReactCSSTransitionGroup transitionName="toolbarAnimate" transitionEnterTimeout={200} transitionLeaveTimeout={200}>
-          <Paper
-            key={this.state.emptyPlaceHolders}
-            circle={true}
-            style={style.backdrop}
-          >
-            <CreateNewFolder style={style.icon} />
-            looks empty to me
-          </Paper>
-        </ReactCSSTransitionGroup>
+      <ReactCSSTransitionGroup transitionName="downloadedAnimate" transitionEnterTimeout={200} transitionLeaveTimeout={200} transitionAppear={true}>
+        <Paper
+          key={this.state.emptyPlaceHolder}
+          circle={true}
+          style={style.backdrop}
+        >
+          <CreateNewFolder style={style.icon} />
+          looks empty to me
+        </Paper>
+      </ReactCSSTransitionGroup>
     )
   }
 }

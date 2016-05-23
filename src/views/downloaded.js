@@ -41,8 +41,7 @@ let innerComp
 export default class Downloaded extends React.Component {
   state = {
     toolbar: false,
-    table: true,
-    // emptyPlaceHolder: false
+    table: true
   }
 
   // toggle toolbar's visibility
@@ -113,7 +112,9 @@ export default class Downloaded extends React.Component {
     // if table's length is zero show the EmptyPlaceHolder and hide the table
     if (!tableData.length) {
       this.setState({table: false})
-      // this.setState({emptyPlaceHolder: true})
+      setTimeout(() => {
+        this.refs.emptyPlaceHolder.setState({emptyPlaceHolder: true})
+      }, 700)
     }
     console.log(this)
   }
@@ -156,9 +157,6 @@ export default class Downloaded extends React.Component {
       },
       table: {
         display: this.state.table ? 'table' : 'none'
-      },
-      emptyPlaceHolder: {
-        // visibility: this.state.table ? 'visible' : 'hidden'
       }
     }
 
@@ -251,10 +249,7 @@ export default class Downloaded extends React.Component {
           </TableBody>
           >
         </Table>
-        <EmptyPlaceHolder
-          ref="emptyPlaceFolder"
-          style={style.emptyPlaceHolder}
-        />
+        <EmptyPlaceHolder ref="emptyPlaceHolder" />
       </div>
     )
   }

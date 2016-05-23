@@ -11,13 +11,13 @@ body {
 /*custom scroll bars*/
 
 /*animations for react css transition groups*/
+/*toolbar animations*/
 .toolbarAnimate-enter {
   opacity: 0.01;
 }
 
 .toolbarAnimate-enter.toolbarAnimate-enter-active {
   opacity: 1;
-  -webkit-transition: opacity .3s cubic-bezier(0.4, 0.0, 0.2, 1);
   transition: opacity .3s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
@@ -27,6 +27,24 @@ body {
 
 .toolbarAnimate-leave.toolbarAnimate-leave-active {
   opacity: 0.01;
-  -webkit-transition: opacity .3s cubic-bezier(0.4, 0.0, 0.2, 1);
   transition: opacity .3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+/*placeholder for downloaded animations*/
+.downloadedAnimate-enter {
+  transform: scale(0.01);
+}
+
+.downloadedAnimate-enter.downloadedAnimate-enter-active {
+  transform: scale(1);
+  transition: transform .3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.downloadedAnimate-leave {
+  transform: scale(1);
+}
+
+.downloadedAnimate-leave.downloadedAnimate-leave-active {
+  transform: scale(0.01);
+  transition: transform .3s cubic-bezier(0.4, 0.0, 0.2, 1);
 }

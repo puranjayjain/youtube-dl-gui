@@ -1,5 +1,4 @@
 import React, {PropTypes} from 'react'
-import {render} from 'react-dom'
 
 // import necessary components
 import RaisedButton from 'material-ui/RaisedButton'

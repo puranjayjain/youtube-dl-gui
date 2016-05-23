@@ -35,6 +35,12 @@ If you think a feature is missing or needs improvement please file a new issue o
 
 None, All dependencies will auto install with the app now as far as possible.
 
+# Development and Testing
+
+```
+gulp default --NODE-ENVIRONMENT=development
+```
+
 # License
 The Project is Licensed under the [MIT License](https://github.com/puranjayjain/Youtube-dl-gui/blob/master/LICENSE)
 
