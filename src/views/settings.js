@@ -14,6 +14,7 @@ import Toggle from 'material-ui/Toggle'
 import Storage from '../helpers/Storage'
 
 let stored = {
+  data: [],
   theme: {},
   download: {},
   filesystem: {}
@@ -34,6 +35,8 @@ class Settings extends React.Component {
     stored.filesystem.id = new Storage('id', false)
     stored.filesystem.output = new Storage('output', 'default')
     stored.filesystem.restrict = new Storage('restrict', false)
+    // also initiate the settings that are not being displayed
+    stored.data = new Storage('data', '[]')
   }
 
   // functions to do the settings update work
