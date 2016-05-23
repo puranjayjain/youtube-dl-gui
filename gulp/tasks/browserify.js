@@ -8,6 +8,7 @@
 
 var browserify   = require('browserify');
 var watchify     = require('watchify');
+var envify       = require('envify/custom');
 var bundleLogger = require('../util/bundleLogger');
 var gulp         = require('gulp');
 var handleErrors = require('../util/handleErrors');
@@ -29,7 +30,11 @@ gulp.task('browserify', function(callback) {
       // Add file extentions to make optional in your requires
       extensions: config.extensions,
       // Enable source maps!
-      debug: config.debug
+      debug: config.debug,
+      // NOTE change development to production for release builds! 
+      transform: envify({
+        NODE_ENV: 'development'
+      })
     });
 
     var bundle = function() {

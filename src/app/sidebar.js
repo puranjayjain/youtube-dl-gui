@@ -1,7 +1,6 @@
 import React, {PropTypes} from 'react'
 import { Router, Route, IndexRoute, hashHistory } from 'react-router'
 
-import muiThemeable from 'material-ui/styles/muiThemeable'
 import AppBar from 'material-ui/AppBar'
 import Drawer from 'material-ui/Drawer'
 import Divider from 'material-ui/Divider'
@@ -24,7 +23,7 @@ const style = {
   }
 }
 
-class Sidebar extends React.Component {
+export default class Sidebar extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -54,8 +53,8 @@ class Sidebar extends React.Component {
   isActive = (to) => {
     if (this.context.location.pathname === to) {
       return {
-        background: this.props.muiTheme.palette.primary1Color,
-        color: this.props.muiTheme.palette.alternateTextColor
+        background: this.context.muiTheme.palette.primary1Color,
+        color: this.context.muiTheme.palette.alternateTextColor
       }
     }
     else {
@@ -67,8 +66,8 @@ class Sidebar extends React.Component {
   isActiveIcon = (to) => {
     if (this.context.location.pathname === to) {
       return {
-        fill: this.props.muiTheme.palette.textColor,
-        color: this.props.muiTheme.palette.textColor
+        fill: this.context.muiTheme.palette.textColor,
+        color: this.context.muiTheme.palette.textColor
       }
     }
     else {
@@ -112,11 +111,6 @@ class Sidebar extends React.Component {
 }
 
 Sidebar.contextTypes = {
-  location: React.PropTypes.object.isRequired
-}
-
-Sidebar.propTypes = {
+  location: React.PropTypes.object.isRequired,
   muiTheme: PropTypes.object.isRequired
 }
-
-export default muiThemeable()(Sidebar)

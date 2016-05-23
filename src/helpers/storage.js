@@ -6,7 +6,7 @@ export default class Storage {
     this._key = key
     /**
      * [if the storage object is not already present then create it with the default value]
-     * @param  {[type]} !this.dataExists [description]
+     * @param  {type} !this.dataExists [description]
      */
     if (!this.dataExists) {
       this.data = init
@@ -15,7 +15,7 @@ export default class Storage {
 
   /**
    * [dataExists check if the data exists or not in the localstorage]
-   * @return {[Boolean]} [true or false]
+   * @return {Boolean} [true or false]
    */
   get dataExists() {
     if (localStorage.getItem(this._key) === null) {
@@ -28,7 +28,7 @@ export default class Storage {
 
   /**
    * [data getter for data]
-   * @return {[String]} [data value from storage]
+   * @return {String} [data value from storage]
    */
   get data() {
     return localStorage.getItem(this._key)
@@ -36,7 +36,7 @@ export default class Storage {
 
   /**
    * [data setter for data]
-   * @param  {[String]} newdata [the new data to be updated]
+   * @param  {String} newdata [the new data to be updated]
    */
   set data(newdata) {
     if(newdata) {

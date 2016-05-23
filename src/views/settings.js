@@ -1,7 +1,6 @@
 import React, {PropTypes} from 'react'
 
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card'
-import muiThemeable from 'material-ui/styles/muiThemeable'
 import {List, ListItem} from 'material-ui/List'
 import Menu from 'material-ui/Menu'
 import Subheader from 'material-ui/Subheader'
@@ -20,7 +19,7 @@ let stored = {
   filesystem: {}
 }
 
-class Settings extends React.Component {
+export default class Settings extends React.Component {
   constructor(props, context) {
     super(props, context)
     // initiate all the settings from storage here in order of being displayed
@@ -67,15 +66,15 @@ class Settings extends React.Component {
         flex: 1,
         marginTop: '1em',
         marginRight: '1em',
-        background: this.props.muiTheme.palette.alternateTextColor
+        background: this.context.muiTheme.palette.alternateTextColor
       },
       toc: {
-        width: '250px',
-        paddingRight: '0.5em'
+        paddingRight: '0.5em',
+        flex: 3
       },
       main: {
         display: 'flex',
-        flex: 1,
+        flex: '8 0 auto',
         flexDirection: 'column'
       },
       innerText: {
@@ -86,14 +85,12 @@ class Settings extends React.Component {
 
     return (
       <div style={style.container}>
-        <div style={style.toc}>
-          <Menu >
-            <Subheader>Jump To</Subheader>
-            <ListItem primaryText="Theme" />
-            <ListItem primaryText="Download Options" />
-            <ListItem primaryText="Filesystem Options" />
-          </Menu>
-        </div>
+        <Menu style={style.toc}>
+          <Subheader>Jump To</Subheader>
+          <ListItem primaryText="Theme" />
+          <ListItem primaryText="Download Options" />
+          <ListItem primaryText="Filesystem Options" />
+        </Menu>
         <div style={style.main}>
           <Card style={style.card}>
             <List>
@@ -161,8 +158,6 @@ class Settings extends React.Component {
   }
 }
 
-Settings.propTypes = {
+Settings.contextTypes = {
   muiTheme: PropTypes.object
 }
-
-export default muiThemeable()(Settings)

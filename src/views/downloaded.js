@@ -3,7 +3,6 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar'
-import muiThemeable from 'material-ui/styles/muiThemeable'
 import IconButton from 'material-ui/IconButton'
 import MenuItem from 'material-ui/MenuItem'
 import {fade} from 'material-ui/utils/colorManipulator'
@@ -16,43 +15,56 @@ import DeleteForever from 'material-ui/svg-icons/action/delete-forever'
 import Pause from 'material-ui/svg-icons/av/pause-circle-filled'
 import Play from 'material-ui/svg-icons/av/play-arrow'
 
+// Custom components
+import EmptyPlaceHolder from '../placeholders/EmptyPlaceHolder'
+
 let tableData = [
-  {
-    fileName: 'John Smith dsffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
-    size: '94 Mb',
-    lastTry: '17/05/2016'
-  },
-  {
-    fileName: 'John Smith',
-    size: '94 Mb',
-    lastTry: '17/05/2016'
-  }
+  // {
+  //   fileName: 'John Smith dsffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
+  //   size: '94 Mb',
+  //   lastTry: '17/05/2016',
+  //   selected: false
+  // },
+  // {
+  //   fileName: 'John Smith',
+  //   size: '94 Mb',
+  //   lastTry: '17/05/2016',
+  //   selected: false
+  // }
 ]
 
 let checkboxes = 0
 
-class Downloaded extends React.Component {
-  constructor(props) {
-    super(props)
-  }
+// the component to render inside
+let innerComp
 
+export default class Downloaded extends React.Component {
   state = {
-    toolbar: false
+    toolbar: false,
+    table: true,
+    // emptyPlaceHolder: false
   }
 
   // toggle toolbar's visibility
+  /**
+   * [description]
+   * @param  {Boolean}   state    [new state of the toolbar]
+   * @param  {Function} callback [callback function]
+   */
   onToggleToolbar = (state, callback) => this.setState({toolbar: state}, callback)
 
   /**
    * [Event handler for select all checkbox]
-   * @param  {[Event]}  event         [event]
+   * @param  {Event}  event         [event]
    * @param  {Boolean} isInputChecked [tells if the input was checked or not]
-   * @param  {[Boolean]}  called      [if the event was called from outside or recursively via a callback]
+   * @param  {Boolean}  called      [if the event was called from outside or recursively via a callback]
    */
   onAllChecked = (event, isInputChecked, called) => {
     if (called) {
       for (let i = 0; i < checkboxes; i++) {
         this.refs['check' + i].setChecked(isInputChecked)
+        // update the data
+        tableData[i].selected = isInputChecked
       }
     }
     else {
@@ -63,16 +75,47 @@ class Downloaded extends React.Component {
     this.refs.allcheck.setChecked(isInputChecked)
   }
 
-  // on checking of one of the checkbox
-  onChecked = (index) => {
-    console.log(index);
-    console.log(this);
+  /**
+   * [on checking of one of the checkbox]
+   * @method
+   * @param  {Integer} index          [index of the checkbox in table from 0..n]
+   * @param  {Event}  event          [passed event]
+   * @param  {Boolean} isInputChecked [if the current input is checked or not]
+   * @param  {[type]}  called         [if was called back from a callback function or not]
+   */
+  onChecked = (index, event, isInputChecked, called) => {
+    if (!called) {
+      tableData[index].selected = isInputChecked
+      // check if we need to show or hide the toolbar
+      let shouldCheck = false
+      for (let i = 0; i < checkboxes; i++) {
+        if (tableData[i].selected) {
+          shouldCheck = true
+          break
+        }
+      }
+      this.onToggleToolbar(shouldCheck, this.onChecked.bind(this, index, event, isInputChecked, true))
+    }
+    else {
+      // toggle this component's state
+      this.refs['check' + index].setChecked(isInputChecked)
+    }
   }
 
   // close the toolbar
   onCloseToolbar = (e) => {
     // trigger all checked
     this.onAllChecked(e, false)
+  }
+
+  // show or hide the table function
+  componentDidMount() {
+    // if table's length is zero show the EmptyPlaceHolder and hide the table
+    if (!tableData.length) {
+      this.setState({table: false})
+      // this.setState({emptyPlaceHolder: true})
+    }
+    console.log(this)
   }
 
   render() {
@@ -85,7 +128,7 @@ class Downloaded extends React.Component {
         width: '100%',
         top: 0,
         left: 0,
-        paddingLeft: '3em',
+        paddingLeft: '32px',
         height: '64px',
         alignItems: 'center',
         visibility: this.state.toolbar ? 'visible' : 'hidden',
@@ -97,18 +140,25 @@ class Downloaded extends React.Component {
       Seperator: {
         top: 'auto',
         marginLeft: '.5em',
-        background: fade(this.props.muiTheme.palette.textColor, 0.5)
+        background: fade(this.context.muiTheme.palette.textColor, 0.5)
       },
       toolbarTitle1: {
         paddingLeft: '.5em',
-        color: this.props.muiTheme.palette.textColor
+        color: this.context.muiTheme.palette.textColor
       },
       deleteForever: {
-        background: this.props.muiTheme.palette.primary1Color,
+        background: this.context.muiTheme.palette.primary1Color,
         borderRadius: '50%'
       },
       tableColumn: {
-        width: '24px'
+        width: '24px',
+        paddingLeft: '20px'
+      },
+      table: {
+        display: this.state.table ? 'table' : 'none'
+      },
+      emptyPlaceHolder: {
+        // visibility: this.state.table ? 'visible' : 'hidden'
       }
     }
 
@@ -156,6 +206,7 @@ class Downloaded extends React.Component {
         </ReactCSSTransitionGroup>
         <Table
           ref="table"
+          style={style.table}
           selectable={false}
         >
           <TableHeader
@@ -184,7 +235,7 @@ class Downloaded extends React.Component {
                 <TableRowColumn style={style.tableColumn}>
                   <Checkbox
                     ref={"check" + index}
-                    onCheck={() => this.onChecked(index)}
+                    onCheck={(event, isInputChecked) => this.onChecked(index, event, isInputChecked)}
                   />
                 </TableRowColumn>
                 <TableRowColumn style={style.multiLineItem}>{row.fileName}</TableRowColumn>
@@ -192,17 +243,23 @@ class Downloaded extends React.Component {
                 <TableRowColumn>{row.lastTry}</TableRowColumn>
               </TableRow>
             ))}
-            {checkboxes = tableData.length}
+            {
+              // set the var to note the checkboxes value
+              checkboxes = tableData.length
+            }
+            }
           </TableBody>
           >
         </Table>
+        <EmptyPlaceHolder
+          ref="emptyPlaceFolder"
+          style={style.emptyPlaceHolder}
+        />
       </div>
     )
   }
 }
 
-Downloaded.propTypes = {
-  muiTheme: PropTypes.object
+Downloaded.contextTypes = {
+  muiTheme: PropTypes.object.isRequired
 }
-
-export default muiThemeable()(Downloaded)
