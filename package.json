@@ -1,7 +1,7 @@
 {
   "name": "youtube-dl-gui",
   "version": "0.0.0",
-  "description": "A GUI Client for youtube-dl written in react, electron and material themes",
+  "description": "A Cross Platform GUI Client for youtube-dl written in react, electron and material themes",
   "keywords": [
     "youtube",
     "dl",

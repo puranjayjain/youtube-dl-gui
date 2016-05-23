@@ -43,7 +43,12 @@ class Downloaded extends React.Component {
   // toggle toolbar's visibility
   onToggleToolbar = (state, callback) => this.setState({toolbar: state}, callback)
 
-  // select all checkbox
+  /**
+   * [Event handler for select all checkbox]
+   * @param  {[Event]}  event         [event]
+   * @param  {Boolean} isInputChecked [tells if the input was checked or not]
+   * @param  {[Boolean]}  called      [if the event was called from outside or recursively via a callback]
+   */
   onAllChecked = (event, isInputChecked, called) => {
     if (called) {
       for (let i = 0; i < checkboxes; i++) {
@@ -56,6 +61,12 @@ class Downloaded extends React.Component {
     }
     // toggle this component's state
     this.refs.allcheck.setChecked(isInputChecked)
+  }
+
+  // on checking of one of the checkbox
+  onChecked = (index) => {
+    console.log(index);
+    console.log(this);
   }
 
   // close the toolbar
@@ -171,7 +182,10 @@ class Downloaded extends React.Component {
             {tableData.map( (row, index) => (
               <TableRow>
                 <TableRowColumn style={style.tableColumn}>
-                  <Checkbox ref={"check" + index}/>
+                  <Checkbox
+                    ref={"check" + index}
+                    onCheck={() => this.onChecked(index)}
+                  />
                 </TableRowColumn>
                 <TableRowColumn style={style.multiLineItem}>{row.fileName}</TableRowColumn>
                 <TableRowColumn>{row.size}</TableRowColumn>
