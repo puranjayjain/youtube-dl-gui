@@ -53,10 +53,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/puranjayjain/Youtube-dl-gui.git"
+    "url": "git+https://github.com/puranjayjain/youtube-dl-gui.git"
   },
   "bugs": {
-    "url": "https://github.com/puranjayjain/Youtube-dl-gui/issues"
+    "url": "https://github.com/puranjayjain/youtube-dl-gui/issues"
   },
   "homepage": "https://puranjayjain.github.io/youtube-dl-gui"
 }
