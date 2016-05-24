@@ -200,7 +200,10 @@ export default class Addurl extends React.Component {
           hintText="e.g. https://www.youtube.com/watch?v=foE1mO2yM04"
           floatingLabelText="Enter or Paste the video url here"
         />
-        <Card expanded={this.state.authentication} onExpandChange={this.onAuthenticationCheck}>
+        <Card
+          expanded={this.state.authentication}
+          onExpandChange={this.onAuthenticationCheck}
+        >
           <CardText>
             <Checkbox
               onCheck={this.onAuthCheck}
