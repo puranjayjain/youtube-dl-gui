@@ -93,34 +93,35 @@ export default class Sidebar extends React.Component {
         <AppBar
           ref="AppBar"
           title={this.getPageTitle()}
-          on
-          leftIconButtonTouchTap={this.handleToggle}
+          onLeftIconButtonTouchTap={this.handleToggle}
           style={style.appbar}
         />
-        <Drawer c
-          ontainerStyle={style.drawer}
-          docked={false}
-          open={this.state.open}
+        <Drawer
+          containerStyle={style.drawer}
+          docked={false} open={this.state.open}
           onRequestChange={(open) => this.setState({open})}
         >
           <Menu onItemTouchTap={this.changePage}>
             <MenuItem
               innerDivStyle={this.isActive('/')}
-              primaryText="All" value="/"
+              primaryText="All"
+              value="/"
               leftIcon={
                 <AllInclusive style={this.isActiveIcon('/')} />
               }
             />
             <MenuItem
               innerDivStyle={this.isActive('/downloading')}
-              primaryText="Downloading" value="/downloading"
+              primaryText="Downloading"
+              value="/downloading"
               leftIcon={
                 <FileDownload style={this.isActiveIcon('/downloading')} />
               }
             />
             <MenuItem
               innerDivStyle={this.isActive('/downloaded')}
-              primaryText="Downloaded" value="/downloaded"
+              primaryText="Downloaded"
+              value="/downloaded"
               leftIcon={
                 <Done style={this.isActiveIcon('/downloaded')} />
               }
@@ -128,7 +129,8 @@ export default class Sidebar extends React.Component {
             <Divider />
             <MenuItem
               innerDivStyle={this.isActive('/settings')}
-              primaryText="Settings" value="/settings"
+              primaryText="Settings"
+              value="/settings"
               leftIcon={
                 <Settings style={this.isActiveIcon('/settings')} />
               }

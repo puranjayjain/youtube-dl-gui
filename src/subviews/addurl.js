@@ -145,7 +145,7 @@ export default class Addurl extends React.Component {
       <ReactCSSTransitionGroup
         transitionName="downloadedAnimate"
         transitionEnterTimeout={200}
-        transitionLeaveTimeout={200} 
+        transitionLeaveTimeout={200}
         transitionAppear={true}
         transitionAppearTimeout={200}
       >
