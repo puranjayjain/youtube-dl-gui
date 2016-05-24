@@ -14,6 +14,8 @@ import Done from 'material-ui/svg-icons/action/done'
 import Settings from 'material-ui/svg-icons/action/settings'
 import Help from 'material-ui/svg-icons/action/help'
 
+import mrEmitter from '../helpers/mrEmitter'
+
 const style = {
   drawer: {
     overflow: 'hidden'
@@ -24,11 +26,8 @@ const style = {
 }
 
 export default class Sidebar extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      open: false
-    }
+  state = {
+    open: false
   }
 
   handleToggle = () => this.setState({
@@ -42,6 +41,8 @@ export default class Sidebar extends React.Component {
   changePage = (e, menuItem) => {
     window.location.hash = menuItem.props.value
     this.handleClose()
+    // emit onRouteChange event
+    mrEmitter.emit('onRouteChange', menuItem.props.value)
   }
 
   // capitalize the first letter of string

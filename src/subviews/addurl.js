@@ -16,9 +16,15 @@ import Dialog from 'material-ui/Dialog'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import Info from 'material-ui/svg-icons/action/info'
 
-export default class Main extends React.Component {
+import mrEmitter from '../helpers/mrEmitter'
+
+// remove this subscription afterwards when there is no use for it
+let Subscription = null
+
+export default class Addurl extends React.Component {
   constructor(props, context) {
     super(props, context)
+    console.log(this);
   }
 
   //keep tooltip state
@@ -60,7 +66,7 @@ export default class Main extends React.Component {
     this.setState({authentication: check})
   }
 
-  // check if the page sohuld have the fab or no
+  // check if the page should have the fab or no
   isActive = (to) => {
     let pathName = this.context.location.pathname
     let newState = true
@@ -73,13 +79,25 @@ export default class Main extends React.Component {
     this.setState({fab: newState})
   }
 
+  // register all adding stuff here
+  componentWillMount() {
+    Subscription = mrEmitter.addListener('onRouteChange', (newLocation) => {
+      console.log(newLocation)
+    });
+  }
+
+  // unregister all references here
+  componentWillUnmount() {
+    Subscription.remove()
+  }
+
   render() {
     const style = {
     fab: {
       position: 'fixed',
       bottom: '25px',
       right: '20px',
-      visibility: this.state.fab ? 'visible' : 'collapse'
+      visibility: this.state.fab ? 'visible' : 'collapse',
       zIndex: 2
     },
     tooltip: {
