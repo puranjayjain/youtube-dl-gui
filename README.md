@@ -41,6 +41,13 @@ None, All dependencies will auto install with the app now as far as possible.
 gulp default --NODE-ENVIRONMENT=development
 ```
 
+## Versioning
+
+For transparency into our release cycle and in striving to maintain backward
+compatibility, Material Design Lite is maintained under
+[the Semantic Versioning guidelines](http://semver.org/). Sometimes we screw up,
+but we'll adhere to those rules whenever possible.
+
 # License
 The Project is Licensed under the [MIT License](https://github.com/puranjayjain/Youtube-dl-gui/blob/master/LICENSE)
 
