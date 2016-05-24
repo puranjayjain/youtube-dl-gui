@@ -37,7 +37,7 @@ body {
 
 .downloadedAnimate-appear.downloadedAnimate-appear-active {
   transform: scale(1);
-  transition: transform .3s cubic-bezier(0.4, 0.0, 0.2, 1) .5s;
+  transition: transform .3s cubic-bezier(0.4, 0.0, 0.2, 1) .3s;
 }
 
 .downloadedAnimate-enter {

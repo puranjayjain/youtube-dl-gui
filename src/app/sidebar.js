@@ -93,17 +93,53 @@ export default class Sidebar extends React.Component {
         <AppBar
           ref="AppBar"
           title={this.getPageTitle()}
-          onLeftIconButtonTouchTap={this.handleToggle}
+          on
+          leftIconButtonTouchTap={this.handleToggle}
           style={style.appbar}
         />
-        <Drawer containerStyle={style.drawer} docked={false} open={this.state.open} onRequestChange={(open) => this.setState({open})}>
+        <Drawer c
+          ontainerStyle={style.drawer}
+          docked={false}
+          open={this.state.open}
+          onRequestChange={(open) => this.setState({open})}
+        >
           <Menu onItemTouchTap={this.changePage}>
-            <MenuItem innerDivStyle={this.isActive('/')} primaryText="All" value="/" leftIcon={<AllInclusive style={this.isActiveIcon('/')} />} />
-            <MenuItem innerDivStyle={this.isActive('/downloading')} primaryText="Downloading" value="/downloading" leftIcon={<FileDownload style={this.isActiveIcon('/downloading')} />} />
-            <MenuItem innerDivStyle={this.isActive('/downloaded')} primaryText="Downloaded" value="/downloaded" leftIcon={<Done style={this.isActiveIcon('/downloaded')} />} />
+            <MenuItem
+              innerDivStyle={this.isActive('/')}
+              primaryText="All" value="/"
+              leftIcon={
+                <AllInclusive style={this.isActiveIcon('/')} />
+              }
+            />
+            <MenuItem
+              innerDivStyle={this.isActive('/downloading')}
+              primaryText="Downloading" value="/downloading"
+              leftIcon={
+                <FileDownload style={this.isActiveIcon('/downloading')} />
+              }
+            />
+            <MenuItem
+              innerDivStyle={this.isActive('/downloaded')}
+              primaryText="Downloaded" value="/downloaded"
+              leftIcon={
+                <Done style={this.isActiveIcon('/downloaded')} />
+              }
+            />
             <Divider />
-            <MenuItem innerDivStyle={this.isActive('/settings')} primaryText="Settings" value="/settings" leftIcon={<Settings style={this.isActiveIcon('/settings')} />} />
-            <MenuItem innerDivStyle={this.isActive('/about')} primaryText="About" value="/about" leftIcon={<Help style={this.isActiveIcon('/about')} />} />
+            <MenuItem
+              innerDivStyle={this.isActive('/settings')}
+              primaryText="Settings" value="/settings"
+              leftIcon={
+                <Settings style={this.isActiveIcon('/settings')} />
+              }
+            />
+            <MenuItem
+              innerDivStyle={this.isActive('/about')}
+              primaryText="About" value="/about"
+              leftIcon={
+                <Help style={this.isActiveIcon('/about')} />
+              }
+            />
           </Menu>
         </Drawer>
       </div>

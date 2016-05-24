@@ -31,13 +31,22 @@ body {
 }
 
 /*placeholder for downloaded animations*/
+.downloadedAnimate-appear {
+  transform: scale(0.01);
+}
+
+.downloadedAnimate-appear.downloadedAnimate-appear-active {
+  transform: scale(1);
+  transition: transform .3s cubic-bezier(0.4, 0.0, 0.2, 1) .5s;
+}
+
 .downloadedAnimate-enter {
   transform: scale(0.01);
 }
 
 .downloadedAnimate-enter.downloadedAnimate-enter-active {
   transform: scale(1);
-  transition: transform .3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  transition: transform .3s cubic-bezier(0.4, 0.0, 0.2, 1) .3s;
 }
 
 .downloadedAnimate-leave {
@@ -46,5 +55,5 @@ body {
 
 .downloadedAnimate-leave.downloadedAnimate-leave-active {
   transform: scale(0.01);
-  transition: transform .3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  transition: transform .3s cubic-bezier(0.4, 0.0, 0.2, 1) .3s;
 }

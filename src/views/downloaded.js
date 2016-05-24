@@ -116,7 +116,6 @@ export default class Downloaded extends React.Component {
         this.refs.emptyPlaceHolder.setState({emptyPlaceHolder: true})
       }, 700)
     }
-    console.log(this)
   }
 
   render() {

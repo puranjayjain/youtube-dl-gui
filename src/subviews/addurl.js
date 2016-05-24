@@ -22,11 +22,6 @@ import mrEmitter from '../helpers/mrEmitter'
 let Subscription = null
 
 export default class Addurl extends React.Component {
-  constructor(props, context) {
-    super(props, context)
-    console.log(this);
-  }
-
   //keep tooltip state
   state = {
     authentication: false,
@@ -68,21 +63,27 @@ export default class Addurl extends React.Component {
 
   // check if the page should have the fab or no
   isActive = (to) => {
-    let pathName = this.context.location.pathname
-    let newState = true
-    if (pathName === 'all' || pathName === 'downloading' || pathName === 'downloaded') {
+    let newState
+    console.log(to);
+    if (to === '/' || to === '/downloading' || to === '/downloaded') {
       newState = true
     }
     else {
       newState = false
     }
-    this.setState({fab: newState})
+    // don't update state if already the right one
+    if (newState !== this.state.fab) {
+      this.setState({fab: newState})
+    }
   }
 
   // register all adding stuff here
   componentWillMount() {
+    // on initiate load
+    this.isActive(this.context.location.pathname)
+    // on each event trigger
     Subscription = mrEmitter.addListener('onRouteChange', (newLocation) => {
-      console.log(newLocation)
+      this.isActive(newLocation)
     });
   }
 
@@ -141,7 +142,13 @@ export default class Addurl extends React.Component {
 
   return (
     <div>
-      <ReactCSSTransitionGroup transitionName="downloadedAnimate" transitionEnterTimeout={200} transitionLeaveTimeout={200} transitionAppear={true}>
+      <ReactCSSTransitionGroup
+        transitionName="downloadedAnimate"
+        transitionEnterTimeout={200}
+        transitionLeaveTimeout={200} 
+        transitionAppear={true}
+        transitionAppearTimeout={200}
+      >
         <FloatingActionButton
           secondary={true}
           key={this.state.fab}
