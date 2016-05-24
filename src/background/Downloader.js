@@ -10,10 +10,9 @@ importScripts('../require.js')
 // }
 
 require({
-        baseUrl: './'
-    },
-    ['require', 'fs', 'youtube-dl'],
-    (require, fs, youtubedl) => {
-        postMessage('yolo' + e.data)
-    }
+    baseUrl: './'
+  }, ['require', 'fs', 'youtube-dl'],
+  (require, fs, youtubedl) => {
+    postMessage('yolo' + e.data)
+  }
 )

@@ -16,7 +16,7 @@ import Pause from 'material-ui/svg-icons/av/pause-circle-filled'
 import Play from 'material-ui/svg-icons/av/play-arrow'
 
 // Custom components
-import EmptyPlaceHolder from '../placeholders/EmptyPlaceHolder'
+import DownloadedPlaceHolder from '../placeholders/DownloadedPlaceHolder'
 
 let tableData = [
   // {
@@ -113,7 +113,7 @@ export default class Downloaded extends React.Component {
     if (!tableData.length) {
       this.setState({table: false})
       setTimeout(() => {
-        this.refs.emptyPlaceHolder.setState({emptyPlaceHolder: true})
+        this.refs.downloadedPlaceHolder.setState({visible: true})
       }, 700)
     }
   }
@@ -248,7 +248,7 @@ export default class Downloaded extends React.Component {
           </TableBody>
           >
         </Table>
-        <EmptyPlaceHolder ref="emptyPlaceHolder" />
+        <DownloadedPlaceHolder ref="downloadedPlaceHolder" />
       </div>
     )
   }
