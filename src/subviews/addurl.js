@@ -1,5 +1,6 @@
 import React from 'react'
 const shell = window.require('electron').shell
+const clipboard = window.require('electron').clipboard
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 // import necessary components
@@ -21,6 +22,10 @@ import mrEmitter from '../helpers/mrEmitter'
 // remove this subscription afterwards when there is no use for it
 let Subscription = null
 
+// standard regex for matching the urls
+// see http://www.regexr.com/3ajfi
+const urlPattern = /([--:\w?@%&+~#=]*\.[a-z]{2,4}\/{0,2})((?:[?&](?:\w+)=(?:\w+))+|[--:\w?@%&+~#=]+)?/
+
 export default class Addurl extends React.Component {
   //keep tooltip state
   state = {
@@ -36,6 +41,10 @@ export default class Addurl extends React.Component {
     // focus the url input
     setTimeout(() => {
       this.refs.urlInput.focus()
+      // check if the clipboard has a url (if yes paste it)
+      if (urlPattern.test(clipboard.readText(String))) {
+
+      }
     }, 300)
   }
 
@@ -64,7 +73,6 @@ export default class Addurl extends React.Component {
   // check if the page should have the fab or no
   isActive = (to) => {
     let newState
-    console.log(to);
     if (to === '/' || to === '/downloading' || to === '/downloaded') {
       newState = true
     }
