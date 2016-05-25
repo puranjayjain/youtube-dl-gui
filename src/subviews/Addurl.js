@@ -19,6 +19,9 @@ import Info from 'material-ui/svg-icons/action/info'
 
 import mrEmitter from '../helpers/mrEmitter'
 
+// import all the errors to be used
+import Errordata from '../Data/Errordata'
+
 // remove this subscription afterwards when there is no use for it
 let Subscription = null
 
@@ -29,28 +32,64 @@ const urlPattern = /([--:\w?@%&+~#=]*\.[a-z]{2,4}\/{0,2})((?:[?&](?:\w+)=(?:\w+)
 export default class Addurl extends React.Component {
   //keep tooltip state
   state = {
+    // checkbox state of the main dialog checkbox
     authentication: false,
+    // tooltip state for the info button in the main dialog
     tooltipShown: false,
+    // main dialog display state
     dialog: false,
-    fab: true
+    // confirm dialog display state
+    confirmDialog: false,
+    // main fab display state
+    fab: true,
+    // to store the url in the input of the main dialog
+    url: '',
+    // to store the error text in the input of the main dialog
+    errorUrl: '',
   }
 
   // click to open the Dialog
   openDownloadDialog = () => {
     this.setState({dialog: true})
+    // check if the clipboard has a url (if yes paste it)
+    let text = clipboard.readText(String).split('\n')[0]
+    if (urlPattern.test(text)) {
+      this.setState({url: text})
+    }
     // focus the url input
     setTimeout(() => {
       this.refs.urlInput.focus()
-      // check if the clipboard has a url (if yes paste it)
-      if (urlPattern.test(clipboard.readText(String))) {
-
-      }
     }, 300)
+  }
+
+  // on change event of the url input in the main dialog
+  setUrl = (event) => {
+    this.setState({url: event.target.value})
+  }
+
+  // ok button the main dialog
+  onOkDialog = () => {
+    let text = this.state.url.split('\n')[0]
+    // check if there is a url and it is valid
+    if (urlPattern.test(text)) {
+      this.setState({
+        dialog: false,
+        confirmDialog: true
+      })
+    }
+    else {
+      this.setState({errorUrl: Errordata.invalidUrl})
+    }
   }
 
   // close the dialog
   closeDownloadDialog = () => {
     this.setState({dialog: false})
+  }
+
+  // close the confirm dialog
+  closeConfirmDialog = () => {
+    this.setState({confirmDialog: false})
   }
 
   // on info button click
@@ -134,7 +173,7 @@ export default class Addurl extends React.Component {
     }
   }
 
-    // dialog actions
+  // main dialog actions
   const actions = [
     <FlatButton
       label="Cancel"
@@ -144,8 +183,22 @@ export default class Addurl extends React.Component {
     <FlatButton
       label="Ok"
       primary={true}
-      onTouchTap={this.closeDownloadDialog}
+      onTouchTap={this.onOkDialog}
     />
+  ]
+
+  // confirm download dialog
+  const confirmActions = [
+   <FlatButton
+     label="Cancel"
+     primary={true}
+     onTouchTap={this.closeConfirmDialog}
+   />,
+   <FlatButton
+     label="Start"
+     primary={true}
+     onTouchTap={this.closeConfirmDialog}
+   />
   ]
 
   return (
@@ -197,8 +250,11 @@ export default class Addurl extends React.Component {
         <TextField
           ref="urlInput"
           style={style.urlInput}
+          value={this.state.url}
           hintText="e.g. https://www.youtube.com/watch?v=foE1mO2yM04"
           floatingLabelText="Enter or Paste the video url here"
+          errorText={this.state.errorUrl}
+          onChange={this.setUrl}
         />
         <Card
           expanded={this.state.authentication}
@@ -228,6 +284,18 @@ export default class Addurl extends React.Component {
             />
           </CardText>
         </Card>
+      </Dialog>
+      <Dialog
+        title={
+          <div style={style.dialogTitle}>
+            Download a video or a playlist (if supported)
+          </div>
+        }
+        actions={confirmActions}
+        open={this.state.confirmDialog}
+        onRequestClose={this.closeConfirmDialog}
+      >
+        yoyo
       </Dialog>
     </div>
     )
