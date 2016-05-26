@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {PropTypes} from 'react'
 const shell = window.require('electron').shell
 const clipboard = window.require('electron').clipboard
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
@@ -6,15 +6,20 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 // import necessary components
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
+import RefreshIndicator from 'material-ui/RefreshIndicator'
+import DropDownMenu from 'material-ui/DropDownMenu'
+import RaisedButton from 'material-ui/RaisedButton'
 import Tooltip from 'material-ui/internal/Tooltip'
 import FlatButton from 'material-ui/FlatButton'
 import IconButton from 'material-ui/IconButton'
 import TextField from 'material-ui/TextField'
+import MenuItem from 'material-ui/MenuItem'
 import Checkbox from 'material-ui/Checkbox'
 import Dialog from 'material-ui/Dialog'
 
 // icons
 import ContentAdd from 'material-ui/svg-icons/content/add'
+import MoreHoriz from 'material-ui/svg-icons/navigation/more-horiz'
 import Info from 'material-ui/svg-icons/action/info'
 
 import mrEmitter from '../helpers/mrEmitter'
@@ -26,8 +31,8 @@ import Errordata from '../Data/Errordata'
 let Subscription = null
 
 // standard regex for matching the urls
-// see http://www.regexr.com/3ajfi
-const urlPattern = /([--:\w?@%&+~#=]*\.[a-z]{2,4}\/{0,2})((?:[?&](?:\w+)=(?:\w+))+|[--:\w?@%&+~#=]+)?/
+// see https://gist.github.com/dperini/729294
+const urlPattern = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i
 
 export default class Addurl extends React.Component {
   //keep tooltip state
@@ -46,6 +51,10 @@ export default class Addurl extends React.Component {
     url: '',
     // to store the error text in the input of the main dialog
     errorUrl: '',
+    // to store error text for file path
+    errorPath: '',
+    // the downloadable formats state
+    format: 1
   }
 
   // click to open the Dialog
@@ -124,6 +133,9 @@ export default class Addurl extends React.Component {
     }
   }
 
+  // change the dropdown value for the format dropdown
+  handleFormat = (event, index, value) => this.setState({format: value});
+
   // register all adding stuff here
   componentWillMount() {
     // on initiate load
@@ -132,6 +144,7 @@ export default class Addurl extends React.Component {
     Subscription = mrEmitter.addListener('onRouteChange', (newLocation) => {
       this.isActive(newLocation)
     });
+    console.log(this);
   }
 
   // unregister all references here
@@ -170,7 +183,25 @@ export default class Addurl extends React.Component {
     },
     authPass: {
       flex: 1
-    }
+    },
+    confirmDiv: {
+      display: 'flex',
+      width: '100%',
+      alignItems: 'flex-end'
+    },
+    fileText: {
+      flex: 1
+    },
+    fileButton: {
+      marginLeft: '8px',
+      marginBottom: '8px'
+    },
+    format: {
+      marginLeft: '-24px'
+    },
+    formatLoader: {
+      position: 'relative',
+    },
   }
 
   // main dialog actions
@@ -288,14 +319,43 @@ export default class Addurl extends React.Component {
       <Dialog
         title={
           <div style={style.dialogTitle}>
-            Download a video or a playlist (if supported)
+            Confirm download options
           </div>
         }
         actions={confirmActions}
         open={this.state.confirmDialog}
         onRequestClose={this.closeConfirmDialog}
       >
-        yoyo
+        <div style={style.confirmDiv}>
+          <TextField
+            style={style.fileText}
+            errorText={this.state.errorPath}
+            hintText="e.g. c:/users/users/videos"
+            floatingLabelText="Path to save file"
+          />
+          <RaisedButton
+            style={style.fileButton}
+            icon={<MoreHoriz />}
+            primary={true}
+          />
+        </div>
+        <DropDownMenu
+          style={style.format}
+          value={this.state.format}
+          onChange={this.handleFormat}
+        >
+          <MenuItem value={1} primaryText="Default" />
+          <MenuItem value={2}>
+            <RefreshIndicator
+              size={40}
+              left={10}
+              top={0}
+              style={style.formatLoader}
+              loadingColor={this.context.muiTheme.baseTheme.palette.accent1Color}
+              status="loading"
+            />
+          </MenuItem>
+        </DropDownMenu>
       </Dialog>
     </div>
     )
@@ -303,5 +363,6 @@ export default class Addurl extends React.Component {
 }
 
 Addurl.contextTypes = {
-  location: React.PropTypes.object.isRequired
+  location: PropTypes.object.isRequired,
+  muiTheme: PropTypes.object.isRequired
 }

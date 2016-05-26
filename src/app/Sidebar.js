@@ -150,6 +150,6 @@ export default class Sidebar extends React.Component {
 }
 
 Sidebar.contextTypes = {
-  location: React.PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
   muiTheme: PropTypes.object.isRequired
 }

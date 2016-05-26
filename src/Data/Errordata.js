@@ -3,8 +3,11 @@
 const Errordata = {
   // if the url is not valid (used in textfields)
   invalidUrl: 'This is not a valid url',
+  // internet connection states
   noTnternet: 'You are offline',
-  internet: 'You are online'
+  internet: 'You are online',
+  // invalid file path
+  invalidPath: 'Enter a valid path'
 }
 
 export default Errordata
