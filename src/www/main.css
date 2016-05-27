@@ -9,11 +9,54 @@ body {
 }
 
 /*custom scroll bars*/
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #6200EA;
+  border: 0 none transparent;
+  border-radius: 50px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #651FFF;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: #7C4DFF;
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  border: 0 none transparent;
+  border-radius: 50px;
+}
+
+::-webkit-scrollbar-track:hover {
+  background: transparent;
+}
+
+::-webkit-scrollbar-track:active {
+  background: transparent;
+  width: 24px;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
 
 /*animations for react css transition groups*/
 /*toolbar animations*/
 .toolbarAnimate-enter {
-  opacity: 0.01;
+  opacity: .01;
 }
 
 .toolbarAnimate-enter.toolbarAnimate-enter-active {
@@ -26,7 +69,7 @@ body {
 }
 
 .toolbarAnimate-leave.toolbarAnimate-leave-active {
-  opacity: 0.01;
+  opacity: .01;
   transition: opacity .3s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
