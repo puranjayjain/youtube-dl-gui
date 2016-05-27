@@ -17,6 +17,10 @@ import MenuItem from 'material-ui/MenuItem'
 import Checkbox from 'material-ui/Checkbox'
 import Dialog from 'material-ui/Dialog'
 
+// import node youtube dl and related dependencies
+const fs = window.require('fs')
+const youtubedl = window.require('youtube-dl')
+
 // icons
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import MoreHoriz from 'material-ui/svg-icons/navigation/more-horiz'
@@ -33,6 +37,12 @@ let Subscription = null
 // standard regex for matching the urls
 // see https://gist.github.com/dperini/729294
 const urlPattern = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i
+
+// youtube dl format array will be stored here
+let youtubedlFormat
+
+// to track if the video formats are to be loaded this time
+let loadFormat = true
 
 export default class Addurl extends React.Component {
   //keep tooltip state
@@ -54,12 +64,16 @@ export default class Addurl extends React.Component {
     // to store error text for file path
     errorPath: '',
     // the downloadable formats state
-    format: 1
+    format: 1,
+    // dropdown values
+    formats: [],
   }
 
   // click to open the Dialog
   openDownloadDialog = () => {
     this.setState({dialog: true})
+    // set loadFormats to true to tell that the formats are to be refetched
+    loadFormat = true
     // check if the clipboard has a url (if yes paste it)
     let text = clipboard.readText(String).split('\n')[0]
     if (urlPattern.test(text)) {
@@ -99,6 +113,10 @@ export default class Addurl extends React.Component {
   // close the confirm dialog
   closeConfirmDialog = () => {
     this.setState({confirmDialog: false})
+    // reset to default as the format
+    this.setState({format: 1})
+    // clear the downloaded formats
+    this.setState({formats: []})
   }
 
   // on info button click
@@ -134,7 +152,33 @@ export default class Addurl extends React.Component {
   }
 
   // change the dropdown value for the format dropdown
-  handleFormat = (event, index, value) => this.setState({format: value});
+  handleFormat = (event, index, value) => this.setState({format: value})
+
+  // on touch tap of format dropdown
+  openFormat = () => {
+    const url = this.state.url
+    // only do this if the formats were not triggered at this request
+    if (loadFormat) {
+      // async get the information of the requested file
+      youtubedl.getInfo(url, (error, info) => {
+        // TODO handle errors as toasts here
+        if (error) console.error(error)
+        // store all the media formats in here
+        youtubedlFormat = info.formats
+        // also update the dialog with these values
+        let formatList = []
+        for (let f of youtubedlFormat) {
+          formatList.push(f.format.split(' - ')[1] + ' [.' + f.ext + '] {codec: ' + f.acodec + '}')
+        }
+        // set the dropdown items
+        this.setState({formats: formatList})
+        // some issue with dropdown not updating correctly
+        this.forceUpdate()
+        // set that the formats were loaded
+        loadFormat = false
+      })
+    }
+  }
 
   // register all adding stuff here
   componentWillMount() {
@@ -143,8 +187,7 @@ export default class Addurl extends React.Component {
     // on each event trigger
     Subscription = mrEmitter.addListener('onRouteChange', (newLocation) => {
       this.isActive(newLocation)
-    });
-    console.log(this);
+    })
   }
 
   // unregister all references here
@@ -197,10 +240,11 @@ export default class Addurl extends React.Component {
       marginBottom: '8px'
     },
     format: {
-      marginLeft: '-24px'
+      marginLeft: '-24px',
+      width: '400px'
     },
     formatLoader: {
-      position: 'relative',
+      position: 'relative'
     },
   }
 
@@ -231,6 +275,24 @@ export default class Addurl extends React.Component {
      onTouchTap={this.closeConfirmDialog}
    />
   ]
+
+  // to render the loader or not
+  let loaderFormats
+  if (!this.state.formats.length) {
+    loaderFormats = <MenuItem value={2}>
+      <RefreshIndicator
+        size={40}
+        left={170}
+        top={0}
+        style={style.formatLoader}
+        loadingColor={this.context.muiTheme.baseTheme.palette.accent1Color}
+        status="loading"
+      />
+    </MenuItem>
+  }
+  else {
+    loaderFormats = <span></span>
+  }
 
   return (
     <div>
@@ -340,21 +402,21 @@ export default class Addurl extends React.Component {
           />
         </div>
         <DropDownMenu
+          autoWidth={false}
+          refs="format"
           style={style.format}
           value={this.state.format}
+          onTouchTap={this.openFormat}
           onChange={this.handleFormat}
         >
           <MenuItem value={1} primaryText="Default" />
-          <MenuItem value={2}>
-            <RefreshIndicator
-              size={40}
-              left={10}
-              top={0}
-              style={style.formatLoader}
-              loadingColor={this.context.muiTheme.baseTheme.palette.accent1Color}
-              status="loading"
-            />
-          </MenuItem>
+          {loaderFormats}
+          {this.state.formats.map( (row, index) => (
+            <MenuItem
+              key={index + 2}
+              value={index + 2}
+              primaryText={row} />
+          ))}
         </DropDownMenu>
       </Dialog>
     </div>

@@ -59,7 +59,9 @@ export default class Sidebar extends React.Component {
       }
     }
     else {
-      return ''
+      return {
+        background: 'transparent'
+      }
     }
   }
 
