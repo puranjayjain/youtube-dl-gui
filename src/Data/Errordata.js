@@ -7,7 +7,9 @@ const Errordata = {
   noTnternet: 'You are offline',
   internet: 'You are online',
   // invalid file path
-  invalidPath: 'Enter a valid path'
+  invalidPath: 'Enter a valid path',
+  // error fetching format
+  errorFormat: 'Error fetching formats',
 }
 
 export default Errordata

@@ -14,6 +14,7 @@ import Tooltip from 'material-ui/internal/Tooltip'
 import FlatButton from 'material-ui/FlatButton'
 import IconButton from 'material-ui/IconButton'
 import TextField from 'material-ui/TextField'
+import Snackbar from 'material-ui/Snackbar'
 import MenuItem from 'material-ui/MenuItem'
 import Checkbox from 'material-ui/Checkbox'
 import Dialog from 'material-ui/Dialog'
@@ -45,6 +46,9 @@ let youtubedlFormat
 // to track if the video formats are to be loaded this time
 let loadFormat = true
 
+// current error in the snackbar
+let snackbarErrorText = ''
+
 export default class Addurl extends React.Component {
   //keep tooltip state
   state = {
@@ -70,6 +74,8 @@ export default class Addurl extends React.Component {
     format: 1,
     // dropdown values
     formats: [],
+    // errors snackbar state
+    errorSnackbar: false,
   }
 
   // click to open the Dialog
@@ -163,23 +169,34 @@ export default class Addurl extends React.Component {
       // async get the information of the requested file
       youtubedl.getInfo(url, (error, info) => {
         if (error) {
-          // TODO handle errors as toasts here
           console.error(error)
+          // handle errors as toasts here
+          snackbarErrorText = Errordata.errorFormat
+          // display the snackbar
+          this.setState({errorSnackbar: true})
           loadFormat = true
+          return
         }
-        // store all the media formats in here
-        youtubedlFormat = info.formats
-        // also update the dialog with these values
-        let formatList = []
-        for (let f of youtubedlFormat) {
-          formatList.push(f.format.split(' - ')[1] + ' [.' + f.ext + '] {codec: ' + f.acodec + '}')
+        console.log(info);
+        // if the format is not available
+        if (info.hasOwnProperty('formats')) {
+          // store all the media formats in here
+          youtubedlFormat = info.formats
+          // also update the dialog with these values
+          let formatList = []
+          for (let f of youtubedlFormat) {
+            formatList.push(f.format.split(' - ')[1] + ' [.' + f.ext + '] {codec: ' + f.acodec + '}')
+          }
+          // set the dropdown items
+          this.setState({formats: formatList})
+          // REVIEW some issue with dropdown not updating correctly
+          this.forceUpdate()
+          // set that the formats were loaded
+          loadFormat = false
         }
-        // set the dropdown items
-        this.setState({formats: formatList})
-        // REVIEW some issue with dropdown not updating correctly
-        this.forceUpdate()
-        // set that the formats were loaded
-        loadFormat = false
+        else {
+          console.log('you?');
+        }
       })
     }
   }
@@ -291,16 +308,15 @@ export default class Addurl extends React.Component {
   // to render the loader or not
   let loaderFormats
   if (!this.state.formats.length) {
-    loaderFormats = <MenuItem value={2}>
+    loaderFormats =
       <RefreshIndicator
         size={40}
-        left={170}
-        top={0}
+        left={200}
+        top={8}
         style={style.formatLoader}
         loadingColor={this.context.muiTheme.baseTheme.palette.accent1Color}
         status="loading"
       />
-    </MenuItem>
   }
   else {
     loaderFormats = <span></span>
@@ -434,6 +450,11 @@ export default class Addurl extends React.Component {
           ))}
         </DropDownMenu>
       </Dialog>
+      <Snackbar
+        open={this.state.errorSnackbar}
+        message={snackbarErrorText}
+        autoHideDuration={4000}
+      />
     </div>
     )
   }
