@@ -6,6 +6,7 @@ import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
 
 // import override light theme and dark theme we have created along with the provider
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import light from '../themes/light'
@@ -66,13 +67,15 @@ export default class Main extends React.Component {
     }
 
     return (
-      <div style={style}>
-        <Sidebar/>
-        {this.props.children && React.cloneElement(this.props.children, {
-          updateTheme: this.updateTheme
-        })}
-        <Addurl />
-      </div>
+      <MuiThemeProvider muiTheme={this.state.muiTheme}>
+        <div style={style}>
+          <Sidebar/>
+          {this.props.children && React.cloneElement(this.props.children, {
+            updateTheme: this.updateTheme
+          })}
+          <Addurl />
+        </div>
+      </MuiThemeProvider>
     )
   }
 }

@@ -14,6 +14,11 @@ body {
   height: 6px;
 }
 
+:active::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
 ::-webkit-scrollbar-button {
   width: 0;
   height: 0;
@@ -46,7 +51,6 @@ body {
 
 ::-webkit-scrollbar-track:active {
   background: transparent;
-  width: 24px;
 }
 
 ::-webkit-scrollbar-corner {

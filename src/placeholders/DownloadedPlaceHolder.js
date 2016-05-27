@@ -44,7 +44,13 @@ export default class DownloadedPlaceHolder extends React.Component {
     }
 
     return (
-      <ReactCSSTransitionGroup transitionName="downloadedAnimate" transitionEnterTimeout={200} transitionLeaveTimeout={200} transitionAppear={true}>
+      <ReactCSSTransitionGroup
+        transitionName="downloadedAnimate"
+        transitionEnterTimeout={200}
+        transitionLeaveTimeout={200}
+        transitionAppear={true}
+        transitionAppearTimeout ={200}
+      >
         <Paper
           key={this.state.visible}
           circle={true}

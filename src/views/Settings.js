@@ -44,6 +44,8 @@ export default class Settings extends React.Component {
     stored.theme.darkTheme.toggleData()
     // update the theme on the parent
     this.props.updateTheme()
+    // display in snackbar that the theme couldnot be updated globally so please restart the app to apply it
+    
   }
 
   // update the id setting
@@ -85,12 +87,12 @@ export default class Settings extends React.Component {
 
     return (
       <div style={style.container}>
-        <Menu style={style.toc}>
+        <List style={style.toc}>
           <Subheader>Jump To</Subheader>
           <ListItem primaryText="Theme" />
           <ListItem primaryText="Download Options" />
           <ListItem primaryText="Filesystem Options" />
-        </Menu>
+        </List>
         <div style={style.main}>
           <Card style={style.card}>
             <List>

@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react'
 const shell = window.require('electron').shell
+const {dialog} = window.require('electron').remote
 const clipboard = window.require('electron').clipboard
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
@@ -63,6 +64,8 @@ export default class Addurl extends React.Component {
     errorUrl: '',
     // to store error text for file path
     errorPath: '',
+    // path to file save
+    filePath: '',
     // the downloadable formats state
     format: 1,
     // dropdown values
@@ -86,9 +89,7 @@ export default class Addurl extends React.Component {
   }
 
   // on change event of the url input in the main dialog
-  setUrl = (event) => {
-    this.setState({url: event.target.value})
-  }
+  setText = (event, state) => this.setState({state: event.target.value})
 
   // ok button the main dialog
   onOkDialog = () => {
@@ -161,8 +162,11 @@ export default class Addurl extends React.Component {
     if (loadFormat) {
       // async get the information of the requested file
       youtubedl.getInfo(url, (error, info) => {
-        // TODO handle errors as toasts here
-        if (error) console.error(error)
+        if (error) {
+          // TODO handle errors as toasts here
+          console.error(error)
+          loadFormat = true
+        }
         // store all the media formats in here
         youtubedlFormat = info.formats
         // also update the dialog with these values
@@ -172,11 +176,19 @@ export default class Addurl extends React.Component {
         }
         // set the dropdown items
         this.setState({formats: formatList})
-        // some issue with dropdown not updating correctly
+        // REVIEW some issue with dropdown not updating correctly
         this.forceUpdate()
         // set that the formats were loaded
         loadFormat = false
       })
+    }
+  }
+
+  // set or update the file save path
+  pickFilePath = () => {
+    const userPath = dialog.showOpenDialog({properties: ['openDirectory']})
+    if (userPath) {
+      this.setState({filePath: userPath})
     }
   }
 
@@ -347,7 +359,7 @@ export default class Addurl extends React.Component {
           hintText="e.g. https://www.youtube.com/watch?v=foE1mO2yM04"
           floatingLabelText="Enter or Paste the video url here"
           errorText={this.state.errorUrl}
-          onChange={this.setUrl}
+          onChange={(event, url) => this.setText}
         />
         <Card
           expanded={this.state.authentication}
@@ -390,15 +402,18 @@ export default class Addurl extends React.Component {
       >
         <div style={style.confirmDiv}>
           <TextField
+            value={this.state.filePath}
             style={style.fileText}
             errorText={this.state.errorPath}
             hintText="e.g. c:/users/users/videos"
             floatingLabelText="Path to save file"
+            onChange={(event, filePath) => this.setText}
           />
           <RaisedButton
             style={style.fileButton}
             icon={<MoreHoriz />}
             primary={true}
+            onTouchTap={this.pickFilePath}
           />
         </div>
         <DropDownMenu
@@ -409,7 +424,7 @@ export default class Addurl extends React.Component {
           onTouchTap={this.openFormat}
           onChange={this.handleFormat}
         >
-          <MenuItem value={1} primaryText="Default" />
+          <MenuItem value={1} primaryText="Default format" />
           {loaderFormats}
           {this.state.formats.map( (row, index) => (
             <MenuItem
