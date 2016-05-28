@@ -1,8 +1,9 @@
 import React, {PropTypes} from 'react'
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
+
 const shell = window.require('electron').shell
 const {dialog} = window.require('electron').remote
 const clipboard = window.require('electron').clipboard
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 // import necessary components
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card'
@@ -95,7 +96,7 @@ export default class Addurl extends React.Component {
   }
 
   // on change event of the url input in the main dialog
-  setText = (event, state) => this.setState({state: event.target.value})
+  setText = (event, state) => this.setState({[state]: event.target.value})
 
   // ok button the main dialog
   onOkDialog = () => {
@@ -174,10 +175,8 @@ export default class Addurl extends React.Component {
           snackbarErrorText = Errordata.errorFormat
           // display the snackbar
           this.setState({errorSnackbar: true})
-          loadFormat = true
           return
         }
-        console.log(info);
         // if the format is not available
         if (info.hasOwnProperty('formats')) {
           // store all the media formats in here
@@ -190,12 +189,14 @@ export default class Addurl extends React.Component {
           // set the dropdown items
           this.setState({formats: formatList})
           // REVIEW some issue with dropdown not updating correctly
-          this.forceUpdate()
           // set that the formats were loaded
           loadFormat = false
         }
         else {
-          console.log('you?');
+          // handle errors as toasts here
+          snackbarErrorText = Errordata.thirdPartyError
+          // display the snackbar
+          this.setState({errorSnackbar: true})
         }
       })
     }
@@ -375,7 +376,7 @@ export default class Addurl extends React.Component {
           hintText="e.g. https://www.youtube.com/watch?v=foE1mO2yM04"
           floatingLabelText="Enter or Paste the video url here"
           errorText={this.state.errorUrl}
-          onChange={(event, url) => this.setText}
+          onChange={(event) => this.setText(event, 'url')}
         />
         <Card
           expanded={this.state.authentication}
@@ -423,7 +424,7 @@ export default class Addurl extends React.Component {
             errorText={this.state.errorPath}
             hintText="e.g. c:/users/users/videos"
             floatingLabelText="Path to save file"
-            onChange={(event, filePath) => this.setText}
+            onChange={(event) => this.setText(event, 'filePath')}
           />
           <RaisedButton
             style={style.fileButton}

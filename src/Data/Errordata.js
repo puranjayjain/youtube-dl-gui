@@ -10,6 +10,8 @@ const Errordata = {
   invalidPath: 'Enter a valid path',
   // error fetching format
   errorFormat: 'Error fetching formats',
+  // third party website and playlists
+  thirdPartyError: 'Playlists and third party websites are currently not supported'
 }
 
 export default Errordata

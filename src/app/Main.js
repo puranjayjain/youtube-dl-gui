@@ -15,6 +15,11 @@ import dark from '../themes/dark'
 // import our components
 import Sidebar from './Sidebar'
 
+const {remote} = window.require('electron')
+
+// native electron components
+import contextMenu from '../menu/contextMenu'
+
 // import subviews if any
 import Addurl from '../subviews/Addurl'
 
@@ -53,8 +58,22 @@ export default class Main extends React.Component {
     }
   }
 
+  // function to attach the context menu to the browser remote
+  attachContextMenu = (event) => {
+    event.preventDefault()
+    contextMenu.popup(remote.getCurrentWindow())
+  }
+
   componentWillMount() {
     this.updateTheme()
+  }
+
+  componentDidMount() {
+    window.addEventListener('contextmenu', this.attachContextMenu, false)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('contextmenu', this.attachContextMenu, false)
   }
 
   render() {
