@@ -23,6 +23,7 @@ import Dialog from 'material-ui/Dialog'
 // import node youtube dl and related dependencies
 const fs = window.require('fs')
 const youtubedl = window.require('youtube-dl')
+const pathExists = window.require('path-exists')
 
 // icons
 import ContentAdd from 'material-ui/svg-icons/content/add'
@@ -113,9 +114,33 @@ export default class Addurl extends React.Component {
     }
   }
 
-  // close the dialog
-  closeDownloadDialog = () => {
-    this.setState({dialog: false})
+  /**
+   * [open the snackbar]
+   * @method
+   * @param  {String} text [the text to be displayed]
+   */
+  openSnackBar = (text) => {
+    // handle errors as toasts here
+    snackbarErrorText = text
+    // display the snackbar
+    this.setState({errorSnackbar: true})
+  }
+
+  // set the new state of the component
+  setComponentState = (component, state) => this.setState({[component]: state})
+
+  /**
+   * [on any input's keypress]
+   * @method
+   * @param  {Event}   event     [Event for the text input]
+   * @param  {Function} callback [function to call on success]
+   * @return {[type]}
+   */
+  onTextKeyPress = (event, callback) => {
+    // if key code matches move to next one
+    if (event.keyCode === 13) {
+      callback()
+    }
   }
 
   // close the confirm dialog
@@ -125,6 +150,19 @@ export default class Addurl extends React.Component {
     this.setState({format: 1})
     // clear the downloaded formats
     this.setState({formats: []})
+  }
+
+  // ok button of the confirm dialog
+  onConfirmDialog = () => {
+    // check if the path passed by the user is valid
+    pathExists(this.state.filePath).then(exists => {
+      if (exists) {
+        // begin procedure to download the media
+      }
+    	else {
+        this.setState({errorPath: Errordata.invalidPath})
+    	}
+    })
   }
 
   // on info button click
@@ -172,9 +210,7 @@ export default class Addurl extends React.Component {
         if (error) {
           console.error(error)
           // handle errors as toasts here
-          snackbarErrorText = Errordata.errorFormat
-          // display the snackbar
-          this.setState({errorSnackbar: true})
+          this.openSnackBar(Errordata.errorFormat)
           return
         }
         // if the format is not available
@@ -194,9 +230,7 @@ export default class Addurl extends React.Component {
         }
         else {
           // handle errors as toasts here
-          snackbarErrorText = Errordata.thirdPartyError
-          // display the snackbar
-          this.setState({errorSnackbar: true})
+          this.openSnackBar(Errordata.errorFormat)
         }
       })
     }
@@ -283,7 +317,7 @@ export default class Addurl extends React.Component {
     <FlatButton
       label="Cancel"
       primary={true}
-      onTouchTap={this.closeDownloadDialog}
+      onTouchTap={() => this.setComponentState('dialog', false)}
     />,
     <FlatButton
       label="Ok"
@@ -302,7 +336,7 @@ export default class Addurl extends React.Component {
    <FlatButton
      label="Start"
      primary={true}
-     onTouchTap={this.closeConfirmDialog}
+     onTouchTap={this.onConfirmDialog}
    />
   ]
 
@@ -367,7 +401,7 @@ export default class Addurl extends React.Component {
         }
         actions={actions}
         open={this.state.dialog}
-        onRequestClose={this.closeDownloadDialog}
+        onRequestClose={() => this.setComponentState('dialog', false)}
       >
         <TextField
           ref="urlInput"
@@ -377,6 +411,7 @@ export default class Addurl extends React.Component {
           floatingLabelText="Enter or Paste the video url here"
           errorText={this.state.errorUrl}
           onChange={(event) => this.setText(event, 'url')}
+          onKeyDown={(event) => this.onTextKeyPress(event, this.onOkDialog)}
         />
         <Card
           expanded={this.state.authentication}
@@ -422,9 +457,10 @@ export default class Addurl extends React.Component {
             value={this.state.filePath}
             style={style.fileText}
             errorText={this.state.errorPath}
-            hintText="e.g. c:/users/users/videos"
+            hintText="e.g. C:\Users\User\Videos"
             floatingLabelText="Path to save file"
             onChange={(event) => this.setText(event, 'filePath')}
+            onKeyDown={(event) => this.onTextKeyPress(event, this.onConfirmDialog)}
           />
           <RaisedButton
             style={style.fileButton}
@@ -455,6 +491,7 @@ export default class Addurl extends React.Component {
         open={this.state.errorSnackbar}
         message={snackbarErrorText}
         autoHideDuration={4000}
+        onRequestClose={() => this.setComponentState('errorSnackbar', false)}
       />
     </div>
     )

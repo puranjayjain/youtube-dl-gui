@@ -35,6 +35,7 @@ export default class Settings extends React.Component {
     stored.filesystem.output = new Storage('output', 'default')
     stored.filesystem.restrict = new Storage('restrict', false)
     // also initiate the settings that are not being displayed
+    // data about the downloaded files and te files being downloaded
     stored.data = new Storage('data', '[]')
   }
 
@@ -45,7 +46,7 @@ export default class Settings extends React.Component {
     // update the theme on the parent
     this.props.updateTheme()
     // display in snackbar that the theme couldnot be updated globally so please restart the app to apply it
-    
+
   }
 
   // update the id setting
