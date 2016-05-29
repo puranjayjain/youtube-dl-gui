@@ -9,34 +9,18 @@ import Checkbox from 'material-ui/Checkbox'
 import Divider from 'material-ui/Divider'
 import Toggle from 'material-ui/Toggle'
 
-// the storage helper
-import Storage from '../helpers/Storage'
+// the settings loader helper
+import SettingsHandler from '../helpers/SettingsHandler'
 
-let stored = {
-  data: [],
-  theme: {},
-  download: {},
-  filesystem: {}
-}
+let stored = {}
+
+let settingsHandle = new SettingsHandler()
 
 export default class Settings extends React.Component {
   constructor(props, context) {
     super(props, context)
-    // initiate all the settings from storage here in order of being displayed
-    // NOTE - are lower camel cased e.g dark-theme becomes darkTheme
-    // see https://en.wikipedia.org/wiki/CamelCase
-    // theme settings
-    stored.theme.darkTheme = new Storage('darkTheme', true)
-    // Download Options
-    stored.download.retries = new Storage('retries', 10)
-    stored.download.bufferSize = new Storage('bufferSize', 1024)
-    // File Options
-    stored.filesystem.id = new Storage('id', false)
-    stored.filesystem.output = new Storage('output', 'default')
-    stored.filesystem.restrict = new Storage('restrict', false)
-    // also initiate the settings that are not being displayed
-    // data about the downloaded files and te files being downloaded
-    stored.data = new Storage('data', '[]')
+    // load all the settings
+    stored = settingsHandle.stored
   }
 
   // functions to do the settings update work
