@@ -2,6 +2,7 @@ import React from 'react'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 
 // Custom components
+import mrEmitter from '../helpers/mrEmitter'
 import AllPlaceHolder from '../placeholders/AllPlaceHolder'
 
 let tableData = [

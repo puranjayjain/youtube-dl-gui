@@ -4,20 +4,24 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 // Custom components
 import AllPlaceHolder from '../placeholders/AllPlaceHolder'
 
+import mrEmitter from '../helpers/mrEmitter'
+
 const tableData = [
   // {
-  //   fileName: 'John Smith dsffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
-  //   downloaded: 'Employed',
-  //   status: 'downloading',
-  //   size: '94 Mb',
-  //   lastTry: '17/05/2016'
+  //     uuid: 'uuid',
+  //     fileName: 'C:\Users\User\Music\Song.mp4', // full path to file
+  //     size: '94 Mb', // full size in mb
+  //     lastTry: '17/05/2016 9:06 AM', // last attempt at downloading the file
+  //     downloaded: '5 MB',
+  //     status: 'Paused', // can have values as 'Paused', 'Downloading', 'Error', 'Done'
   // },
   // {
-  //   fileName: 'John Smith',
-  //   downloaded: 'Employed',
-  //   status: 'downloading',
-  //   size: '94 Mb',
-  //   lastTry: '17/05/2016'
+  //     uuid: 'uuid',
+  //     fileName: 'C:\Users\User\Music\Song.mp4', // full path to file
+  //     size: '94 Mb', // full size in mb
+  //     lastTry: '17/05/2016 9:06 AM', // last attempt at downloading the file
+  //     downloaded: '5 MB',
+  //     status: 'Paused', // can have values as 'Paused', 'Downloading', 'Error', 'Done'
   // }
 ]
 

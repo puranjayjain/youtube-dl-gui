@@ -16,6 +16,7 @@ import Pause from 'material-ui/svg-icons/av/pause-circle-filled'
 import Play from 'material-ui/svg-icons/av/play-arrow'
 
 // Custom components
+import mrEmitter from '../helpers/mrEmitter'
 import DownloadedPlaceHolder from '../placeholders/DownloadedPlaceHolder'
 
 let tableData = [

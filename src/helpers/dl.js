@@ -2,6 +2,7 @@
 const fs = window.require('fs')
 const youtubedl = window.require('youtube-dl')
 
+import mrEmitter from './mrEmitter'
 import SettingsHandler from './SettingsHandler'
 
 let stored = {}
@@ -13,11 +14,12 @@ let video
 
 export default class Dl {
   constructor(args = {
+    uuid,
     url,
     filename
   }) {
     this._args = args
-    // load all the settings
+      // load all the settings
     stored = SettingsHandler.stored
       // call the instantiate functions here
     initVideo(args)
@@ -27,17 +29,23 @@ export default class Dl {
   // TODO add checks for resuming a partially downloaded file
   initVideo = (args) => {
     video = youtubedl(args.url,
-      // Additional options can be given for calling `child_process.execFile()`.
-      {
-        cwd: __dirname
-      })
+        // Additional options can be given for calling `child_process.execFile()`.
+        {
+          cwd: __dirname
+        })
+      // initiate the download status monitor here
+    video.on('data', (chunk) => {
+      // TODO console.log('got %d bytes of data', chunk.length)
+      // the other end of this will read the chunk.length for new download size addition
+      mrEmitter.emit('onDownloadStatus', chunk)
+    })
   }
 
   // all the getters and setters are declared here https://github.com/fent/node-youtube-dl/issues/112
   get download() {
-    return video.pipe(fs.createWriteStream(this._args))
-  }
-  // all the main functions to proppogate tasks
+      return video.pipe(fs.createWriteStream(this._args))
+    }
+    // all the main functions to proppogate tasks
   resumeDownload = () => {
     video.resume()
   }
