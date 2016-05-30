@@ -30,7 +30,7 @@ module.exports = {
       entries: src + '/app/app.js',
       dest: dest,
       outputName: 'app.js'
-    }, ],
+    } ],
     extensions: ['.js'],
-  },
+  }
 };

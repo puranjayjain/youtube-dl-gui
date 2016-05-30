@@ -1,0 +1,8 @@
+- [ ] Showcase the app on the material-ui docs site
+- [ ] remove all TODO statements and make it work
+- [ ] Always remove all inline TODOs and console.logs on release build
+- [ ] add a linter
+- [ ] implement the offline/online feature detection http://electron.atom.io/docs/all/#onlineoffline-event-detection
+- [ ] decide between tray icon change or overlay status and implement it http://electron.atom.io/docs/all/#icon-overlays-in-taskbar-windows
+- [ ] implement download status using http://electron.atom.io/docs/all/#icon-overlays-in-taskbar-windows
+- [ ] implement download notifications using http://electron.atom.io/docs/all/#icon-overlays-in-taskbar-windows

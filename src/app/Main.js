@@ -33,14 +33,16 @@ export default class Main extends React.Component {
 
   state = {
     muiTheme: '',
-    darkTheme: new Storage('darkTheme', true)
+    darkTheme: new Storage('darkTheme', true),
+    downloadProcesses: []
   }
 
   // pass location context down the tree
   getChildContext() {
     return {
       location: this.props.location,
-      muiTheme: this.state.muiTheme
+      muiTheme: this.state.muiTheme,
+      downloadProcesses: this.state.downloadProcesses
     }
   }
 
@@ -99,9 +101,10 @@ export default class Main extends React.Component {
   }
 }
 
-// passing the location route to children
+// passing the location route and context to childrento children
 Main.childContextTypes = {
   location: PropTypes.object,
   muiTheme: PropTypes.object.isRequired,
+  downloadProcesses: PropTypes.array.isRequired,
   updateTheme: PropTypes.func
 }

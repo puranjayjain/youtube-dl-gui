@@ -17,12 +17,6 @@ let stored = {}
 let settingsHandle = new SettingsHandler()
 
 export default class Settings extends React.Component {
-  constructor(props, context) {
-    super(props, context)
-    // load all the settings
-    stored = settingsHandle.stored
-  }
-
   // functions to do the settings update work
   onDarkThemeToggle = () => {
     // update the stored dark theme
@@ -41,6 +35,11 @@ export default class Settings extends React.Component {
   //  Restrict filenames to only ASCII characters, and avoid "&" and spaces in filenames
   onRestrictToggle = () => {
     stored.filesystem.restrict.toggleData()
+  }
+
+  componentWillMount(){
+    // load all the settings
+    stored = settingsHandle.stored
   }
 
   render() {
@@ -86,7 +85,7 @@ export default class Settings extends React.Component {
                 primaryText="Use Dark Theme"
                 rightToggle= {
                   <Toggle
-                    defaultToggled = {JSON.parse(stored.theme.darkTheme.data)}
+                    defaultToggled = {stored.theme.darkTheme.data}
                     onToggle = {this.onDarkThemeToggle}
                   />
                 }
@@ -117,7 +116,7 @@ export default class Settings extends React.Component {
                 primaryText="Use only video ID in file name"
                 leftCheckbox= {
                   <Checkbox
-                    defaultChecked = {JSON.parse(stored.filesystem.id.data)}
+                    defaultChecked = {stored.filesystem.id.data}
                     onCheck = {this.onIdToggle}
                   />
                 }
@@ -132,7 +131,7 @@ export default class Settings extends React.Component {
                 primaryText="Restrict filenames to only ASCII characters"
                 leftCheckbox = {
                   <Checkbox
-                    defaultChecked = {JSON.parse(stored.filesystem.restrict.data)}
+                    defaultChecked = {stored.filesystem.restrict.data}
                     onCheck = {this.onIdToggle}
                   />
                 }

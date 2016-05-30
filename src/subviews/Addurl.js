@@ -24,6 +24,8 @@ import Dialog from 'material-ui/Dialog'
 const fs = window.require('fs')
 const youtubedl = window.require('youtube-dl')
 const pathExists = window.require('path-exists')
+import uuid from 'uuid'
+import moment from 'moment'
 
 // icons
 import ContentAdd from 'material-ui/svg-icons/content/add'
@@ -31,6 +33,7 @@ import MoreHoriz from 'material-ui/svg-icons/navigation/more-horiz'
 import Info from 'material-ui/svg-icons/action/info'
 
 import mrEmitter from '../helpers/mrEmitter'
+import Dl from '../helpers/Dl'
 
 // import all the errors to be used
 import Errordata from '../Data/Errordata'
@@ -50,6 +53,13 @@ let loadFormat = true
 
 // current error in the snackbar
 let snackbarErrorText = ''
+
+// the settings loader helper
+import SettingsHandler from '../helpers/SettingsHandler'
+
+let stored = {}
+
+let settingsHandle = new SettingsHandler()
 
 export default class Addurl extends React.Component {
   //keep tooltip state
@@ -90,6 +100,10 @@ export default class Addurl extends React.Component {
     if (urlPattern.test(text)) {
       this.setState({url: text})
     }
+    else {
+      // empty the text if not a url
+      this.setState({url: ''})
+    }
     // focus the url input
     setTimeout(() => {
       this.refs.urlInput.focus()
@@ -106,7 +120,8 @@ export default class Addurl extends React.Component {
     if (urlPattern.test(text)) {
       this.setState({
         dialog: false,
-        confirmDialog: true
+        confirmDialog: true,
+        errorUrl: ''
       })
     }
     else {
@@ -145,19 +160,47 @@ export default class Addurl extends React.Component {
 
   // close the confirm dialog
   closeConfirmDialog = () => {
-    this.setState({confirmDialog: false})
-    // reset to default as the format
-    this.setState({format: 1})
-    // clear the downloaded formats
-    this.setState({formats: []})
+    this.setState({
+      confirmDialog: false,
+      // reset to default as the format
+      format: 1,
+      // clear the downloaded formats
+      formats: [],
+      // reset the error states
+      errorPath: ''
+    })
   }
 
   // ok button of the confirm dialog
   onConfirmDialog = () => {
     // check if the path passed by the user is valid
-    pathExists(this.state.filePath).then(exists => {
+    pathExists(this.state.filePath.toString()).then(exists => {
       if (exists) {
+        // generate the download id and use it
+        const id = uuid.v1()
         // begin procedure to download the media
+        const downloadProcess = new Dl({
+          uuid: id,
+          url: this.state.url,
+          filepath: this.state.filePath
+        })
+        // initiate the object to store
+        const newDownload = {
+          downloadProcess: downloadProcess, //internally useful state
+          uuid: id,
+          format: 22, // format number of the download
+          url: this.state.url, //url of the media
+          fileName: this.state.filePath + '\\thevideo.mp4', // TODO replace the filename and get it calculated from ytdl!!!
+          size: 0, // e.g 459834 bytes converted to mb when displayed, full size of download
+          lastTry: moment(), // last attempt at downloading the file TODO display it using moment(your date time here).fromNow(),
+          downloaded: 0, // e.g 459834 bytes converted to mb when displayed, bytes downloaded
+          status: 'Starting'
+        }
+        // update the localstorage by parse and then stringify
+        stored.data = stored.data.push(newDownload)
+        // update the contextual storage
+        this.context.downloadProcesses.unshift(newDownload)
+        console.log(downloadProcess)
       }
     	else {
         this.setState({errorPath: Errordata.invalidPath})
@@ -246,6 +289,8 @@ export default class Addurl extends React.Component {
 
   // register all adding stuff here
   componentWillMount() {
+    // load all the settings
+    stored = settingsHandle.stored
     // on initiate load
     this.isActive(this.context.location.pathname)
     // on each event trigger
@@ -500,5 +545,6 @@ export default class Addurl extends React.Component {
 
 Addurl.contextTypes = {
   location: PropTypes.object.isRequired,
-  muiTheme: PropTypes.object.isRequired
+  muiTheme: PropTypes.object.isRequired,
+  downloadProcesses: PropTypes.array.isRequired
 }

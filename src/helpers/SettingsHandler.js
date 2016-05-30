@@ -17,15 +17,15 @@ export default class SettingsHandler {
     // see https://en.wikipedia.org/wiki/CamelCase
     // theme settings
     stored.theme.darkTheme = new Storage('darkTheme', true)
-    // Download Options
+      // Download Options
     stored.download.retries = new Storage('retries', 10)
     stored.download.bufferSize = new Storage('bufferSize', 1024)
-    // File Options
+      // File Options
     stored.filesystem.id = new Storage('id', false)
     stored.filesystem.output = new Storage('output', 'default')
     stored.filesystem.restrict = new Storage('restrict', false)
-    // also initiate the settings that are not being displayed
-    // data about the downloaded files and te files being downloaded
+      // also initiate the settings that are not being displayed
+      // data about the downloaded files and te files being downloaded
     stored.data = new Storage('data', '[]')
   }
 
