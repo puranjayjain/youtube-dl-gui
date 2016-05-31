@@ -196,11 +196,17 @@ export default class Addurl extends React.Component {
           downloaded: 0, // e.g 459834 bytes converted to mb when displayed, bytes downloaded
           status: 'Starting'
         }
-        // update the localstorage by parse and then stringify
-        stored.data = stored.data.push(newDownload)
         // update the contextual storage
         this.context.downloadProcesses.unshift(newDownload)
         console.log(downloadProcess)
+        // don't store internal state
+        delete newDownload.downloadProcess
+        // update the localstorage data
+        let updateData = stored.dldata.data
+        // push new data
+        updateData.push(newDownload)
+        // stored = updateData
+        settingsHandle.setStored('dldata', updateData)
       }
     	else {
         this.setState({errorPath: Errordata.invalidPath})

@@ -4,6 +4,8 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 // Custom components
 import AllPlaceHolder from '../placeholders/AllPlaceHolder'
 
+// remove this subscription afterwards when there is no use for it
+let Subscription = null
 import mrEmitter from '../helpers/mrEmitter'
 
 const tableData = [
@@ -30,6 +32,7 @@ export default class All extends React.Component {
     toolbar: false,
     table: true
   }
+
   // show or hide the table function
   componentDidMount() {
     // if table's length is zero show the EmptyPlaceHolder and hide the table
@@ -39,6 +42,17 @@ export default class All extends React.Component {
         this.refs.allPlaceHolder.setState({visible: true})
       }, 700)
     }
+    // add emitter event listener
+    // on each event trigger
+    Subscription = mrEmitter.addListener('onStartStatus', (uuid, info) => {
+      console.log(uuid)
+      console.log(info)
+    })
+  }
+
+  componentWillUnmount(){
+    // remove emitter event listener
+    Subscription.remove()
   }
 
   render() {

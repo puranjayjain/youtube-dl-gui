@@ -26,7 +26,7 @@ export default class SettingsHandler {
     stored.filesystem.restrict = new Storage('restrict', false)
       // also initiate the settings that are not being displayed
       // data about the downloaded files and te files being downloaded
-    stored.data = new Storage('data', '[]')
+    stored.dldata = new Storage('dldata', [], true)
   }
 
   // getters and setter are defined here
@@ -35,6 +35,12 @@ export default class SettingsHandler {
   }
 
   set stored(value) {
+    console.log('SettingsHandler: ' + value)
     stored = value
+  }
+
+  // set a particular storage data
+  setStored = (key, value) => {
+    stored[key].data = value
   }
 }

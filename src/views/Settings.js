@@ -23,7 +23,7 @@ export default class Settings extends React.Component {
     stored.theme.darkTheme.toggleData()
     // update the theme on the parent
     this.props.updateTheme()
-    // display in snackbar that the theme couldnot be updated globally so please restart the app to apply it
+    // TODO display in snackbar that the theme couldnot be updated globally so please restart the app to apply it
 
   }
 

@@ -39,7 +39,6 @@ export default class Dl {
         })
       // initiate the download status monitors here
     _video.on('info', (info) => {
-      console.log(info)
       // emits on download start / resume to update the useful stuff
       mrEmitter.emit('onStartStatus', this._args.uuid, info)
     })
