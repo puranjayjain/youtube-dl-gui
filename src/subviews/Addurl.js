@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 const shell = window.require('electron').shell
-const {dialog} = window.require('electron').remote
+const {dialog, app} = window.require('electron').remote
 const clipboard = window.require('electron').clipboard
 
 // import necessary components
@@ -179,14 +179,13 @@ export default class Addurl extends React.Component {
         // generate the download id and use it
         const id = uuid.v1()
         // begin procedure to download the media
-        const downloadProcess = new Dl({
-          uuid: id,
-          url: this.state.url,
-          filepath: this.state.filePath
-        })
+        // let downloadProcess = new Dl({
+        //   uuid: id,
+        //   url: this.state.url,
+        //   filepath: this.state.filePath
+        // })
         // initiate the object to store
-        const newDownload = {
-          downloadProcess: downloadProcess, //internally useful state
+        let newDownload = {
           uuid: id,
           format_id: 22, // format id(number) of the download
           url: this.state.url, //url of the media
@@ -196,17 +195,44 @@ export default class Addurl extends React.Component {
           downloaded: 0, // e.g 459834 bytes converted to mb when displayed, bytes downloaded
           status: 'Starting'
         }
-        // update the contextual storage
-        this.context.downloadProcesses.unshift(newDownload)
-        console.log(downloadProcess)
-        // don't store internal state
-        delete newDownload.downloadProcess
         // update the localstorage data
-        let updateData = stored.dldata.data
+        // let updateData = stored.dldata.data
         // push new data to the start of the array
-        updateData.unshift(newDownload)
+        // updateData.unshift(newDownload)
         // stored = updateData
-        settingsHandle.setStored('dldata', updateData)
+        // settingsHandle.setStored('dldata', updateData)
+        // add internal states for use
+        // newDownload.downloadProcess = downloadProcess
+
+        // newDownload.video = downloadProcess.initVideo()
+        // console.log(downloadProcess.video)
+        console.log(app.getAppPath())
+
+        // update the contextual storage
+        // this.context.downloadProcesses.unshift(newDownload)
+        let _video = youtubedl(
+            this.state.url,
+            // TODO leaving the formats to empty for now, get them calculated from the settings
+            [],
+            // Additional options can be given for calling `child_process.execFile()`.
+            // TODO replace dirname with the actual path this._args.filepath
+            {
+              cwd: app.getAppPath()
+            })
+          // initiate the download status monitors here
+        _video.on('info', (info) => {
+          // emits on download start / resume to update the useful stuff
+          mrEmitter.emit('onStartStatus', this._args.uuid, info)
+        })
+        // start the download here
+        _video.pipe(fs.createWriteStream('thevideo.mp4'))
+
+        // _video.on('data', (chunk) => {
+        //   // TODO console.log('got %d bytes of data', chunk.length)
+        //   // the other end of this will read the chunk.length for new download size addition
+        //   // TODO update the other end's time and date with moment()
+        //   mrEmitter.emit('onDownloadStatus', this._args.uuid, chunk)
+        // })
       }
     	else {
         this.setState({errorPath: Errordata.invalidPath})

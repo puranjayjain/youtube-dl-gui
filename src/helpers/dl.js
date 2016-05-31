@@ -21,14 +21,17 @@ export default class Dl {
     this._args = args
       // load all the settings
     stored = SettingsHandler.stored
-      // call initiating functions here
-    this._initVideo()
+  }
+
+  // all the getters and setters are declared here https://github.com/fent/node-youtube-dl/issues/112
+  get video() {
+    return _video
   }
 
   // instantiate functions
   // TODO add checks for resuming a partially downloaded file
   // start te process and get the video also
-  _initVideo = () => {
+  initVideo = () => {
     _video = youtubedl(
         this._args.url,
         // TODO leaving the formats to empty for now, get them calculated from the settings
@@ -43,34 +46,31 @@ export default class Dl {
       // emits on download start / resume to update the useful stuff
       mrEmitter.emit('onStartStatus', this._args.uuid, info)
     })
+    // start the download here
+    _video.pipe(fs.createWriteStream('thevideo.mp4'))
+
     _video.on('data', (chunk) => {
       // TODO console.log('got %d bytes of data', chunk.length)
       // the other end of this will read the chunk.length for new download size addition
       // TODO update the other end's time and date with moment()
       mrEmitter.emit('onDownloadStatus', this._args.uuid, chunk)
     })
-    // start the download here
-    _video.pipe(fs.createWriteStream('thevideo.mp4'))
-  }
 
-
-  // all the getters and setters are declared here https://github.com/fent/node-youtube-dl/issues/112
-  get video() {
     return _video
   }
 
   // all the main functions to proppogate tasks
   resumeDownload = () => {
-    _video.resume()
+    return _video.resume()
   }
 
   pauseDownload = () => {
-    _video.pause()
+    return _video.pause()
   }
 
   // REVIEW this after this is resolved https://github.com/fent/node-youtube-dl/issues/112
   stopDownload = () => {
     this.pauseDownload()
-    _video.unpipe()
+    return _video.unpipe()
   }
 }
