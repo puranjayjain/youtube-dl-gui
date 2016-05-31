@@ -1,14 +1,24 @@
 import React from 'react'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 
+import moment from 'moment'
+import bytes from 'bytes'
+
 // Custom components
 import AllPlaceHolder from '../placeholders/AllPlaceHolder'
 
 // remove this subscription afterwards when there is no use for it
-let Subscription = null
+let Subscriptions = []
 import mrEmitter from '../helpers/mrEmitter'
 
-const tableData = [
+// the settings loader helper
+import SettingsHandler from '../helpers/SettingsHandler'
+
+let stored = {}
+
+let settingsHandle = new SettingsHandler()
+
+let tableData = [
   // {
   //     uuid: 'uuid',
   //     fileName: 'C:\Users\User\Music\Song.mp4', // full path to file
@@ -33,6 +43,14 @@ export default class All extends React.Component {
     table: true
   }
 
+  // register all adding stuff here
+  componentWillMount() {
+    // load all the settings
+    stored = settingsHandle.stored
+    // update the local data
+    tableData = stored.dldata.data
+  }
+
   // show or hide the table function
   componentDidMount() {
     // if table's length is zero show the EmptyPlaceHolder and hide the table
@@ -44,15 +62,44 @@ export default class All extends React.Component {
     }
     // add emitter event listener
     // on each event trigger
-    Subscription = mrEmitter.addListener('onStartStatus', (uuid, info) => {
-      console.log(uuid)
-      console.log(info)
-    })
+    Subscriptions.push(mrEmitter.addListener('onStartStatus', (uuid, info) => {
+      // create a copy of the data
+      let updateData = stored.dldata.data
+      // try to find it in tableData if not add it
+      for (let cData of updateData) {
+        if (cData.uuid === uuid) {
+          cData.size = info.size
+          cData.format_id = info.format_id
+        }
+      }
+      // update the stored data
+      settingsHandle.setStored('dldata', updateData)
+      // update the local data
+      tableData = stored.dldata
+    }))
+    // on each byte downloaded
+    Subscriptions.push(mrEmitter.addListener('onDownloadStatus', (uuid, chunk) => {
+      // create a copy of the data
+      let updateData = stored.dldata.data
+      // try to find it in tableData if not add it
+      for (let cData of updateData) {
+        if (cData.uuid === uuid) {
+          cData.siz += chunk
+          cData.lastTry = moment()
+        }
+      }
+      // update the stored data
+      settingsHandle.setStored('dldata', updateData)
+      // update the local data
+      tableData = stored.dldata
+    }))
   }
 
   componentWillUnmount(){
-    // remove emitter event listener
-    Subscription.remove()
+    // remove emitter event listeners
+    for (let Subscription of Subscriptions) {
+      Subscription.remove()
+    }
   }
 
   render() {
@@ -90,12 +137,12 @@ export default class All extends React.Component {
             stripedRows={true}
           >
             {tableData.map( (row, index) => (
-              <TableRow>
+              <TableRow key={index}>
                 <TableRowColumn style={style.tableColumn}>{row.fileName}</TableRowColumn>
-                <TableRowColumn>{row.downloaded}</TableRowColumn>
+                <TableRowColumn>{bytes(row.downloaded)}</TableRowColumn>
                 <TableRowColumn>{row.status}</TableRowColumn>
-                <TableRowColumn>{row.size}</TableRowColumn>
-                <TableRowColumn>{row.lastTry}</TableRowColumn>
+                <TableRowColumn>{bytes(row.size)}</TableRowColumn>
+                <TableRowColumn>{moment(row.lastTry).fromNow()}</TableRowColumn>
               </TableRow>
             ))}
           </TableBody>

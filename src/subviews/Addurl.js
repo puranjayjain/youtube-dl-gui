@@ -188,11 +188,11 @@ export default class Addurl extends React.Component {
         const newDownload = {
           downloadProcess: downloadProcess, //internally useful state
           uuid: id,
-          format: 22, // format number of the download
+          format_id: 22, // format id(number) of the download
           url: this.state.url, //url of the media
           fileName: this.state.filePath + '\\thevideo.mp4', // TODO replace the filename and get it calculated from ytdl!!!
           size: 0, // e.g 459834 bytes converted to mb when displayed, full size of download
-          lastTry: moment(), // last attempt at downloading the file TODO display it using moment(your date time here).fromNow(),
+          lastTry: moment(), // last attempt at downloading the file
           downloaded: 0, // e.g 459834 bytes converted to mb when displayed, bytes downloaded
           status: 'Starting'
         }
@@ -203,8 +203,8 @@ export default class Addurl extends React.Component {
         delete newDownload.downloadProcess
         // update the localstorage data
         let updateData = stored.dldata.data
-        // push new data
-        updateData.push(newDownload)
+        // push new data to the start of the array
+        updateData.unshift(newDownload)
         // stored = updateData
         settingsHandle.setStored('dldata', updateData)
       }
@@ -212,6 +212,8 @@ export default class Addurl extends React.Component {
         this.setState({errorPath: Errordata.invalidPath})
     	}
     })
+    // close the dialog now
+    this.closeConfirmDialog()
   }
 
   // on info button click

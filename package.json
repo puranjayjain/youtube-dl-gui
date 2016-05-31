@@ -42,6 +42,7 @@
     "watchify": "^3.7.0"
   },
   "dependencies": {
+    "bytes": "^2.3.0",
     "fbemitter": "^2.0.2",
     "material-ui": "^0.15.0",
     "moment": "^2.13.0",

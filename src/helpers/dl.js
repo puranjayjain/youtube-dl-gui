@@ -22,20 +22,21 @@ export default class Dl {
       // load all the settings
     stored = SettingsHandler.stored
       // call initiating functions here
-    this.initVideo()
+    this._initVideo()
   }
 
   // instantiate functions
   // TODO add checks for resuming a partially downloaded file
   // start te process and get the video also
-  initVideo = () => {
+  _initVideo = () => {
     _video = youtubedl(
         this._args.url,
         // TODO leaving the formats to empty for now, get them calculated from the settings
         [],
         // Additional options can be given for calling `child_process.execFile()`.
+        // TODO replace dirname with the actual path this._args.filepath
         {
-          cwd: this._args.filepath
+          cwd: __dirname
         })
       // initiate the download status monitors here
     _video.on('info', (info) => {
@@ -48,6 +49,8 @@ export default class Dl {
       // TODO update the other end's time and date with moment()
       mrEmitter.emit('onDownloadStatus', this._args.uuid, chunk)
     })
+    // start the download here
+    _video.pipe(fs.createWriteStream('thevideo.mp4'))
   }
 
 
@@ -56,11 +59,7 @@ export default class Dl {
     return _video
   }
 
-  get download() {
-      // TODO replace the filename and get it calculated from ytdl!!!
-      return _video.pipe(fs.createWriteStream('thevideo.mp4'))
-    }
-    // all the main functions to proppogate tasks
+  // all the main functions to proppogate tasks
   resumeDownload = () => {
     _video.resume()
   }

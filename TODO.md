@@ -6,3 +6,4 @@
 - [ ] decide between tray icon change or overlay status and implement it http://electron.atom.io/docs/all/#icon-overlays-in-taskbar-windows
 - [ ] implement download status using http://electron.atom.io/docs/all/#icon-overlays-in-taskbar-windows
 - [ ] implement download notifications using http://electron.atom.io/docs/all/#icon-overlays-in-taskbar-windows
+- [ ] implement resizable tables http://jsfiddle.net/thrilleratplay/epcybL4v/
