@@ -46,7 +46,6 @@ export default class Storage {
    * @param  {String} newdata [the new data to be updated]
    */
   set data(newdata) {
-    console.log('Storage: ' + newdata);
     localStorage.setItem(this._key, JSON.stringify(newdata))
   }
 

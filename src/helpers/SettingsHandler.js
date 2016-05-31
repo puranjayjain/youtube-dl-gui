@@ -35,7 +35,6 @@ export default class SettingsHandler {
   }
 
   set stored(value) {
-    console.log('SettingsHandler: ' + value)
     stored = value
   }
 
