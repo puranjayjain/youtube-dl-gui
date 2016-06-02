@@ -45,7 +45,7 @@
     "watchify": "^3.7.0"
   },
   "dependencies": {
-    "bytes": "^2.3.0",
+    "bytes": "^2.4.0",
     "devtron": "^1.1.2",
     "electron-debug": "^1.0.0",
     "fbemitter": "^2.0.2",
