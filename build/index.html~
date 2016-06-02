@@ -1,0 +1,39 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Youtube Dl GUI</title>
+  <meta name="description" content="Google's material design UI components built with React.">
+
+  <!-- Use minimum-scale=1 to enable GPU rasterization -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0, maximum-scale=1, minimum-scale=1">
+  <link rel="stylesheet" type="text/css" href="fonts.css">
+  <link rel="stylesheet" type="text/css" href="main.css">
+</head>
+
+<body>
+  <div id="app"></div>
+  <script src="App.js"></script>
+  <script type="text/javascript">
+    const fs = require('fs')
+    const youtubedl = require('youtube-dl')
+    let video = youtubedl('http://www.youtube.com/watch?v=90AiXO1pAiA',
+        // Optional arguments passed to youtube-dl.
+        ['--format=18'],
+        // Additional options can be given for calling `child_process.execFile()`.
+        {
+          cwd: app.getAppPath()
+        })
+
+      // Will be called when the download starts.
+      video.on('info', function (info) {
+        console.log('Download started')
+        console.log('filename: ' + info.filename)
+        console.log('size: ' + info.size)
+      })
+  </script>
+</body>
+
+</html>

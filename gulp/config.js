@@ -29,7 +29,8 @@ module.exports = {
     bundleConfigs: [{
       entries: src + '/app/app.js',
       dest: dest,
-      outputName: 'app.js'
+      outputName: 'app.js',
+      ignore: './node_modules/youtube-dl/**/*.js'
     }],
     extensions: ['.js'],
   }

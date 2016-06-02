@@ -8,9 +8,6 @@ const BrowserWindow = electron.BrowserWindow
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 
-// show electron debug dev tools https://github.com/sindresorhus/electron-debug
-require('electron-debug')({showDevTools: true})
-
 const shouldQuit = app.makeSingleInstance((commandLine, workingDirectory) => {
   // Someone tried to run a second instance, we should focus our window.
   if(mainWindow) {
@@ -33,10 +30,10 @@ function createWindow() {
 
   // and load the index.html of the app.
   mainWindow.loadURL('file://' + __dirname + '/build/index.html')
-    // mainWindow.loadURL('http://localhost:3000')
+  // FIXME remove me or keep me it's your choice mainWindow.loadURL('http://localhost:3000')
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
@@ -73,7 +70,3 @@ app.on('activate', function () {
 process.on('uncaughtException', (err) => {
   console.error(err)
 })
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
-// const dl = require('./main/Dl')

@@ -75,23 +75,26 @@ export default class All extends React.Component {
       // update the stored data
       settingsHandle.setStored('dldata', updateData)
       // update the local data
-      tableData = stored.dldata
+      tableData = stored.dldata.data
     }))
     // on each byte downloaded
     Subscriptions.push(mrEmitter.addListener('onDownloadStatus', (uuid, chunk) => {
+      // console.log(chunk);
       // create a copy of the data
       let updateData = stored.dldata.data
       // try to find it in tableData if not add it
       for (let cData of updateData) {
         if (cData.uuid === uuid) {
-          cData.siz += chunk
+          cData.downloaded += chunk.length
+          cData.status = 'Downloading'
           cData.lastTry = moment()
         }
       }
       // update the stored data
       settingsHandle.setStored('dldata', updateData)
       // update the local data
-      tableData = stored.dldata
+      tableData = stored.dldata.data
+      this.forceUpdate()
     }))
   }
 

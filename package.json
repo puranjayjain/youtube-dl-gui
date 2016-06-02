@@ -16,7 +16,7 @@
   ],
   "main": "dist/js/index.html",
   "scripts": {
-    "start": "electron --debug=5858 electron_main.js"
+    "start": "electron electron_main.js"
   },
   "author": "Puranjay Jain <puranjay.jain@st.niituniversity.in>",
   "license": "MIT",
@@ -47,8 +47,6 @@
   },
   "dependencies": {
     "bytes": "^2.4.0",
-    "devtron": "^1.1.2",
-    "electron-debug": "^1.0.0",
     "fbemitter": "^2.0.2",
     "material-ui": "^0.15.0",
     "moment": "^2.13.0",
