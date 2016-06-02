@@ -69,36 +69,11 @@ app.on('activate', function () {
   }
 })
 
+// TODO send errors to console of the renderer
 process.on('uncaughtException', (err) => {
   console.error(err)
 })
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
-// const downloadHandler = require('./main/downloadHandler')
-// const child_process = require('child_process')
-
-// console.log(__dirname);
-//
-// child_process.execFile(__dirname + '\\node_modules\\.bin\\youtube-dl.exe', ['https://www.youtube.com/watch?v=i3Jv9fNPjgk'], (err, stdout, stderr) => {
-//   if (err) throw err;
-//
-//   console.log(stdout, stderr);
-// })
-const fs = require('fs')
-const youtubedl = require('youtube-dl')
-
-const video = youtubedl('http://www.youtube.com/watch?v=90AiXO1pAiA',
-// Optional arguments passed to youtube-dl.
-['--format=18'],
-// Additional options can be given for calling `child_process.execFile()`.
-{ cwd: __dirname })
-
-// Will be called when the download starts.
-video.on('info', function(info) {
-  console.log('Download started')
-  console.log('filename: ' + info.filename)
-  console.log('size: ' + info.size)
-})
-
-console.log(video.pipe(fs.createWriteStream('myvideo.mp4')))
+// const dl = require('./main/Dl')

@@ -1,9 +1,7 @@
 import React, {PropTypes} from 'react'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
-const shell = window.require('electron').shell
-const {dialog, app} = window.require('electron').remote
-const clipboard = window.require('electron').clipboard
+const {dialog, app, shell, clipboard} = window.require('electron').remote
 
 // import necessary components
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card'
@@ -31,7 +29,6 @@ import MoreHoriz from 'material-ui/svg-icons/navigation/more-horiz'
 import Info from 'material-ui/svg-icons/action/info'
 
 import mrEmitter from '../helpers/mrEmitter'
-import Dl from '../helpers/Dl'
 
 // import all the errors to be used
 import Errordata from '../Data/Errordata'

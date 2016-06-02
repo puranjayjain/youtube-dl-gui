@@ -1,3 +1,12 @@
 {
-  "presets": ["es2015", "react", "stage-1"]
+  /*drop es2015 preset in favor of individual modules as we dont need them all for chrome 51+*/
+  /* these two are removed add them if needed*/
+  /* stage-1 */
+  /* transform-es2015-modules-commonjs */
+  "presets": ["react"],
+  "plugins": [
+    "transform-es2015-duplicate-keys",
+    "transform-es2015-modules-umd",
+    "transform-class-properties"
+  ]
 }

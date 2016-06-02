@@ -14,7 +14,6 @@ import dark from '../themes/dark'
 
 // import our components
 import Sidebar from './Sidebar'
-
 const {remote} = window.require('electron')
 
 // native electron components
