@@ -21,9 +21,7 @@ import Checkbox from 'material-ui/Checkbox'
 import Dialog from 'material-ui/Dialog'
 
 // import node youtube dl and related dependencies
-const fs = window.require('fs')
-const youtubedl = window.require('youtube-dl')
-const pathExists = window.require('path-exists')
+const pathExists = require('path-exists')
 import uuid from 'uuid'
 import moment from 'moment'
 
@@ -58,8 +56,8 @@ let snackbarErrorText = ''
 import SettingsHandler from '../helpers/SettingsHandler'
 
 let stored = {}
-
 let settingsHandle = new SettingsHandler()
+let video
 
 export default class Addurl extends React.Component {
   //keep tooltip state
@@ -179,11 +177,11 @@ export default class Addurl extends React.Component {
         // generate the download id and use it
         const id = uuid.v1()
         // begin procedure to download the media
-        // let downloadProcess = new Dl({
-        //   uuid: id,
-        //   url: this.state.url,
-        //   filepath: this.state.filePath
-        // })
+        let downloadProcess = new Dl({
+          uuid: id,
+          url: this.state.url,
+          filepath: this.state.filePath
+        })
         // initiate the object to store
         let newDownload = {
           uuid: id,
@@ -195,37 +193,44 @@ export default class Addurl extends React.Component {
           downloaded: 0, // e.g 459834 bytes converted to mb when displayed, bytes downloaded
           status: 'Starting'
         }
-        // update the localstorage data
-        // let updateData = stored.dldata.data
-        // push new data to the start of the array
-        // updateData.unshift(newDownload)
-        // stored = updateData
-        // settingsHandle.setStored('dldata', updateData)
-        // add internal states for use
-        // newDownload.downloadProcess = downloadProcess
 
-        // newDownload.video = downloadProcess.initVideo()
-        // console.log(downloadProcess.video)
+        // console.log(path.join(path.dirname(app.getAppPath()), './youtube-dl.exe'));
+        //
+        // child_process.execFile(path.join(path.dirname(app.getAppPath()), './youtube-dl.exe'), ['https://www.youtube.com/watch?v=i3Jv9fNPjgk'], (err, stdout, stderr) => {
+        //   if (err) throw err;
+        //   console.log('inside')
+        //   console.log(stdout, stderr)
+        // })
+        // update the localstorage data
+        let updateData = stored.dldata.data
+        // push new data to the start of the array
+        updateData.unshift(newDownload)
+        stored = updateData
+        settingsHandle.setStored('dldata', updateData)
+        // add internal states for use
+        newDownload.downloadProcess = downloadProcess
+
+        newDownload.video = downloadProcess.initVideo()
+        console.log(downloadProcess.video)
         console.log(app.getAppPath())
 
         // update the contextual storage
         // this.context.downloadProcesses.unshift(newDownload)
-        let _video = youtubedl(
-            this.state.url,
-            // TODO leaving the formats to empty for now, get them calculated from the settings
-            [],
-            // Additional options can be given for calling `child_process.execFile()`.
-            // TODO replace dirname with the actual path this._args.filepath
-            {
-              cwd: app.getAppPath()
-            })
-          // initiate the download status monitors here
-        _video.on('info', (info) => {
-          // emits on download start / resume to update the useful stuff
-          mrEmitter.emit('onStartStatus', this._args.uuid, info)
-        })
-        // start the download here
-        _video.pipe(fs.createWriteStream('thevideo.mp4'))
+
+        // video = youtubedl('http://www.youtube.com/watch?v=90AiXO1pAiA',
+        // // Optional arguments passed to youtube-dl.
+        // ['--format=18'],
+        // // Additional options can be given for calling `child_process.execFile()`.
+        // { cwd: __dirname })
+        //
+        // // Will be called when the download starts.
+        // video.on('info', function(info) {
+        //   console.log('Download started')
+        //   console.log('filename: ' + info.filename)
+        //   console.log('size: ' + info.size)
+        // })
+        //
+        // console.log(video.pipe(fs.createWriteStream('myvideo.mp4')))
 
         // _video.on('data', (chunk) => {
         //   // TODO console.log('got %d bytes of data', chunk.length)
@@ -283,33 +288,33 @@ export default class Addurl extends React.Component {
     // only do this if the formats were not triggered at this request
     if (loadFormat) {
       // async get the information of the requested file
-      youtubedl.getInfo(url, (error, info) => {
-        if (error) {
-          console.error(error)
-          // handle errors as toasts here
-          this.openSnackBar(Errordata.errorFormat)
-          return
-        }
-        // if the format is not available
-        if (info.hasOwnProperty('formats')) {
-          // store all the media formats in here
-          youtubedlFormat = info.formats
-          // also update the dialog with these values
-          let formatList = []
-          for (let f of youtubedlFormat) {
-            formatList.push(f.format.split(' - ')[1] + ' [.' + f.ext + '] {codec: ' + f.acodec + '}')
-          }
-          // set the dropdown items
-          this.setState({formats: formatList})
-          // REVIEW some issue with dropdown not updating correctly
-          // set that the formats were loaded
-          loadFormat = false
-        }
-        else {
-          // handle errors as toasts here
-          this.openSnackBar(Errordata.errorFormat)
-        }
-      })
+      // youtubedl.getInfo(url, (error, info) => {
+      //   if (error) {
+      //     console.error(error)
+      //     // handle errors as toasts here
+      //     this.openSnackBar(Errordata.errorFormat)
+      //     return
+      //   }
+      //   // if the format is not available
+      //   if (info.hasOwnProperty('formats')) {
+      //     // store all the media formats in here
+      //     youtubedlFormat = info.formats
+      //     // also update the dialog with these values
+      //     let formatList = []
+      //     for (let f of youtubedlFormat) {
+      //       formatList.push(f.format.split(' - ')[1] + ' [.' + f.ext + '] {codec: ' + f.acodec + '}')
+      //     }
+      //     // set the dropdown items
+      //     this.setState({formats: formatList})
+      //     // REVIEW some issue with dropdown not updating correctly
+      //     // set that the formats were loaded
+      //     loadFormat = false
+      //   }
+      //   else {
+      //     // handle errors as toasts here
+      //     this.openSnackBar(Errordata.errorFormat)
+      //   }
+      // })
     }
   }
 
