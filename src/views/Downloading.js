@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Component} from 'react'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 
 // Custom components
@@ -20,7 +20,7 @@ let tableData = [
   // }
 ]
 
-export default class Downloading extends React.Component {
+export default class Downloading extends Component {
   state = {
     toolbar: false,
     table: true

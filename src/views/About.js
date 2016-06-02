@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Component} from 'react'
 
 const shell = window.require('electron').shell
 
@@ -12,12 +12,12 @@ const style = {
   margin: '12px'
 }
 
-export default class About extends React.Component {
+export default class About extends Component {
   // on info button click
   openBugsPage = () => {
     shell.openExternal('https://github.com/puranjayjain/youtube-dl-gui/issues')
   }
-  
+
   render() {
     const version = {
       node: "Node Js Version " + window.process.versions.node,

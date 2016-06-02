@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react'
+import React, {PropTypes, Component} from 'react'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
@@ -39,7 +39,7 @@ let checkboxes = 0
 // the component to render inside
 let innerComp
 
-export default class Downloaded extends React.Component {
+export default class Downloaded extends Component {
   state = {
     toolbar: false,
     table: true

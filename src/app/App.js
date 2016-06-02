@@ -1,7 +1,7 @@
 import React from 'react'
-import { ReactDOM, render } from 'react-dom'
+import {ReactDOM, render} from 'react-dom'
 import injectTapEventPlugin from 'react-tap-event-plugin'
-import { Router, Route, IndexRoute, hashHistory } from 'react-router'
+import {Router, Route, IndexRoute, hashHistory} from 'react-router'
 
 // All the views and inner views
 import Main from './Main'

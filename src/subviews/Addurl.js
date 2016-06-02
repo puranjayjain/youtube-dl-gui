@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react'
+import React, {PropTypes, Component} from 'react'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 const {dialog, app, shell, clipboard} = window.require('electron').remote
@@ -55,7 +55,7 @@ import SettingsHandler from '../helpers/SettingsHandler'
 let stored = {}
 let settingsHandle = new SettingsHandler()
 
-export default class Addurl extends React.Component {
+export default class Addurl extends Component {
   //keep tooltip state
   state = {
     // checkbox state of the main dialog checkbox

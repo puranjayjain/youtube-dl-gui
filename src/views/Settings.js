@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react'
+import React, {PropTypes, Component} from 'react'
 
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card'
 import {List, ListItem} from 'material-ui/List'
@@ -16,7 +16,7 @@ let stored = {}
 
 let settingsHandle = new SettingsHandler()
 
-export default class Settings extends React.Component {
+export default class Settings extends Component {
   // functions to do the settings update work
   onDarkThemeToggle = () => {
     // update the stored dark theme

@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react'
+import React, {PropTypes, Component} from 'react'
 
 // import necessary components
 import RaisedButton from 'material-ui/RaisedButton'
@@ -25,7 +25,7 @@ import Addurl from '../subviews/Addurl'
 // the storage helper
 import Storage from '../helpers/Storage'
 
-export default class Main extends React.Component {
+export default class Main extends Component {
   constructor(props, context) {
     super(props, context)
   }

@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react'
+import React, {PropTypes, Component} from 'react'
 import { Router, Route, IndexRoute, hashHistory } from 'react-router'
 
 import AppBar from 'material-ui/AppBar'
@@ -25,7 +25,7 @@ const style = {
   }
 }
 
-export default class Sidebar extends React.Component {
+export default class Sidebar extends Component {
   state = {
     open: false
   }

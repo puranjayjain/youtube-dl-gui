@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Component} from 'react'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 
 import moment from 'moment'
@@ -37,7 +37,7 @@ let tableData = [
   // }
 ]
 
-export default class All extends React.Component {
+export default class All extends Component {
   state = {
     toolbar: false,
     table: true
