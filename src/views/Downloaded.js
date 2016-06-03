@@ -15,34 +15,42 @@ import DeleteForever from 'material-ui/svg-icons/action/delete-forever'
 import Pause from 'material-ui/svg-icons/av/pause-circle-filled'
 import Play from 'material-ui/svg-icons/av/play-arrow'
 
+import moment from 'moment'
+import bytes from 'bytes'
+
 // Custom components
 import mrEmitter from '../helpers/mrEmitter'
 import DownloadedPlaceHolder from '../placeholders/DownloadedPlaceHolder'
 
-let tableData = [
-  // {
-  //   fileName: 'John Smith dsffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
-  //   size: '94 Mb',
-  //   lastTry: '17/05/2016',
-  //   selected: false
-  // },
-  // {
-  //   fileName: 'John Smith',
-  //   size: '94 Mb',
-  //   lastTry: '17/05/2016',
-  //   selected: false
-  // }
-]
-
-let checkboxes = 0
+// the settings loader helper
+import SettingsHandler from '../helpers/SettingsHandler'
 
 // the component to render inside
-let innerComp
+let innerComp,
+checkboxes = 0,
+stored = {},
+settingsHandle = new SettingsHandler(),
+// remove this subscription afterwards when there is no use for it
+Subscriptions = []
 
 export default class Downloaded extends Component {
   state = {
     toolbar: false,
-    table: true
+    table: true,
+    tableData: [
+      // {
+      //   fileName: 'John Smith dsffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
+      //   size: '94 Mb',
+      //   lastTry: '17/05/2016',
+      //   selected: false
+      // },
+      // {
+      //   fileName: 'John Smith',
+      //   size: '94 Mb',
+      //   lastTry: '17/05/2016',
+      //   selected: false
+      // }
+    ]
   }
 
   // toggle toolbar's visibility
@@ -64,7 +72,7 @@ export default class Downloaded extends Component {
       for (let i = 0; i < checkboxes; i++) {
         this.refs['check' + i].setChecked(isInputChecked)
         // update the data
-        tableData[i].selected = isInputChecked
+        this.state.tableData[i].selected = isInputChecked
       }
     }
     else {
@@ -85,11 +93,13 @@ export default class Downloaded extends Component {
    */
   onChecked = (index, event, isInputChecked, called) => {
     if (!called) {
-      tableData[index].selected = isInputChecked
+      let tempState = this.state.tableData
+      tempState[index].selected = isInputChecked
+      this.setState({tableData: tempState})
       // check if we need to show or hide the toolbar
       let shouldCheck = false
       for (let i = 0; i < checkboxes; i++) {
-        if (tableData[i].selected) {
+        if (this.state.tableData[i].selected) {
           shouldCheck = true
           break
         }
@@ -108,10 +118,18 @@ export default class Downloaded extends Component {
     this.onAllChecked(e, false)
   }
 
+  // register all adding stuff here
+  componentWillMount() {
+    // load all the settings
+    stored = settingsHandle.stored
+    // update the local data
+    this.setState({tableData: stored.dldata.data})
+  }
+
   // show or hide the table function
   componentDidMount() {
     // if table's length is zero show the EmptyPlaceHolder and hide the table
-    if (!tableData.length) {
+    if (!this.state.tableData.length) {
       this.setState({table: false})
       setTimeout(() => {
         this.refs.downloadedPlaceHolder.setState({visible: true})
@@ -228,8 +246,8 @@ export default class Downloaded extends Component {
             showRowHover={true}
             stripedRows={true}
           >
-            {tableData.map( (row, index) => (
-              <TableRow>
+            {this.state.tableData.map( (row, index) => (
+              <TableRow key={index}>
                 <TableRowColumn style={style.tableColumn}>
                   <Checkbox
                     ref={"check" + index}
@@ -237,13 +255,13 @@ export default class Downloaded extends Component {
                   />
                 </TableRowColumn>
                 <TableRowColumn style={style.multiLineItem}>{row.fileName}</TableRowColumn>
-                <TableRowColumn>{row.size}</TableRowColumn>
-                <TableRowColumn>{row.lastTry}</TableRowColumn>
+                <TableRowColumn>{bytes(row.size)}</TableRowColumn>
+                <TableRowColumn>{moment(row.lastTry).fromNow()}</TableRowColumn>
               </TableRow>
             ))}
             {
               // set the var to note the checkboxes value
-              checkboxes = tableData.length
+              checkboxes = this.state.tableData.length
             }
             }
           </TableBody>

@@ -6,41 +6,38 @@ import bytes from 'bytes'
 
 // Custom components
 import AllPlaceHolder from '../placeholders/AllPlaceHolder'
-
-// remove this subscription afterwards when there is no use for it
-let Subscriptions = []
 import mrEmitter from '../helpers/mrEmitter'
 
 // the settings loader helper
 import SettingsHandler from '../helpers/SettingsHandler'
 
-let stored = {}
-
-let settingsHandle = new SettingsHandler()
-
-let tableData = [
-  // {
-  //     uuid: 'uuid',
-  //     fileName: 'C:\Users\User\Music\Song.mp4', // full path to file
-  //     size: '94 Mb', // full size in mb
-  //     lastTry: '17/05/2016 9:06 AM', // last attempt at downloading the file
-  //     downloaded: '5 MB',
-  //     status: 'Paused', // can have values as 'Paused', 'Downloading', 'Error', 'Done'
-  // },
-  // {
-  //     uuid: 'uuid',
-  //     fileName: 'C:\Users\User\Music\Song.mp4', // full path to file
-  //     size: '94 Mb', // full size in mb
-  //     lastTry: '17/05/2016 9:06 AM', // last attempt at downloading the file
-  //     downloaded: '5 MB',
-  //     status: 'Paused', // can have values as 'Paused', 'Downloading', 'Error', 'Done'
-  // }
-]
+let settingsHandle = new SettingsHandler(),
+stored = {},
+// remove this subscription afterwards when there is no use for it
+Subscriptions = []
 
 export default class All extends Component {
   state = {
     toolbar: false,
-    table: true
+    table: true,
+    tableData: [
+      // {
+      //     uuid: 'uuid',
+      //     fileName: 'C:\Users\User\Music\Song.mp4', // full path to file
+      //     size: '94 Mb', // full size in mb
+      //     lastTry: '17/05/2016 9:06 AM', // last attempt at downloading the file
+      //     downloaded: '5 MB',
+      //     status: 'Paused', // can have values as 'Paused', 'Downloading', 'Error', 'Done'
+      // },
+      // {
+      //     uuid: 'uuid',
+      //     fileName: 'C:\Users\User\Music\Song.mp4', // full path to file
+      //     size: '94 Mb', // full size in mb
+      //     lastTry: '17/05/2016 9:06 AM', // last attempt at downloading the file
+      //     downloaded: '5 MB',
+      //     status: 'Paused', // can have values as 'Paused', 'Downloading', 'Error', 'Done'
+      // }
+    ]
   }
 
   // register all adding stuff here
@@ -48,13 +45,13 @@ export default class All extends Component {
     // load all the settings
     stored = settingsHandle.stored
     // update the local data
-    tableData = stored.dldata.data
+    this.setState({tableData: stored.dldata.data})
   }
 
   // show or hide the table function
   componentDidMount() {
     // if table's length is zero show the EmptyPlaceHolder and hide the table
-    if (!tableData.length) {
+    if (!this.state.tableData.length) {
       this.setState({table: false})
       setTimeout(() => {
         this.refs.allPlaceHolder.setState({visible: true})
@@ -75,7 +72,7 @@ export default class All extends Component {
       // update the stored data
       settingsHandle.setStored('dldata', updateData)
       // update the local data
-      tableData = stored.dldata.data
+      this.setState({tableData: stored.dldata.data})
     }))
     // on each byte downloaded
     Subscriptions.push(mrEmitter.addListener('onDownloadStatus', (uuid, chunk) => {
@@ -93,8 +90,7 @@ export default class All extends Component {
       // update the stored data
       settingsHandle.setStored('dldata', updateData)
       // update the local data
-      tableData = stored.dldata.data
-      this.forceUpdate()
+      this.setState({tableData: stored.dldata.data})
     }))
   }
 
@@ -139,7 +135,7 @@ export default class All extends Component {
             showRowHover={true}
             stripedRows={true}
           >
-            {tableData.map( (row, index) => (
+            {this.state.tableData.map( (row, index) => (
               <TableRow key={index}>
                 <TableRowColumn style={style.tableColumn}>{row.fileName}</TableRowColumn>
                 <TableRowColumn>{bytes(row.downloaded)}</TableRowColumn>

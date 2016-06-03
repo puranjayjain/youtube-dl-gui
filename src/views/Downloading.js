@@ -1,35 +1,54 @@
 import React, {Component} from 'react'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 
+import moment from 'moment'
+import bytes from 'bytes'
+
 // Custom components
 import mrEmitter from '../helpers/mrEmitter'
 import AllPlaceHolder from '../placeholders/AllPlaceHolder'
 
-let tableData = [
-  // {
-  //   fileName: 'John Smith dsffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
-  //   downloaded: 'Employed',
-  //   size: '94 Mb',
-  //   lastTry: '17/05/2016'
-  // },
-  // {
-  //   fileName: 'John Smith',
-  //   downloaded: 'Employed',
-  //   size: '94 Mb',
-  //   lastTry: '17/05/2016'
-  // }
-]
+// the settings loader helper
+import SettingsHandler from '../helpers/SettingsHandler'
+
+let settingsHandle = new SettingsHandler(),
+stored = {},
+// remove this subscription afterwards when there is no use for it
+Subscriptions = []
+
 
 export default class Downloading extends Component {
   state = {
     toolbar: false,
-    table: true
+    table: true,
+    tableData: [
+      // {
+      //   fileName: 'John Smith dsffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
+      //   downloaded: 'Employed',
+      //   size: '94 Mb',
+      //   lastTry: '17/05/2016'
+      // },
+      // {
+      //   fileName: 'John Smith',
+      //   downloaded: 'Employed',
+      //   size: '94 Mb',
+      //   lastTry: '17/05/2016'
+      // }
+    ]
+  }
+
+  // register all adding stuff here
+  componentWillMount() {
+    // load all the settings
+    stored = settingsHandle.stored
+    // update the local data
+    this.setState({tableData: stored.dldata.data})
   }
 
   // show or hide the table function
   componentDidMount() {
     // if table's length is zero show the EmptyPlaceHolder and hide the table
-    if (!tableData.length) {
+    if (!this.state.tableData.length) {
       this.setState({table: false})
       setTimeout(() => {
         this.refs.allPlaceHolder.setState({visible: true})
@@ -70,12 +89,12 @@ render() {
           showRowHover={true}
           stripedRows={true}
         >
-          {tableData.map( (row, index) => (
-            <TableRow>
+          {this.state.tableData.map( (row, index) => (
+            <TableRow key={index}>
               <TableRowColumn style={style.tableColumn}>{row.fileName}</TableRowColumn>
               <TableRowColumn>{row.downloaded}</TableRowColumn>
-              <TableRowColumn>{row.size}</TableRowColumn>
-              <TableRowColumn>{row.lastTry}</TableRowColumn>
+              <TableRowColumn>{bytes(row.size)}</TableRowColumn>
+              <TableRowColumn>{moment(row.lastTry).fromNow()}</TableRowColumn>
             </TableRow>
           ))}
         </TableBody>

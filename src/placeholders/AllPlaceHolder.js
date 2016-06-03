@@ -27,7 +27,7 @@ export default class AllPlaceHolder extends React.Component {
         display: 'flex',
         minWidth: '325px',
         minHeight: '325px',
-        opacity: this.state.visible ? '1' : '0'
+        visibility: this.state.visible ? 'visible' : 'collapse'
       },
       icon: {
         height: '18vh',
