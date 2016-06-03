@@ -5,7 +5,7 @@
 A Cross Platform GUI Client for youtube-dl written in react, electron and material ui.
 
 #Installation
-Coming soon v1 alpha release
+Coming soon v1 alpha release for Windows
 
 # Features
 Most of these features match the ones found [here](https://github.com/rg3/youtube-dl/blob/master/README.md#options)

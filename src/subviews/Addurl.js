@@ -33,27 +33,23 @@ import mrEmitter from '../helpers/mrEmitter'
 // import all the errors to be used
 import Errordata from '../Data/Errordata'
 
-// remove this subscription afterwards when there is no use for it
-let Subscription = null
-
 // standard regex for matching the urls
 // see https://gist.github.com/dperini/729294
 const urlPattern = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i
 
-// youtube dl format array will be stored here
-let youtubedlFormat
-
-// to track if the video formats are to be loaded this time
-let loadFormat = true
-
-// current error in the snackbar
-let snackbarErrorText = ''
-
 // the settings loader helper
 import SettingsHandler from '../helpers/SettingsHandler'
 
-let stored = {}
-let settingsHandle = new SettingsHandler()
+let settingsHandle = new SettingsHandler(),
+stored = {},
+// remove this subscription afterwards when there is no use for it
+Subscription = null,
+// youtube dl format array will be stored here
+youtubedlFormat,
+// to track if the video formats are to be loaded this time
+loadFormat = true,
+// current error in the snackbar
+snackbarErrorText = ''
 
 export default class Addurl extends Component {
   //keep tooltip state
@@ -190,10 +186,6 @@ export default class Addurl extends Component {
           status: 'Starting'
         }
 
-        // child.on('close', function(code) {
-        //     console.log('closing code: ' + code)
-        // })
-
         // update the localstorage data
         let updateData = stored.dldata.data
         // push new data to the start of the array
@@ -202,18 +194,20 @@ export default class Addurl extends Component {
         settingsHandle.setStored('dldata', updateData)
         // add internal states for use
         newDownload.downloadProcess = downloadProcess
-
-        newDownload.video = downloadProcess.initVideo()
+        // initialze the download process
+        downloadProcess.initVideo()
+        // keep video reference
+        newDownload.video = downloadProcess.video
 
         // update the contextual storage
         this.context.downloadProcesses.unshift(newDownload)
+        // close the dialog now
+        this.closeConfirmDialog()
       }
     	else {
         this.setState({errorPath: Errordata.invalidPath})
     	}
     })
-    // close the dialog now
-    this.closeConfirmDialog()
   }
 
   // on info button click

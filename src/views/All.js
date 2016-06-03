@@ -27,7 +27,7 @@ export default class All extends Component {
       //     size: '94 Mb', // full size in mb
       //     lastTry: '17/05/2016 9:06 AM', // last attempt at downloading the file
       //     downloaded: '5 MB',
-      //     status: 'Paused', // can have values as 'Paused', 'Downloading', 'Error', 'Done'
+      //     status: 'Paused', // can have values as 'Paused', 'Downloading', 'Error', 'Canceled', 'Done'
       // },
       // {
       //     uuid: 'uuid',
@@ -35,7 +35,7 @@ export default class All extends Component {
       //     size: '94 Mb', // full size in mb
       //     lastTry: '17/05/2016 9:06 AM', // last attempt at downloading the file
       //     downloaded: '5 MB',
-      //     status: 'Paused', // can have values as 'Paused', 'Downloading', 'Error', 'Done'
+      //     status: 'Paused', // can have values as 'Paused', 'Downloading', 'Error', 'Canceled', 'Done'
       // }
     ]
   }
@@ -58,40 +58,7 @@ export default class All extends Component {
       }, 700)
     }
     // add emitter event listener
-    // on each event trigger
-    Subscriptions.push(mrEmitter.addListener('onStartStatus', (uuid, info) => {
-      // create a copy of the data
-      let updateData = stored.dldata.data
-      // try to find it in tableData if not add it
-      for (let cData of updateData) {
-        if (cData.uuid === uuid) {
-          cData.size = info.size
-          cData.format_id = info.format_id
-        }
-      }
-      // update the stored data
-      settingsHandle.setStored('dldata', updateData)
-      // update the local data
-      this.setState({tableData: stored.dldata.data})
-    }))
-    // on each byte downloaded
-    Subscriptions.push(mrEmitter.addListener('onDownloadStatus', (uuid, chunk) => {
-      // console.log(chunk);
-      // create a copy of the data
-      let updateData = stored.dldata.data
-      // try to find it in tableData if not add it
-      for (let cData of updateData) {
-        if (cData.uuid === uuid) {
-          cData.downloaded += chunk.length
-          cData.status = 'Downloading'
-          cData.lastTry = moment()
-        }
-      }
-      // update the stored data
-      settingsHandle.setStored('dldata', updateData)
-      // update the local data
-      this.setState({tableData: stored.dldata.data})
-    }))
+    Subscriptions.push(mrEmitter.addListener('onUpdateData', (updateData) => this.setState({tableData: updateData})))
   }
 
   componentWillUnmount(){

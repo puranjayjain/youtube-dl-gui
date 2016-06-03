@@ -54,6 +54,15 @@ export default class Downloading extends Component {
         this.refs.allPlaceHolder.setState({visible: true})
       }, 700)
     }
+    // add emitter event listener
+    Subscriptions.push(mrEmitter.addListener('onUpdateData', (updateData) => this.setState({tableData: updateData})))
+  }
+
+  componentWillUnmount(){
+    // remove emitter event listeners
+    for (let Subscription of Subscriptions) {
+      Subscription.remove()
+    }
   }
 
 render() {
@@ -92,7 +101,7 @@ render() {
           {this.state.tableData.map( (row, index) => (
             <TableRow key={index}>
               <TableRowColumn style={style.tableColumn}>{row.fileName}</TableRowColumn>
-              <TableRowColumn>{row.downloaded}</TableRowColumn>
+              <TableRowColumn>{bytes(row.downloaded)}</TableRowColumn>
               <TableRowColumn>{bytes(row.size)}</TableRowColumn>
               <TableRowColumn>{moment(row.lastTry).fromNow()}</TableRowColumn>
             </TableRow>

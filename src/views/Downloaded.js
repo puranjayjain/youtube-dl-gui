@@ -84,7 +84,7 @@ export default class Downloaded extends Component {
   }
 
   /**
-   * [on checking of one of the checkbox]
+   * [on checking of one of the checkboxes]
    * @method
    * @param  {Integer} index          [index of the checkbox in table from 0..n]
    * @param  {Event}  event          [passed event]
@@ -134,6 +134,15 @@ export default class Downloaded extends Component {
       setTimeout(() => {
         this.refs.downloadedPlaceHolder.setState({visible: true})
       }, 700)
+    }
+    // add emitter event listener
+    Subscriptions.push(mrEmitter.addListener('onUpdateData', (updateData) => this.setState({tableData: updateData})))
+  }
+
+  componentWillUnmount(){
+    // remove emitter event listeners
+    for (let Subscription of Subscriptions) {
+      Subscription.remove()
     }
   }
 
