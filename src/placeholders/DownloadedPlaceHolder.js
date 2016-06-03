@@ -36,7 +36,7 @@ export default class DownloadedPlaceHolder extends React.Component {
         color:  this.context.muiTheme.palette.amber500Color
       },
       h2: {
-        margin: '0 auto 0.43em 8.1vh'
+        margin: '0 auto 0.43em 5.5vh'
       },
       h3: {
         marginTop: 0
@@ -61,7 +61,7 @@ export default class DownloadedPlaceHolder extends React.Component {
             It's empty here
           </h2>
           <h3 style={style.h3}>
-            Only downloaded files show here.
+            Only downloaded files are shown here.
           </h3>
         </Paper>
       </ReactCSSTransitionGroup>

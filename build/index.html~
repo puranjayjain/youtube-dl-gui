@@ -15,25 +15,20 @@
 
 <body>
   <div id="app"></div>
-  <script src="App.js"></script>
   <script type="text/javascript">
-    const fs = require('fs')
-    const youtubedl = require('youtube-dl')
-    let video = youtubedl('http://www.youtube.com/watch?v=90AiXO1pAiA',
-        // Optional arguments passed to youtube-dl.
-        ['--format=18'],
-        // Additional options can be given for calling `child_process.execFile()`.
-        {
-          cwd: app.getAppPath()
-        })
+    // TODO replace this with a proper script which is not transpiled
+      const {
+        app
+      } = require('electron').remote
 
-      // Will be called when the download starts.
-      video.on('info', function (info) {
-        console.log('Download started')
-        console.log('filename: ' + info.filename)
-        console.log('size: ' + info.size)
-      })
+      const fs = require('fs')
+      const pathExists = require('path-exists')
+      const youtubedl = require('youtube-dl')
+
+      // let video
+      let dirname = __dirname
   </script>
+  <script src="App.js"></script>
 </body>
 
 </html>

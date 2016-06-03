@@ -32,7 +32,8 @@ export default class Dl {
     _video = youtubedl(
         this._args.url,
         // TODO leaving the formats to empty for now, get them calculated from the settings
-        ['-k'],
+        // FIXME calculate it by default the best format
+        ['-f','best'],
         // Additional options can be given for calling `child_process.execFile()`.
         // TODO replace dirname with the actual path this._args.filepath
         {
@@ -57,9 +58,6 @@ export default class Dl {
       mrEmitter.emit('onUpdateData', updateData)
     })
 
-    // start the download here
-    _video.pipe(fs.createWriteStream('thevideo.mp4'))
-
     // update on each downloaded chunk
     _video.on('data', (chunk) => {
       // the other end of this will read the chunk.length for new download size addition
@@ -80,13 +78,13 @@ export default class Dl {
     })
 
     // also add events for stream paused, resumed, etc.
-    _video.on('pause', () => {
-      console.info('pause')
-    })
-
-    _video.on('resume', () => {
-      console.info('resume')
-    })
+    // TODO implement these events from the tables
+    // _video.on('pause', () => {
+    //   console.info('pause')
+    // })
+    // _video.on('resume', () => {
+      // console.info('resume')
+    // })
 
     // update the data on download end, error, cancel
     _video.on('error', (e) => {
@@ -99,8 +97,23 @@ export default class Dl {
 
     // download has been completed
     _video.on('end', () => {
-      console.info('end')
+      // the other end of this will read the chunk.length for new download size addition
+      let updateData = stored.dldata.data
+      // try to find it in tableData if not add it
+      for (let cData of updateData) {
+        if (cData.uuid === this._args.uuid) {
+          cData.status = 'Done'
+          break
+        }
+      }
+      // update the stored data
+      settingsHandle.setStored('dldata', updateData)
+      // update the ui state
+      mrEmitter.emit('onUpdateData', updateData)
     })
+
+    // start the download here
+    _video.pipe(fs.createWriteStream('thevideo.mp4'))
   }
 
   // all the main functions to proppogate tasks

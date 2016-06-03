@@ -58,7 +58,7 @@ export default class Downloading extends Component {
     Subscriptions.push(mrEmitter.addListener('onUpdateData', (updateData) => this.setState({tableData: updateData})))
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     // remove emitter event listeners
     for (let Subscription of Subscriptions) {
       Subscription.remove()

@@ -31,7 +31,7 @@ export default class About extends Component {
           <CardHeader
             title="Youtube Dl GUI"
             subtitle="v0.0.1"
-            avatar="http://lorempixel.com/100/100/nature/"
+            avatar="icon.png"
           />
           <CardText>
             <List>

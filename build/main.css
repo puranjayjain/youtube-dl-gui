@@ -8,6 +8,12 @@ body {
   margin: 0;
 }
 
+/* user selection color */
+::selection {
+  background: #B71C1C; /* WebKit/Blink Browsers */
+  color: #fff;
+}
+
 /*custom scroll bars*/
 ::-webkit-scrollbar {
   width: 6px;

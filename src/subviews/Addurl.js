@@ -80,19 +80,28 @@ export default class Addurl extends Component {
     errorSnackbar: false,
   }
 
-  // click to open the Dialog
-  openDownloadDialog = () => {
+  /**
+   * [click to open the Dialog]
+   * @method
+   * @param  {Boolean} external = false [if set true it means that the dialog was opened from the outside link]
+   */
+  openDownloadDialog = (event, external = false) => {
     this.setState({dialog: true})
     // set loadFormats to true to tell that the formats are to be refetched
     loadFormat = true
+    // reset the error
+    this.setState({errorUrl: ''})
     // check if the clipboard has a url (if yes paste it)
     let text = clipboard.readText(String).split('\n')[0]
-    if (urlPattern.test(text)) {
-      this.setState({url: text})
-    }
-    else {
-      // empty the text if not a url
-      this.setState({url: ''})
+    // if the external parameter was passed do nothing
+    if (!external) {
+      if (urlPattern.test(text)) {
+        this.setState({url: text})
+      }
+      else {
+        // empty the text if not a url
+        this.setState({url: ''})
+      }
     }
     // focus the url input
     setTimeout(() => {
@@ -196,8 +205,6 @@ export default class Addurl extends Component {
         newDownload.downloadProcess = downloadProcess
         // initialze the download process
         downloadProcess.initVideo()
-        // keep video reference
-        newDownload.video = downloadProcess.video
 
         // update the contextual storage
         this.context.downloadProcesses.unshift(newDownload)
@@ -299,11 +306,26 @@ export default class Addurl extends Component {
     Subscription = mrEmitter.addListener('onRouteChange', (newLocation) => {
       this.isActive(newLocation)
     })
+    // add event listeners to trigger file download if necessary
+    window.ondragover = window.ondragleave = window.ondragend = () => false
+    window.ondrop = (event) => {
+      event.preventDefault()
+      // capture dropped urls and start download process if a url
+      const dropUrl = event.dataTransfer.getData("text/plain")
+      if (urlPattern.test(dropUrl)) {
+        // copy text to the url input of the dialog
+        this.setState({url: dropUrl})
+        // open the dialog
+        this.openDownloadDialog(true)
+      }
+    }
   }
 
   // unregister all references here
   componentWillUnmount() {
     Subscription.remove()
+    // remove window event listeners
+    window.ondragover = window.ondragleave = window.ondragend = window.ondrop = null
   }
 
   render() {

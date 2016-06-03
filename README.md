@@ -8,27 +8,30 @@ A Cross Platform GUI Client for youtube-dl written in react, electron and materi
 Coming soon v1 alpha release for Windows
 
 # Features
+ - [x] Drop links to start downloading
+
+## Configurable
 Most of these features match the ones found [here](https://github.com/rg3/youtube-dl/blob/master/README.md#options)
 
 If you think a feature is missing or needs improvement please file a new issue or +1 an existing one [here](https://github.com/puranjayjain/Youtube-dl-gui/issues)
 
-## Download Options:
+### Download Options:
 - [ ] rate-limit
 - [x] retries
 - [ ] fragment-retries
 - [x] buffer-size
 
-## Filesystem Options:
+### Filesystem Options:
 - [x] id
 - [x] output
 - [x] restrict-filenames
 - [ ] no-part
 
-## Authentication Options:
+### Authentication Options:
 - [x] username
 - [x] password
 
-## Our options (these are found in our app exclusively)
+### Our options (these are found in our app exclusively)
 - [x] Dark theme support
 
 # Dependencies
@@ -40,6 +43,13 @@ None, All dependencies will auto install with the app now as far as possible.
 ```
 gulp default --NODE-ENVIRONMENT=development
 ```
+
+# Faqs
+
+1. What all websites does it support?
+> See [https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md](https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md)
+2. Motive behind it
+> To learn React, Event Emitters, Material UI and Electron
 
 ## Versioning
 

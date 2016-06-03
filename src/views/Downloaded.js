@@ -112,6 +112,15 @@ export default class Downloaded extends Component {
     }
   }
 
+  filterDownloader = (data) => {
+    if ('status' in data && typeof(data.status) === 'string' && data.status === 'Done') {
+      return true
+    }
+    else {
+      return false
+    }
+  }
+
   // close the toolbar
   onCloseToolbar = (e) => {
     // trigger all checked
@@ -123,7 +132,7 @@ export default class Downloaded extends Component {
     // load all the settings
     stored = settingsHandle.stored
     // update the local data
-    this.setState({tableData: stored.dldata.data})
+    this.setState({tableData: stored.dldata.data.filter(this.filterDownloader)})
   }
 
   // show or hide the table function
@@ -136,10 +145,11 @@ export default class Downloaded extends Component {
       }, 700)
     }
     // add emitter event listener
-    Subscriptions.push(mrEmitter.addListener('onUpdateData', (updateData) => this.setState({tableData: updateData})))
+    // filter and keep only the ones that are 'downloaded'
+    Subscriptions.push(mrEmitter.addListener('onUpdateData', (updateData) => this.setState({tableData: updateData.filter(this.filterDownloader)})))
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     // remove emitter event listeners
     for (let Subscription of Subscriptions) {
       Subscription.remove()
