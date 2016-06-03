@@ -1,3 +1,5 @@
+![Logo](https://raw.githubusercontent.com/puranjayjain/youtube-dl-gui/master/src/assets/icon36.png)
+
 # Youtube-dl-gui
 
 [![Join the chat at https://gitter.im/puranjayjain/Youtube-dl-gui](https://badges.gitter.im/puranjayjain/Youtube-dl-gui.svg)](https://gitter.im/puranjayjain/Youtube-dl-gui?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
