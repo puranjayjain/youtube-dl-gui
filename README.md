@@ -47,14 +47,17 @@ gulp default --NODE-ENVIRONMENT=development
 # Faqs
 
 1. What all websites does it support?
+
 > See [https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md](https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md)
+
 2. Motive behind it
+
 > To learn React, Event Emitters, Material UI and Electron
 
 ## Versioning
 
 For transparency into our release cycle and in striving to maintain backward
-compatibility, Material Design Lite is maintained under
+compatibility, the project is maintained under
 [the Semantic Versioning guidelines](http://semver.org/). Sometimes we screw up,
 but we'll adhere to those rules whenever possible.
 
