@@ -69,6 +69,6 @@ app.on('activate', () => {
 })
 
 // TODO send errors to console of the renderer
-process.on('uncaughtException', (err) => {
-  console.error(err)
+process.on('uncaughtException', (error) => {
+  console.error(error)
 })

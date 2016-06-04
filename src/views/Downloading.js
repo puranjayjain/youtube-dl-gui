@@ -37,12 +37,22 @@ export default class Downloading extends Component {
     ]
   }
 
+  // filter and show only downloading files
+  filterDownloader = (data) => {
+    if ('status' in data && typeof(data.status) === 'string' && data.status === 'Downloading') {
+      return true
+    }
+    else {
+      return false
+    }
+  }
+
   // register all adding stuff here
   componentWillMount() {
     // load all the settings
     stored = settingsHandle.stored
     // update the local data
-    this.setState({tableData: stored.dldata.data})
+    this.setState({tableData: stored.dldata.data.filter(this.filterDownloader)})
   }
 
   // show or hide the table function
@@ -55,7 +65,7 @@ export default class Downloading extends Component {
       }, 700)
     }
     // add emitter event listener
-    Subscriptions.push(mrEmitter.addListener('onUpdateData', (updateData) => this.setState({tableData: updateData})))
+    Subscriptions.push(mrEmitter.addListener('onUpdateData', (updateData) => this.setState({tableData: updateData.filter(this.filterDownloader)})))
   }
 
   componentWillUnmount() {
@@ -65,52 +75,51 @@ export default class Downloading extends Component {
     }
   }
 
-render() {
-  const style = {
-    table: {
-      display: this.state.table ? 'table' : 'none'
-    },
-    tableColumn: {
-      whiteSpace: 'normal'
-    },
-  }
-
-  return (
-    <div>
-      <Table
-        ref="table"
-        style={style.table}
-        selectable={false}
-      >
-        <TableHeader
-          adjustForCheckbox={false}
-          displaySelectAll={false}
+  render() {
+    const style = {
+      table: {
+        display: this.state.table ? 'table' : 'none'
+      },
+      tableColumn: {
+        whiteSpace: 'normal'
+      },
+    }
+    return (
+      <div>
+        <Table
+          ref="table"
+          style={style.table}
+          selectable={false}
         >
-          <TableRow>
-            <TableHeaderColumn>File Name</TableHeaderColumn>
-            <TableHeaderColumn>Downloaded</TableHeaderColumn>
-            <TableHeaderColumn>Size</TableHeaderColumn>
-            <TableHeaderColumn>Last Try</TableHeaderColumn>
-          </TableRow>
-        </TableHeader>
-        <TableBody
-          displayRowCheckbox={false}
-          showRowHover={true}
-          stripedRows={true}
-        >
-          {this.state.tableData.map( (row, index) => (
-            <TableRow key={index}>
-              <TableRowColumn style={style.tableColumn}>{row.fileName}</TableRowColumn>
-              <TableRowColumn>{bytes(row.downloaded)}</TableRowColumn>
-              <TableRowColumn>{bytes(row.size)}</TableRowColumn>
-              <TableRowColumn>{moment(row.lastTry).fromNow()}</TableRowColumn>
+          <TableHeader
+            adjustForCheckbox={false}
+            displaySelectAll={false}
+          >
+            <TableRow>
+              <TableHeaderColumn>File Name</TableHeaderColumn>
+              <TableHeaderColumn>Downloaded</TableHeaderColumn>
+              <TableHeaderColumn>Size</TableHeaderColumn>
+              <TableHeaderColumn>Last Try</TableHeaderColumn>
             </TableRow>
-          ))}
-        </TableBody>
-        >
-      </Table>
-      <AllPlaceHolder ref="allPlaceHolder" />
-    </div>
+          </TableHeader>
+          <TableBody
+            displayRowCheckbox={false}
+            showRowHover={true}
+            stripedRows={true}
+          >
+            {this.state.tableData.map( (row, index) => (
+              <TableRow key={index}>
+                <TableRowColumn style={style.tableColumn}>{row.fileName}</TableRowColumn>
+                <TableRowColumn>{bytes(row.downloaded)}</TableRowColumn>
+                <TableRowColumn>{bytes(row.size)}</TableRowColumn>
+                <TableRowColumn>{moment(row.lastTry).fromNow()}</TableRowColumn>
+              </TableRow>
+            ))}
+          </TableBody>
+          >
+        </Table>
+        <AllPlaceHolder ref="allPlaceHolder" />
+      </div>
     )
   }
 }

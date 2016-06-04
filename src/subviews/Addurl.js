@@ -237,7 +237,7 @@ export default class Addurl extends Component {
   // check if the page should have the fab or no
   isActive = (to) => {
     let newState
-    if (to === '/' || to === '/downloading' || to === '/downloaded') {
+    if (to === '/' || to === '/downloading' || to === '/downloaded' || to === '/unfinished') {
       newState = true
     }
     else {

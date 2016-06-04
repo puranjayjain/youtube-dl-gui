@@ -10,6 +10,7 @@ import MenuItem from 'material-ui/MenuItem'
 // icons
 import AllInclusive from 'material-ui/svg-icons/places/all-inclusive'
 import FileDownload from 'material-ui/svg-icons/file/file-download'
+import ErrorIcon from 'material-ui/svg-icons/alert/error'
 import Done from 'material-ui/svg-icons/action/done'
 import Settings from 'material-ui/svg-icons/action/settings'
 import Help from 'material-ui/svg-icons/action/help'
@@ -118,6 +119,14 @@ export default class Sidebar extends Component {
               value="/downloading"
               leftIcon={
                 <FileDownload style={this.isActiveIcon('/downloading')} />
+              }
+            />
+            <MenuItem
+              innerDivStyle={this.isActive('/unfinished')}
+              primaryText="Unfinished"
+              value="/unfinished"
+              leftIcon={
+                <ErrorIcon style={this.isActiveIcon('/unfinished')} />
               }
             />
             <MenuItem

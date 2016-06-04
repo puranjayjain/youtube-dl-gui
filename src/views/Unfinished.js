@@ -12,8 +12,8 @@ import Checkbox from 'material-ui/Checkbox'
 import Clear from 'material-ui/svg-icons/content/clear'
 import Delete from 'material-ui/svg-icons/action/delete'
 import DeleteForever from 'material-ui/svg-icons/action/delete-forever'
-import Info from 'material-ui/svg-icons/action/info'
-import Refresh from 'material-ui/svg-icons/navigation/refresh'
+import Pause from 'material-ui/svg-icons/av/pause-circle-filled'
+import Play from 'material-ui/svg-icons/av/play-arrow'
 
 import moment from 'moment'
 import bytes from 'bytes'
@@ -33,7 +33,7 @@ settingsHandle = new SettingsHandler(),
 // remove this subscription afterwards when there is no use for it
 Subscriptions = []
 
-export default class Downloaded extends Component {
+export default class Unfinished extends Component {
   state = {
     toolbar: false,
     table: true,
@@ -51,9 +51,8 @@ export default class Downloaded extends Component {
       //   selected: false
       // }
     ],
-    allChecked: false,
-    // number of selected checkboxes
-    selected: 0
+    // number of checked checkboxes
+    checkedBoxes: 0
   }
 
   // toggle toolbar's visibility
@@ -64,45 +63,36 @@ export default class Downloaded extends Component {
    */
   onToggleToolbar = (state, callback) => this.setState({toolbar: state}, callback)
 
-  // toggle the state of the checkbox
-  onAllChecked = () => {
-    setTimeout(() => {
-      this.setState({allChecked: !this.state.allChecked})
-    }, 100)
-  }
-
   /**
    * [Event handler for select all checkbox]
    * @param  {Event}  event         [event]
    * @param  {Boolean} isInputChecked [tells if the input was checked or not]
    * @param  {Boolean}  called      [if the event was called from outside or recursively via a callback]
    */
-  // onAllChecked = (event, isInputChecked, called = false) => {
-    // if (called) {
-    //   let i
-    //   for (i = 0; i < checkboxes; i++) {
-    //     this.refs['check' + i].setChecked(isInputChecked)
-    //     // update the data
-    //     this.state.tableData[i].selected = isInputChecked
-    //   }
-    //   // if the inputs were all checked set the selected to all else to 0
-    //   let selectedCheckboxes
-    //   if (isInputChecked) {
-    //     selectedCheckboxes = i
-    //   }
-    //   else {
-    //     selectedCheckboxes = 0
-    //   }
-    //   // set the value to state
-    //   this.setState({selected: selectedCheckboxes})
-    // }
-    // else {
-    //   // update the toolbar
-    //   this.onToggleToolbar(isInputChecked, this.onAllChecked.bind(this, event, isInputChecked, true))
-    // }
-    // // toggle this component's state
-    // this.refs.allcheck.setChecked(isInputChecked)
-  // }
+  onAllChecked = (event, isInputChecked, called = false) => {
+    if (called) {
+      let i
+      for (i = 0; i < checkboxes; i++) {
+        this.refs['check' + i].setChecked(isInputChecked)
+        // update the data
+        this.state.tableData[i].selected = isInputChecked
+      }
+      let updatedState
+      if (isInputChecked) {
+        updatedState = i
+      }
+      else {
+        updatedState = 0
+      }
+      mrEmitter.emit('onSetUnfinishedState', updatedState)
+    }
+    else {
+      // update the toolbar
+      this.onToggleToolbar(isInputChecked, this.onAllChecked.bind(this, event, isInputChecked, true))
+    }
+    // toggle this component's state
+    this.refs.allcheck.setChecked(isInputChecked)
+  }
 
   /**
    * [on checking of one of the checkboxes]
@@ -134,7 +124,7 @@ export default class Downloaded extends Component {
   }
 
   filterDownloader = (data) => {
-    if ('status' in data && typeof(data.status) === 'string' && data.status === 'Done') {
+    if ('status' in data && typeof(data.status) === 'string' && (data.status === 'Canceled' || data.status === 'Error' || data.status === 'Paused' || data.status === 'Starting')) {
       return true
     }
     else {
@@ -168,6 +158,8 @@ export default class Downloaded extends Component {
     // add emitter event listener
     // filter and keep only the ones that are 'downloaded'
     Subscriptions.push(mrEmitter.addListener('onUpdateData', (updateData) => this.setState({tableData: updateData.filter(this.filterDownloader)})))
+    // update the selected checkboxes
+    Subscriptions.push(mrEmitter.addListener('onSetUnfinishedState', (updatedState) => this.setState({checkedBoxes: updatedState})))
   }
 
   componentWillUnmount() {
@@ -242,11 +234,11 @@ export default class Downloaded extends Component {
               />
             </ToolbarGroup>
             <ToolbarGroup>
-              <IconButton tooltip="Redownload">
-                <Refresh />
+              <IconButton tooltip="Resume">
+                <Play />
               </IconButton>
-              <IconButton tooltip="Info">
-                <Info />
+              <IconButton tooltip="Pause">
+                <Pause />
               </IconButton>
               <IconButton tooltip="Remove from List">
                 <Delete />
@@ -273,7 +265,6 @@ export default class Downloaded extends Component {
               <TableHeaderColumn style={style.tableColumn}>
                 <Checkbox
                   ref={"allcheck"}
-                  checked={this.state.allChecked}
                   onCheck={this.onAllChecked}
                 />
               </TableHeaderColumn>
@@ -314,6 +305,6 @@ export default class Downloaded extends Component {
   }
 }
 
-Downloaded.contextTypes = {
+Unfinished.contextTypes = {
   muiTheme: PropTypes.object.isRequired
 }

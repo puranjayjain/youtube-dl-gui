@@ -27,7 +27,7 @@ export default class All extends Component {
       //     size: '94 Mb', // full size in mb
       //     lastTry: '17/05/2016 9:06 AM', // last attempt at downloading the file
       //     downloaded: '5 MB',
-      //     status: 'Paused', // can have values as 'Paused', 'Downloading', 'Error', 'Canceled', 'Done'
+      //     status: 'Paused', // can have values as 'Starting', 'Paused', 'Downloading', 'Error', 'Canceled', 'Done'
       // },
       // {
       //     uuid: 'uuid',
@@ -35,7 +35,7 @@ export default class All extends Component {
       //     size: '94 Mb', // full size in mb
       //     lastTry: '17/05/2016 9:06 AM', // last attempt at downloading the file
       //     downloaded: '5 MB',
-      //     status: 'Paused', // can have values as 'Paused', 'Downloading', 'Error', 'Canceled', 'Done'
+      //     status: 'Paused', // can have values as 'Starting', 'Paused', 'Downloading', 'Error', 'Canceled', 'Done'
       // }
     ]
   }
