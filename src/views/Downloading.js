@@ -21,20 +21,7 @@ export default class Downloading extends Component {
   state = {
     toolbar: false,
     table: true,
-    tableData: [
-      // {
-      //   fileName: 'John Smith dsffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
-      //   downloaded: 'Employed',
-      //   size: '94 Mb',
-      //   lastTry: '17/05/2016'
-      // },
-      // {
-      //   fileName: 'John Smith',
-      //   downloaded: 'Employed',
-      //   size: '94 Mb',
-      //   lastTry: '17/05/2016'
-      // }
-    ]
+    tableData: []
   }
 
   // filter and show only downloading files

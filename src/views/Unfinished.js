@@ -37,20 +37,7 @@ export default class Unfinished extends Component {
   state = {
     toolbar: false,
     table: true,
-    tableData: [
-      // {
-      //   fileName: 'John Smith dsffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
-      //   size: '94 Mb',
-      //   lastTry: '17/05/2016',
-      //   selected: false
-      // },
-      // {
-      //   fileName: 'John Smith',
-      //   size: '94 Mb',
-      //   lastTry: '17/05/2016',
-      //   selected: false
-      // }
-    ],
+    tableData: [],
     // number of checked checkboxes
     checkedBoxes: 0
   }

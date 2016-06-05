@@ -316,7 +316,7 @@ export default class Addurl extends Component {
         // copy text to the url input of the dialog
         this.setState({url: dropUrl})
         // open the dialog
-        this.openDownloadDialog(true)
+        this.openDownloadDialog(event, true)
       }
     }
   }

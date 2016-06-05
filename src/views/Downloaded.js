@@ -37,20 +37,7 @@ export default class Downloaded extends Component {
   state = {
     toolbar: false,
     table: true,
-    tableData: [
-      // {
-      //   fileName: 'John Smith dsffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
-      //   size: '94 Mb',
-      //   lastTry: '17/05/2016',
-      //   selected: false
-      // },
-      // {
-      //   fileName: 'John Smith',
-      //   size: '94 Mb',
-      //   lastTry: '17/05/2016',
-      //   selected: false
-      // }
-    ],
+    tableData: [],
     allChecked: false,
     // number of selected checkboxes
     selected: 0
@@ -66,9 +53,7 @@ export default class Downloaded extends Component {
 
   // toggle the state of the checkbox
   onAllChecked = () => {
-    setTimeout(() => {
-      this.setState({allChecked: !this.state.allChecked})
-    }, 100)
+    this.setState({allChecked: !this.state.allChecked})
   }
 
   /**
