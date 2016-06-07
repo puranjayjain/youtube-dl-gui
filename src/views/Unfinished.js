@@ -39,7 +39,9 @@ export default class Unfinished extends Component {
     table: true,
     tableData: [],
     // number of checked checkboxes
-    checkedBoxes: 0
+    checkedBoxes: 0,
+    // selected text
+    selectedText: "0 Selected"
   }
 
   // toggle toolbar's visibility
@@ -58,20 +60,27 @@ export default class Unfinished extends Component {
    */
   onAllChecked = (event, isInputChecked, called = false) => {
     if (called) {
-      let i
+      // get the temp  data
+      let i, tempTableData = this.state.tableData
       for (i = 0; i < checkboxes; i++) {
         this.refs['check' + i].setChecked(isInputChecked)
         // update the data
-        this.state.tableData[i].selected = isInputChecked
+        tempTableData[i].selected = isInputChecked
       }
-      let updatedState
+      // if the inputs were all checked set the selected to all else to 0
+      let selectedCheckboxes
       if (isInputChecked) {
-        updatedState = i
+        selectedCheckboxes = i
       }
       else {
-        updatedState = 0
+        selectedCheckboxes = 0
       }
-      mrEmitter.emit('onSetUnfinishedState', updatedState)
+      // set the value to state
+      this.setState({
+        checkedBoxes: selectedCheckboxes,
+        tableData: tempTableData,
+        selectedText: `${selectedCheckboxes} Selected`
+      })
     }
     else {
       // update the toolbar
@@ -93,7 +102,6 @@ export default class Unfinished extends Component {
     if (!called) {
       let tempState = this.state.tableData
       tempState[index].selected = isInputChecked
-      this.setState({tableData: tempState})
       // check if we need to show or hide the toolbar
       let shouldCheck = false
       for (let i = 0; i < checkboxes; i++) {
@@ -102,6 +110,20 @@ export default class Unfinished extends Component {
           break
         }
       }
+      // if the inputs were all checked set the selected to all else to 0
+      let selectedCheckboxes = this.state.checkedBoxes
+      if (isInputChecked) {
+        selectedCheckboxes++
+      }
+      else {
+        selectedCheckboxes--
+      }
+      // set the value to state
+      this.setState({
+        checkedBoxes: selectedCheckboxes,
+        tableData: tempState,
+        selectedText: `${selectedCheckboxes} Selected`
+      })
       this.onToggleToolbar(shouldCheck, this.onChecked.bind(this, index, event, isInputChecked, true))
     }
     else {
@@ -217,7 +239,7 @@ export default class Unfinished extends Component {
               <ToolbarSeparator style={style.Seperator}/>
               <ToolbarTitle
                 style={style.toolbarTitle1}
-                text="1 Selected"
+                text={this.state.selectedText}
               />
             </ToolbarGroup>
             <ToolbarGroup>
