@@ -48,11 +48,11 @@ gulp default --NODE-ENVIRONMENT=development
 
 1. What all websites does it support?
 
-> See [https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md](https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md)
+  > See [https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md](https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md)
 
 2. Motive behind it
 
-> To learn React, Event Emitters, Material UI and Electron
+  > To learn React, Event Emitters, Material UI and Electron
 
 ## Versioning
 
