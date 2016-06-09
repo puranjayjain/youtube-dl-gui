@@ -10,6 +10,7 @@ import Checkbox from 'material-ui/Checkbox'
 
 // icons
 import Clear from 'material-ui/svg-icons/content/clear'
+import Info from 'material-ui/svg-icons/action/info'
 import Delete from 'material-ui/svg-icons/action/delete'
 import DeleteForever from 'material-ui/svg-icons/action/delete-forever'
 import Pause from 'material-ui/svg-icons/av/pause-circle-filled'
@@ -248,6 +249,9 @@ export default class Unfinished extends Component {
               </IconButton>
               <IconButton tooltip="Pause">
                 <Pause />
+              </IconButton>
+              <IconButton tooltip="Info">
+                <Info />
               </IconButton>
               <IconButton tooltip="Remove from List">
                 <Delete />
