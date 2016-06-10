@@ -14,7 +14,7 @@ let Subscriptions = []
 export default class FileInfoDialog extends Component {
   state = {
     open: false,
-    Info: ''
+    data: ''
   }
 
   handleClose = () => {
@@ -22,13 +22,6 @@ export default class FileInfoDialog extends Component {
   }
 
   componentDidMount() {
-    // if table's length is zero show the EmptyPlaceHolder and hide the table
-    if (!this.state.tableData.length) {
-      this.setState({table: false})
-      setTimeout(() => {
-        this.refs.downloadedPlaceHolder.setState({visible: true})
-      }, 700)
-    }
     // add emitter event listener
     // events for single file request info or multiple files request info
     Subscriptions.push(mrEmitter.addListener('onRequestSingleFileInfo', (sendData) => {
@@ -62,7 +55,7 @@ export default class FileInfoDialog extends Component {
         open={this.state.open}
         onRequestClose={this.handleClose}
       >
-        The actions in this window were passed in as an array of React objects.
+        {this.state.data}
       </Dialog>
     )
   }
