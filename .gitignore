@@ -20,9 +20,6 @@ coverage
 # node-waf configuration
 .lock-wscript
 
-# Compiled binary addons (http://nodejs.org/api/addons.html)
-build/Release
-
 # Dependency directories
 node_modules
 jspm_packages
@@ -35,3 +32,6 @@ jspm_packages
 
 # atom project stuff
 .tern-project
+
+# project specific
+build

@@ -22,6 +22,8 @@ import bytes from 'bytes'
 // Custom components
 import mrEmitter from '../helpers/mrEmitter'
 import DownloadedPlaceHolder from '../placeholders/DownloadedPlaceHolder'
+import ToolbarActions from '../helpers/ToolbarActions'
+import FileInfoDialog from '../subviews/FileInfoDialog'
 
 // the settings loader helper
 import SettingsHandler from '../helpers/SettingsHandler'
@@ -47,18 +49,18 @@ export default class Unfinished extends Component {
 
   // toggle toolbar's visibility
   /**
-   * [description]
-   * @param  {Boolean}   state    [new state of the toolbar]
-   * @param  {Function} callback [callback function]
-   */
+  * [description]
+  * @param  {Boolean}   state    [new state of the toolbar]
+  * @param  {Function} callback [callback function]
+  */
   onToggleToolbar = (state, callback) => this.setState({toolbar: state}, callback)
 
   /**
-   * [Event handler for select all checkbox]
-   * @param  {Event}  event         [event]
-   * @param  {Boolean} isInputChecked [tells if the input was checked or not]
-   * @param  {Boolean}  called      [if the event was called from outside or recursively via a callback]
-   */
+  * [Event handler for select all checkbox]
+  * @param  {Event}  event         [event]
+  * @param  {Boolean} isInputChecked [tells if the input was checked or not]
+  * @param  {Boolean}  called      [if the event was called from outside or recursively via a callback]
+  */
   onAllChecked = (event, isInputChecked, called = false) => {
     if (called) {
       // get the temp  data
@@ -92,13 +94,13 @@ export default class Unfinished extends Component {
   }
 
   /**
-   * [on checking of one of the checkboxes]
-   * @method
-   * @param  {Integer} index          [index of the checkbox in table from 0..n]
-   * @param  {Event}  event          [passed event]
-   * @param  {Boolean} isInputChecked [if the current input is checked or not]
-   * @param  {[type]}  called         [if was called back from a callback function or not]
-   */
+  * [on checking of one of the checkboxes]
+  * @method
+  * @param  {Integer} index          [index of the checkbox in table from 0..n]
+  * @param  {Event}  event          [passed event]
+  * @param  {Boolean} isInputChecked [if the current input is checked or not]
+  * @param  {[type]}  called         [if was called back from a callback function or not]
+  */
   onChecked = (index, event, isInputChecked, called = false) => {
     if (!called) {
       let tempState = this.state.tableData
@@ -168,8 +170,6 @@ export default class Unfinished extends Component {
     // add emitter event listener
     // filter and keep only the ones that are 'downloaded'
     Subscriptions.push(mrEmitter.addListener('onUpdateData', (updateData) => this.setState({tableData: updateData.filter(this.filterDownloader)})))
-    // update the selected checkboxes
-    Subscriptions.push(mrEmitter.addListener('onSetUnfinishedState', (updatedState) => this.setState({checkedBoxes: updatedState})))
   }
 
   componentWillUnmount() {
@@ -308,11 +308,11 @@ export default class Unfinished extends Component {
               // set the var to note the checkboxes value
               checkboxes = this.state.tableData.length
             }
-            }
           </TableBody>
           >
         </Table>
         <DownloadedPlaceHolder ref="downloadedPlaceHolder" />
+        <FileInfoDialog />
       </div>
     )
   }
