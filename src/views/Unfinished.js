@@ -135,6 +135,20 @@ export default class Unfinished extends Component {
     }
   }
 
+  onToolbarButton = (type) => {
+    switch (type) {
+      case 'info':
+        ToolbarActions.onRequestFileInfo(this.state.tableData.filter(this.filterSelected))
+        break
+      default:
+
+    }
+  }
+
+  // filter the selected tableData
+  filterSelected = (data) => !!data.selected
+
+  // filter for this page
   filterDownloader = (data) => {
     if ('status' in data && typeof(data.status) === 'string' && (data.status === 'Canceled' || data.status === 'Error' || data.status === 'Paused' || data.status === 'Starting')) {
       return true
@@ -250,7 +264,10 @@ export default class Unfinished extends Component {
               <IconButton tooltip="Pause">
                 <Pause />
               </IconButton>
-              <IconButton tooltip="Info">
+              <IconButton
+                onTouchTap={() => this.onToolbarButton('info')}
+                tooltip="Info"
+              >
                 <Info />
               </IconButton>
               <IconButton tooltip="Remove from List">

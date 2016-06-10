@@ -3,6 +3,9 @@ import React, {PropTypes, Component} from 'react'
 import FlatButton from 'material-ui/FlatButton'
 import Dialog from 'material-ui/Dialog'
 
+import moment from 'moment'
+import bytes from 'bytes'
+
 import Info from 'material-ui/svg-icons/action/info'
 
 import mrEmitter from '../helpers/mrEmitter'
@@ -25,6 +28,10 @@ export default class FileInfoDialog extends Component {
     // add emitter event listener
     // events for single file request info or multiple files request info
     Subscriptions.push(mrEmitter.addListener('onRequestSingleFileInfo', (sendData) => {
+      this.state.data =
+      <div>
+        <h2>{sendData.downloaded}</h2>
+      </div>
       this.setState({open: true})
     }))
     Subscriptions.push(mrEmitter.addListener('onRequestFileInfo', (sendData) => {
@@ -49,7 +56,7 @@ export default class FileInfoDialog extends Component {
 
     return (
       <Dialog
-        title="Dialog With Actions"
+        title="Detailed Information"
         actions={actions}
         modal={false}
         open={this.state.open}

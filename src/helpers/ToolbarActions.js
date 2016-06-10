@@ -5,25 +5,17 @@ import SettingsHandler from '../helpers/SettingsHandler'
 * This class contains helpers for toolbar actions
 */
 class InternalToolbarActions {
-  constructor() {
-
-  }
-
   // display detailed info about file / files
-  onRequestFileInfo = (...uuid) => {
+  onRequestFileInfo = (tableData) => {
     let sendData = {
       files: 0,
       downloaded: 0,
       fileName: ''
     }
-    for (cUuid of uuid) {
-      for (cData of stored) {
-        if (cData.uuid === cUuid) {
-          sendData.files++
-          sendData.downloaded += cData.downloaded
-          sendData.fileName = cData.fileName
-        }
-      }
+    for (let cData of tableData) {
+      sendData.files++
+      sendData.downloaded += cData.downloaded
+      sendData.fileName = cData.fileName
     }
     // emit according to no of files
     if (sendData.files > 1) {
