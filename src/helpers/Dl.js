@@ -88,11 +88,23 @@ export default class Dl {
 
     // update the data on download end, error, cancel
     _video.on('error', (e) => {
-      console.error(e)
+      // the other end of this will read the chunk.length for new download size addition
+      let updateData = stored.dldata.data
+      // try to find it in tableData if not add it
+      for (let cData of updateData) {
+        if (cData.uuid === this._args.uuid) {
+          cData.status = 'Error'
+          break
+        }
+      }
+      // update the stored data
+      settingsHandle.setStored('dldata', updateData)
+      // update the ui state
+      mrEmitter.emit('onUpdateData', updateData)
     })
 
-    _video.on('close', (chunk) => {
-      console.info('close: ' + chunk.length)
+    _video.on('close', () => {
+      console.info('close: ')
     })
 
     // download has been completed

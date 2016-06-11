@@ -2,6 +2,7 @@ import React, {PropTypes, Component} from 'react'
 
 import FlatButton from 'material-ui/FlatButton'
 import Dialog from 'material-ui/Dialog'
+import {List, ListItem} from 'material-ui/List'
 
 import moment from 'moment'
 import bytes from 'bytes'
@@ -29,9 +30,20 @@ export default class FileInfoDialog extends Component {
     // events for single file request info or multiple files request info
     Subscriptions.push(mrEmitter.addListener('onRequestSingleFileInfo', (sendData) => {
       this.state.data =
-      <div>
-        <h2>{sendData.downloaded}</h2>
-      </div>
+      <List>
+        <ListItem
+          primaryText="File Path"
+          secondaryText={sendData.fileName}
+        />
+        <ListItem
+          primaryText="File size"
+          secondaryText={bytes(sendData.downloaded)}
+        />
+        <ListItem
+          primaryText="Last try"
+          secondaryText={moment(sendData.lastTry).fromNow()}
+        />
+      </List>
       this.setState({open: true})
     }))
     Subscriptions.push(mrEmitter.addListener('onRequestFileInfo', (sendData) => {

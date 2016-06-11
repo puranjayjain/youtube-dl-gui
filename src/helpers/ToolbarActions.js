@@ -10,12 +10,14 @@ class InternalToolbarActions {
     let sendData = {
       files: 0,
       downloaded: 0,
-      fileName: ''
+      fileName: '',
+      lastTry: 0
     }
     for (let cData of tableData) {
       sendData.files++
       sendData.downloaded += cData.downloaded
       sendData.fileName = cData.fileName
+      sendData.lastTry = cData.lastTry
     }
     // emit according to no of files
     if (sendData.files > 1) {
