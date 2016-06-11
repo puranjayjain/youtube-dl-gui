@@ -1,3 +1,5 @@
+// Add button for the url and also the common element for rendering fab, snackbar among common elements
+
 import React, {PropTypes, Component} from 'react'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
@@ -43,7 +45,7 @@ import SettingsHandler from '../helpers/SettingsHandler'
 let settingsHandle = new SettingsHandler(),
 stored = {},
 // remove this subscription afterwards when there is no use for it
-Subscription = null,
+Subscriptions = [],
 // youtube dl format array will be stored here
 youtubedlFormat,
 // to track if the video formats are to be loaded this time
@@ -78,6 +80,10 @@ export default class Addurl extends Component {
     formats: [],
     // errors snackbar state
     errorSnackbar: false,
+    // snackbar action text
+    actionText: '',
+    // function to call with the action button on click
+    actionFunc: ''
   }
 
   /**
@@ -137,8 +143,32 @@ export default class Addurl extends Component {
     // handle errors as toasts here
     snackbarErrorText = text
     // display the snackbar
-    this.setState({errorSnackbar: true})
+    this.setState({
+      errorSnackbar: true,
+      actionText: ''
+    })
   }
+
+  /**
+   * [snackbar with action text]
+   * @method
+   * @param  {String} text                  [the text to be displayed]
+   * @param  {String} action                [the text to be displayed as the action button]
+   * @param  {Callback function} actionFunc [the function to call when the action button is clicked]
+   */
+  openActionSnackBar = (text, action, actionFunc) => {
+    // handle errors as toasts here
+    snackbarErrorText = text
+    // display the snackbar
+    this.setState({
+      errorSnackbar: true,
+      actionText: action,
+      actionFunc: actionFunc
+    })
+  }
+
+  // store the download data back to storage
+  setDataChange = (updateData) => settingsHandle.setStored('dldata', updateData)
 
   // set the new state of the component
   setComponentState = (component, state) => this.setState({[component]: state})
@@ -200,7 +230,7 @@ export default class Addurl extends Component {
         // push new data to the start of the array
         updateData.unshift(newDownload)
         stored = updateData
-        settingsHandle.setStored('dldata', updateData)
+        this.setDataChange.bind(this, updateData)
         // add internal states for use
         newDownload.downloadProcess = downloadProcess
         // initialze the download process
@@ -303,9 +333,9 @@ export default class Addurl extends Component {
     // on initiate load
     this.isActive(this.context.location.pathname)
     // on each event trigger
-    Subscription = mrEmitter.addListener('onRouteChange', (newLocation) => {
-      this.isActive(newLocation)
-    })
+    Subscriptions.push(mrEmitter.addListener('onRouteChange', (newLocation) => this.isActive(newLocation)))
+    // Toolbar action of removing items from list => display snackbar
+    Subscriptions.push(mrEmitter.addListener('onClearList', (count, tableData) => this.openActionSnackBar(`${count} removed from List`, 'undo', this.setDataChange.bind(this, tableData))))
     // add event listeners to trigger file download if necessary
     window.ondragover = window.ondragleave = window.ondragend = () => false
     window.ondrop = (event) => {
@@ -323,7 +353,10 @@ export default class Addurl extends Component {
 
   // unregister all references here
   componentWillUnmount() {
-    Subscription.remove()
+    // remove emitter event listeners
+    for (let Subscription of Subscriptions) {
+      Subscription.remove()
+    }
     // remove window event listeners
     window.ondragover = window.ondragleave = window.ondragend = window.ondrop = null
   }
@@ -559,6 +592,8 @@ export default class Addurl extends Component {
       <Snackbar
         open={this.state.errorSnackbar}
         message={snackbarErrorText}
+        action={this.state.actionText}
+        onActionTouchTap={this.handleActionTouchTap}
         autoHideDuration={4000}
         onRequestClose={() => this.setComponentState('errorSnackbar', false)}
       />

@@ -134,6 +134,20 @@ export default class Downloaded extends Component {
     }
   }
 
+  onToolbarButton = (type) => {
+    switch (type) {
+      case 'info':
+      ToolbarActions.onRequestFileInfo(this.state.tableData)
+      break
+      case 'clear':
+      ToolbarActions.onRemoveFromList(this.state.tableData)
+      break
+      default:
+    }
+    // close the toolbar
+    this.onAllChecked('', false)
+  }
+
   filterDownloader = (data) => {
     if ('status' in data && typeof(data.status) === 'string' && data.status === 'Done') {
       return true
@@ -246,10 +260,16 @@ export default class Downloaded extends Component {
               <IconButton tooltip="Redownload">
                 <Refresh />
               </IconButton>
-              <IconButton tooltip="Info">
+              <IconButton
+                onTouchTap={() => this.onToolbarButton('info')}
+                tooltip="Info"
+              >
                 <Info />
               </IconButton>
-              <IconButton tooltip="Remove from List">
+              <IconButton
+                onTouchTap={() => this.onToolbarButton('clear')}
+                tooltip="Remove from List"
+              >
                 <Delete />
               </IconButton>
               <IconButton

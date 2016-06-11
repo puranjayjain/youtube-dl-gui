@@ -138,15 +138,16 @@ export default class Unfinished extends Component {
   onToolbarButton = (type) => {
     switch (type) {
       case 'info':
-        ToolbarActions.onRequestFileInfo(this.state.tableData.filter(this.filterSelected))
-        break
+      ToolbarActions.onRequestFileInfo(this.state.tableData)
+      break
+      case 'clear':
+      ToolbarActions.onRemoveFromList(this.state.tableData)
+      break
       default:
-
     }
+    // close the toolbar
+    this.onAllChecked('', false)
   }
-
-  // filter the selected tableData
-  filterSelected = (data) => !!data.selected
 
   // filter for this page
   filterDownloader = (data) => {
@@ -270,7 +271,10 @@ export default class Unfinished extends Component {
               >
                 <Info />
               </IconButton>
-              <IconButton tooltip="Remove from List">
+              <IconButton
+                onTouchTap={() => this.onToolbarButton('clear')}
+                tooltip="Remove from List"
+              >
                 <Delete />
               </IconButton>
               <IconButton

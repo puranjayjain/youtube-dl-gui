@@ -5,16 +5,23 @@ import SettingsHandler from '../helpers/SettingsHandler'
 * This class contains helpers for toolbar actions
 */
 class InternalToolbarActions {
+
+  // filter the selected tableData
+  filterSelected = (data) => !!data.selected
+
   // display detailed info about file / files
   onRequestFileInfo = (tableData) => {
+    tableData = tableData.filter(this.filterSelected)
     let sendData = {
       files: 0,
+      size: 0,
       downloaded: 0,
       fileName: '',
       lastTry: 0
     }
     for (let cData of tableData) {
       sendData.files++
+      sendData.size += cData.size
       sendData.downloaded += cData.downloaded
       sendData.fileName = cData.fileName
       sendData.lastTry = cData.lastTry
@@ -26,6 +33,35 @@ class InternalToolbarActions {
     else {
       mrEmitter.emit('onRequestSingleFileInfo', sendData)
     }
+  }
+
+  /**
+  * [clear list and update the items in it]
+  * @method
+  * @param  {String} updateData [the data to be updated]
+  * @param  {String} tableData  [the original data]
+  * @return {Event}
+  */
+  onRemoveFromList = (tableData) => {
+    const listData = tableData.filter(this.filterSelected)
+    let updateData = []
+    // go through the whole data to match the ones with the selected one's uuid and add them to the updateData array
+    for (let cData of stored.dldata.data) {
+      for (let lData of listData) {
+        if (lData.uuid === cData.uuid) {
+          break
+        }
+        else {
+          updateData.push(cData)
+        }
+      }
+    }
+    // update the item in storage
+    settingsHandle.setStored('dldata', updateData)
+    // emit event with the new data
+    mrEmitter.emit('onUpdateData', updateData)
+    // emit the event that the items are cleared from the list
+    mrEmitter.emit('onClearList', listData.length, stored.dldata.data)
   }
 }
 
