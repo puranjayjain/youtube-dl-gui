@@ -22,7 +22,7 @@ import bytes from 'bytes'
 import mrEmitter from '../helpers/mrEmitter'
 import DownloadedPlaceHolder from '../placeholders/DownloadedPlaceHolder'
 import ToolbarActions from '../helpers/ToolbarActions'
-import FileInfoDialog from '../subviews/FileInfoDialog'
+import CommonDialog from '../subviews/CommonDialog'
 
 // the settings loader helper
 import SettingsHandler from '../helpers/SettingsHandler'
@@ -142,6 +142,9 @@ export default class Downloaded extends Component {
       case 'clear':
       ToolbarActions.onRemoveFromList(this.state.tableData)
       break
+      case 'delete':
+      ToolbarActions.onDeleteFromDisk(this.state.tableData)
+      break
       default:
     }
     // close the toolbar
@@ -171,8 +174,7 @@ export default class Downloaded extends Component {
     this.setState({tableData: stored.dldata.data.filter(this.filterDownloader)})
   }
 
-  // show or hide the table function
-  componentDidMount() {
+  onShowPlaceholder = () => {
     // if table's length is zero show the EmptyPlaceHolder and hide the table
     if (!this.state.tableData.length) {
       this.setState({table: false})
@@ -180,9 +182,23 @@ export default class Downloaded extends Component {
         this.refs.downloadedPlaceHolder.setState({visible: true})
       }, 700)
     }
+    else {
+      this.setState({table: true})
+      this.refs.downloadedPlaceHolder.setState({visible: false})
+    }
+  }
+
+  // show or hide the table function
+  componentDidMount() {
+    this.onShowPlaceholder()
     // add emitter event listener
     // filter and keep only the ones that are 'downloaded'
-    Subscriptions.push(mrEmitter.addListener('onUpdateData', (updateData) => this.setState({tableData: updateData.filter(this.filterDownloader)})))
+    Subscriptions.push(mrEmitter.addListener('onUpdateData', (updateData) => {
+      this.setState({tableData: updateData.filter(this.filterDownloader)})
+      setTimeout(() => {
+        this.onShowPlaceholder()
+      }, 300)
+    }))
   }
 
   componentWillUnmount() {
@@ -273,6 +289,7 @@ export default class Downloaded extends Component {
                 <Delete />
               </IconButton>
               <IconButton
+                onTouchTap={() => this.onToolbarButton('delete')}
                 style={style.deleteForever}
                 tooltip="Delete from Disk"
               >
@@ -329,7 +346,7 @@ export default class Downloaded extends Component {
           >
         </Table>
         <DownloadedPlaceHolder ref="downloadedPlaceHolder" />
-        <FileInfoDialog />
+        <CommonDialog />
       </div>
   )
 }

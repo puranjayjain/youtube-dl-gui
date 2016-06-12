@@ -38,8 +38,8 @@ class InternalToolbarActions {
   /**
   * [clear list and update the items in it]
   * @method
-  * @param  {String} updateData [the data to be updated]
-  * @param  {String} tableData  [the original data]
+  * @param  {String}  tableData  [the original data]
+  * @param  {Boolean} confirm    [if true the toast to undo will be shown]
   * @return {Event}
   */
   onRemoveFromList = (tableData) => {
@@ -56,12 +56,16 @@ class InternalToolbarActions {
         }
       }
     }
+    // emit the event that the items are cleared from the list
+    mrEmitter.emit('onClearList', listData.length, stored.dldata.data)
     // update the item in storage
     settingsHandle.setStored('dldata', updateData)
     // emit event with the new data
     mrEmitter.emit('onUpdateData', updateData)
-    // emit the event that the items are cleared from the list
-    mrEmitter.emit('onClearList', listData.length, stored.dldata.data)
+  }
+
+  onDeleteFromDisk = (tableData) => {
+    mrEmitter.emit('onDeleteFromDisk', tableData)
   }
 }
 

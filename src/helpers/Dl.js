@@ -33,7 +33,7 @@ export default class Dl {
         this._args.url,
         // TODO leaving the formats to empty for now, get them calculated from the settings
         // FIXME calculate it by default the best format
-        ['-f','best'],
+        ['best'],
         // Additional options can be given for calling `child_process.execFile()`.
         // TODO replace dirname with the actual path this._args.filepath
         {

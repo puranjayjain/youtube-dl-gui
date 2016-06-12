@@ -5,6 +5,7 @@
   /* transform-es2015-modules-commonjs */
   "presets": ["react"],
   "plugins": [
+    "transform-react-router-optimize",
     "transform-es2015-duplicate-keys",
     "transform-es2015-modules-umd",
     "transform-class-properties"

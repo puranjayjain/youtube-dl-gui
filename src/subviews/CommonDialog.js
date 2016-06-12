@@ -9,6 +9,7 @@ import bytes from 'bytes'
 
 import Info from 'material-ui/svg-icons/action/info'
 
+import SettingsHandler from '../helpers/SettingsHandler'
 import mrEmitter from '../helpers/mrEmitter'
 
 // remove this subscription afterwards when there is no use for it
@@ -21,17 +22,53 @@ style = {
     paddingTop: '12px',
     paddingBottom: '12px'
   }
-}
+},
+settingsHandle = new SettingsHandler(),
+stored = settingsHandle.stored
 
 // file info dialog
-export default class FileInfoDialog extends Component {
+export default class CommonDialog extends Component {
   state = {
     open: false,
+    heading: '',
+    actions: <div></div>,
     data: ''
   }
 
+  // filter the selected tableData
+  filterSelected = (data) => !!data.selected
+
   handleClose = () => {
     this.setState({open: false})
+  }
+
+  onConfirmOkdelete = (tableData) => {
+    // delete files from the list and the disk
+    const listData = tableData.filter(this.filterSelected)
+    let updateData = []
+    // go through the whole data to match the ones with the selected one's uuid and add them to the updateData array
+    for (let cData of stored.dldata.data) {
+      for (let lData of listData) {
+        if (lData.uuid === cData.uuid) {
+          // delete from the disk
+          fs.unlink(cData.fileName, function(e) {
+            if (e) {
+              console.error(e)
+            }
+          })
+          break
+        }
+        else {
+          updateData.push(cData)
+        }
+      }
+    }
+    // update the item in storage
+    settingsHandle.setStored('dldata', updateData)
+    // emit event with the new data
+    mrEmitter.emit('onUpdateData', updateData)
+    // close the dialog
+    this.handleClose()
   }
 
   componentDidMount() {
@@ -61,7 +98,16 @@ export default class FileInfoDialog extends Component {
           secondaryText={moment(sendData.lastTry).fromNow()}
         />
       </List>
-      this.setState({open: true})
+      this.setState({
+        open: true,
+        heading: 'Detailed Information',
+        actions:
+        <FlatButton
+          label="Close"
+          primary={true}
+          onTouchTap={this.handleClose}
+        />
+      })
     }))
     Subscriptions.push(mrEmitter.addListener('onRequestFileInfo', (sendData) => {
       this.state.data =
@@ -82,7 +128,38 @@ export default class FileInfoDialog extends Component {
           secondaryText={bytes(sendData.downloaded)}
         />
       </List>
-      this.setState({open: true})
+      this.setState({
+        open: true,
+        heading: 'Detailed Information',
+        actions:
+        <FlatButton
+          label="Close"
+          primary={true}
+          onTouchTap={this.handleClose}
+        />
+      })
+    }))
+    Subscriptions.push(mrEmitter.addListener('onDeleteFromDisk', (tableData) => {
+      console.log(tableData)
+      this.state.data =
+      <div>
+        Are you sure you want to delete the file(s)?
+      </div>
+      this.setState({
+        open: true,
+        heading: 'Confirm deletion',
+        actions:
+        [<FlatButton
+          label="Cancel"
+          primary={true}
+          onTouchTap={this.handleClose}
+         />,
+        <FlatButton
+          label="Ok"
+          primary={true}
+          onTouchTap={this.onConfirmOkdelete.bind(this, tableData)}
+        />]
+      })
     }))
   }
 
@@ -94,17 +171,10 @@ export default class FileInfoDialog extends Component {
   }
 
   render() {
-    const actions =
-    <FlatButton
-      label="Close"
-      primary={true}
-      onTouchTap={this.handleClose}
-    />
-
     return (
       <Dialog
-        title="Detailed Information"
-        actions={actions}
+        title={this.state.heading}
+        actions={this.state.actions}
         modal={false}
         open={this.state.open}
         onRequestClose={this.handleClose}

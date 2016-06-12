@@ -83,8 +83,11 @@ export default class Addurl extends Component {
     // snackbar action text
     actionText: '',
     // function to call with the action button on click
-    actionFunc: ''
+    actionFunc: this.noop
   }
+
+  // no operation function
+  noop = () => {}
 
   /**
    * [click to open the Dialog]
@@ -168,7 +171,12 @@ export default class Addurl extends Component {
   }
 
   // store the download data back to storage
-  setDataChange = (updateData) => settingsHandle.setStored('dldata', updateData)
+  setDataChange = (updateData) => {
+    settingsHandle.setStored('dldata', updateData)
+    this.setComponentState('errorSnackbar', false)
+    // emits on download start / resume to update the useful stuff
+    mrEmitter.emit('onUpdateData', updateData)
+  }
 
   // set the new state of the component
   setComponentState = (component, state) => this.setState({[component]: state})
@@ -229,8 +237,7 @@ export default class Addurl extends Component {
         let updateData = stored.dldata.data
         // push new data to the start of the array
         updateData.unshift(newDownload)
-        stored = updateData
-        this.setDataChange.bind(this, updateData)
+        settingsHandle.setStored('dldata', updateData)
         // add internal states for use
         newDownload.downloadProcess = downloadProcess
         // initialze the download process
@@ -248,21 +255,13 @@ export default class Addurl extends Component {
   }
 
   // on info button click
-  onInfoButton = () => {
-    shell.openExternal('https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md')
-  }
+  onInfoButton = () => shell.openExternal('https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md')
 
   // authentication checkbox
-  onAuthCheck = () => {
-    this.setState({
-      authentication: !this.state.authentication
-    })
-  }
+  onAuthCheck = () => this.setState({authentication: !this.state.authentication})
 
   // handle expansion panel or the card
-  onAuthenticationCheck = (check) => {
-    this.setState({authentication: check})
-  }
+  onAuthenticationCheck = (check) => this.setState({authentication: check})
 
   // check if the page should have the fab or no
   isActive = (to) => {
@@ -335,7 +334,7 @@ export default class Addurl extends Component {
     // on each event trigger
     Subscriptions.push(mrEmitter.addListener('onRouteChange', (newLocation) => this.isActive(newLocation)))
     // Toolbar action of removing items from list => display snackbar
-    Subscriptions.push(mrEmitter.addListener('onClearList', (count, tableData) => this.openActionSnackBar(`${count} removed from List`, 'undo', this.setDataChange.bind(this, tableData))))
+    Subscriptions.push(mrEmitter.addListener('onClearList', (count, originalTableData) => this.openActionSnackBar(`${count} removed from List`, 'undo', this.setDataChange.bind(this, originalTableData))))
     // add event listeners to trigger file download if necessary
     window.ondragover = window.ondragleave = window.ondragend = () => false
     window.ondrop = (event) => {
@@ -593,7 +592,7 @@ export default class Addurl extends Component {
         open={this.state.errorSnackbar}
         message={snackbarErrorText}
         action={this.state.actionText}
-        onActionTouchTap={this.handleActionTouchTap}
+        onActionTouchTap={this.state.actionFunc}
         autoHideDuration={4000}
         onRequestClose={() => this.setComponentState('errorSnackbar', false)}
       />
