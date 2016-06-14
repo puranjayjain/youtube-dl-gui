@@ -138,6 +138,20 @@ export default class Settings extends Component {
               />
             </List>
           </Card>
+          <Card style={style.card}>
+            <List>
+              <Subheader>Desktop</Subheader>
+              <ListItem
+                primaryText="Show download status in taskbar"
+                leftCheckbox= {
+                  <Checkbox
+                    defaultChecked = {stored.desktop.status.data}
+                    onCheck = {this.onIdToggle}
+                  />
+                }
+              />
+            </List>
+          </Card>
         </div>
       </div>
     )
