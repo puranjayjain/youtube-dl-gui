@@ -147,8 +147,6 @@ export default class Downloaded extends Component {
       break
       default:
     }
-    // close the toolbar
-    this.onAllChecked('', false)
   }
 
   filterDownloader = (data) => {
@@ -199,6 +197,8 @@ export default class Downloaded extends Component {
         this.onShowPlaceholder()
       }, 300)
     }))
+    // close the toolbar
+    Subscriptions.push(mrEmitter.addListener('onCloseToolbar', () => this.onAllChecked('', false)))
   }
 
   componentWillUnmount() {

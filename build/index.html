@@ -22,8 +22,11 @@
     } = require('electron').remote
 
     const fs = require('fs')
+    const path = require('path')
     const pathExists = require('path-exists')
     const youtubedl = require('youtube-dl')
+
+    const {ipcRenderer} = require('electron')
 
     // let video
     let dirname = __dirname

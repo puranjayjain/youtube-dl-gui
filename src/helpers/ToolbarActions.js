@@ -62,6 +62,8 @@ class InternalToolbarActions {
     settingsHandle.setStored('dldata', updateData)
     // emit event with the new data
     mrEmitter.emit('onUpdateData', updateData)
+    // now close the toolbar
+    mrEmitter.emit('onCloseToolbar')
   }
 
   onDeleteFromDisk = (tableData) => {

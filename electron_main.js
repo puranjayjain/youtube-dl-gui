@@ -3,6 +3,8 @@ const electron = require('electron')
 const app = electron.app
   // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
+// initializing comms
+const {ipcMain} = require('electron')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -71,4 +73,10 @@ app.on('activate', () => {
 // TODO send errors to console of the renderer
 process.on('uncaughtException', (error) => {
   console.error(error)
+})
+
+// set window progrss bar via ipcmessage
+// for more info see http://electron.atom.io/docs/all/#winsetprogressbarprogress
+ipcMain.on('progressBar', (event, progress) => {
+  mainWindow.setProgressBar(progress)
 })

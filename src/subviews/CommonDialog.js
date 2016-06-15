@@ -38,18 +38,25 @@ export default class CommonDialog extends Component {
   // filter the selected tableData
   filterSelected = (data) => !!data.selected
 
+  filterNotSelected = (data) => !!!data.selected
+
   handleClose = () => {
     this.setState({open: false})
+    // now close the toolbar
+    mrEmitter.emit('onCloseToolbar')
   }
 
   onConfirmOkdelete = (tableData) => {
     // delete files from the list and the disk
     const listData = tableData.filter(this.filterSelected)
-    let updateData = []
+    let updateData = stored.dldata.data
     // go through the whole data to match the ones with the selected one's uuid and add them to the updateData array
-    for (let cData of stored.dldata.data) {
+    for (var i = 0; i < updateData.length; i++) {
+      let cData = updateData[i]
       for (let lData of listData) {
         if (lData.uuid === cData.uuid) {
+          // delete from the list
+          updateData.splice(i, 1)
           // delete from the disk
           fs.unlink(cData.fileName, function(e) {
             if (e) {
@@ -58,11 +65,10 @@ export default class CommonDialog extends Component {
           })
           break
         }
-        else {
-          updateData.push(cData)
-        }
       }
     }
+    // now close the toolbar
+    mrEmitter.emit('onCloseToolbar')
     // update the item in storage
     settingsHandle.setStored('dldata', updateData)
     // emit event with the new data
@@ -140,7 +146,6 @@ export default class CommonDialog extends Component {
       })
     }))
     Subscriptions.push(mrEmitter.addListener('onDeleteFromDisk', (tableData) => {
-      console.log(tableData)
       this.state.data =
       <div>
         Are you sure you want to delete the file(s)?

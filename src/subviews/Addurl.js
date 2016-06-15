@@ -1,5 +1,4 @@
 // Add button for the url and also the common element for rendering fab, snackbar among common elements
-
 import React, {PropTypes, Component} from 'react'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
@@ -26,8 +25,8 @@ import uuid from 'uuid'
 import moment from 'moment'
 
 // icons
-import ContentAdd from 'material-ui/svg-icons/content/add'
 import MoreHoriz from 'material-ui/svg-icons/navigation/more-horiz'
+import ContentAdd from 'material-ui/svg-icons/content/add'
 import Info from 'material-ui/svg-icons/action/info'
 
 import mrEmitter from '../helpers/mrEmitter'
@@ -51,7 +50,9 @@ youtubedlFormat,
 // to track if the video formats are to be loaded this time
 loadFormat = true,
 // current error in the snackbar
-snackbarErrorText = ''
+snackbarErrorText = '',
+// to store the currently downloaded progress
+tableData = {}
 
 export default class Addurl extends Component {
   //keep tooltip state
@@ -88,6 +89,16 @@ export default class Addurl extends Component {
 
   // no operation function
   noop = () => {}
+
+  // filter and show only downloading files
+  filterDownloader = (data) => {
+    if ('status' in data && typeof(data.status) === 'string' && data.status === 'Downloading') {
+      return true
+    }
+    else {
+      return false
+    }
+  }
 
   /**
    * [click to open the Dialog]
@@ -331,6 +342,23 @@ export default class Addurl extends Component {
     stored = settingsHandle.stored
     // on initiate load
     this.isActive(this.context.location.pathname)
+    // on update of getting a new download byte
+    Subscriptions.push(mrEmitter.addListener('onUpdateData', (updateData) => {
+      // do this only if the requirement is
+      if (stored.desktop.status.data) {        
+        tableData = stored.dldata.data.filter(this.filterDownloader)
+        // for each through them and get the download bytes ratio of total
+        let downloadedBytes = 0,
+        totalBytes = 0
+        for (let cData of tableData) {
+          downloadedBytes += cData.downloaded
+          totalBytes += cData.size
+        }
+        // set them to the main process
+        // from https://stackoverflow.com/questions/11832914/round-to-at-most-2-decimal-places-in-javascript/12830454#12830454
+        ipcRenderer.send('progressBar', +(downloadedBytes/totalBytes).toFixed(1))
+      }
+    }))
     // on each event trigger
     Subscriptions.push(mrEmitter.addListener('onRouteChange', (newLocation) => this.isActive(newLocation)))
     // Toolbar action of removing items from list => display snackbar

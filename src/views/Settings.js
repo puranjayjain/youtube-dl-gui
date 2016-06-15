@@ -76,6 +76,7 @@ export default class Settings extends Component {
           <ListItem primaryText="Theme" />
           <ListItem primaryText="Download Options" />
           <ListItem primaryText="Filesystem Options" />
+          <ListItem primaryText="Desktop" />
         </List>
         <div style={style.main}>
           <Card style={style.card}>

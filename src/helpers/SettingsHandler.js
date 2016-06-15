@@ -7,7 +7,8 @@ let stored = {
   data: [],
   theme: {},
   download: {},
-  filesystem: {}
+  filesystem: {},
+  desktop: {}
 }
 export default class SettingsHandler {
   //  initiate all the settings here

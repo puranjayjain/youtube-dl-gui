@@ -32,10 +32,9 @@ export default class Dl {
     _video = youtubedl(
         this._args.url,
         // TODO leaving the formats to empty for now, get them calculated from the settings
-        // FIXME calculate it by default the best format
-        ['best'],
+        // FIXME calculate it by default and leave it if no format is chosen (node youtubedl handles for best on it's own)
+        [],
         // Additional options can be given for calling `child_process.execFile()`.
-        // TODO replace dirname with the actual path this._args.filepath
         {
           cwd: dirname
         })
@@ -88,6 +87,8 @@ export default class Dl {
 
     // update the data on download end, error, cancel
     _video.on('error', (e) => {
+      // throw the error
+      console.error(e)
       // the other end of this will read the chunk.length for new download size addition
       let updateData = stored.dldata.data
       // try to find it in tableData if not add it
@@ -125,7 +126,9 @@ export default class Dl {
     })
 
     // start the download here
-    _video.pipe(fs.createWriteStream('thevideo.mp4'))
+    // TODO replace thevideomp4 with the one which we get from youtube
+    const downloadPath = path.join(this._args.filepath.toString(), 'thevideo.mp4')
+    _video.pipe(fs.createWriteStream(downloadPath))
   }
 
   // all the main functions to proppogate tasks
