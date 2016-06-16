@@ -23,7 +23,8 @@ export default class All extends Component {
     tableData: [
       // {
       //     uuid: 'uuid',
-      //     fileName: 'C:\Users\User\Music\Song.mp4', // full path to file
+      //     fileName: 'C:\Users\User\Music\Song.mp4', // full path to file,
+      //     url: 'the-website-url-download-the-video.mp4',
       //     size: '94 Mb', // full size in mb
       //     lastTry: '17/05/2016 9:06 AM', // last attempt at downloading the file
       //     downloaded: '5 MB',
@@ -32,6 +33,7 @@ export default class All extends Component {
       // {
       //     uuid: 'uuid',
       //     fileName: 'C:\Users\User\Music\Song.mp4', // full path to file
+      //     url: 'the-website-url-download-the-video.mp4',
       //     size: '94 Mb', // full size in mb
       //     lastTry: '17/05/2016 9:06 AM', // last attempt at downloading the file
       //     downloaded: '5 MB',

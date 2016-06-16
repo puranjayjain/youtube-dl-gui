@@ -13,6 +13,7 @@ import Clear from 'material-ui/svg-icons/content/clear'
 import Info from 'material-ui/svg-icons/action/info'
 import Delete from 'material-ui/svg-icons/action/delete'
 import DeleteForever from 'material-ui/svg-icons/action/delete-forever'
+import Refresh from 'material-ui/svg-icons/navigation/refresh'
 import Pause from 'material-ui/svg-icons/av/pause-circle-filled'
 import Play from 'material-ui/svg-icons/av/play-arrow'
 
@@ -137,6 +138,9 @@ export default class Unfinished extends Component {
 
   onToolbarButton = (type) => {
     switch (type) {
+      case 'redownload':
+      ToolbarActions.onRedownloadFile(this.state.tableData)
+      break
       case 'info':
       ToolbarActions.onRequestFileInfo(this.state.tableData)
       break
@@ -280,6 +284,13 @@ export default class Unfinished extends Component {
               </IconButton>
               <IconButton tooltip="Pause">
                 <Pause />
+              </IconButton>
+              <IconButton
+                onTouchTap={() => this.onToolbarButton('redownload')}
+                style={style.redownload}
+                tooltip="Redownload"
+              >
+                <Refresh />
               </IconButton>
               <IconButton
                 onTouchTap={() => this.onToolbarButton('info')}

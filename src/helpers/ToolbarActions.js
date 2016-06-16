@@ -9,6 +9,14 @@ class InternalToolbarActions {
   // filter the selected tableData
   filterSelected = (data) => !!data.selected
 
+  // restart the download process for a file
+  onRedownloadFile = (tableData) => {
+    // send the file to be downloaded again
+    mrEmitter.emit('onRedownloadFile', tableData.filter(this.filterSelected)[0])
+    // now close the toolbar
+    mrEmitter.emit('onCloseToolbar')
+  }
+
   // display detailed info about file / files
   onRequestFileInfo = (tableData) => {
     tableData = tableData.filter(this.filterSelected)

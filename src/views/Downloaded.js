@@ -29,6 +29,7 @@ import SettingsHandler from '../helpers/SettingsHandler'
 
 // the component to render inside
 let innerComp,
+// stores the total number of checkboxes
 checkboxes = 0,
 stored = {},
 settingsHandle = new SettingsHandler(),
@@ -136,6 +137,9 @@ export default class Downloaded extends Component {
 
   onToolbarButton = (type) => {
     switch (type) {
+      case 'redownload':
+      ToolbarActions.onRedownloadFile(this.state.tableData)
+      break
       case 'info':
       ToolbarActions.onRequestFileInfo(this.state.tableData)
       break
@@ -236,6 +240,9 @@ export default class Downloaded extends Component {
         paddingLeft: '.5em',
         color: this.context.muiTheme.palette.textColor
       },
+      redownload: {
+        display: this.state.checkedBoxes === 1 ? 'flex' : 'none'
+      },
       deleteForever: {
         background: this.context.muiTheme.palette.primary1Color,
         borderRadius: '50%'
@@ -273,7 +280,11 @@ export default class Downloaded extends Component {
               />
             </ToolbarGroup>
             <ToolbarGroup>
-              <IconButton tooltip="Redownload">
+              <IconButton
+                onTouchTap={() => this.onToolbarButton('redownload')}
+                style={style.redownload}
+                tooltip="Redownload"
+              >
                 <Refresh />
               </IconButton>
               <IconButton

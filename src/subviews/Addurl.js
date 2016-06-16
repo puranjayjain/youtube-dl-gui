@@ -345,7 +345,7 @@ export default class Addurl extends Component {
     // on update of getting a new download byte
     Subscriptions.push(mrEmitter.addListener('onUpdateData', (updateData) => {
       // do this only if the requirement is
-      if (stored.desktop.status.data) {        
+      if (stored.desktop.status.data) {
         tableData = stored.dldata.data.filter(this.filterDownloader)
         // for each through them and get the download bytes ratio of total
         let downloadedBytes = 0,
@@ -363,6 +363,15 @@ export default class Addurl extends Component {
     Subscriptions.push(mrEmitter.addListener('onRouteChange', (newLocation) => this.isActive(newLocation)))
     // Toolbar action of removing items from list => display snackbar
     Subscriptions.push(mrEmitter.addListener('onClearList', (count, originalTableData) => this.openActionSnackBar(`${count} removed from List`, 'undo', this.setDataChange.bind(this, originalTableData))))
+    // to redownload a file event
+    Subscriptions.push(mrEmitter.addListener('onRedownloadFile', (fileData) => {
+      if (urlPattern.test(fileData.url)) {
+        // copy text to the url input of the dialog
+        this.setState({url: fileData.url})
+        // open the dialog
+        this.openDownloadDialog(event, true)
+      }
+    }))
     // add event listeners to trigger file download if necessary
     window.ondragover = window.ondragleave = window.ondragend = () => false
     window.ondrop = (event) => {
