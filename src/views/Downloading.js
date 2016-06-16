@@ -4,6 +4,8 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 import moment from 'moment'
 import bytes from 'bytes'
 
+import Pause from 'material-ui/svg-icons/av/pause-circle-filled'
+
 // Custom components
 import mrEmitter from '../helpers/mrEmitter'
 import AllPlaceHolder from '../placeholders/AllPlaceHolder'

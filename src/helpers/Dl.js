@@ -13,7 +13,9 @@ export default class Dl {
   constructor(args = {
     uuid,
     url,
-    filepath
+    filePath,
+    start: 0,
+    fullPath: false
   }) {
     this._args = args
       // load all the settings
@@ -36,6 +38,7 @@ export default class Dl {
         [],
         // Additional options can be given for calling `child_process.execFile()`.
         {
+          start: this._args.start,
           cwd: dirname
         })
 
@@ -127,7 +130,13 @@ export default class Dl {
 
     // start the download here
     // TODO replace thevideomp4 with the one which we get from youtube
-    const downloadPath = path.join(this._args.filepath.toString(), 'thevideo.mp4')
+    let downloadPath
+    if (this._args.fullPath) {
+      downloadPath = this._args.filePath
+    }
+    else {
+      downloadPath = path.join(this._args.filePath.toString(), 'thevideo.mp4')
+    }
     _video.pipe(fs.createWriteStream(downloadPath))
   }
 

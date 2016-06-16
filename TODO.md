@@ -1,11 +1,11 @@
 - [ ] Showcase the app on the material-ui docs site
-- [x] remove all TODO statements and make it work
+- [x] remove all inline TODO statements and make it work
 - [ ] add a linter
 - [ ] Always remove all inline TODOs and console.logs on release build
 - [ ] implement the offline/online feature detection http://electron.atom.io/docs/all/#onlineoffline-event-detection
 - [ ] decide between tray icon change or overlay status and implement it http://electron.atom.io/docs/all/#icon-overlays-in-taskbar-windows
 - [ ] implement download status using http://electron.atom.io/docs/all/#icon-overlays-in-taskbar-windows
-- [ ] implement download notifications using http://electron.atom.io/docs/all/#icon-overlays-in-taskbar-windows
+- [x] implement download notifications using http://electron.atom.io/docs/all/#icon-overlays-in-taskbar-windows
 - [ ] implement resizable tables http://jsfiddle.net/thrilleratplay/epcybL4v/
 - [ ] use https://github.com/fent/node-streamspeed to determine speed
 - [ ] use the github requests api to check for a new version of youtube-dl.exe and download when available and replace the old one with it

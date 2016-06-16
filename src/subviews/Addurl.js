@@ -230,7 +230,7 @@ export default class Addurl extends Component {
         let downloadProcess = new Dl({
           uuid: id,
           url: this.state.url,
-          filepath: this.state.filePath
+          filePath: this.state.filePath
         })
         // initiate the object to store
         let newDownload = {
@@ -337,7 +337,18 @@ export default class Addurl extends Component {
   }
 
   // register all adding stuff here
+  // set all the downloading data to error status
   componentWillMount() {
+    let updateData = settingsHandle.stored.dldata.data
+    for (let cData of updateData) {
+      if (cData.status === 'Downloading') {
+        cData.status = 'Error'
+      }
+    }
+    // store it back
+    settingsHandle.setStored('dldata', updateData)
+    // emits on download start / resume to update the useful stuff
+    mrEmitter.emit('onUpdateData', updateData)
     // load all the settings
     stored = settingsHandle.stored
     // on initiate load
@@ -359,10 +370,12 @@ export default class Addurl extends Component {
         ipcRenderer.send('progressBar', +(downloadedBytes/totalBytes).toFixed(1))
       }
     }))
-    // on each event trigger
+    // on each event triggeronStartDownload
     Subscriptions.push(mrEmitter.addListener('onRouteChange', (newLocation) => this.isActive(newLocation)))
     // Toolbar action of removing items from list => display snackbar
     Subscriptions.push(mrEmitter.addListener('onClearList', (count, originalTableData) => this.openActionSnackBar(`${count} removed from List`, 'undo', this.setDataChange.bind(this, originalTableData))))
+    // add to downloadProcesses
+    Subscriptions.push(mrEmitter.addListener('onStartDownload', (newDownload) => this.context.downloadProcesses.unshift(newDownload)))
     // to redownload a file event
     Subscriptions.push(mrEmitter.addListener('onRedownloadFile', (fileData) => {
       if (urlPattern.test(fileData.url)) {

@@ -10,6 +10,7 @@ let stored = {
   filesystem: {},
   desktop: {}
 }
+
 export default class SettingsHandler {
   //  initiate all the settings here
   constructor() {

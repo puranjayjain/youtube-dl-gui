@@ -1,5 +1,6 @@
 import mrEmitter from '../helpers/mrEmitter'
 import SettingsHandler from '../helpers/SettingsHandler'
+import Dl from '../helpers/Dl'
 
 /**
 * This class contains helpers for toolbar actions
@@ -13,6 +14,53 @@ class InternalToolbarActions {
   onRedownloadFile = (tableData) => {
     // send the file to be downloaded again
     mrEmitter.emit('onRedownloadFile', tableData.filter(this.filterSelected)[0])
+    // now close the toolbar
+    mrEmitter.emit('onCloseToolbar')
+  }
+
+  // resume download
+  onResumeDownload = (tableData, downloadProcesses) => {
+    tableData = tableData.filter(this.filterSelected)
+    // flag to check if the Data is found in the downloadProcesses list
+    let found = false
+    for (let cData of tableData) {
+      // go through the downloadProcesses
+      for (let downloadProcess of downloadProcesses) {
+        if (cData.uuid === downloadProcess.uuid) {
+          downloadProcess.resumeDownload()
+          found = true
+          break
+        }
+      }
+      let updateData = stored.dldata.data
+      for (let lData of updateData) {
+        if (cData.uuid === lData.uuid) {
+          lData.status = 'Downloading'
+          // if not found then continue to loop through the entire list
+          if (!found) {
+            let downloadProcess = new Dl({
+              uuid: lData.id,
+              url: lData.url,
+              filePath: lData.fileName,
+              start: lData.downloaded,
+              fullPath: true
+            })
+            // copy ldata into newDownload
+            let newDownload = Object.assign({}, lData)
+            // add downloadProcess to new download
+            newDownload.downloadProcess = downloadProcess
+            // emit download process
+            mrEmitter.emit('onStartDownload', newDownload)
+            // initialze the download process
+            downloadProcess.initVideo()
+          }
+        }
+      }
+      // store it back in the storage
+      settingsHandle.setStored('dldata', updateData)
+      // emit storage event
+      mrEmitter.emit('onUpdateData', updateData)
+    }
     // now close the toolbar
     mrEmitter.emit('onCloseToolbar')
   }

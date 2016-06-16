@@ -14,7 +14,6 @@ import Info from 'material-ui/svg-icons/action/info'
 import Delete from 'material-ui/svg-icons/action/delete'
 import DeleteForever from 'material-ui/svg-icons/action/delete-forever'
 import Refresh from 'material-ui/svg-icons/navigation/refresh'
-import Pause from 'material-ui/svg-icons/av/pause-circle-filled'
 import Play from 'material-ui/svg-icons/av/play-arrow'
 
 import moment from 'moment'
@@ -138,6 +137,9 @@ export default class Unfinished extends Component {
 
   onToolbarButton = (type) => {
     switch (type) {
+      case 'resume':
+      ToolbarActions.onResumeDownload(this.state.tableData, this.context.downloadProcesses)
+      break
       case 'redownload':
       ToolbarActions.onRedownloadFile(this.state.tableData)
       break
@@ -188,7 +190,9 @@ export default class Unfinished extends Component {
     }
     else {
       this.setState({table: true})
-      this.refs.downloadedPlaceHolder.setState({visible: false})
+      setTimeout(() => {
+        this.refs.downloadedPlaceHolder.setState({visible: false})
+      }, 700)
     }
   }
 
@@ -242,6 +246,9 @@ export default class Unfinished extends Component {
         paddingLeft: '.5em',
         color: this.context.muiTheme.palette.textColor
       },
+      redownload: {
+        display: this.state.checkedBoxes === 1 ? 'flex' : 'none'
+      },
       deleteForever: {
         background: this.context.muiTheme.palette.primary1Color,
         borderRadius: '50%'
@@ -279,11 +286,11 @@ export default class Unfinished extends Component {
               />
             </ToolbarGroup>
             <ToolbarGroup>
-              <IconButton tooltip="Resume">
+              <IconButton
+                onTouchTap={() => this.onToolbarButton('resume')}
+                tooltip="Resume"
+              >
                 <Play />
-              </IconButton>
-              <IconButton tooltip="Pause">
-                <Pause />
               </IconButton>
               <IconButton
                 onTouchTap={() => this.onToolbarButton('redownload')}
@@ -331,6 +338,7 @@ export default class Unfinished extends Component {
                 />
               </TableHeaderColumn>
               <TableHeaderColumn>File Name</TableHeaderColumn>
+              <TableHeaderColumn>Status</TableHeaderColumn>
               <TableHeaderColumn>Size</TableHeaderColumn>
               <TableHeaderColumn>Last Try</TableHeaderColumn>
             </TableRow>
@@ -349,6 +357,7 @@ export default class Unfinished extends Component {
                   />
                 </TableRowColumn>
                 <TableRowColumn style={style.multiLineItem}>{row.fileName}</TableRowColumn>
+                <TableRowColumn>{row.status}</TableRowColumn>
                 <TableRowColumn>{bytes(row.size)}</TableRowColumn>
                 <TableRowColumn>{moment(row.lastTry).fromNow()}</TableRowColumn>
               </TableRow>
@@ -368,5 +377,6 @@ export default class Unfinished extends Component {
 }
 
 Unfinished.contextTypes = {
-  muiTheme: PropTypes.object.isRequired
+  muiTheme: PropTypes.object.isRequired,
+  downloadProcesses: PropTypes.array.isRequired
 }
