@@ -38,7 +38,6 @@
     "gulp": "^3.9.1",
     "gulp-notify": "^2.2.0",
     "gulp-util": "^3.0.7",
-    "node-inspector": "^0.12.8",
     "node-pre-gyp": "git+https://git@github.com/enlight/node-pre-gyp.git#detect-electron-runtime-in-find",
     "pretty-hrtime": "^1.0.2",
     "require-dir": "^0.3.0",
