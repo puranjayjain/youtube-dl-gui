@@ -34,9 +34,7 @@ export default class Settings extends Component {
   }
 
   // on touch tap go to link
-  onTouchLink = (index) => {
-    findDOMNode(this.refs['card'+ index]).scrollIntoView()
-  }
+  onTouchLink = (index) => findDOMNode(this.refs['card'+ index]).scrollIntoView()
 
   // update the id setting
   onIdToggle = () => stored.filesystem.id.toggleData()
