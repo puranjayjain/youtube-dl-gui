@@ -1,5 +1,9 @@
 import React, {Component} from 'react'
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
+import IconButton from 'material-ui/IconButton'
+import IconMenu from 'material-ui/IconMenu'
+import MenuItem from 'material-ui/MenuItem'
 
 import moment from 'moment'
 import bytes from 'bytes'
@@ -7,6 +11,12 @@ import bytes from 'bytes'
 // Custom components
 import AllPlaceHolder from '../placeholders/AllPlaceHolder'
 import mrEmitter from '../helpers/mrEmitter'
+
+// icons
+import MoreVert from 'material-ui/svg-icons/navigation/more-vert'
+import Delete from 'material-ui/svg-icons/action/delete'
+import Pause from 'material-ui/svg-icons/av/pause'
+import Play from 'material-ui/svg-icons/av/play-arrow'
 
 // the settings loader helper
 import SettingsHandler from '../helpers/SettingsHandler'
@@ -18,7 +28,7 @@ Subscriptions = []
 
 export default class All extends Component {
   state = {
-    toolbar: false,
+    actionHolder: false,
     table: true,
     tableData: [
       // {
@@ -40,6 +50,14 @@ export default class All extends Component {
       //     status: 'Paused', // can have values as 'Starting', 'Paused', 'Downloading', 'Error', 'Canceled', 'Done'
       // }
     ]
+  }
+
+  onShowActions = (rowNumber) => {
+    this.setState({actionHolder: true})
+  }
+
+  onHideActions = (rowNumber) => {
+    this.setState({actionHolder: false})
   }
 
   // register all adding stuff here
@@ -78,6 +96,20 @@ export default class All extends Component {
       tableColumn: {
         whiteSpace: 'normal'
       },
+      actionButton: {
+        width: 36,
+        height: 36,
+        padding: 0
+      },
+      actionHolder: {
+        display: this.state.actionHolder ? 'flex' : 'none',
+        position: 'absolute',
+        top: '130px',
+        right: 0
+      },
+      actionMenu: {
+        width: 200,
+      }
     }
 
     return (
@@ -86,6 +118,8 @@ export default class All extends Component {
           ref="table"
           style={style.table}
           selectable={false}
+          onRowHover={this.onShowActions}
+          onRowHoverExit={this.onHideActions}
         >
           <TableHeader
             adjustForCheckbox={false}
@@ -116,6 +150,47 @@ export default class All extends Component {
           </TableBody>
           >
         </Table>
+        <ReactCSSTransitionGroup transitionName="toolbarAnimate" transitionEnterTimeout={200} transitionLeaveTimeout={200}>
+          <div
+            style={style.actionHolder}
+            ref="actionHolder"
+          >
+            <IconButton
+              style={style.actionButton}
+              tooltip="Resume"
+            >
+              <Play />
+            </IconButton>
+            <IconButton
+              style={style.actionButton}
+              tooltip="Pause"
+            >
+              <Pause />
+            </IconButton>
+            <IconButton
+              style={style.actionButton}
+              tooltip="Remove from list"
+            >
+              <Delete />
+            </IconButton>
+            <IconMenu
+              useLayerForClickAway={true}
+              iconButtonElement={
+                <IconButton
+                  style={style.actionButton}
+                >
+                  <MoreVert />
+                </IconButton>
+              }
+              anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+              targetOrigin={{horizontal: 'right', vertical: 'top'}}
+            >
+              <MenuItem primaryText="Redownload" />
+              <MenuItem primaryText="File Info" />
+              <MenuItem primaryText="Delete from disk" />
+            </IconMenu>
+          </div>
+        </ReactCSSTransitionGroup>
         <AllPlaceHolder ref="allPlaceHolder" />
       </div>
     )
