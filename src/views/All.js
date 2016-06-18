@@ -49,11 +49,15 @@ export default class All extends Component {
       //     downloaded: '5 MB',
       //     status: 'Paused', // can have values as 'Starting', 'Paused', 'Downloading', 'Error', 'Canceled', 'Done'
       // }
-    ]
+    ],
+    rowNumber: -1
   }
 
   onShowActions = (rowNumber) => {
-    this.setState({actionHolder: true})
+    this.setState({
+      actionHolder: true,
+      rowNumber: rowNumber
+    })
   }
 
   onHideActions = (rowNumber) => {
