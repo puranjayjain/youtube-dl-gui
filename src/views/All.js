@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 import IconButton from 'material-ui/IconButton'
 import IconMenu from 'material-ui/IconMenu'
@@ -11,6 +10,7 @@ import bytes from 'bytes'
 // Custom components
 import AllPlaceHolder from '../placeholders/AllPlaceHolder'
 import mrEmitter from '../helpers/mrEmitter'
+import ToolbarActions from '../helpers/ToolbarActions'
 
 // icons
 import MoreVert from 'material-ui/svg-icons/navigation/more-vert'
@@ -50,18 +50,48 @@ export default class All extends Component {
       //     status: 'Paused', // can have values as 'Starting', 'Paused', 'Downloading', 'Error', 'Canceled', 'Done'
       // }
     ],
-    rowNumber: -1
+    rowNumber: -1,
+    rowPosition: 129
   }
 
   onShowActions = (rowNumber) => {
+    let setPosition = 0
+    if (rowNumber > 0) {
+      setPosition = 128.5 + (rowNumber * 51)
+    }
+    else {
+      setPosition = 129
+    }
     this.setState({
       actionHolder: true,
-      rowNumber: rowNumber
+      rowNumber: rowNumber,
+      rowPosition: setPosition
     })
   }
 
-  onHideActions = (rowNumber) => {
-    this.setState({actionHolder: false})
+  // menu item click action
+  onToolbarButton = (type) => {
+    switch (type) {
+      case 'resume':
+      // ToolbarActions.onResumeDownload(this.state.tableData, this.context.downloadProcesses)
+      break
+      case 'pause':
+      // ToolbarActions.onRedownloadFile(this.state.tableData)
+      break
+      case 'redownload':
+      // ToolbarActions.onRedownloadFile(this.state.tableData)
+      break
+      case 'info':
+      // ToolbarActions.onRequestFileInfo(this.state.tableData)
+      break
+      case 'clear':
+      // ToolbarActions.onRemoveFromList(this.state.tableData)
+      break
+      case 'delete':
+      // ToolbarActions.onDeleteFromDisk(this.state.tableData)
+      break
+      default:
+    }
   }
 
   // register all adding stuff here
@@ -108,8 +138,9 @@ export default class All extends Component {
       actionHolder: {
         display: this.state.actionHolder ? 'flex' : 'none',
         position: 'absolute',
-        top: '130px',
-        right: 0
+        top: `${this.state.rowPosition}px`,
+        right: 0,
+        marginRight: '8px'
       },
       actionMenu: {
         width: 200,
@@ -123,7 +154,6 @@ export default class All extends Component {
           style={style.table}
           selectable={false}
           onRowHover={this.onShowActions}
-          onRowHoverExit={this.onHideActions}
         >
           <TableHeader
             adjustForCheckbox={false}
@@ -157,47 +187,58 @@ export default class All extends Component {
           </TableBody>
           >
         </Table>
-        <ReactCSSTransitionGroup transitionName="toolbarAnimate" transitionEnterTimeout={200} transitionLeaveTimeout={200}>
-          <div
-            style={style.actionHolder}
-            ref="actionHolder"
+        <div
+          onMouseOver={this.onKeepOpenActions}
+          style={style.actionHolder}
+          ref="actionHolder"
+        >
+          <IconButton
+            onTouchTap={() => this.onToolbarButton('resume')}
+            style={style.actionButton}
+            tooltip="Resume"
           >
-            <IconButton
-              style={style.actionButton}
-              tooltip="Resume"
-            >
-              <Play />
-            </IconButton>
-            <IconButton
-              style={style.actionButton}
-              tooltip="Pause"
-            >
-              <Pause />
-            </IconButton>
-            <IconButton
-              style={style.actionButton}
-              tooltip="Remove from list"
-            >
-              <Delete />
-            </IconButton>
-            <IconMenu
-              useLayerForClickAway={true}
-              iconButtonElement={
-                <IconButton
-                  style={style.actionButton}
-                >
-                  <MoreVert />
-                </IconButton>
-              }
-              anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-              targetOrigin={{horizontal: 'right', vertical: 'top'}}
-            >
-              <MenuItem primaryText="Redownload" />
-              <MenuItem primaryText="File Info" />
-              <MenuItem primaryText="Delete from disk" />
-            </IconMenu>
-          </div>
-        </ReactCSSTransitionGroup>
+            <Play />
+          </IconButton>
+          <IconButton
+            onTouchTap={() => this.onToolbarButton('pause')}
+            style={style.actionButton}
+            tooltip="Pause"
+          >
+            <Pause />
+          </IconButton>
+          <IconButton
+            onTouchTap={() => this.onToolbarButton('clear')}
+            style={style.actionButton}
+            tooltip="Remove from list"
+          >
+            <Delete />
+          </IconButton>
+          <IconMenu
+            useLayerForClickAway={true}
+            iconButtonElement={
+              <IconButton
+                style={style.actionButton}
+              >
+                <MoreVert />
+              </IconButton>
+            }
+            anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+            targetOrigin={{horizontal: 'right', vertical: 'top'}}
+          >
+            <MenuItem
+              onTouchTap={() => this.onToolbarButton('redownload')}
+              primaryText="Redownload"
+            />
+            <MenuItem
+              onTouchTap={() => this.onToolbarButton('info')}
+              primaryText="File Info"
+            />
+            <MenuItem
+              onTouchTap={() => this.onToolbarButton('delete')}
+              primaryText="Delete from disk"
+            />
+          </IconMenu>
+        </div>
         <AllPlaceHolder ref="allPlaceHolder" />
       </div>
     )

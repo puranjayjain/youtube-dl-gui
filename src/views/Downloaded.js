@@ -137,9 +137,9 @@ export default class Downloaded extends Component {
 
   // propogate checkbox tick from the table row to the relevant checkbox
   onClickTableCell = (rowNumber, columnId, event) => {
-    console.log(rowNumber);
-    console.log(c);
-    console.log(event.target);
+    if (event.target.nodeName !== 'INPUT') {
+      this.onChecked(rowNumber, event, !this.state.tableData[rowNumber].selected)
+    }
   }
 
   onToolbarButton = (type) => {

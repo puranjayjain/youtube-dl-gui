@@ -135,6 +135,13 @@ export default class Unfinished extends Component {
     }
   }
 
+  // propogate checkbox tick from the table row to the relevant checkbox
+  onClickTableCell = (rowNumber, columnId, event) => {
+    if (event.target.nodeName !== 'INPUT') {
+      this.onChecked(rowNumber, event, !this.state.tableData[rowNumber].selected)
+    }
+  }
+
   onToolbarButton = (type) => {
     switch (type) {
       case 'resume':
@@ -325,6 +332,7 @@ export default class Unfinished extends Component {
           ref="table"
           style={style.table}
           selectable={false}
+          onCellClick={this.onClickTableCell}
         >
           <TableHeader
             adjustForCheckbox={false}
