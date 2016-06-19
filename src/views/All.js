@@ -143,7 +143,10 @@ export default class All extends Component {
             stripedRows={true}
           >
             {this.state.tableData.map( (row, index) => (
-              <TableRow key={index}>
+              <TableRow
+                ref={`tableRow${index}`}
+                key={index}
+              >
                 <TableRowColumn style={style.tableColumn}>{row.fileName}</TableRowColumn>
                 <TableRowColumn>{bytes(row.downloaded)}</TableRowColumn>
                 <TableRowColumn>{row.status}</TableRowColumn>

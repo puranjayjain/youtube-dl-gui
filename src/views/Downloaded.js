@@ -66,7 +66,7 @@ export default class Downloaded extends Component {
       // get the temp data
       let i, tempTableData = this.state.tableData
       for (i = 0; i < checkboxes; i++) {
-        this.refs['check' + i].setChecked(isInputChecked)
+        this.refs[`check${i}`].setChecked(isInputChecked)
         // update the data
         tempTableData[i].selected = isInputChecked
       }
@@ -131,8 +131,15 @@ export default class Downloaded extends Component {
     }
     else {
       // toggle this component's state
-      this.refs['check' + index].setChecked(isInputChecked)
+      this.refs[`check${index}`].setChecked(isInputChecked)
     }
+  }
+
+  // propogate checkbox tick from the table row to the relevant checkbox
+  onClickTableCell = (rowNumber, columnId, event) => {
+    console.log(rowNumber);
+    console.log(c);
+    console.log(event.target);
   }
 
   onToolbarButton = (type) => {
@@ -313,6 +320,7 @@ export default class Downloaded extends Component {
           ref="table"
           style={style.table}
           selectable={false}
+          onCellClick={this.onClickTableCell}
         >
           <TableHeader
             adjustForCheckbox={false}
@@ -339,7 +347,7 @@ export default class Downloaded extends Component {
               <TableRow key={index}>
                 <TableRowColumn style={style.tableColumn}>
                   <Checkbox
-                    ref={"check" + index}
+                    ref={`check${index}`}
                     onCheck={(event, isInputChecked) => this.onChecked(index, event, isInputChecked)}
                   />
                 </TableRowColumn>

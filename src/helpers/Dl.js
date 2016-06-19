@@ -14,6 +14,7 @@ export default class Dl {
     uuid,
     url,
     filePath,
+    format,
     start: 0,
     fullPath: false
   }) {
@@ -27,15 +28,24 @@ export default class Dl {
     return _video
   }
 
+  // returns all the arguments that need to be passed for youtube-dl
+  getArgs = () => {
+    args = []
+    // FIXME calculate it by default and leave it if no format is chosen (node youtubedl handles for best on it's own)
+    // check and push format
+    if (format) {
+      args.push(format)
+    }
+    return args
+  }
+
   // instantiate functions
   // TODO add checks for resuming a partially downloaded file
   // start te process and get the video also
   initVideo = () => {
     _video = youtubedl(
         this._args.url,
-        // TODO leaving the formats to empty for now, get them calculated from the settings
-        // FIXME calculate it by default and leave it if no format is chosen (node youtubedl handles for best on it's own)
-        [],
+        this.getArgs(),
         // Additional options can be given for calling `child_process.execFile()`.
         {
           start: this._args.start,

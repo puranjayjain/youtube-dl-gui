@@ -230,12 +230,13 @@ export default class Addurl extends Component {
         let downloadProcess = new Dl({
           uuid: id,
           url: this.state.url,
-          filePath: this.state.filePath
+          filePath: this.state.filePath,
+          format: this.state.format === 1 ? false : this.state.formats[this.state.format]
         })
         // initiate the object to store
         let newDownload = {
           uuid: id,
-          format_id: 22, // format id(number) of the download
+          format_id: this.state.format === 1 ? false : this.state.formats[this.state.format], // format id(number) of the download
           url: this.state.url, //url of the media
           fileName: this.state.filePath + '\\thevideo.mp4', // TODO replace the filename and get it calculated from ytdl!!!
           size: 0, // e.g 459834 bytes converted to mb when displayed, full size of download

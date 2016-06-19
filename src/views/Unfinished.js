@@ -66,7 +66,7 @@ export default class Unfinished extends Component {
       // get the temp  data
       let i, tempTableData = this.state.tableData
       for (i = 0; i < checkboxes; i++) {
-        this.refs['check' + i].setChecked(isInputChecked)
+        this.refs[`check${i}`].setChecked(isInputChecked)
         // update the data
         tempTableData[i].selected = isInputChecked
       }
@@ -131,7 +131,7 @@ export default class Unfinished extends Component {
     }
     else {
       // toggle this component's state
-      this.refs['check' + index].setChecked(isInputChecked)
+      this.refs[`check${index}`].setChecked(isInputChecked)
     }
   }
 
@@ -352,7 +352,7 @@ export default class Unfinished extends Component {
               <TableRow key={index}>
                 <TableRowColumn style={style.tableColumn}>
                   <Checkbox
-                    ref={"check" + index}
+                    ref={`check${index}`}
                     onCheck={(event, isInputChecked) => this.onChecked(index, event, isInputChecked)}
                   />
                 </TableRowColumn>

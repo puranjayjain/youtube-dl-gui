@@ -43,7 +43,8 @@ class InternalToolbarActions {
               url: lData.url,
               filePath: lData.fileName,
               start: lData.downloaded,
-              fullPath: true
+              fullPath: true,
+              format: ldata.format
             })
             // copy ldata into newDownload
             let newDownload = Object.assign({}, lData)

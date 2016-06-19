@@ -34,7 +34,7 @@ export default class Settings extends Component {
   }
 
   // on touch tap go to link
-  onTouchLink = (index) => findDOMNode(this.refs['card'+ index]).scrollIntoView()
+  onTouchLink = (index) => findDOMNode(this.refs[`card${index}`]).scrollIntoView()
 
   // update the id setting
   onIdToggle = () => stored.filesystem.id.toggleData()
@@ -87,7 +87,7 @@ export default class Settings extends Component {
           {links.map( (row, index) => (
             <ListItem
               onTouchTap={() => this.onTouchLink(index)}
-              key={'li-' + index}
+              key={`li-${index}`}
               primaryText={row}
             />
           ))}
@@ -95,8 +95,8 @@ export default class Settings extends Component {
         <div style={style.main}>
           {links.map((row, index) => (
             <Card
-              ref={'card' + index}
-              key={'item-' + index}
+              ref={`card${index}`}
+              key={`item-${index}`}
               style={style.card}
             >
               <List>

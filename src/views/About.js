@@ -43,9 +43,9 @@ export default class About extends Component {
 
   render() {
     const version = {
-      node: "Node Js Version " + window.process.versions.node,
-      chrome: "Chrome " + window.process.versions.chrome,
-      electron: "Electron " + window.process.versions.electron
+      node: `Node Js Version ${window.process.versions.node}`,
+      chrome: `Chrome ${window.process.versions.chrome}`,
+      electron: `Electron ${window.process.versions.electron}`
     }
 
     return (
