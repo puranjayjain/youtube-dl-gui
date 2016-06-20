@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {PropTypes, Component} from 'react'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 import IconButton from 'material-ui/IconButton'
 import IconMenu from 'material-ui/IconMenu'
@@ -38,17 +38,9 @@ export default class All extends Component {
       //     size: '94 Mb', // full size in mb
       //     lastTry: '17/05/2016 9:06 AM', // last attempt at downloading the file
       //     downloaded: '5 MB',
-      //     status: 'Paused', // can have values as 'Starting', 'Paused', 'Downloading', 'Error', 'Canceled', 'Done'
+      //     status: 'Paused', // can have values as 'Starting', 'Paused', 'Downloading', 'Error', 'Canceled', 'Done',
+      //     selected: true // or false for checkbox and other use cases
       // },
-      // {
-      //     uuid: 'uuid',
-      //     fileName: 'C:\Users\User\Music\Song.mp4', // full path to file
-      //     url: 'the-website-url-download-the-video.mp4',
-      //     size: '94 Mb', // full size in mb
-      //     lastTry: '17/05/2016 9:06 AM', // last attempt at downloading the file
-      //     downloaded: '5 MB',
-      //     status: 'Paused', // can have values as 'Starting', 'Paused', 'Downloading', 'Error', 'Canceled', 'Done'
-      // }
     ],
     rowNumber: -1,
     rowPosition: 129
@@ -71,27 +63,30 @@ export default class All extends Component {
 
   // menu item click action
   onToolbarButton = (type) => {
+    let sendTableData = JSON.parse(JSON.stringify(this.state.tableData))
+    sendTableData[this.state.rowNumber].selected = true
     switch (type) {
       case 'resume':
-      // ToolbarActions.onResumeDownload(this.state.tableData, this.context.downloadProcesses)
+      ToolbarActions.onResumeDownload(sendTableData, this.context.downloadProcesses)
       break
       case 'pause':
-      // ToolbarActions.onRedownloadFile(this.state.tableData)
+      ToolbarActions.onRedownloadFile(sendTableData)
       break
       case 'redownload':
-      // ToolbarActions.onRedownloadFile(this.state.tableData)
+      ToolbarActions.onRedownloadFile(sendTableData)
       break
       case 'info':
-      // ToolbarActions.onRequestFileInfo(this.state.tableData)
+      ToolbarActions.onRequestFileInfo(sendTableData)
       break
       case 'clear':
-      // ToolbarActions.onRemoveFromList(this.state.tableData)
+      ToolbarActions.onRemoveFromList(sendTableData)
       break
       case 'delete':
-      // ToolbarActions.onDeleteFromDisk(this.state.tableData)
+      ToolbarActions.onDeleteFromDisk(sendTableData)
       break
       default:
     }
+    console.log(this.state.tableData)
   }
 
   // register all adding stuff here
@@ -243,4 +238,8 @@ export default class All extends Component {
       </div>
     )
   }
+}
+
+All.contextTypes = {
+  downloadProcesses: PropTypes.array.isRequired
 }
