@@ -41,97 +41,89 @@ export default class Unfinished extends Component {
     toolbar: false,
     table: true,
     tableData: [],
+    // all checkbox state
+    allChecked: false,
     // number of checked checkboxes
     checkedBoxes: 0,
     // selected text
     selectedText: "0 Selected"
   }
 
-  // toggle toolbar's visibility
   /**
-  * [description]
+  * [toggle toolbar's visibility]
   * @param  {Boolean}   state    [new state of the toolbar]
-  * @param  {Function} callback [callback function]
   */
-  onToggleToolbar = (state, callback) => this.setState({toolbar: state}, callback)
+  onToggleToolbar = (state) => this.setState({toolbar: state})
 
   /**
   * [Event handler for select all checkbox]
   * @param  {Event}  event         [event]
   * @param  {Boolean} isInputChecked [tells if the input was checked or not]
-  * @param  {Boolean}  called      [if the event was called from outside or recursively via a callback]
   */
-  onAllChecked = (event, isInputChecked, called = false) => {
-    if (called) {
-      // get the temp  data
-      let i, tempTableData = this.state.tableData
-      for (i = 0; i < checkboxes; i++) {
-        this.refs[`check${i}`].setChecked(isInputChecked)
-        // update the data
-        tempTableData[i].selected = isInputChecked
-      }
-      // if the inputs were all checked set the selected to all else to 0
-      let selectedCheckboxes
-      if (isInputChecked) {
-        selectedCheckboxes = i
-      }
-      else {
-        selectedCheckboxes = 0
-      }
-      // set the value to state
-      this.setState({
-        checkedBoxes: selectedCheckboxes,
-        tableData: tempTableData,
-        selectedText: `${selectedCheckboxes} Selected`
-      })
+  onAllChecked = (event, isInputChecked) => {
+    // get the temp  data
+    let i, tempTableData = this.state.tableData
+    for (i = 0; i < checkboxes; i++) {
+      // update the data
+      tempTableData[i].selected = isInputChecked
+    }
+    // if the inputs were all checked set the selected to all else to 0
+    let selectedCheckboxes
+    if (isInputChecked) {
+      selectedCheckboxes = i
     }
     else {
-      // update the toolbar
-      this.onToggleToolbar(isInputChecked, this.onAllChecked.bind(this, event, isInputChecked, true))
+      selectedCheckboxes = 0
     }
-    // toggle this component's state
-    this.refs.allcheck.setChecked(isInputChecked)
+    // set the value to state
+    this.setState({
+      allChecked: isInputChecked,
+      checkedBoxes: selectedCheckboxes,
+      tableData: tempTableData,
+      selectedText: `${selectedCheckboxes} Selected`
+    })
+    // update the toolbar
+    this.onToggleToolbar(isInputChecked)
   }
 
   /**
   * [on checking of one of the checkboxes]
   * @method
   * @param  {Integer} index          [index of the checkbox in table from 0..n]
-  * @param  {Event}  event          [passed event]
+  * @param  {Event}   event          [passed event]
   * @param  {Boolean} isInputChecked [if the current input is checked or not]
-  * @param  {[type]}  called         [if was called back from a callback function or not]
   */
-  onChecked = (index, event, isInputChecked, called = false) => {
-    if (!called) {
-      let tempState = this.state.tableData
-      tempState[index].selected = isInputChecked
-      // check if we need to show or hide the toolbar
-      let shouldCheck = false
-      for (let i = 0; i < checkboxes; i++) {
-        if (this.state.tableData[i].selected) {
-          shouldCheck = true
-          break
-        }
+  onChecked = (index, event, isInputChecked) => {
+    let tempState = this.state.tableData
+    tempState[index].selected = isInputChecked
+    // check if we need to show or hide the toolbar
+    let shouldCheck = false
+    for (let i = 0; i < checkboxes; i++) {
+      if (this.state.tableData[i].selected) {
+        shouldCheck = true
+        break
       }
-      // if the inputs were all checked set the selected to all else to 0
-      let selectedCheckboxes = this.state.checkedBoxes
-      if (isInputChecked) {
-        selectedCheckboxes++
-      }
-      else {
-        selectedCheckboxes--
-      }
-      // set the value to state
-      this.setState({
-        checkedBoxes: selectedCheckboxes,
-        tableData: tempState,
-        selectedText: `${selectedCheckboxes} Selected`
-      })
-      this.onToggleToolbar(shouldCheck, this.onChecked.bind(this, index, event, isInputChecked, true))
+    }
+    // if the inputs were all checked set the selected to all else to 0
+    let selectedCheckboxes = this.state.checkedBoxes
+    if (isInputChecked) {
+      selectedCheckboxes++
     }
     else {
-      // toggle this component's state
-      this.refs[`check${index}`].setChecked(isInputChecked)
+      selectedCheckboxes--
+    }
+    // set the value to state
+    this.setState({
+      checkedBoxes: selectedCheckboxes,
+      tableData: tempState,
+      selectedText: `${selectedCheckboxes} Selected`
+    })
+    // check if toolbar needs to be shown
+    if (selectedCheckboxes > 0) {
+      this.onToggleToolbar(true)
+    }
+    else {
+      this.onToggleToolbar(false)
     }
   }
 
@@ -183,8 +175,13 @@ export default class Unfinished extends Component {
   componentWillMount() {
     // load all the settings
     stored = settingsHandle.stored
+    // adding selected property to tableData
+    let tempData = stored.dldata.data.filter(this.filterDownloader)
+    for (let cData of tempData) {
+      cData.selected = false
+    }
     // update the local data
-    this.setState({tableData: stored.dldata.data.filter(this.filterDownloader)})
+    this.setState({tableData: tempData})
   }
 
   onShowPlaceholder = () => {
@@ -209,7 +206,12 @@ export default class Unfinished extends Component {
     // add emitter event listener
     // filter and keep only the ones that are 'downloaded'
     Subscriptions.push(mrEmitter.addListener('onUpdateData', (updateData) => {
-      this.setState({tableData: updateData.filter(this.filterDownloader)})
+      // adding selected property to tableData
+      let tempData = updateData.filter(this.filterDownloader)
+      for (let cData of tempData) {
+        cData.selected = false
+      }
+      this.setState({tableData: tempData})
       setTimeout(() => {
         this.onShowPlaceholder()
       }, 300)
@@ -341,7 +343,7 @@ export default class Unfinished extends Component {
             <TableRow>
               <TableHeaderColumn style={style.tableColumn}>
                 <Checkbox
-                  ref={"allcheck"}
+                  checked={this.state.allChecked}
                   onCheck={this.onAllChecked}
                 />
               </TableHeaderColumn>
@@ -360,7 +362,7 @@ export default class Unfinished extends Component {
               <TableRow key={index}>
                 <TableRowColumn style={style.tableColumn}>
                   <Checkbox
-                    ref={`check${index}`}
+                    checked={row.selected}
                     onCheck={(event, isInputChecked) => this.onChecked(index, event, isInputChecked)}
                   />
                 </TableRowColumn>
