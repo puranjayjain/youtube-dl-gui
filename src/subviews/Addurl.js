@@ -7,6 +7,7 @@ const {dialog, app, shell, clipboard} = window.require('electron').remote
 // import necessary components
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
+import CircularProgress from 'material-ui/CircularProgress'
 import RefreshIndicator from 'material-ui/RefreshIndicator'
 import DropDownMenu from 'material-ui/DropDownMenu'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -73,12 +74,20 @@ export default class Addurl extends Component {
     errorUrl: '',
     // to store error text for file path
     errorPath: '',
+    // init loader visibility
+    initLoader: true,
     // path to file save
     filePath: '',
     // the downloadable formats state
     format: 1,
     // dropdown values
     formats: [],
+    // store extensions
+    extensions: [],
+    // start button for Confirmation dialog's disabled props state
+    start: true,
+    // replace fileName
+    replaceFilename: '',
     // errors snackbar state
     errorSnackbar: false,
     // snackbar action text
@@ -99,6 +108,10 @@ export default class Addurl extends Component {
       return false
     }
   }
+
+  // keep unique elements only
+  // http://stackoverflow.com/questions/1960473/unique-values-in-an-array
+  filterUnique = (value, index, self) => self.indexOf(value) === index
 
   /**
    * [click to open the Dialog]
@@ -142,6 +155,8 @@ export default class Addurl extends Component {
         confirmDialog: true,
         errorUrl: ''
       })
+      // trigger format loader
+      this.loadFormat()
     }
     else {
       this.setState({errorUrl: Errordata.invalidUrl})
@@ -214,15 +229,21 @@ export default class Addurl extends Component {
       format: 1,
       // clear the downloaded formats
       formats: [],
+      extensions: [],
       // reset the error states
-      errorPath: ''
+      errorPath: '',
+      initLoader: false,
+      start: true,
+      replaceFilename: ''
     })
   }
 
   // ok button of the confirm dialog
   onConfirmDialog = () => {
+    let tempPath = this.state.filePath
+    tempPath = tempPath.slice(0, tempPath.lastIndexOf('\\') - tempPath.length)
     // check if the path passed by the user is valid
-    pathExists(this.state.filePath.toString()).then(exists => {
+    pathExists(tempPath).then(exists => {
       if (exists) {
         // generate the download id and use it
         const id = uuid.v1()
@@ -231,14 +252,14 @@ export default class Addurl extends Component {
           uuid: id,
           url: this.state.url,
           filePath: this.state.filePath,
-          format: this.state.format === 1 ? false : this.state.formats[this.state.format]
+          format: this.state.format === 1 ? false : this.state.formats[this.state.format - 2]
         })
         // initiate the object to store
         let newDownload = {
           uuid: id,
-          format_id: this.state.format === 1 ? false : this.state.formats[this.state.format], // format id(number) of the download
+          format_id: this.state.format === 1 ? false : this.state.formats[this.state.format - 2], // format id(number) of the download
           url: this.state.url, //url of the media
-          fileName: this.state.filePath + '\\thevideo.mp4', // TODO replace the filename and get it calculated from ytdl!!!
+          fileName: this.state.filePath,
           size: 0, // e.g 459834 bytes converted to mb when displayed, full size of download
           lastTry: moment(), // last attempt at downloading the file
           downloaded: 0, // e.g 459834 bytes converted to mb when displayed, bytes downloaded
@@ -293,8 +314,8 @@ export default class Addurl extends Component {
   // change the dropdown value for the format dropdown
   handleFormat = (event, index, value) => this.setState({format: value})
 
-  // on touch tap of format dropdown
-  openFormat = () => {
+  // on requesting information for format and file
+  loadFormat = () => {
     const url = this.state.url
     // only do this if the formats were not triggered at this request
     if (loadFormat) {
@@ -311,13 +332,19 @@ export default class Addurl extends Component {
           // store all the media formats in here
           youtubedlFormat = info.formats
           // also update the dialog with these values
-          let formatList = []
+          let formatList = [],
+              extensions = []
           for (let f of youtubedlFormat) {
             formatList.push(f.format.split(' - ')[1] + ' [.' + f.ext + '] {codec: ' + f.acodec + '}')
+            extensions.push(f.ext)
           }
           // set the dropdown items
-          this.setState({formats: formatList})
-          // REVIEW some issue with dropdown not updating correctly
+          this.setState({
+            formats: formatList,
+            replaceFilename: info._filename,
+            start: false,
+            extensions: extensions.filter(this.filterUnique)
+          })
           // set that the formats were loaded
           loadFormat = false
         }
@@ -325,15 +352,21 @@ export default class Addurl extends Component {
           // handle errors as toasts here
           this.openSnackBar(Errordata.errorFormat)
         }
+        // set the loader off
+        this.setState({initLoader: false})
       })
     }
   }
 
   // set or update the file save path
   pickFilePath = () => {
-    const userPath = dialog.showOpenDialog({properties: ['openDirectory']})
+    const userPath = dialog.showSaveDialog({
+      title: 'Save media in location',
+      defaultPath: this.state.filePath ? this.state.filePath : this.state.replaceFilename,
+      filters: [{name: 'Formats', extensions: this.state.extensions}]
+    })
     if (userPath) {
-      this.setState({filePath: userPath})
+      this.setState({filePath: userPath.slice(0, userPath.lastIndexOf('\\') - userPath.length + 1) + this.state.replaceFilename})
     }
   }
 
@@ -459,9 +492,9 @@ export default class Addurl extends Component {
       marginLeft: '-24px',
       width: '400px'
     },
-    formatLoader: {
-      position: 'relative'
-    },
+    initLoader: {
+      visibility: this.state.initLoader ? 'visible' : 'collapse'
+    }
   }
 
   // main dialog actions
@@ -489,25 +522,9 @@ export default class Addurl extends Component {
      label="Start"
      primary={true}
      onTouchTap={this.onConfirmDialog}
+     disabled={this.state.start}
    />
   ]
-
-  // to render the loader or not
-  let loaderFormats
-  if (!this.state.formats.length) {
-    loaderFormats =
-      <RefreshIndicator
-        size={40}
-        left={200}
-        top={8}
-        style={style.formatLoader}
-        loadingColor={this.context.muiTheme.baseTheme.palette.accent1Color}
-        status="loading"
-      />
-  }
-  else {
-    loaderFormats = <span></span>
-  }
 
   return (
     <div>
@@ -598,6 +615,7 @@ export default class Addurl extends Component {
         title={
           <div style={style.dialogTitle}>
             Confirm download options
+            <CircularProgress style={style.initLoader} />
           </div>
         }
         actions={confirmActions}
@@ -618,22 +636,20 @@ export default class Addurl extends Component {
             style={style.fileButton}
             icon={<MoreHoriz />}
             primary={true}
+            disabled={this.state.start}
             onTouchTap={this.pickFilePath}
           />
         </div>
         <DropDownMenu
           autoWidth={false}
-          refs="format"
           style={style.format}
           value={this.state.format}
-          onTouchTap={this.openFormat}
           onChange={this.handleFormat}
         >
           <MenuItem value={1} primaryText="Default format" />
-          {loaderFormats}
           {this.state.formats.map( (row, index) => (
             <MenuItem
-              key={index + 2}
+              key={index}
               value={index + 2}
               primaryText={row} />
           ))}

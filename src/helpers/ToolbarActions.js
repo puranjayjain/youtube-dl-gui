@@ -43,7 +43,6 @@ class InternalToolbarActions {
               url: lData.url,
               filePath: lData.fileName,
               start: lData.downloaded,
-              fullPath: true,
               format: ldata.format
             })
             // copy ldata into newDownload

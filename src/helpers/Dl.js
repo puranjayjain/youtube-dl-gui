@@ -15,8 +15,7 @@ export default class Dl {
     url,
     filePath,
     format,
-    start: 0,
-    fullPath: false
+    start: 0
   }) {
     this._args = args
       // load all the settings
@@ -30,8 +29,8 @@ export default class Dl {
 
   // returns all the arguments that need to be passed for youtube-dl
   getArgs = () => {
-    args = []
-    // FIXME calculate it by default and leave it if no format is chosen (node youtubedl handles for best on it's own)
+    let args = []
+    // calculate it by default and leave it if no format is chosen (node youtubedl handles for best on it's own)
     // check and push format
     if (format) {
       args.push(format)
@@ -139,15 +138,7 @@ export default class Dl {
     })
 
     // start the download here
-    // TODO replace thevideomp4 with the one which we get from youtube
-    let downloadPath
-    if (this._args.fullPath) {
-      downloadPath = this._args.filePath
-    }
-    else {
-      downloadPath = path.join(this._args.filePath.toString(), 'thevideo.mp4')
-    }
-    _video.pipe(fs.createWriteStream(downloadPath))
+    _video.pipe(fs.createWriteStream(this._args.filePath))
   }
 
   // all the main functions to proppogate tasks
