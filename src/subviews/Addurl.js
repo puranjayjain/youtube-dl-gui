@@ -72,6 +72,9 @@ export default class Addurl extends Component {
     url: '',
     // to store the error text in the input of the main dialog
     errorUrl: '',
+    // username and password from the first dialog
+    username: '',
+    password: '',
     // to store error text for file path
     errorPath: '',
     // init loader visibility
@@ -238,6 +241,22 @@ export default class Addurl extends Component {
     })
   }
 
+  // get dl js options
+  getDlOptions = () => {
+    let dlO = {
+      uuid: id,
+      url: this.state.url,
+      filePath: this.state.filePath,
+      format: this.state.format === 1 ? false : this.state.formats[this.state.format - 2]
+    }
+    // if the username options are to be used
+    if (this.state.username && this.state.password && this.state.authentication) {
+      dlO.username = this.state.username
+      dlO.password = this.state.password
+    }
+    return dlO
+  }
+
   // ok button of the confirm dialog
   onConfirmDialog = () => {
     let tempPath = this.state.filePath
@@ -248,12 +267,7 @@ export default class Addurl extends Component {
         // generate the download id and use it
         const id = uuid.v1()
         // begin procedure to download the media
-        let downloadProcess = new Dl({
-          uuid: id,
-          url: this.state.url,
-          filePath: this.state.filePath,
-          format: this.state.format === 1 ? false : this.state.formats[this.state.format - 2]
-        })
+        let downloadProcess = new Dl(this.getDlOptions)
         // initiate the object to store
         let newDownload = {
           uuid: id,
@@ -598,12 +612,14 @@ export default class Addurl extends Component {
             style={style.authCover}
           >
             <TextField
-              ref="username"
+              value={this.state.username}
+              onChange={(event) => this.setText(event, 'username')}
               style={style.authUser}
               floatingLabelText="Username"
             />
             <TextField
-              ref="password"
+              value={this.state.password}
+              onChange={(event) => this.setText(event, 'password')}
               floatingLabelText="Password"
               style={style.authPass}
               type="password"

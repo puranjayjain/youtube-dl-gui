@@ -15,7 +15,9 @@ export default class Dl {
     url,
     filePath,
     format,
-    start: 0
+    start: 0,
+    username,
+    password
   }) {
     this._args = args
       // load all the settings
@@ -32,8 +34,15 @@ export default class Dl {
     let args = []
     // calculate it by default and leave it if no format is chosen (node youtubedl handles for best on it's own)
     // check and push format
-    if (format) {
-      args.push(format)
+    if (this._args.format) {
+      args.push(this._args.format)
+    }
+    // authentication
+    if (this._args.username && this._args.password) {
+      args.push('--u')
+      args.push(this._args.username)
+      args.push('--p')
+      args.push(this._args.password)
     }
     return args
   }
