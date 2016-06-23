@@ -61,6 +61,14 @@ export default class All extends Component {
     })
   }
 
+  onHideActions = () => {
+    if (!this.refs.actionMenu.state.open) {
+      this.setState({
+        actionHolder: false
+      })
+    }
+  }
+
   // menu item click action
   onToolbarButton = (type) => {
     let sendTableData = JSON.parse(JSON.stringify(this.state.tableData))
@@ -86,7 +94,6 @@ export default class All extends Component {
       break
       default:
     }
-    console.log(this.state.tableData)
   }
 
   // register all adding stuff here
@@ -143,7 +150,7 @@ export default class All extends Component {
     }
 
     return (
-      <div>
+      <div onMouseLeave={this.onHideActions}>
         <Table
           ref="table"
           style={style.table}
@@ -209,6 +216,7 @@ export default class All extends Component {
             <Delete />
           </IconButton>
           <IconMenu
+            ref="actionMenu"
             useLayerForClickAway={true}
             iconButtonElement={
               <IconButton

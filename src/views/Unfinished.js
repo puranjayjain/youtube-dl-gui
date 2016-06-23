@@ -23,7 +23,6 @@ import bytes from 'bytes'
 import mrEmitter from '../helpers/mrEmitter'
 import DownloadedPlaceHolder from '../placeholders/DownloadedPlaceHolder'
 import ToolbarActions from '../helpers/ToolbarActions'
-import CommonDialog from '../subviews/CommonDialog'
 
 // the settings loader helper
 import SettingsHandler from '../helpers/SettingsHandler'
@@ -380,7 +379,6 @@ export default class Unfinished extends Component {
           >
         </Table>
         <DownloadedPlaceHolder ref="downloadedPlaceHolder" />
-        <CommonDialog />
       </div>
     )
   }

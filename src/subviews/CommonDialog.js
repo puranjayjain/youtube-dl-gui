@@ -3,10 +3,13 @@ import React, {PropTypes, Component} from 'react'
 import FlatButton from 'material-ui/FlatButton'
 import Dialog from 'material-ui/Dialog'
 import {List, ListItem} from 'material-ui/List'
+import TextField from 'material-ui/TextField'
+import Popover from 'material-ui/Popover'
 
 import moment from 'moment'
 import bytes from 'bytes'
 
+import Edit from 'material-ui/svg-icons/image/edit'
 import Info from 'material-ui/svg-icons/action/info'
 
 import SettingsHandler from '../helpers/SettingsHandler'
@@ -21,6 +24,9 @@ style = {
   listItem: {
     paddingTop: '12px',
     paddingBottom: '12px'
+  },
+  textPopOver: {
+    width: '600px'
   }
 },
 settingsHandle = new SettingsHandler(),
@@ -32,7 +38,12 @@ export default class CommonDialog extends Component {
     open: false,
     heading: '',
     actions: <div></div>,
-    data: ''
+    data: '',
+    edit: '',
+    url: '',
+    path: '',
+    openPopOver: false,
+    textPopOver: ''
   }
 
   // filter the selected tableData
@@ -45,6 +56,47 @@ export default class CommonDialog extends Component {
     // now close the toolbar
     mrEmitter.emit('onCloseToolbar')
   }
+
+  // on change event of the input in popover
+  setText = (event) => this.setState({textPopOver: event.target.value})
+
+  /**
+   * [on any input's keypress]
+   * @method
+   * @param  {Event}   event     [Event for the text input]
+   */
+  onTextKeyPress = (event) => {
+    // enter key
+    if (event.keyCode === 13) {
+      // TODO implement it
+      // display can't move file or change it's url while downloading
+      // if not downloading then move it
+      // if file exists then move it
+      // else show error of file not found
+      // close the popover
+      this.onCloseEdit()
+    }
+    // escape key
+    else if (event.keyCode === 27) {
+      // close the popover
+      this.onCloseEdit()
+    }
+    // prevent the default action
+    event.stopPropagation()
+  }
+
+  onTriggerEdit = (event, edit) => {
+    this.setState({
+      openPopOver: true,
+      anchorEl: event.currentTarget,
+      edit: edit,
+      textPopOver: this.state[edit]
+    })
+    // focus the textfield inside
+    setTimeout(() => this.refs.editPopover.focus(), 500)
+  }
+
+  onCloseEdit = () => this.setState({openPopOver: false})
 
   onConfirmOkdelete = (tableData) => {
     // delete files from the list and the disk
@@ -81,12 +133,29 @@ export default class CommonDialog extends Component {
     // add emitter event listener
     // events for single file request info or multiple files request info
     Subscriptions.push(mrEmitter.addListener('onRequestSingleFileInfo', (sendData) => {
-      this.state.data =
+      let data =
       <List style={style.list}>
+        <ListItem
+          innerDivStyle={style.listItem}
+          primaryText="Download url"
+          secondaryText={sendData.url}
+          rightIconButton={
+            <Edit
+              onTouchTap={(event) => this.onTriggerEdit(event, 'url')}
+              tooltip="Change download url"
+            />
+          }
+        />
         <ListItem
           innerDivStyle={style.listItem}
           primaryText="File Path"
           secondaryText={sendData.fileName}
+          rightIconButton={
+            <Edit
+              onTouchTap={(event) => this.onTriggerEdit(event, 'path')}
+              tooltip="Change file path or move it"
+            />
+          }
         />
         <ListItem
           innerDivStyle={style.listItem}
@@ -105,6 +174,9 @@ export default class CommonDialog extends Component {
         />
       </List>
       this.setState({
+        data: data,
+        url: sendData.url,
+        path: sendData.fileName,
         open: true,
         heading: 'Detailed Information',
         actions:
@@ -116,7 +188,7 @@ export default class CommonDialog extends Component {
       })
     }))
     Subscriptions.push(mrEmitter.addListener('onRequestFileInfo', (sendData) => {
-      this.state.data =
+      let data =
       <List style={style.list}>
         <ListItem
           innerDivStyle={style.listItem}
@@ -136,6 +208,7 @@ export default class CommonDialog extends Component {
       </List>
       this.setState({
         open: true,
+        data: data,
         heading: 'Detailed Information',
         actions:
         <FlatButton
@@ -185,6 +258,25 @@ export default class CommonDialog extends Component {
         onRequestClose={this.handleClose}
       >
         {this.state.data}
+        <Popover
+          className="popover-fix"
+          open={this.state.openPopOver}
+          onRequestClose={this.onCloseEdit}
+          anchorEl={this.state.anchorEl}
+          zDepth={3}
+          anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+          targetOrigin={{horizontal: 'right', vertical: 'top'}}
+        >
+          <TextField
+            style={style.textPopOver}
+            value={this.state.textPopOver}
+            onChange={this.setText}
+            onKeyUp={this.onTextKeyPress}
+            ref="editPopover"
+            hintText="Press Enter to save, Escape to exit"
+            floatingLabelText="Edit"
+          />
+        </Popover>
       </Dialog>
     )
   }

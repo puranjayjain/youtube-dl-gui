@@ -8,8 +8,8 @@ const {dialog, app, shell, clipboard} = window.require('electron').remote
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 import CircularProgress from 'material-ui/CircularProgress'
-import RefreshIndicator from 'material-ui/RefreshIndicator'
 import DropDownMenu from 'material-ui/DropDownMenu'
+import CommonDialog from '../subviews/CommonDialog'
 import RaisedButton from 'material-ui/RaisedButton'
 import Tooltip from 'material-ui/internal/Tooltip'
 import FlatButton from 'material-ui/FlatButton'
@@ -671,6 +671,7 @@ export default class Addurl extends Component {
           ))}
         </DropDownMenu>
       </Dialog>
+      <CommonDialog />
       <Snackbar
         open={this.state.errorSnackbar}
         message={snackbarErrorText}

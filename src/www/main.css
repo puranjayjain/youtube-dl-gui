@@ -58,6 +58,15 @@ body {
   background: transparent;
 }
 
+/*popover fix*/
+.popover-fix {
+  padding: 16px;
+}
+
+.popover-fix > div {
+  overflow: visible !important;
+}
+
 /*animations for react css transition groups*/
 /*toolbar animations*/
 .toolbarAnimate-enter {
