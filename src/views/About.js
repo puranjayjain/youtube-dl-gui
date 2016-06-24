@@ -9,6 +9,12 @@ import Avatar from 'material-ui/Avatar'
 import Restore from 'material-ui/svg-icons/action/restore'
 import BugReport from 'material-ui/svg-icons/action/bug-report'
 
+// the settings loader helper
+import SettingsHandler from '../helpers/SettingsHandler'
+
+let settingsHandle = new SettingsHandler(),
+stored = {}
+
 const style = {
   card: {
     margin: '12px'
@@ -36,6 +42,10 @@ export default class About extends Component {
     location.reload()
   }
 
+  componentWillMount() {
+    stored = settingsHandle.stored
+  }
+
   // on info button click
   openBugsPage = () => {
     shell.openExternal('https://github.com/puranjayjain/youtube-dl-gui/issues')
@@ -45,7 +55,8 @@ export default class About extends Component {
     const version = {
       node: `Node Js Version ${window.process.versions.node}`,
       chrome: `Chrome ${window.process.versions.chrome}`,
-      electron: `Electron ${window.process.versions.electron}`
+      electron: `Electron ${window.process.versions.electron}`,
+      youtubedl: `Youtubedl ${stored.youtubedl.data.version}`
     }
 
     return (
@@ -61,6 +72,7 @@ export default class About extends Component {
               <ListItem primaryText={version.node} />
               <ListItem primaryText={version.chrome} />
               <ListItem primaryText={version.electron} />
+              <ListItem primaryText={version.youtubedl} />
             </List>
           </CardText>
         </Card>

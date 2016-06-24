@@ -12,6 +12,7 @@ import bytes from 'bytes'
 import Edit from 'material-ui/svg-icons/image/edit'
 import Info from 'material-ui/svg-icons/action/info'
 
+import Errordata from '../Data/Errordata'
 import SettingsHandler from '../helpers/SettingsHandler'
 import mrEmitter from '../helpers/mrEmitter'
 
@@ -40,6 +41,7 @@ export default class CommonDialog extends Component {
     actions: <div></div>,
     data: '',
     edit: '',
+    uuid: '',
     url: '',
     path: '',
     openPopOver: false,
@@ -68,11 +70,22 @@ export default class CommonDialog extends Component {
   onTextKeyPress = (event) => {
     // enter key
     if (event.keyCode === 13) {
-      // TODO implement it
-      // display can't move file or change it's url while downloading
-      // if not downloading then move it
-      // if file exists then move it
-      // else show error of file not found
+      // check the download process for that
+      for (let cProcess of this.context.downloadProcesses) {
+        if (cProcess.uuid === uuid) {
+          // display can't move file or change it's url while downloading
+          mrEmitter.emit('onShowError', Errordata.videoDownloading)
+          return
+        }
+      }
+      // do stuff according to the mode
+      if (this.state.edit === 'url') {
+        settingsHandle.updateDlDataItem(this.state.uuid, 'url', this.state.url)
+      }
+      else {
+        // if not downloading then move it and if file exists then move it
+        // else show error of file not found and remove it from list
+      }
       // close the popover
       this.onCloseEdit()
     }
@@ -187,6 +200,7 @@ export default class CommonDialog extends Component {
         />
       })
     }))
+
     Subscriptions.push(mrEmitter.addListener('onRequestFileInfo', (sendData) => {
       let data =
       <List style={style.list}>
@@ -218,13 +232,15 @@ export default class CommonDialog extends Component {
         />
       })
     }))
+
     Subscriptions.push(mrEmitter.addListener('onDeleteFromDisk', (tableData) => {
-      this.state.data =
+      let data =
       <div>
         Are you sure you want to delete the file(s)?
       </div>
       this.setState({
         open: true,
+        data: data,
         heading: 'Confirm deletion',
         actions:
         [<FlatButton
@@ -280,4 +296,8 @@ export default class CommonDialog extends Component {
       </Dialog>
     )
   }
+}
+
+CommonDialog.contextTypes = {
+  downloadProcesses: PropTypes.array.isRequired
 }

@@ -82,6 +82,7 @@ class InternalToolbarActions {
       sendData.fileName = cData.fileName
       sendData.lastTry = cData.lastTry
       sendData.url = cData.url
+      sendData.uuid = cData.uuid
     }
     // emit according to no of files
     if (sendData.files > 1) {

@@ -31,6 +31,7 @@ import ContentAdd from 'material-ui/svg-icons/content/add'
 import Info from 'material-ui/svg-icons/action/info'
 
 import mrEmitter from '../helpers/mrEmitter'
+import VersionChecker from '../helpers/VersionChecker'
 
 // import all the errors to be used
 import Errordata from '../Data/Errordata'
@@ -177,7 +178,8 @@ export default class Addurl extends Component {
     // display the snackbar
     this.setState({
       errorSnackbar: true,
-      actionText: ''
+      actionText: '',
+      actionFunc: this.noop
     })
   }
 
@@ -388,17 +390,22 @@ export default class Addurl extends Component {
   // set all the downloading data to error status
   componentWillMount() {
     let updateData = settingsHandle.stored.dldata.data
+    // change downloading status to error on load
     for (let cData of updateData) {
       if (cData.status === 'Downloading') {
         cData.status = 'Error'
       }
     }
+    // load all the settings
+    stored = settingsHandle.stored
+    // load ytdl version
+    settingsHandle.loadYtdlVersion()
+    // check for youtube dl version
+    VersionChecker.checkVersion()
     // store it back
     settingsHandle.setStored('dldata', updateData)
     // emits on download start / resume to update the useful stuff
     mrEmitter.emit('onUpdateData', updateData)
-    // load all the settings
-    stored = settingsHandle.stored
     // on initiate load
     this.isActive(this.context.location.pathname)
     // on update of getting a new download byte
@@ -420,6 +427,8 @@ export default class Addurl extends Component {
     }))
     // on each event triggeronStartDownload
     Subscriptions.push(mrEmitter.addListener('onRouteChange', (newLocation) => this.isActive(newLocation)))
+    // show error text
+    Subscriptions.push(mrEmitter.addListener('onShowError', (error) => this.openSnackBar(error)))
     // Toolbar action of removing items from list => display snackbar
     Subscriptions.push(mrEmitter.addListener('onClearList', (count, originalTableData) => this.openActionSnackBar(`${count} removed from List`, 'undo', this.setDataChange.bind(this, originalTableData))))
     // add to downloadProcesses

@@ -122,6 +122,7 @@ export default class Dl {
       // update the stored data
       settingsHandle.setStored('dldata', updateData)
       // update the ui state
+      // TODO remove the downlaod process
       mrEmitter.emit('onUpdateData', updateData)
     })
 

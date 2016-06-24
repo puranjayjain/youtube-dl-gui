@@ -11,7 +11,11 @@ const Errordata = {
   // error fetching format
   errorFormat: 'Error fetching formats',
   // third party website and playlists
-  thirdPartyError: 'Playlists and third party websites are currently not supported'
+  thirdPartyError: 'Playlists and third party websites are currently not supported',
+  // video is downloading
+  videoDownloading: 'Error Video is downloading',
+  // file doesnt exist error
+  fileDoesntExist: 'File does not exist on disk'
 }
 
 export default Errordata
