@@ -244,7 +244,7 @@ export default class Addurl extends Component {
   }
 
   // get dl js options
-  getDlOptions = () => {
+  getDlOptions = (id) => {
     let dlO = {
       uuid: id,
       url: this.state.url,
@@ -269,7 +269,7 @@ export default class Addurl extends Component {
         // generate the download id and use it
         const id = uuid.v1()
         // begin procedure to download the media
-        let downloadProcess = new Dl(this.getDlOptions)
+        let downloadProcess = new Dl(this.getDlOptions(id))
         // initiate the object to store
         let newDownload = {
           uuid: id,

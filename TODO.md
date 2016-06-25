@@ -8,4 +8,6 @@
 - [x] implement download notifications using http://electron.atom.io/docs/all/#icon-overlays-in-taskbar-windows
 - [ ] implement resizable tables http://jsfiddle.net/thrilleratplay/epcybL4v/
 - [ ] use https://github.com/fent/node-streamspeed to determine speed
-- [ ] use the github requests api to check for a new version of youtube-dl.exe and download when available and replace the old one with it
+- [x] use the github requests api to check for a new version of youtube-dl.exe
+- [ ] download when available and replace the old one with it
+- [ ] ability to stop downloads and remove the underlying downloadProcess 

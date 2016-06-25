@@ -34,24 +34,26 @@ export default class SettingsHandler {
     // data about the downloaded files and te files being downloaded
     stored.dldata = new Storage('dldata', [], true)
     // also include the youtubedl version
-    stored.youtubedl = new Storage('youtubedl', {version: 0, lasttried: -1})
+    stored.youtubedl = new Storage('youtubedl', {version: 0, lasttried: -1, published_at: -1, partial: false, updating: false})
   }
 
   // load youtubedl version
   loadYtdlVersion = () => {
-    youtubedl.exec('', ['--version'], {}, function(err, output) {
+    youtubedl.exec('', ['--version'], {}, (err, output) => {
       if (err) {
         throw err
         return
       }
-      let ytdl = stored.youtubedl
+      let ytdl = stored.youtubedl.data
       ytdl.version = output[0]
       // update the item in storage
       this.setStored('youtubedl', ytdl)
     })
   }
 
-  // getters and setter are defined here
+  /*
+  * getters and setter are defined here
+  */
   get stored() {
     return stored
   }
@@ -61,13 +63,13 @@ export default class SettingsHandler {
   }
 
   /**
-   * [update a data item in dlData]
-   * @method
-   * @param  {String} uuid [to identify the item]
-   * @param  {key}   item [object's key]
-   * @param  {value} data [object's value]
-   * @return {mrEmitter}
-   */
+  * [update a data item in dlData]
+  * @method
+  * @param  {String} uuid [to identify the item]
+  * @param  {key}   item [object's key]
+  * @param  {value} data [object's value]
+  * @return {mrEmitter}
+  */
   updateDlDataItem = (uuid, item, data) => {
     let updateData = stored.dldata.data
     for (let cData of updateData) {
@@ -79,6 +81,24 @@ export default class SettingsHandler {
     this.setStored('dldata', updateData)
     // emit updated data
     mrEmitter.emit('onUpdateData', updateData)
+  }
+
+  /**
+  * [update multiple storage objects of a stored]
+  * @method
+  * @param  {String} key  [the identifying key]
+  * @param  {Object} data [object contains the updated key value pair]
+  */
+  updateStores = (key, data) => {
+    let updateData = stored[key].data
+    for (let i in data) {
+      // check if it is not a prototype
+      if (data.hasOwnProperty(i)) {
+        updateData[i] = data[i]
+      }
+    }
+    // forward data to set stored method to finally store it back
+    this.setStored(key, updateData)
   }
 
   // set a particular storage data

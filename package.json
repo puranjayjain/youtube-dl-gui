@@ -57,7 +57,9 @@
     "react-router": "^2.5.1",
     "react-tap-event-plugin": "^1.0.0",
     "uuid": "^2.0.2",
-    "youtube-dl": "^1.11.1"
+    "which": "^1.2.10",
+    "youtube-dl": "^1.11.1",
+    "zeltice-mt-downloader": "^1.1.3"
   },
   "repository": {
     "type": "git",
