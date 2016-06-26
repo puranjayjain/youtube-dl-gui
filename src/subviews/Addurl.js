@@ -34,7 +34,7 @@ import mrEmitter from '../helpers/mrEmitter'
 import VersionChecker from '../helpers/VersionChecker'
 
 // import all the errors to be used
-import Errordata from '../Data/Errordata'
+import {Errordata} from '../Data/Messagedata'
 
 // standard regex for matching the urls
 // see https://gist.github.com/dperini/729294

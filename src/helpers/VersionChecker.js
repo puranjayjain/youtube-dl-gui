@@ -1,5 +1,7 @@
 import SettingsHandler from '../helpers/SettingsHandler'
 import YtdlUpdater from '../helpers/YtdlUpdater'
+import {Errordata, Successdata} from '../Data/Messagedata'
+import mrEmitter from '../helpers/mrEmitter'
 import moment from 'moment'
 
 let settingsHandle = new SettingsHandler(),
@@ -8,6 +10,11 @@ ytdlUpdate
 
 class InternalVersionChecker {
   checkVersion = (forced = false) => {
+    // check if to update flag was set, if yes then execute the replacing procedure
+    if (stored.youtubedl.data.toUpdate) {
+      this.replaceFile()
+      return
+    }
     // if checked today don't do it again unless forced
     if (forced || Math.abs(moment(stored.youtubedl.data.lasttried).diff(moment(), 'days')) > 0) {
       fetch('https://api.github.com/repos/rg3/youtube-dl/releases/latest').then((response) => {
@@ -37,6 +44,34 @@ class InternalVersionChecker {
         console.error(err)
       })
     }
+  }
+
+  // replace file if toUpdate flag was set
+  replaceFile = () => {
+    // delete the exe file
+    fs.unlink(path.join(stored.youtubedl.data.path, 'youtube-dl.exe'), (err) => {
+      if (err) {
+        throw err
+        // show the error in toast
+        mrEmitter.emit('onShowError', Errordata.couldntDeleteYtdl())
+        return
+      }
+      // then remove .temp extension
+      fs.rename(path.join(stored.youtubedl.data.path, 'youtube-dl.exe.temp'), path.join(stored.youtubedl.data.path, 'youtube-dl.exe'), (err) => {
+        if (err) {
+          throw err
+          // show the error in toast
+          mrEmitter.emit('onShowError', Errordata.couldntRenameYtdl())
+          return
+        }
+        // if successful, do the necessary changes
+        settingsHandle.updateStores('youtubedl', {
+          toUpdate: false
+        })
+        // show successfully updated toast
+        mrEmitter.emit('onShowError', SuccessData.updateYtdl())
+      })
+    })
   }
 }
 

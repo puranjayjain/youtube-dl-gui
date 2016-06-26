@@ -34,7 +34,7 @@ export default class SettingsHandler {
     // data about the downloaded files and te files being downloaded
     stored.dldata = new Storage('dldata', [], true)
     // also include the youtubedl version
-    stored.youtubedl = new Storage('youtubedl', {version: 0, lasttried: -1, published_at: -1, partial: false, updating: false})
+    stored.youtubedl = new Storage('youtubedl', {version: 0, lasttried: -1, published_at: -1, path: '', toUpdate: false})
   }
 
   // load youtubedl version

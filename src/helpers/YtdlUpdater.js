@@ -14,7 +14,7 @@ export default class YtdlUpdater {
 
   startUpdateExe = (published_at, url) => {
     which('youtube-dl', (err, resolvedPath) => {
-      // err is returned if no "exe" is found on the PATH
+      // err is returned if no 'exe' is found on the PATH
       // if it is found, then the absolute path to the exec is returned
       if (err) {
         throw err
@@ -22,7 +22,7 @@ export default class YtdlUpdater {
       }
 
       let pathToExe = resolvedPath.slice(0, resolvedPath.lastIndexOf('\\') - resolvedPath.length + 1),
-      fileName = 'youtube-dl.exe.mtd',
+      fileName = 'youtube-dl.exe.temp',
       filePath = path.join(pathToExe, fileName)
 
       // start download of youtube-dl
@@ -38,9 +38,12 @@ export default class YtdlUpdater {
           // update the stored data
           settingsHandle.updateStores('youtubedl', {
             published_at: published_at,
-            lasttried: moment()
+            lasttried: moment(),
+            path: pathToExe,
+            // to update the temp file over exe file
+            toUpdate: true
           })
-          // TODO if the new published_at is new stop all downloads and then update ytdl
+          // TODO show a message that you need to restart or close and open youtube dl next time to see an updated version
         }
       }
     )

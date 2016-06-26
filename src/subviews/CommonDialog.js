@@ -12,7 +12,7 @@ import bytes from 'bytes'
 import Edit from 'material-ui/svg-icons/image/edit'
 import Info from 'material-ui/svg-icons/action/info'
 
-import Errordata from '../Data/Errordata'
+import {Errordata} from '../Data/Messagedata'
 import SettingsHandler from '../helpers/SettingsHandler'
 import mrEmitter from '../helpers/mrEmitter'
 

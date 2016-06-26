@@ -1,4 +1,4 @@
-// this file stores all the error text that can occur in the app
+// this file stores all the error text that can occur in the app or a successful update
 
 const Errordata = {
   // if the url is not valid (used in textfields)
@@ -15,7 +15,16 @@ const Errordata = {
   // video is downloading
   videoDownloading: 'Error Video is downloading',
   // file doesnt exist error
-  fileDoesntExist: 'File does not exist on disk'
+  fileDoesntExist: 'File does not exist on disk',
+  // could'nt delete youtube-dl's old exe, it is in use
+  couldntDeleteYtdl: 'Unable to delete old youtubedl exe',
+  // could'nt rename youtube-dl's new exe, it is in use
+  couldntRenameYtdl: 'Unable to rename new youtubedl exe'
+}
+//
+const SuccessData = {
+  // update of youtube-dl done
+  updateYtdl: 'Successfully updated youtube-dl exe'
 }
 
-export default Errordata
+export default {Errordata, Successdata}
