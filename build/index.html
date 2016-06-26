@@ -22,11 +22,11 @@
     } = require('electron').remote
 
     const fs = require('fs')
+    const wget = require('node-wget')
     const path = require('path')
     const pathExists = require('path-exists')
     const youtubedl = require('youtube-dl')
     const which = require('which')
-    const zmtd = require('zeltice-mt-downloader')
     const {ipcRenderer} = require('electron')
 
     // pass the current cwd as global to fix a bug of ytdl not working

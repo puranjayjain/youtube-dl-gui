@@ -17,16 +17,20 @@
   <div id="app"></div>
   <script type="text/javascript">
     // TODO replace this with a proper script which is not transpiled
-      const {
-        app
-      } = require('electron').remote
+    const {
+      app
+    } = require('electron').remote
 
-      const fs = require('fs')
-      const pathExists = require('path-exists')
-      const youtubedl = require('youtube-dl')
+    const fs = require('fs')
+    const path = require('path')
+    const pathExists = require('path-exists')
+    const youtubedl = require('youtube-dl')
+    const which = require('which')
+    const zmtd = require('zeltice-mt-downloader')
+    const {ipcRenderer} = require('electron')
 
-      // let video
-      let dirname = __dirname
+    // pass the current cwd as global to fix a bug of ytdl not working
+    let dirname = __dirname
   </script>
   <script src="App.js"></script>
 </body>
