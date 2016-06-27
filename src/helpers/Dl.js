@@ -35,6 +35,7 @@ export default class Dl {
     // calculate it by default and leave it if no format is chosen (node youtubedl handles for best on it's own)
     // check and push format
     if (this._args.format) {
+      args.push('-f')
       args.push(this._args.format)
     }
     // authentication

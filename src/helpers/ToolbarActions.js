@@ -27,7 +27,7 @@ class InternalToolbarActions {
       // go through the downloadProcesses
       for (let downloadProcess of downloadProcesses) {
         if (cData.uuid === downloadProcess.uuid) {
-          downloadProcess.resumeDownload()
+          downloadProcess.downloadProcess.resumeDownload()
           found = true
           break
         }
@@ -52,7 +52,7 @@ class InternalToolbarActions {
             // emit download process
             mrEmitter.emit('onStartDownload', newDownload)
             // initialze the download process
-            downloadProcess.initVideo()
+            downloadProcess.downloadProcess.initVideo()
           }
         }
       }
@@ -63,6 +63,31 @@ class InternalToolbarActions {
     }
     // now close the toolbar
     mrEmitter.emit('onCloseToolbar')
+  }
+
+  // search for download in downloadProcess and then pause it
+  onPauseDownload = (tableData, downloadProcesses) => {
+    tableData = tableData.filter(this.filterSelected)
+    let found = false,
+    cData = tableData[0],
+    updateData = stored.dldata.data
+    // go through the downloadProcesses
+    for (let downloadProcess of downloadProcesses) {
+      if (cData.uuid === downloadProcess.uuid) {
+        downloadProcess.downloadProcess.pauseDownload()
+        for (let lData of updateData) {
+          if (cData.uuid === lData.uuid) {
+            lData.status = 'Paused'
+            // update the item in storage
+            settingsHandle.setStored('dldata', updateData)
+            // emit event with the new data
+            mrEmitter.emit('onUpdateData', updateData)
+            break
+          }
+        }
+        break
+      }
+    }
   }
 
   // display detailed info about file / files

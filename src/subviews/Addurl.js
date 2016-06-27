@@ -86,6 +86,8 @@ export default class Addurl extends Component {
     format: 1,
     // dropdown values
     formats: [],
+    // format ids
+    format_id: [],
     // store extensions
     extensions: [],
     // start button for Confirmation dialog's disabled props state
@@ -249,7 +251,7 @@ export default class Addurl extends Component {
       uuid: id,
       url: this.state.url,
       filePath: this.state.filePath,
-      format: this.state.format === 1 ? false : this.state.formats[this.state.format - 2]
+      format: this.state.format === 1 ? false : this.state.format_id[this.state.format - 2]
     }
     // if the username options are to be used
     if (this.state.username && this.state.password && this.state.authentication) {
@@ -273,7 +275,7 @@ export default class Addurl extends Component {
         // initiate the object to store
         let newDownload = {
           uuid: id,
-          format_id: this.state.format === 1 ? false : this.state.formats[this.state.format - 2], // format id(number) of the download
+          format_id: this.state.format === 1 ? false : this.state.format_id[this.state.format - 2], // format id(number) of the download
           url: this.state.url, //url of the media
           fileName: this.state.filePath,
           size: 0, // e.g 459834 bytes converted to mb when displayed, full size of download
@@ -349,14 +351,17 @@ export default class Addurl extends Component {
           youtubedlFormat = info.formats
           // also update the dialog with these values
           let formatList = [],
+              formatIdList = [],
               extensions = []
           for (let f of youtubedlFormat) {
             formatList.push(f.format.split(' - ')[1] + ' [.' + f.ext + '] {codec: ' + f.acodec + '}')
             extensions.push(f.ext)
+            formatIdList.push(f.format_id)
           }
           // set the dropdown items
           this.setState({
             formats: formatList,
+            format_id: formatIdList,
             replaceFilename: info._filename,
             start: false,
             extensions: extensions.filter(this.filterUnique)

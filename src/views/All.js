@@ -78,7 +78,7 @@ export default class All extends Component {
       ToolbarActions.onResumeDownload(sendTableData, this.context.downloadProcesses)
       break
       case 'pause':
-      ToolbarActions.onRedownloadFile(sendTableData)
+      ToolbarActions.onPauseDownload(sendTableData, this.context.downloadProcesses)
       break
       case 'redownload':
       ToolbarActions.onRedownloadFile(sendTableData)
