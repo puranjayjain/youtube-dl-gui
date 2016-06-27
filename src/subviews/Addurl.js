@@ -239,8 +239,9 @@ export default class Addurl extends Component {
       extensions: [],
       // reset the error states
       errorPath: '',
-      initLoader: false,
+      initLoader: true,
       start: true,
+      filePath: '',
       replaceFilename: ''
     })
   }
