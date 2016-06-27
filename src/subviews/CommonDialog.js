@@ -41,7 +41,7 @@ export default class CommonDialog extends Component {
     actions: <div></div>,
     data: '',
     edit: '',
-    uuid: '',
+    hashid: '',
     url: '',
     path: '',
     openPopOver: false,
@@ -72,7 +72,7 @@ export default class CommonDialog extends Component {
     if (event.keyCode === 13) {
       // check the download process for that
       for (let cProcess of this.context.downloadProcesses) {
-        if (cProcess.uuid === uuid) {
+        if (cProcess.hashid === hashid) {
           // display can't move file or change it's url while downloading
           mrEmitter.emit('onShowError', ErrorData.videoDownloading)
           return
@@ -80,7 +80,7 @@ export default class CommonDialog extends Component {
       }
       // do stuff according to the mode
       if (this.state.edit === 'url') {
-        settingsHandle.updateDlDataItem(this.state.uuid, 'url', this.state.url)
+        settingsHandle.updateDlDataItem(this.state.hashid, 'url', this.state.url)
       }
       else {
         // if not downloading then move it and if file exists then move it
@@ -115,11 +115,11 @@ export default class CommonDialog extends Component {
     // delete files from the list and the disk
     const listData = tableData.filter(this.filterSelected)
     let updateData = stored.dldata.data
-    // go through the whole data to match the ones with the selected one's uuid and add them to the updateData array
+    // go through the whole data to match the ones with the selected one's hashid and add them to the updateData array
     for (var i = 0; i < updateData.length; i++) {
       let cData = updateData[i]
       for (let lData of listData) {
-        if (lData.uuid === cData.uuid) {
+        if (lData.hashid === cData.hashid) {
           // delete from the list
           updateData.splice(i, 1)
           // delete from the disk

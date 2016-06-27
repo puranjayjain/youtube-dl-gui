@@ -26,7 +26,7 @@ class InternalToolbarActions {
     for (let cData of tableData) {
       // go through the downloadProcesses
       for (let downloadProcess of downloadProcesses) {
-        if (cData.uuid === downloadProcess.uuid) {
+        if (cData.hashid === downloadProcess.hashid) {
           downloadProcess.downloadProcess.resumeDownload()
           found = true
           break
@@ -34,16 +34,16 @@ class InternalToolbarActions {
       }
       let updateData = stored.dldata.data
       for (let lData of updateData) {
-        if (cData.uuid === lData.uuid) {
+        if (cData.hashid === lData.hashid) {
           lData.status = 'Downloading'
           // if not found then continue to loop through the entire list
           if (!found) {
             let downloadProcess = new Dl({
-              uuid: lData.id,
+              hashid: lData.id,
               url: lData.url,
               filePath: lData.fileName,
               start: lData.downloaded,
-              format: ldata.format
+              format: lData.format
             })
             // copy ldata into newDownload
             let newDownload = Object.assign({}, lData)
@@ -73,10 +73,10 @@ class InternalToolbarActions {
     updateData = stored.dldata.data
     // go through the downloadProcesses
     for (let downloadProcess of downloadProcesses) {
-      if (cData.uuid === downloadProcess.uuid) {
+      if (cData.hashid === downloadProcess.hashid) {
         downloadProcess.downloadProcess.pauseDownload()
         for (let lData of updateData) {
-          if (cData.uuid === lData.uuid) {
+          if (cData.hashid === lData.hashid) {
             lData.status = 'Paused'
             // update the item in storage
             settingsHandle.setStored('dldata', updateData)
@@ -107,7 +107,7 @@ class InternalToolbarActions {
       sendData.fileName = cData.fileName
       sendData.lastTry = cData.lastTry
       sendData.url = cData.url
-      sendData.uuid = cData.uuid
+      sendData.hashid = cData.hashid
     }
     // emit according to no of files
     if (sendData.files > 1) {
@@ -128,17 +128,22 @@ class InternalToolbarActions {
   onRemoveFromList = (tableData) => {
     const listData = tableData.filter(this.filterSelected)
     let updateData = []
-    // go through the whole data to match the ones with the selected one's uuid and add them to the updateData array
+    console.log(tableData.length)
+    // go through the whole data to match the ones with the selected one's hashid and add them to the updateData array
     for (let cData of stored.dldata.data) {
+      // console.log(cData)
       for (let lData of listData) {
-        if (lData.uuid === cData.uuid) {
+        if (lData.hashid === cData.hashid) {
+          console.warn(lData)
           break
         }
         else {
+          console.info(cData)
           updateData.push(cData)
         }
       }
     }
+    console.info(tableData.length)
     // emit the event that the items are cleared from the list
     mrEmitter.emit('onClearList', listData.length, stored.dldata.data)
     // update the item in storage

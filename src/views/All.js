@@ -32,7 +32,7 @@ export default class All extends Component {
     table: true,
     tableData: [
       // {
-      //     uuid: 'uuid',
+      //     hashid: 'hashid',
       //     fileName: 'C:\Users\User\Music\Song.mp4', // full path to file,
       //     url: 'the-website-url-download-the-video.mp4',
       //     size: '94 Mb', // full size in mb
@@ -104,8 +104,7 @@ export default class All extends Component {
     this.setState({tableData: stored.dldata.data})
   }
 
-  // show or hide the table function
-  componentDidMount() {
+  onShowPlaceholder = () => {
     // if table's length is zero show the EmptyPlaceHolder and hide the table
     if (!this.state.tableData.length) {
       this.setState({table: false})
@@ -113,8 +112,24 @@ export default class All extends Component {
         this.refs.allPlaceHolder.setState({visible: true})
       }, 700)
     }
+    else {
+      this.setState({table: true})
+      setTimeout(() => {
+        this.refs.allPlaceHolder.setState({visible: false})
+      }, 700)
+    }
+  }
+
+  // show or hide the table function
+  componentDidMount() {
+    this.onShowPlaceholder()
     // add emitter event listener
-    Subscriptions.push(mrEmitter.addListener('onUpdateData', (updateData) => this.setState({tableData: updateData})))
+    Subscriptions.push(mrEmitter.addListener('onUpdateData', (updateData) => {
+      this.setState({tableData: updateData})
+      setTimeout(() => {
+        this.onShowPlaceholder()
+      }, 300)
+    }))
   }
 
   componentWillUnmount() {

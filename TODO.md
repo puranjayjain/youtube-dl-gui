@@ -12,5 +12,5 @@
 - [x] download when available and replace the old one with it
 - [ ] ability to stop downloads and remove the underlying downloadProcess
 - [ ] confirm before closing if downloads are remaining or if the option is set
-- [ ] reset Starting and past states, do clean up to necessary states like canceled or error etc.
+- [x] reset Starting and past states, do clean up to necessary states like canceled or error etc.
 - [ ] dynamically calculate the right side toolbar position

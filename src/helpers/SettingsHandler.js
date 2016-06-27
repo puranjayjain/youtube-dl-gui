@@ -10,7 +10,8 @@ let stored = {
   download: {},
   filesystem: {},
   desktop: {},
-  youtubedl: {}
+  youtubedl: {},
+  hashidcount: 0
 }
 
 export default class SettingsHandler {
@@ -35,6 +36,8 @@ export default class SettingsHandler {
     stored.dldata = new Storage('dldata', [], true)
     // also include the youtubedl version
     stored.youtubedl = new Storage('youtubedl', {version: 0, lasttried: -1, published_at: -1, path: '', toUpdate: false})
+    // also include current hashid count
+    stored.hashidcount = new Storage('hashidcount', 0)
   }
 
   // load youtubedl version
@@ -65,15 +68,15 @@ export default class SettingsHandler {
   /**
   * [update a data item in dlData]
   * @method
-  * @param  {String} uuid [to identify the item]
+  * @param  {String} hashid [to identify the item]
   * @param  {key}   item [object's key]
   * @param  {value} data [object's value]
   * @return {mrEmitter}
   */
-  updateDlDataItem = (uuid, item, data) => {
+  updateDlDataItem = (hashid, item, data) => {
     let updateData = stored.dldata.data
     for (let cData of updateData) {
-      if (cData.uuid === uuid) {
+      if (cData.hashid === hashid) {
         cData[item] = data
       }
     }

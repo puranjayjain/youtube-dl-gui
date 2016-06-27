@@ -11,7 +11,7 @@ _video
 
 export default class Dl {
   constructor(args = {
-    uuid,
+    hashid,
     url,
     filePath,
     format,
@@ -67,7 +67,7 @@ export default class Dl {
       let updateData = stored.dldata.data
       // try to find it in tableData if not add it
       for (let cData of updateData) {
-        if (cData.uuid === this._args.uuid) {
+        if (cData.hashid === this._args.hashid) {
           cData.size = info.size
           cData.format_id = info.format_id
           break
@@ -85,7 +85,7 @@ export default class Dl {
       let updateData = stored.dldata.data
       // try to find it in tableData if not add it
       for (let cData of updateData) {
-        if (cData.uuid === this._args.uuid) {
+        if (cData.hashid === this._args.hashid) {
           cData.downloaded += chunk.length
           cData.status = 'Downloading'
           cData.lastTry = moment()
@@ -106,7 +106,7 @@ export default class Dl {
       let updateData = stored.dldata.data
       // try to find it in tableData if not add it
       for (let cData of updateData) {
-        if (cData.uuid === this._args.uuid) {
+        if (cData.hashid === this._args.hashid) {
           cData.status = 'Error'
           break
         }
@@ -116,7 +116,7 @@ export default class Dl {
       // update the ui state
       mrEmitter.emit('onUpdateData', updateData)
       // remove the download process
-      mrEmitter.emit('onRemoveDownloadProcess', this._args.uuid)
+      mrEmitter.emit('onRemoveDownloadProcess', this._args.hashid)
     })
 
     // download has been completed
@@ -125,7 +125,7 @@ export default class Dl {
       let updateData = stored.dldata.data
       // try to find it in tableData if not add it
       for (let cData of updateData) {
-        if (cData.uuid === this._args.uuid) {
+        if (cData.hashid === this._args.hashid) {
           cData.status = 'Done'
           break
         }
@@ -135,7 +135,7 @@ export default class Dl {
       // update the ui state
       mrEmitter.emit('onUpdateData', updateData)
       // remove the download process
-      mrEmitter.emit('onRemoveDownloadProcess', this._args.uuid)
+      mrEmitter.emit('onRemoveDownloadProcess', this._args.hashid)
     })
 
     // start the download here

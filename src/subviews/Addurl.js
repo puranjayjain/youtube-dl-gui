@@ -22,7 +22,6 @@ import Dialog from 'material-ui/Dialog'
 
 // import node youtube dl and related dependencies
 import Dl from '../helpers/Dl'
-import uuid from 'uuid'
 import moment from 'moment'
 
 // icons
@@ -30,6 +29,7 @@ import MoreHoriz from 'material-ui/svg-icons/navigation/more-horiz'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import Info from 'material-ui/svg-icons/action/info'
 
+import getHashid from '../helpers/HashidStore'
 import mrEmitter from '../helpers/mrEmitter'
 import VersionChecker from '../helpers/VersionChecker'
 
@@ -205,6 +205,7 @@ export default class Addurl extends Component {
 
   // store the download data back to storage
   setDataChange = (updateData) => {
+    console.error('no!')
     settingsHandle.setStored('dldata', updateData)
     this.setComponentState('errorSnackbar', false)
     // emits on download start / resume to update the useful stuff
@@ -249,7 +250,7 @@ export default class Addurl extends Component {
   // get dl js options
   getDlOptions = (id) => {
     let dlO = {
-      uuid: id,
+      hashid: id,
       url: this.state.url,
       filePath: this.state.filePath,
       format: this.state.format === 1 ? false : this.state.formats_info[this.state.format - 2].format_id
@@ -270,12 +271,12 @@ export default class Addurl extends Component {
     pathExists(tempPath).then(exists => {
       if (exists) {
         // generate the download id and use it
-        const id = uuid.v1()
+        const id = getHashid()
         // begin procedure to download the media
         let downloadProcess = new Dl(this.getDlOptions(id))
         // initiate the object to store
         let newDownload = {
-          uuid: id,
+          hashid: id,
           format_id: this.state.format === 1 ? false : this.state.formats_info[this.state.format - 2].format_id, // format id(number) of the download
           url: this.state.url, //url of the media
           fileName: this.state.filePath,
@@ -406,8 +407,11 @@ export default class Addurl extends Component {
     let updateData = settingsHandle.stored.dldata.data
     // change downloading status to error on load
     for (let cData of updateData) {
-      if (cData.status === 'Downloading') {
+      if (cData.status === 'Downloading' || cData.status === 'Starting') {
         cData.status = 'Error'
+      }
+      if (cData.status === 'Paused') {
+        cData.status = 'Canceled'
       }
     }
     // load all the settings
@@ -418,8 +422,6 @@ export default class Addurl extends Component {
     VersionChecker.checkVersion()
     // store it back
     settingsHandle.setStored('dldata', updateData)
-    // emits on download start / resume to update the useful stuff
-    mrEmitter.emit('onUpdateData', updateData)
     // on initiate load
     this.isActive(this.context.location.pathname)
     // reset progressBar on load
@@ -448,13 +450,16 @@ export default class Addurl extends Component {
     // Toolbar action of restart, for update complete
     Subscriptions.push(mrEmitter.addListener('onYoutubeDlUpdate', (message) => this.openActionSnackBar(message, 'restart', () => location.reload())))
     // Toolbar action of removing items from list => display snackbar
-    Subscriptions.push(mrEmitter.addListener('onClearList', (count, originalTableData) => this.openActionSnackBar(`${count} removed from List`, 'undo', this.setDataChange.bind(this, originalTableData))))
+    Subscriptions.push(mrEmitter.addListener('onClearList', (count, originalTableData) => {
+      this.openActionSnackBar(`${count} removed from List`, 'undo',
+      (originalTableData) => this.setDataChange(originalTableData))
+    }))
     // add to downloadProcesses
     Subscriptions.push(mrEmitter.addListener('onStartDownload', (newDownload) => this.context.downloadProcesses.unshift(newDownload)))
     // remove the download process
-    Subscriptions.push(mrEmitter.addListener('onRemoveDownloadProcess', (uuid) => {
+    Subscriptions.push(mrEmitter.addListener('onRemoveDownloadProcess', (hashid) => {
       for (let i in this.context.downloadProcesses) {
-        if (this.context.downloadProcesses[i].uuid === uuid) {
+        if (this.context.downloadProcesses[i].hashid === hashid) {
           this.context.downloadProcesses = this.context.downloadProcesses.splice(i, 1)
         }
       }
@@ -481,6 +486,8 @@ export default class Addurl extends Component {
         this.openDownloadDialog(event, true)
       }
     }
+    // emits on download start / resume to update the useful stuff
+    mrEmitter.emit('onUpdateData', updateData)
   }
 
   // unregister all references here
