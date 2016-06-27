@@ -1,6 +1,6 @@
 // this file stores all the error text that can occur in the app or a successful update
 
-const Errordata = {
+const ErrorData = {
   // if the url is not valid (used in textfields)
   invalidUrl: 'This is not a valid url',
   // internet connection states
@@ -21,10 +21,15 @@ const Errordata = {
   // could'nt rename youtube-dl's new exe, it is in use
   couldntRenameYtdl: 'Unable to rename new youtubedl exe'
 }
-//
+// on successful job
 const SuccessData = {
   // update of youtube-dl done
   updateYtdl: 'Successfully updated youtube-dl exe'
 }
+// on giving out an info which is neutral or a required action
+const InfoData = {
+  // the exe has been updated and will be complete next time
+  updateDownloaded: 'Youtubedl update scheduled for next run'
+}
 
-export default {Errordata, Successdata}
+export default {ErrorData, SuccessData, InfoData}

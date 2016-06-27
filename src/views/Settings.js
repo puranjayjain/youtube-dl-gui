@@ -29,8 +29,6 @@ export default class Settings extends Component {
     stored.theme.darkTheme.toggleData()
     // update the theme on the parent
     this.props.updateTheme()
-    // TODO display in snackbar that the theme couldnot be updated globally so please restart the app to apply it
-
   }
 
   // on touch tap go to link

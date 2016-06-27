@@ -24,7 +24,6 @@ injectTapEventPlugin()
 render((
   <Router history={hashHistory}>
     <Route path="/" component={Main}>
-      // TODO add a first run logic to initiate the settings for the first time
       <IndexRoute component={All}/>
       <Route path="/downloading" component={Downloading}/>
       <Route path="/unfinished" component={Unfinished}/>

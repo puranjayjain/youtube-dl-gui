@@ -92,6 +92,9 @@ export default class About extends Component {
                 primaryText="Report a Bug"
                 rightIcon={<BugReport />}
               />
+              <ListItem
+                primaryText="Check for Updates"
+              />
             </List>
           </CardText>
         </Card>

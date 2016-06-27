@@ -1,6 +1,6 @@
 import SettingsHandler from '../helpers/SettingsHandler'
 import YtdlUpdater from '../helpers/YtdlUpdater'
-import {Errordata, Successdata} from '../Data/Messagedata'
+import {ErrorData, Successdata} from '../Data/Messagedata'
 import mrEmitter from '../helpers/mrEmitter'
 import moment from 'moment'
 
@@ -53,7 +53,7 @@ class InternalVersionChecker {
       if (err) {
         throw err
         // show the error in toast
-        mrEmitter.emit('onShowError', Errordata.couldntDeleteYtdl())
+        mrEmitter.emit('onShowError', ErrorData.couldntDeleteYtdl())
         return
       }
       // then remove .temp extension
@@ -61,7 +61,7 @@ class InternalVersionChecker {
         if (err) {
           throw err
           // show the error in toast
-          mrEmitter.emit('onShowError', Errordata.couldntRenameYtdl())
+          mrEmitter.emit('onShowError', ErrorData.couldntRenameYtdl())
           return
         }
         // if successful, do the necessary changes

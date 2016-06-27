@@ -1,5 +1,7 @@
 // updates the ytdl binary on demand
 import SettingsHandler from '../helpers/SettingsHandler'
+import {ErrorData, Successdata, InfoData} from '../Data/Messagedata'
+import mrEmitter from '../helpers/mrEmitter'
 import moment from 'moment'
 
 let settingsHandle = new SettingsHandler(),
@@ -32,8 +34,7 @@ export default class YtdlUpdater {
         timeout: 10000       // duration to wait for request fulfillment in milliseconds, default is 2 seconds
       }, (error, response, body) => {
         if (error) {
-          console.log('--- error:')
-          console.log(error)            // error encountered
+          throw error
         } else {
           // update the stored data
           settingsHandle.updateStores('youtubedl', {
@@ -43,10 +44,10 @@ export default class YtdlUpdater {
             // to update the temp file over exe file
             toUpdate: true
           })
-          // TODO show a message that you need to restart or close and open youtube dl next time to see an updated version
+          // show a message that you need to restart or close and open youtube dl next time to see an updated version
+          mrEmitter.emit('onYoutubeDlUpdate', InfoData.updateDownloaded())
         }
-      }
-    )
-  })
-}
+      })
+    })
+  }
 }

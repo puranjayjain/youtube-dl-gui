@@ -12,7 +12,7 @@ import bytes from 'bytes'
 import Edit from 'material-ui/svg-icons/image/edit'
 import Info from 'material-ui/svg-icons/action/info'
 
-import {Errordata} from '../Data/Messagedata'
+import {ErrorData} from '../Data/Messagedata'
 import SettingsHandler from '../helpers/SettingsHandler'
 import mrEmitter from '../helpers/mrEmitter'
 
@@ -74,7 +74,7 @@ export default class CommonDialog extends Component {
       for (let cProcess of this.context.downloadProcesses) {
         if (cProcess.uuid === uuid) {
           // display can't move file or change it's url while downloading
-          mrEmitter.emit('onShowError', Errordata.videoDownloading)
+          mrEmitter.emit('onShowError', ErrorData.videoDownloading)
           return
         }
       }

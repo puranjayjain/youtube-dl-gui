@@ -48,7 +48,6 @@ export default class Dl {
   }
 
   // instantiate functions
-  // TODO add checks for resuming a partially downloaded file
   // start te process and get the video also
   initVideo = () => {
     _video = youtubedl(
@@ -56,6 +55,7 @@ export default class Dl {
         this.getArgs(),
         // Additional options can be given for calling `child_process.execFile()`.
         {
+          // add checks for resuming a partially downloaded file
           start: this._args.start,
           cwd: dirname
         })
@@ -96,15 +96,6 @@ export default class Dl {
       // update the ui state
       mrEmitter.emit('onUpdateData', updateData)
     })
-
-    // also add events for stream paused, resumed, etc.
-    // TODO implement these events from the tables
-    // _video.on('pause', () => {
-    //   console.info('pause')
-    // })
-    // _video.on('resume', () => {
-      // console.info('resume')
-    // })
 
     // update the data on download end, error, cancel
     _video.on('error', (e) => {

@@ -34,7 +34,7 @@ import mrEmitter from '../helpers/mrEmitter'
 import VersionChecker from '../helpers/VersionChecker'
 
 // import all the errors to be used
-import {Errordata} from '../Data/Messagedata'
+import {ErrorData} from '../Data/Messagedata'
 
 // standard regex for matching the urls
 // see https://gist.github.com/dperini/729294
@@ -163,7 +163,7 @@ export default class Addurl extends Component {
       this.loadFormat()
     }
     else {
-      this.setState({errorUrl: Errordata.invalidUrl})
+      this.setState({errorUrl: ErrorData.invalidUrl})
     }
   }
 
@@ -298,7 +298,7 @@ export default class Addurl extends Component {
         this.closeConfirmDialog()
       }
     	else {
-        this.setState({errorPath: Errordata.invalidPath})
+        this.setState({errorPath: ErrorData.invalidPath})
     	}
     })
   }
@@ -340,7 +340,7 @@ export default class Addurl extends Component {
         if (error) {
           console.error(error)
           // handle errors as toasts here
-          this.openSnackBar(Errordata.errorFormat)
+          this.openSnackBar(ErrorData.errorFormat)
           return
         }
         // if the format is not available
@@ -366,7 +366,7 @@ export default class Addurl extends Component {
         }
         else {
           // handle errors as toasts here
-          this.openSnackBar(Errordata.errorFormat)
+          this.openSnackBar(ErrorData.errorFormat)
         }
         // set the loader off
         this.setState({initLoader: false})
@@ -429,6 +429,8 @@ export default class Addurl extends Component {
     Subscriptions.push(mrEmitter.addListener('onRouteChange', (newLocation) => this.isActive(newLocation)))
     // show error text
     Subscriptions.push(mrEmitter.addListener('onShowError', (error) => this.openSnackBar(error)))
+    // Toolbar action of restart, for update complete
+    Subscriptions.push(mrEmitter.addListener('onYoutubeDlUpdate', (message) => this.openActionSnackBar(message, 'restart', () => location.reload())))
     // Toolbar action of removing items from list => display snackbar
     Subscriptions.push(mrEmitter.addListener('onClearList', (count, originalTableData) => this.openActionSnackBar(`${count} removed from List`, 'undo', this.setDataChange.bind(this, originalTableData))))
     // add to downloadProcesses
