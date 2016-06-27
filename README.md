@@ -4,8 +4,17 @@
 
 A Cross Platform GUI Client for youtube-dl written in react, electron and material ui.
 
+#Requirements
+Currently supports Windows only. Need collaborators for other platforms (Building and Testing).
+
 #Installation
-Coming soon v1 alpha release for Windows
+Released Developer build please test it.
+  ##Steps:
+  1. Make sure you have the latest version of node.js(6.xx), python (2.xx)
+  2. Now clone the repository or download the latest release
+  3. From the root of the repository, run `npm i`
+  4. Use the `gulp run.bat` and `run app.bat`
+  5. Start Testing!
 
 # Features
  - [x] Drop links to start downloading
@@ -37,12 +46,6 @@ If you think a feature is missing or needs improvement please file a new issue o
 # Dependencies
 
 None, All dependencies will auto install with the app now as far as possible.
-
-# Development and Testing
-
-```
-gulp default --NODE-ENVIRONMENT=development
-```
 
 # Faqs
 
