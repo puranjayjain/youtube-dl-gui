@@ -86,8 +86,8 @@ export default class Addurl extends Component {
     format: 1,
     // dropdown values
     formats: [],
-    // format ids
-    format_id: [],
+    // format detailed information
+    formats_info: [],
     // store extensions
     extensions: [],
     // start button for Confirmation dialog's disabled props state
@@ -120,10 +120,10 @@ export default class Addurl extends Component {
   filterUnique = (value, index, self) => self.indexOf(value) === index
 
   /**
-   * [click to open the Dialog]
-   * @method
-   * @param  {Boolean} external = false [if set true it means that the dialog was opened from the outside link]
-   */
+  * [click to open the Dialog]
+  * @method
+  * @param  {Boolean} external = false [if set true it means that the dialog was opened from the outside link]
+  */
   openDownloadDialog = (event, external = false) => {
     this.setState({dialog: true})
     // set loadFormats to true to tell that the formats are to be refetched
@@ -170,10 +170,10 @@ export default class Addurl extends Component {
   }
 
   /**
-   * [open the snackbar]
-   * @method
-   * @param  {String} text [the text to be displayed]
-   */
+  * [open the snackbar]
+  * @method
+  * @param  {String} text [the text to be displayed]
+  */
   openSnackBar = (text) => {
     // handle errors as toasts here
     snackbarErrorText = text
@@ -186,12 +186,12 @@ export default class Addurl extends Component {
   }
 
   /**
-   * [snackbar with action text]
-   * @method
-   * @param  {String} text                  [the text to be displayed]
-   * @param  {String} action                [the text to be displayed as the action button]
-   * @param  {Callback function} actionFunc [the function to call when the action button is clicked]
-   */
+  * [snackbar with action text]
+  * @method
+  * @param  {String} text                  [the text to be displayed]
+  * @param  {String} action                [the text to be displayed as the action button]
+  * @param  {Callback function} actionFunc [the function to call when the action button is clicked]
+  */
   openActionSnackBar = (text, action, actionFunc) => {
     // handle errors as toasts here
     snackbarErrorText = text
@@ -215,12 +215,12 @@ export default class Addurl extends Component {
   setComponentState = (component, state) => this.setState({[component]: state})
 
   /**
-   * [on any input's keypress]
-   * @method
-   * @param  {Event}   event     [Event for the text input]
-   * @param  {Function} callback [function to call on success]
-   * @return {[type]}
-   */
+  * [on any input's keypress]
+  * @method
+  * @param  {Event}   event     [Event for the text input]
+  * @param  {Function} callback [function to call on success]
+  * @return {[type]}
+  */
   onTextKeyPress = (event, callback) => {
     // if key code matches move to next one
     if (event.keyCode === 13) {
@@ -251,7 +251,7 @@ export default class Addurl extends Component {
       uuid: id,
       url: this.state.url,
       filePath: this.state.filePath,
-      format: this.state.format === 1 ? false : this.state.format_id[this.state.format - 2]
+      format: this.state.format === 1 ? false : this.state.formats_info[this.state.format - 2].format_id
     }
     // if the username options are to be used
     if (this.state.username && this.state.password && this.state.authentication) {
@@ -264,7 +264,7 @@ export default class Addurl extends Component {
   // ok button of the confirm dialog
   onConfirmDialog = () => {
     let tempPath = this.state.filePath
-    tempPath = tempPath.slice(0, tempPath.lastIndexOf('\\') - tempPath.length)
+    tempPath = path.dirname(tempPath)
     // check if the path passed by the user is valid
     pathExists(tempPath).then(exists => {
       if (exists) {
@@ -275,7 +275,7 @@ export default class Addurl extends Component {
         // initiate the object to store
         let newDownload = {
           uuid: id,
-          format_id: this.state.format === 1 ? false : this.state.format_id[this.state.format - 2], // format id(number) of the download
+          format_id: this.state.format === 1 ? false : this.state.formats_info[this.state.format - 2].format_id, // format id(number) of the download
           url: this.state.url, //url of the media
           fileName: this.state.filePath,
           size: 0, // e.g 459834 bytes converted to mb when displayed, full size of download
@@ -299,9 +299,9 @@ export default class Addurl extends Component {
         // close the dialog now
         this.closeConfirmDialog()
       }
-    	else {
+      else {
         this.setState({errorPath: ErrorData.invalidPath})
-    	}
+      }
     })
   }
 
@@ -330,7 +330,17 @@ export default class Addurl extends Component {
   }
 
   // change the dropdown value for the format dropdown
-  handleFormat = (event, index, value) => this.setState({format: value})
+  handleFormat = (event, index, value) => {
+    this.setState({format: value})
+    // change file extension and stored extension if it is required
+    if (this.state.filePath && index > 1) {
+      this.setState({filePath: this.state.filePath.replace(path.extname(this.state.filePath), `.${this.state.formats_info[index - 1].ext}`)})
+    }
+    // change filenname
+    if (this.state.replaceFilename && index > 1) {
+      this.setState({replaceFilename: this.state.replaceFilename.replace(path.extname(this.state.replaceFilename), `.${this.state.formats_info[index - 1].ext}`)})
+    }
+  }
 
   // on requesting information for format and file
   loadFormat = () => {
@@ -351,17 +361,15 @@ export default class Addurl extends Component {
           youtubedlFormat = info.formats
           // also update the dialog with these values
           let formatList = [],
-              formatIdList = [],
-              extensions = []
+          extensions = []
           for (let f of youtubedlFormat) {
-            formatList.push(f.format.split(' - ')[1] + ' [.' + f.ext + '] {codec: ' + f.acodec + '}')
+            formatList.push(`${f.format.split(' - ')[1]} [.${f.ext}] codec(a+v): ${f.acodec}+${f.vcodec}} @${f.abr ? f.abr : 'N/A'}+${f.vbr ? f.vbr : 'N/A'}`)
             extensions.push(f.ext)
-            formatIdList.push(f.format_id)
           }
           // set the dropdown items
           this.setState({
             formats: formatList,
-            format_id: formatIdList,
+            formats_info: youtubedlFormat,
             replaceFilename: info._filename,
             start: false,
             extensions: extensions.filter(this.filterUnique)
@@ -387,7 +395,7 @@ export default class Addurl extends Component {
       filters: [{name: 'Formats', extensions: this.state.extensions}]
     })
     if (userPath) {
-      this.setState({filePath: userPath.slice(0, userPath.lastIndexOf('\\') - userPath.length + 1) + this.state.replaceFilename})
+      this.setState({filePath: path.join(path.dirname(userPath), this.state.replaceFilename)})
     }
   }
 
@@ -413,6 +421,8 @@ export default class Addurl extends Component {
     mrEmitter.emit('onUpdateData', updateData)
     // on initiate load
     this.isActive(this.context.location.pathname)
+    // reset progressBar on load
+    ipcRenderer.send('progressBar', -1)
     // on update of getting a new download byte
     Subscriptions.push(mrEmitter.addListener('onUpdateData', (updateData) => {
       // do this only if the requirement is
@@ -440,6 +450,14 @@ export default class Addurl extends Component {
     Subscriptions.push(mrEmitter.addListener('onClearList', (count, originalTableData) => this.openActionSnackBar(`${count} removed from List`, 'undo', this.setDataChange.bind(this, originalTableData))))
     // add to downloadProcesses
     Subscriptions.push(mrEmitter.addListener('onStartDownload', (newDownload) => this.context.downloadProcesses.unshift(newDownload)))
+    // remove the download process
+    Subscriptions.push(mrEmitter.addListener('onRemoveDownloadProcess', (uuid) => {
+      for (let i in this.context.downloadProcesses) {
+        if (this.context.downloadProcesses[i].uuid === uuid) {
+          this.context.downloadProcesses = this.context.downloadProcesses.splice(i, 1)
+        }
+      }
+    }))
     // to redownload a file event
     Subscriptions.push(mrEmitter.addListener('onRedownloadFile', (fileData) => {
       if (urlPattern.test(fileData.url)) {
@@ -476,227 +494,228 @@ export default class Addurl extends Component {
 
   render() {
     const style = {
-    fab: {
-      position: 'fixed',
-      bottom: '25px',
-      right: '20px',
-      visibility: this.state.fab ? 'visible' : 'collapse',
-      zIndex: 2
-    },
-    tooltip: {
-      position: 'fixed',
-      top: 'calc(100% - 100px)',
-      right: '15px'
-    },
-    dialogTitle: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between'
-    },
-    urlInput: {
-      width: '100%'
-    },
-    authCover: {
-      display: 'flex'
-    },
-    authUser: {
-      marginRight: '1em',
-      flex: 1
-    },
-    authPass: {
-      flex: 1
-    },
-    confirmDiv: {
-      display: 'flex',
-      width: '100%',
-      alignItems: 'flex-end'
-    },
-    fileText: {
-      flex: 1
-    },
-    fileButton: {
-      marginLeft: '8px',
-      marginBottom: '8px'
-    },
-    format: {
-      marginLeft: '-24px',
-      width: '400px'
-    },
-    initLoader: {
-      visibility: this.state.initLoader ? 'visible' : 'collapse'
+      fab: {
+        position: 'fixed',
+        bottom: '25px',
+        right: '20px',
+        visibility: this.state.fab ? 'visible' : 'collapse',
+        zIndex: 2
+      },
+      tooltip: {
+        position: 'fixed',
+        top: 'calc(100% - 100px)',
+        right: '15px'
+      },
+      dialogTitle: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+      },
+      urlInput: {
+        width: '100%'
+      },
+      authCover: {
+        display: 'flex'
+      },
+      authUser: {
+        marginRight: '1em',
+        flex: 1
+      },
+      authPass: {
+        flex: 1
+      },
+      confirmDiv: {
+        display: 'flex',
+        width: '100%',
+        alignItems: 'flex-end'
+      },
+      fileText: {
+        flex: 1
+      },
+      fileButton: {
+        marginLeft: '8px',
+        marginBottom: '8px'
+      },
+      format: {
+        marginLeft: '-24px',
+        width: '550px',
+        overflow: 'hidden'
+      },
+      initLoader: {
+        visibility: this.state.initLoader ? 'visible' : 'collapse'
+      }
     }
-  }
 
-  // main dialog actions
-  const actions = [
-    <FlatButton
-      label="Cancel"
-      primary={true}
-      onTouchTap={() => this.setComponentState('dialog', false)}
-    />,
-    <FlatButton
-      label="Ok"
-      primary={true}
-      onTouchTap={this.onOkDialog}
-    />
-  ]
-
-  // confirm download dialog
-  const confirmActions = [
-   <FlatButton
-     label="Cancel"
-     primary={true}
-     onTouchTap={this.closeConfirmDialog}
-   />,
-   <FlatButton
-     label="Start"
-     primary={true}
-     onTouchTap={this.onConfirmDialog}
-     disabled={this.state.start}
-   />
-  ]
-
-  return (
-    <div>
-      <ReactCSSTransitionGroup
-        transitionName="downloadedAnimate"
-        transitionEnterTimeout={200}
-        transitionLeaveTimeout={200}
-        transitionAppear={true}
-        transitionAppearTimeout={200}
-      >
-        <FloatingActionButton
-          secondary={true}
-          key={this.state.fab}
-          style={style.fab}
-          onTouchTap={this.openDownloadDialog}
-          onMouseEnter={()=>{this.setState({tooltipShown: true})}}
-          onMouseLeave={()=>{this.setState({tooltipShown: false})}}
-        >
-          <ContentAdd />
-        </FloatingActionButton>
-      </ReactCSSTransitionGroup>
-      <Tooltip
-        show={this.state.tooltipShown}
-        label={"Download from a new URL"}
-        style={style.tooltip}
-        horizontalPosition="left"
-        verticalPosition="top"
-        touch={true}
+    // main dialog actions
+    const actions = [
+      <FlatButton
+        label="Cancel"
+        primary={true}
+        onTouchTap={() => this.setComponentState('dialog', false)}
+      />,
+      <FlatButton
+        label="Ok"
+        primary={true}
+        onTouchTap={this.onOkDialog}
       />
-      <Dialog
-        title={
-          <div style={style.dialogTitle}>
-            <span>
-              Download a video or a playlist (if supported)
-            </span>
-            <IconButton
-              tooltip="More Information regarding list of supported formats and websites"
-              onTouchTap={this.onInfoButton}
-            >
-              <Info />
-            </IconButton>
-          </div>
-        }
-        actions={actions}
-        open={this.state.dialog}
-        onRequestClose={() => this.setComponentState('dialog', false)}
-      >
-        <TextField
-          ref="urlInput"
-          style={style.urlInput}
-          value={this.state.url}
-          hintText="e.g. https://www.youtube.com/watch?v=foE1mO2yM04"
-          floatingLabelText="Enter or Paste the video url here"
-          errorText={this.state.errorUrl}
-          onChange={(event) => this.setText(event, 'url')}
-          onKeyDown={(event) => this.onTextKeyPress(event, this.onOkDialog)}
-        />
-        <Card
-          expanded={this.state.authentication}
-          onExpandChange={this.onAuthenticationCheck}
+    ]
+
+    // confirm download dialog
+    const confirmActions = [
+      <FlatButton
+        label="Cancel"
+        primary={true}
+        onTouchTap={this.closeConfirmDialog}
+      />,
+      <FlatButton
+        label="Start"
+        primary={true}
+        onTouchTap={this.onConfirmDialog}
+        disabled={this.state.start}
+      />
+    ]
+
+    return (
+      <div>
+        <ReactCSSTransitionGroup
+          transitionName="downloadedAnimate"
+          transitionEnterTimeout={200}
+          transitionLeaveTimeout={200}
+          transitionAppear={true}
+          transitionAppearTimeout={200}
         >
-          <CardText>
-            <Checkbox
-              onCheck={this.onAuthCheck}
-              checked={this.state.authentication}
-              label="Enable Authentication"
-            />
-          </CardText>
-          <CardText
-            expandable={true}
-            style={style.authCover}
+          <FloatingActionButton
+            secondary={true}
+            key={this.state.fab}
+            style={style.fab}
+            onTouchTap={this.openDownloadDialog}
+            onMouseEnter={()=>{this.setState({tooltipShown: true})}}
+            onMouseLeave={()=>{this.setState({tooltipShown: false})}}
           >
-            <TextField
-              value={this.state.username}
-              onChange={(event) => this.setText(event, 'username')}
-              style={style.authUser}
-              floatingLabelText="Username"
-            />
-            <TextField
-              value={this.state.password}
-              onChange={(event) => this.setText(event, 'password')}
-              floatingLabelText="Password"
-              style={style.authPass}
-              type="password"
-            />
-          </CardText>
-        </Card>
-      </Dialog>
-      <Dialog
-        title={
-          <div style={style.dialogTitle}>
-            Confirm download options
-            <CircularProgress style={style.initLoader} />
-          </div>
-        }
-        actions={confirmActions}
-        open={this.state.confirmDialog}
-        onRequestClose={this.closeConfirmDialog}
-      >
-        <div style={style.confirmDiv}>
-          <TextField
-            value={this.state.filePath}
-            style={style.fileText}
-            errorText={this.state.errorPath}
-            hintText="e.g. C:\Users\User\Videos"
-            floatingLabelText="Path to save file"
-            onChange={(event) => this.setText(event, 'filePath')}
-            onKeyDown={(event) => this.onTextKeyPress(event, this.onConfirmDialog)}
-          />
-          <RaisedButton
-            style={style.fileButton}
-            icon={<MoreHoriz />}
-            primary={true}
-            disabled={this.state.start}
-            onTouchTap={this.pickFilePath}
-          />
-        </div>
-        <DropDownMenu
-          autoWidth={false}
-          style={style.format}
-          value={this.state.format}
-          onChange={this.handleFormat}
+            <ContentAdd />
+          </FloatingActionButton>
+        </ReactCSSTransitionGroup>
+        <Tooltip
+          show={this.state.tooltipShown}
+          label={"Download from a new URL"}
+          style={style.tooltip}
+          horizontalPosition="left"
+          verticalPosition="top"
+          touch={true}
+        />
+        <Dialog
+          title={
+            <div style={style.dialogTitle}>
+              <span>
+                Download a video or a playlist (if supported)
+              </span>
+              <IconButton
+                tooltip="More Information regarding list of supported formats and websites"
+                onTouchTap={this.onInfoButton}
+              >
+                <Info />
+              </IconButton>
+            </div>
+          }
+          actions={actions}
+          open={this.state.dialog}
+          onRequestClose={() => this.setComponentState('dialog', false)}
         >
-          <MenuItem value={1} primaryText="Default format" />
-          {this.state.formats.map( (row, index) => (
-            <MenuItem
-              key={index}
-              value={index + 2}
-              primaryText={row} />
-          ))}
-        </DropDownMenu>
-      </Dialog>
-      <CommonDialog />
-      <Snackbar
-        open={this.state.errorSnackbar}
-        message={snackbarErrorText}
-        action={this.state.actionText}
-        onActionTouchTap={this.state.actionFunc}
-        autoHideDuration={4000}
-        onRequestClose={() => this.setComponentState('errorSnackbar', false)}
-      />
-    </div>
+          <TextField
+            ref="urlInput"
+            style={style.urlInput}
+            value={this.state.url}
+            hintText="e.g. https://www.youtube.com/watch?v=foE1mO2yM04"
+            floatingLabelText="Enter or Paste the video url here"
+            errorText={this.state.errorUrl}
+            onChange={(event) => this.setText(event, 'url')}
+            onKeyDown={(event) => this.onTextKeyPress(event, this.onOkDialog)}
+          />
+          <Card
+            expanded={this.state.authentication}
+            onExpandChange={this.onAuthenticationCheck}
+          >
+            <CardText>
+              <Checkbox
+                onCheck={this.onAuthCheck}
+                checked={this.state.authentication}
+                label="Enable Authentication"
+              />
+            </CardText>
+            <CardText
+              expandable={true}
+              style={style.authCover}
+            >
+              <TextField
+                value={this.state.username}
+                onChange={(event) => this.setText(event, 'username')}
+                style={style.authUser}
+                floatingLabelText="Username"
+              />
+              <TextField
+                value={this.state.password}
+                onChange={(event) => this.setText(event, 'password')}
+                floatingLabelText="Password"
+                style={style.authPass}
+                type="password"
+              />
+            </CardText>
+          </Card>
+        </Dialog>
+        <Dialog
+          title={
+            <div style={style.dialogTitle}>
+              Confirm download options
+              <CircularProgress style={style.initLoader} />
+            </div>
+          }
+          actions={confirmActions}
+          open={this.state.confirmDialog}
+          onRequestClose={this.closeConfirmDialog}
+        >
+          <div style={style.confirmDiv}>
+            <TextField
+              value={this.state.filePath}
+              style={style.fileText}
+              errorText={this.state.errorPath}
+              hintText="e.g. C:\Users\User\Videos"
+              floatingLabelText="Path to save file"
+              onChange={(event) => this.setText(event, 'filePath')}
+              onKeyDown={(event) => this.onTextKeyPress(event, this.onConfirmDialog)}
+            />
+            <RaisedButton
+              style={style.fileButton}
+              icon={<MoreHoriz />}
+              primary={true}
+              disabled={this.state.start}
+              onTouchTap={this.pickFilePath}
+            />
+          </div>
+          <DropDownMenu
+            autoWidth={false}
+            style={style.format}
+            value={this.state.format}
+            onChange={this.handleFormat}
+          >
+            <MenuItem value={1} primaryText="Default format" />
+            {this.state.formats.map( (row, index) => (
+              <MenuItem
+                key={index}
+                value={index + 2}
+                primaryText={row} />
+            ))}
+          </DropDownMenu>
+        </Dialog>
+        <CommonDialog />
+        <Snackbar
+          open={this.state.errorSnackbar}
+          message={snackbarErrorText}
+          action={this.state.actionText}
+          onActionTouchTap={this.state.actionFunc}
+          autoHideDuration={4000}
+          onRequestClose={() => this.setComponentState('errorSnackbar', false)}
+        />
+      </div>
     )
   }
 }

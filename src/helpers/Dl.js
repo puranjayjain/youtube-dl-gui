@@ -114,12 +114,9 @@ export default class Dl {
       // update the stored data
       settingsHandle.setStored('dldata', updateData)
       // update the ui state
-      // TODO remove the downlaod process
       mrEmitter.emit('onUpdateData', updateData)
-    })
-
-    _video.on('close', () => {
-      console.info('close: ')
+      // remove the download process
+      mrEmitter.emit('onRemoveDownloadProcess', this._args.uuid)
     })
 
     // download has been completed
@@ -137,6 +134,8 @@ export default class Dl {
       settingsHandle.setStored('dldata', updateData)
       // update the ui state
       mrEmitter.emit('onUpdateData', updateData)
+      // remove the download process
+      mrEmitter.emit('onRemoveDownloadProcess', this._args.uuid)
     })
 
     // start the download here
