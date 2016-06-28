@@ -32,4 +32,4 @@ const InfoData = {
   updateDownloaded: 'Youtubedl update scheduled for next run'
 }
 
-export default {ErrorData, SuccessData, InfoData}
+export {ErrorData, SuccessData, InfoData}

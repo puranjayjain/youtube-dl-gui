@@ -352,10 +352,10 @@ export default class Addurl extends Component {
       // async get the information of the requested file
       youtubedl.getInfo(url, (error, info) => {
         if (error) {
-          console.error(error)
+          throw error
           // handle errors as toasts here
           this.openSnackBar(ErrorData.errorFormat)
-          return
+          // TODO handle a reload button here
         }
         // if the format is not available
         if (info.hasOwnProperty('formats')) {
