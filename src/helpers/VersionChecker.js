@@ -48,30 +48,34 @@ class InternalVersionChecker {
 
   // replace file if toUpdate flag was set
   replaceFile = () => {
-    // delete the exe file
-    fs.unlink(path.join(stored.youtubedl.data.path, 'youtube-dl.exe'), (err) => {
-      if (err) {
-        throw err
-        // show the error in toast
-        mrEmitter.emit('onShowError', ErrorData.couldntDeleteYtdl)
-        return
-      }
-      // then remove .temp extension
-      fs.rename(path.join(stored.youtubedl.data.path, 'youtube-dl.exe.temp'), path.join(stored.youtubedl.data.path, 'youtube-dl.exe'), (err) => {
+    // REVIEW wait for all modules to load and then try to update
+    // a better solution can be there I am just not there ... yet
+    setTimeout(() => {
+      // delete the exe file
+      fs.unlink(path.join(stored.youtubedl.data.path, 'youtube-dl.exe'), (err) => {
         if (err) {
           throw err
           // show the error in toast
-          mrEmitter.emit('onShowError', ErrorData.couldntRenameYtdl)
+          mrEmitter.emit('onShowError', ErrorData.couldntDeleteYtdl)
           return
         }
-        // if successful, do the necessary changes
-        settingsHandle.updateStores('youtubedl', {
-          toUpdate: false
+        // then remove .temp extension
+        fs.rename(path.join(stored.youtubedl.data.path, 'youtube-dl.exe.temp'), path.join(stored.youtubedl.data.path, 'youtube-dl.exe'), (err) => {
+          if (err) {
+            throw err
+            // show the error in toast
+            mrEmitter.emit('onShowError', ErrorData.couldntRenameYtdl)
+            return
+          }
+          // if successful, do the necessary changes
+          settingsHandle.updateStores('youtubedl', {
+            toUpdate: false
+          })
+          // show successfully updated toast
+          mrEmitter.emit('onShowError', SuccessData.updateYtdl)
         })
-        // show successfully updated toast
-        mrEmitter.emit('onShowError', SuccessData.updateYtdl)
       })
-    })
+    }, 2000)
   }
 }
 

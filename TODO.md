@@ -8,10 +8,13 @@
 - [x] implement download notifications using http://electron.atom.io/docs/all/#icon-overlays-in-taskbar-windows
 - [ ] implement resizable tables http://jsfiddle.net/thrilleratplay/epcybL4v/
 - [ ] use https://github.com/fent/node-streamspeed to determine speed
+- [ ] use https://github.com/tjgq/node-stream-throttle for rate limits
 - [x] use the github requests api to check for a new version of youtube-dl.exe
 - [x] download when available and replace the old one with it
 - [ ] ability to stop downloads and remove the underlying downloadProcess
-- [ ] confirm before closing if downloads are remaining or if the option is set
+- [ ] confirm before closing if downloads are remaining or if the option is set or if an update is going on
+- [ ] disable auto update in data saver mode and not check for newer versions automatically etc.
 - [x] reset Starting and past states, do clean up to necessary states like canceled or error etc.
 - [ ] dynamically calculate the right side toolbar position
 - [ ] A quick download feature where you just put the download link and it begins with the default options
+- [ ] persistent or native notifications for operations like update done or updating or restart to complete update

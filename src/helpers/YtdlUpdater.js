@@ -14,17 +14,18 @@ export default class YtdlUpdater {
     this.startUpdateExe(published_at, url)
   }
 
-  startUpdateExe = (published_at, url) => {
-    which('youtube-dl', (err, resolvedPath) => {
-      // err is returned if no 'exe' is found on the PATH
-      // if it is found, then the absolute path to the exec is returned
-      if (err) {
-        throw err
-        return
+  // HACK determine youtube-dl exe's location
+  getExeLocation = (callback) => {
+    youtubedl.exec('', [], {}, (error) => {
+      if (error) {
+        (() => callback(path.dirname(error.toString().replace('Error: Command failed: ', ''))))()
       }
+    })
+  }
 
-      let pathToExe = path.dirname(resolvedPath),
-      filePath = path.join(pathToExe, 'youtube-dl.exe.temp')
+  startUpdateExe = (published_at, url) => {
+    this.getExeLocation((pathToExe) => {
+      let filePath = path.join(pathToExe, 'youtube-dl.exe.temp')
 
       // start download of youtube-dl
       wget({
