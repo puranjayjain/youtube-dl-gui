@@ -27,27 +27,22 @@ If you think a feature is missing or needs improvement please file a new issue o
 
 ### Download Options:
 - [ ] rate-limit
-- [x] retries
-- [ ] fragment-retries
-- [x] buffer-size
+- [ ] retries
 
 ### Filesystem Options:
-- [x] id
-- [x] output
-- [x] restrict-filenames
-- [ ] no-part
+- [x] default download directory
 
 ### Authentication Options:
 - [x] username
 - [x] password
 
 ### Workarounds:
-- [ ] encoding
-- [ ] no-check-certificate
-- [ ] prefer-insecure
-- [ ] user-agent
-- [ ] referer
-- [ ] add-header
+- [x] encoding
+- [x] no-check-certificate
+- [x] prefer-insecure
+- [x] user-agent
+- [x] referer
+- [x] add-header
 
 ### Our options (these are found in our app exclusively)
 - [x] Dark theme support

@@ -12,7 +12,7 @@ import bytes from 'bytes'
 import Edit from 'material-ui/svg-icons/image/edit'
 import Info from 'material-ui/svg-icons/action/info'
 
-import {ErrorData} from '../Data/Messagedata'
+import {Errordata} from '../Data/Messagedata'
 import SettingsHandler from '../helpers/SettingsHandler'
 import mrEmitter from '../helpers/mrEmitter'
 
@@ -41,7 +41,7 @@ export default class CommonDialog extends Component {
     actions: <div></div>,
     data: '',
     edit: '',
-    hashid: '',
+    uuid: '',
     url: '',
     path: '',
     openPopOver: false,
@@ -63,29 +63,29 @@ export default class CommonDialog extends Component {
   setText = (event) => this.setState({textPopOver: event.target.value})
 
   /**
-   * [on any input's keypress]
-   * @method
-   * @param  {Event}   event     [Event for the text input]
-   */
+  * [on any input's keypress]
+  * @method
+  * @param  {Event}   event     [Event for the text input]
+  */
   onTextKeyPress = (event) => {
     // enter key
     if (event.keyCode === 13) {
       // check the download process for that
       for (let cProcess of this.context.downloadProcesses) {
-        if (cProcess.hashid === hashid) {
+        if (cProcess.uuid === uuid) {
           // display can't move file or change it's url while downloading
-          mrEmitter.emit('onShowError', ErrorData.videoDownloading)
+          mrEmitter.emit('onShowError', Errordata.videoDownloading)
           return
         }
       }
       // do stuff according to the mode
       if (this.state.edit === 'url') {
-        settingsHandle.updateDlDataItem(this.state.hashid, 'url', this.state.url)
+        settingsHandle.updateDlDataItem(this.state.url, 'url', this.state.url)
       }
-      else {
-        // if not downloading then move it and if file exists then move it
-        // else show error of file not found and remove it from list
-      }
+      // if not downloading then move it and if file exists then move it
+
+      // else show error of file not found and remove it from list
+
       // close the popover
       this.onCloseEdit()
     }
@@ -115,11 +115,11 @@ export default class CommonDialog extends Component {
     // delete files from the list and the disk
     const listData = tableData.filter(this.filterSelected)
     let updateData = stored.dldata.data
-    // go through the whole data to match the ones with the selected one's hashid and add them to the updateData array
+    // go through the whole data to match the ones with the selected one's uuid and add them to the updateData array
     for (var i = 0; i < updateData.length; i++) {
       let cData = updateData[i]
       for (let lData of listData) {
-        if (lData.hashid === cData.hashid) {
+        if (lData.uuid === cData.uuid) {
           // delete from the list
           updateData.splice(i, 1)
           // delete from the disk
@@ -145,116 +145,117 @@ export default class CommonDialog extends Component {
   componentDidMount() {
     // add emitter event listener
     // events for single file request info or multiple files request info
-    Subscriptions.push(mrEmitter.addListener('onRequestSingleFileInfo', (sendData) => {
-      let data =
-      <List style={style.list}>
-        <ListItem
-          innerDivStyle={style.listItem}
-          primaryText="Download url"
-          secondaryText={sendData.url}
-          rightIconButton={
-            <Edit
-              onTouchTap={(event) => this.onTriggerEdit(event, 'url')}
-              tooltip="Change download url"
-            />
-          }
-        />
-        <ListItem
-          innerDivStyle={style.listItem}
-          primaryText="File Path"
-          secondaryText={sendData.fileName}
-          rightIconButton={
-            <Edit
-              onTouchTap={(event) => this.onTriggerEdit(event, 'path')}
-              tooltip="Change file path or move it"
-            />
-          }
-        />
-        <ListItem
-          innerDivStyle={style.listItem}
-          primaryText="File size"
-          secondaryText={bytes(sendData.size)}
-        />
-        <ListItem
-          innerDivStyle={style.listItem}
-          primaryText="File size on Disk"
-          secondaryText={bytes(sendData.downloaded)}
-        />
-        <ListItem
-          innerDivStyle={style.listItem}
-          primaryText="Last try"
-          secondaryText={moment(sendData.lastTry).fromNow()}
-        />
-      </List>
-      this.setState({
-        data: data,
-        url: sendData.url,
-        path: sendData.fileName,
-        open: true,
-        heading: 'Detailed Information',
-        actions:
-        <FlatButton
-          label="Close"
-          primary={true}
-          onTouchTap={this.handleClose}
-        />
-      })
-    }))
-
-    Subscriptions.push(mrEmitter.addListener('onRequestFileInfo', (sendData) => {
-      let data =
-      <List style={style.list}>
-        <ListItem
-          innerDivStyle={style.listItem}
-          primaryText="Number of Files"
-          secondaryText={sendData.files}
-        />
-        <ListItem
-          innerDivStyle={style.listItem}
-          primaryText="File size"
-          secondaryText={bytes(sendData.size)}
-        />
-        <ListItem
-          innerDivStyle={style.listItem}
-          primaryText="File size on Disk"
-          secondaryText={bytes(sendData.downloaded)}
-        />
-      </List>
-      this.setState({
-        open: true,
-        data: data,
-        heading: 'Detailed Information',
-        actions:
-        <FlatButton
-          label="Close"
-          primary={true}
-          onTouchTap={this.handleClose}
-        />
-      })
-    }))
-
-    Subscriptions.push(mrEmitter.addListener('onDeleteFromDisk', (tableData) => {
-      let data =
-      <div>
-        Are you sure you want to delete the file(s)?
-      </div>
-      this.setState({
-        open: true,
-        data: data,
-        heading: 'Confirm deletion',
-        actions:
-        [<FlatButton
-          label="Cancel"
-          primary={true}
-          onTouchTap={this.handleClose}
-         />,
-        <FlatButton
-          label="Ok"
-          primary={true}
-          onTouchTap={this.onConfirmOkdelete.bind(this, tableData)}
-        />]
-      })
-    }))
+    Subscriptions.push(
+      mrEmitter.addListener('onRequestSingleFileInfo', (sendData) => {
+        let data =
+        <List style={style.list}>
+          <ListItem
+            innerDivStyle={style.listItem}
+            primaryText="Download url"
+            secondaryText={sendData.url}
+            rightIconButton={
+              <Edit
+                onTouchTap={(event) => this.onTriggerEdit(event, 'url')}
+                tooltip="Change download url"
+              />
+            }
+          />
+          <ListItem
+            innerDivStyle={style.listItem}
+            primaryText="File Path"
+            secondaryText={sendData.fileName}
+            rightIconButton={
+              <Edit
+                onTouchTap={(event) => this.onTriggerEdit(event, 'path')}
+                tooltip="Change file path or move it"
+              />
+            }
+          />
+          <ListItem
+            innerDivStyle={style.listItem}
+            primaryText="File size"
+            secondaryText={bytes(sendData.size)}
+          />
+          <ListItem
+            innerDivStyle={style.listItem}
+            primaryText="File size on Disk"
+            secondaryText={bytes(sendData.downloaded)}
+          />
+          <ListItem
+            innerDivStyle={style.listItem}
+            primaryText="Last try"
+            secondaryText={moment(sendData.lastTry).fromNow()}
+          />
+        </List>
+        this.setState({
+          data: data,
+          url: sendData.url,
+          path: sendData.fileName,
+          open: true,
+          heading: 'Detailed Information',
+          actions:
+          <FlatButton
+            label="Close"
+            primary={true}
+            onTouchTap={this.handleClose}
+          />
+        })
+      }),
+      mrEmitter.addListener('onRequestFileInfo', (sendData) => {
+        let data =
+        <List style={style.list}>
+          <ListItem
+            innerDivStyle={style.listItem}
+            primaryText="Number of Files"
+            secondaryText={sendData.files}
+          />
+          <ListItem
+            innerDivStyle={style.listItem}
+            primaryText="File size"
+            secondaryText={bytes(sendData.size)}
+          />
+          <ListItem
+            innerDivStyle={style.listItem}
+            primaryText="File size on Disk"
+            secondaryText={bytes(sendData.downloaded)}
+          />
+        </List>
+        this.setState({
+          open: true,
+          data: data,
+          heading: 'Detailed Information',
+          actions:
+          <FlatButton
+            label="Close"
+            primary={true}
+            onTouchTap={this.handleClose}
+          />
+        })
+      }),
+      mrEmitter.addListener('onDeleteFromDisk', (tableData) => {
+        let data =
+        <div>
+          Are you sure you want to delete the file(s)?
+        </div>
+        this.setState({
+          open: true,
+          data: data,
+          heading: 'Confirm deletion',
+          actions: [
+            <FlatButton
+              label="Cancel"
+              primary={true}
+              onTouchTap={this.handleClose}
+            />,
+            <FlatButton
+              label="Ok"
+              primary={true}
+              onTouchTap={this.onConfirmOkdelete.bind(this, tableData)}
+            />]
+          })
+        }
+      )
+    )
   }
 
   componentWillUnmount() {

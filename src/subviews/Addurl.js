@@ -427,52 +427,54 @@ export default class Addurl extends Component {
     // reset progressBar on load
     ipcRenderer.send('progressBar', -1)
     // on update of getting a new download byte
-    Subscriptions.push(mrEmitter.addListener('onUpdateData', (updateData) => {
-      // do this only if the requirement is
-      if (stored.desktop.status.data) {
-        tableData = stored.dldata.data.filter(this.filterDownloader)
-        // for each through them and get the download bytes ratio of total
-        let downloadedBytes = 0,
-        totalBytes = 0
-        for (let cData of tableData) {
-          downloadedBytes += cData.downloaded
-          totalBytes += cData.size
+    Subscriptions.push(
+      mrEmitter.addListener('onUpdateData', (updateData) => {
+        // do this only if the requirement is
+        if (stored.desktop.status.data) {
+          tableData = stored.dldata.data.filter(this.filterDownloader)
+          // for each through them and get the download bytes ratio of total
+          let downloadedBytes = 0,
+          totalBytes = 0
+          for (let cData of tableData) {
+            downloadedBytes += cData.downloaded
+            totalBytes += cData.size
+          }
+          // set them to the main process
+          // from https://stackoverflow.com/questions/11832914/round-to-at-most-2-decimal-places-in-javascript/12830454#12830454
+          ipcRenderer.send('progressBar', +(downloadedBytes/totalBytes).toFixed(1))
         }
-        // set them to the main process
-        // from https://stackoverflow.com/questions/11832914/round-to-at-most-2-decimal-places-in-javascript/12830454#12830454
-        ipcRenderer.send('progressBar', +(downloadedBytes/totalBytes).toFixed(1))
-      }
-    }))
-    // on each event triggeronStartDownload
-    Subscriptions.push(mrEmitter.addListener('onRouteChange', (newLocation) => this.isActive(newLocation)))
-    // show error text
-    Subscriptions.push(mrEmitter.addListener('onShowError', (error) => this.openSnackBar(error)))
-    // Toolbar action of restart, for update complete
-    Subscriptions.push(mrEmitter.addListener('onYoutubeDlUpdate', (message) => this.openActionSnackBar(message, 'restart', () => location.reload())))
-    // Toolbar action of removing items from list => display snackbar
-    Subscriptions.push(mrEmitter.addListener('onClearList', (count, originalTableData) => {
-      this.openActionSnackBar(`${count} removed from List`, 'undo',
-      (originalTableData) => this.setDataChange(originalTableData))
-    }))
-    // add to downloadProcesses
-    Subscriptions.push(mrEmitter.addListener('onStartDownload', (newDownload) => this.context.downloadProcesses.unshift(newDownload)))
-    // remove the download process
-    Subscriptions.push(mrEmitter.addListener('onRemoveDownloadProcess', (hashid) => {
-      for (let i in this.context.downloadProcesses) {
-        if (this.context.downloadProcesses[i].hashid === hashid) {
-          this.context.downloadProcesses = this.context.downloadProcesses.splice(i, 1)
+      }),
+      // on each event triggeronStartDownload
+      mrEmitter.addListener('onRouteChange', (newLocation) => this.isActive(newLocation)),
+      // show error text
+      mrEmitter.addListener('onShowError', (error) => this.openSnackBar(error)),
+      // Toolbar action of restart, for update complete
+      mrEmitter.addListener('onYoutubeDlUpdate', (message) => this.openActionSnackBar(message, 'restart', () => location.reload())),
+      // Toolbar action of removing items from list => display snackbar
+      mrEmitter.addListener('onClearList', (count, originalTableData) => {
+        this.openActionSnackBar(`${count} removed from List`, 'undo',
+        (originalTableData) => this.setDataChange(originalTableData))
+      }),
+      // add to downloadProcesses
+      mrEmitter.addListener('onStartDownload', (newDownload) => this.context.downloadProcesses.unshift(newDownload)),
+      // remove the download process
+      mrEmitter.addListener('onRemoveDownloadProcess', (hashid) => {
+        for (let i in this.context.downloadProcesses) {
+          if (this.context.downloadProcesses[i].hashid === hashid) {
+            this.context.downloadProcesses = this.context.downloadProcesses.splice(i, 1)
+          }
         }
-      }
-    }))
-    // to redownload a file event
-    Subscriptions.push(mrEmitter.addListener('onRedownloadFile', (fileData) => {
-      if (urlPattern.test(fileData.url)) {
-        // copy text to the url input of the dialog
-        this.setState({url: fileData.url})
-        // open the dialog
-        this.openDownloadDialog(event, true)
-      }
-    }))
+      }),
+      // to redownload a file event
+      mrEmitter.addListener('onRedownloadFile', (fileData) => {
+        if (urlPattern.test(fileData.url)) {
+          // copy text to the url input of the dialog
+          this.setState({url: fileData.url})
+          // open the dialog
+          this.openDownloadDialog(event, true)
+        }
+      })
+    )
     // add event listeners to trigger file download if necessary
     window.ondragover = window.ondragleave = window.ondragend = () => false
     window.ondrop = (event) => {

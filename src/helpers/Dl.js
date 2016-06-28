@@ -35,15 +35,30 @@ export default class Dl {
     // calculate it by default and leave it if no format is chosen (node youtubedl handles for best on it's own)
     // check and push format
     if (this._args.format) {
-      args.push('-f')
-      args.push(this._args.format)
+      args.push('-f', this._args.format)
     }
     // authentication
     if (this._args.username && this._args.password) {
-      args.push('--u')
-      args.push(this._args.username)
-      args.push('--p')
-      args.push(this._args.password)
+      args.push('--u', this._args.username, '--p', this._args.password)
+    }
+    // workarounds
+    if (stored.workarounds.encoding.data) {
+      args.push('--encoding', stored.workarounds.encoding.data)
+    }
+    if (stored.workarounds.no_check_certificate.data) {
+      args.push('--no-check-certificate', stored.workarounds.no_check_certificate.data)
+    }
+    if (stored.workarounds.prefer_insecure.data) {
+      args.push('--prefer-insecure', stored.workarounds.prefer_insecure.data)
+    }
+    if (stored.workarounds.user_agent.data) {
+      args.push('--user-agent', stored.workarounds.user_agent.data)
+    }
+    if (stored.workarounds.add_header.data) {
+      let headers = stored.workarounds.add_header.data.split(',')
+      for (let header of headers) {
+        args.push('--add-header', header)
+      }
     }
     return args
   }

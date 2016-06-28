@@ -28,6 +28,6 @@ export default class ListCheckbox extends Component {
   }
 }
 
-Listcheckbox.contextTypes = {
+ListCheckbox.contextTypes = {
   muiTheme: PropTypes.object
 }

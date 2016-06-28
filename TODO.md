@@ -14,3 +14,4 @@
 - [ ] confirm before closing if downloads are remaining or if the option is set
 - [x] reset Starting and past states, do clean up to necessary states like canceled or error etc.
 - [ ] dynamically calculate the right side toolbar position
+- [ ] A quick download feature where you just put the download link and it begins with the default options

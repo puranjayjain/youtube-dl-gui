@@ -198,19 +198,21 @@ export default class Downloaded extends Component {
     this.onShowPlaceholder()
     // add emitter event listener
     // filter and keep only the ones that are 'downloaded'
-    Subscriptions.push(mrEmitter.addListener('onUpdateData', (updateData) => {
-      // adding selected property to tableData
-      let tempData = updateData.filter(this.filterDownloader)
-      for (let cData of tempData) {
-        cData.selected = false
-      }
-      this.setState({tableData: tempData})
-      setTimeout(() => {
-        this.onShowPlaceholder()
-      }, 300)
-    }))
-    // close the toolbar
-    Subscriptions.push(mrEmitter.addListener('onCloseToolbar', () => this.onAllChecked('', false)))
+    Subscriptions.push(
+      mrEmitter.addListener('onUpdateData', (updateData) => {
+        // adding selected property to tableData
+        let tempData = updateData.filter(this.filterDownloader)
+        for (let cData of tempData) {
+          cData.selected = false
+        }
+        this.setState({tableData: tempData})
+        setTimeout(() => {
+          this.onShowPlaceholder()
+        }, 300)
+      }),
+      // close the toolbar
+      mrEmitter.addListener('onCloseToolbar', () => this.onAllChecked('', false))
+    )
   }
 
   componentWillUnmount() {
@@ -361,14 +363,12 @@ export default class Downloaded extends Component {
               // set the var to note the checkboxes value
               checkboxes = this.state.tableData.length
             }
-            }
           </TableBody>
-          >
         </Table>
         <DownloadedPlaceHolder ref="downloadedPlaceHolder" />
       </div>
-  )
-}
+    )
+  }
 }
 
 Downloaded.contextTypes = {

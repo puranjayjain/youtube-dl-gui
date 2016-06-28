@@ -25,11 +25,9 @@ export default class SettingsHandler {
     stored.theme.darkTheme = new Storage('darkTheme', true)
     // Download Options
     stored.download.retries = new Storage('retries', 10)
-    stored.download.bufferSize = new Storage('bufferSize', 1024)
+    stored.download.rate_limit = new Storage('rate-limit', '')
     // File Options
-    stored.filesystem.id = new Storage('id', false)
-    stored.filesystem.output = new Storage('output', 'default')
-    stored.filesystem.restrict = new Storage('restrict', false)
+    stored.filesystem.destination = new Storage('destination', '')
     // Workarounds
     stored.workarounds.encoding = new Storage('encoding', '')
     stored.workarounds.no_check_certificate = new Storage('no-check-certificate', false)

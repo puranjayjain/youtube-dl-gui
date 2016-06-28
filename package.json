@@ -58,6 +58,7 @@
     "react-dom": "^15.1.0",
     "react-router": "^2.5.1",
     "react-tap-event-plugin": "^1.0.0",
+    "stream-throttle": "^0.1.3",
     "which": "^1.2.10",
     "youtube-dl": "^1.11.1"
   },

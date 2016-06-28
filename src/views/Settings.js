@@ -96,7 +96,7 @@ export default class Settings extends Component {
                   switch (index) {
                     case 1:
                     return (
-                      <div >
+                      <div>
                         <TextField
                           style={style.innerText}
                           hintText="(default is 10),supports integer or infinite"
@@ -105,30 +105,20 @@ export default class Settings extends Component {
                         />
                         <TextField
                           style={style.innerText}
-                          hintText="(default is 1024),supports integers"
-                          floatingLabelText="Size of download buffer"
-                          value={stored.download.bufferSize.data}
+                          hintText="(default is Infinity), imposes download speed Limit"
+                          floatingLabelText="Rate Limit"
+                          value={stored.download.rate_limit.data}
                         />
                       </div>
                     )
                     case 2:
                     return (
-                    <div>
-                      <ListCheckbox
-                        text="Use only video ID in file name"
-                        check={stored.filesystem.id}
-                      />
-                      <TextField
-                        style={style.innerText}
-                        hintText="Use without destination folder"
-                        floatingLabelText="Output filename template "
-                        value={stored.filesystem.output.data}
-                      />
-                      <ListCheckbox
-                        text="Restrict filenames to only ASCII characters"
-                        check={stored.filesystem.restrict}
-                      />
-                    </div>
+                    <TextField
+                      style={style.innerText}
+                      hintText="e.g C:\Users\Foo\Downloads"
+                      floatingLabelText="Default folder for downloads"
+                      value={stored.filesystem.destination.data}
+                    />
                     )
                     case 3:
                     return (
@@ -140,6 +130,12 @@ export default class Settings extends Component {
                     case 4:
                     return (
                     <div>
+                      <TextField
+                        style={style.innerText}
+                        hintText="Force the specified encoding (experimental)"
+                        floatingLabelText="Encoding"
+                        value={stored.workarounds.encoding.data}
+                      />
                       <ListCheckbox
                         text="Suppress HTTPS certificate validation"
                         check={stored.workarounds.no_check_certificate}
@@ -150,9 +146,21 @@ export default class Settings extends Component {
                       />
                       <TextField
                         style={style.innerText}
-                        hintText="Use without destination folder"
-                        floatingLabelText="Output filename template "
-                        value={stored.filesystem.output.data}
+                        hintText="Specify a custom user agent"
+                        floatingLabelText="User Agent"
+                        value={stored.workarounds.user_agent.data}
+                      />
+                      <TextField
+                        style={style.innerText}
+                        hintText="Specify a custom referer, use if the video access is restricted to one domain"
+                        floatingLabelText="Referer Url"
+                        value={stored.workarounds.referer.data}
+                      />
+                      <TextField
+                        style={style.innerText}
+                        hintText="e.g HTTP_header:value (also with multiple headers seperated by ,)"
+                        floatingLabelText="Add HTTP Headers"
+                        value={stored.workarounds.add_header.data}
                       />
                     </div>
                     )

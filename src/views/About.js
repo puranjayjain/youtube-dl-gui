@@ -64,7 +64,7 @@ export default class About extends Component {
         <Card style={style.card}>
           <CardHeader
             title="Youtube Dl GUI"
-            subtitle="v0.0.1"
+            subtitle="v0.0.2"
             avatar={<div style={style.avatar}></div>}
           />
           <CardText>
