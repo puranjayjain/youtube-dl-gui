@@ -6,9 +6,10 @@ import {List, ListItem} from 'material-ui/List'
 import Menu from 'material-ui/Menu'
 import Subheader from 'material-ui/Subheader'
 import TextField from 'material-ui/TextField'
-import Checkbox from 'material-ui/Checkbox'
 import Divider from 'material-ui/Divider'
 import Toggle from 'material-ui/Toggle'
+
+import ListCheckbox from '../subviews/ListCheckbox'
 
 // the settings loader helper
 import SettingsHandler from '../helpers/SettingsHandler'
@@ -19,7 +20,8 @@ links = [
   'Theme',
   'Download Options',
   'Filesystem Options',
-  'Desktop'
+  'Desktop',
+  'Workarounds'
 ]
 
 export default class Settings extends Component {
@@ -33,15 +35,6 @@ export default class Settings extends Component {
 
   // on touch tap go to link
   onTouchLink = (index) => findDOMNode(this.refs[`card${index}`]).scrollIntoView()
-
-  // update the id setting
-  onIdToggle = () => stored.filesystem.id.toggleData()
-
-  //  Restrict filenames to only ASCII characters, and avoid "&" and spaces in filenames
-  onRestrictToggle = () => stored.filesystem.restrict.toggleData()
-
-  // on toggle the desktop taskbar controller
-  onDesktopStatusToggle = () => stored.desktop.status.toggleData()
 
   componentWillMount() {
     // load all the settings
@@ -62,7 +55,7 @@ export default class Settings extends Component {
       },
       toc: {
         paddingRight: '0.5em',
-        flex: 3
+        flex: '3 0 auto'
       },
       main: {
         display: 'flex',
@@ -121,14 +114,9 @@ export default class Settings extends Component {
                     case 2:
                     return (
                     <div>
-                      <ListItem
-                        primaryText="Use only video ID in file name"
-                        leftCheckbox= {
-                          <Checkbox
-                            defaultChecked = {stored.filesystem.id.data}
-                            onCheck = {this.onIdToggle}
-                          />
-                        }
+                      <ListCheckbox
+                        text="Use only video ID in file name"
+                        check={stored.filesystem.id}
                       />
                       <TextField
                         style={style.innerText}
@@ -136,28 +124,37 @@ export default class Settings extends Component {
                         floatingLabelText="Output filename template "
                         value={stored.filesystem.output.data}
                       />
-                      <ListItem
-                        primaryText="Restrict filenames to only ASCII characters"
-                        leftCheckbox = {
-                          <Checkbox
-                            defaultChecked = {stored.filesystem.restrict.data}
-                            onCheck = {this.onIdToggle}
-                          />
-                        }
+                      <ListCheckbox
+                        text="Restrict filenames to only ASCII characters"
+                        check={stored.filesystem.restrict}
                       />
                     </div>
                     )
                     case 3:
                     return (
-                    <ListItem
-                      primaryText="Show download status in taskbar"
-                      leftCheckbox= {
-                        <Checkbox
-                          defaultChecked = {stored.desktop.status.data}
-                          onCheck = {this.onDesktopStatusToggle}
-                        />
-                      }
+                    <ListCheckbox
+                      text="Show download status in taskbar"
+                      check={stored.desktop.status}
                     />
+                    )
+                    case 4:
+                    return (
+                    <div>
+                      <ListCheckbox
+                        text="Suppress HTTPS certificate validation"
+                        check={stored.workarounds.no_check_certificate}
+                      />
+                      <ListCheckbox
+                        text="Use an unencrypted connection to retrieve information about the video. (Currently supported only for YouTube)"
+                        check={stored.workarounds.prefer_insecure}
+                      />
+                      <TextField
+                        style={style.innerText}
+                        hintText="Use without destination folder"
+                        floatingLabelText="Output filename template "
+                        value={stored.filesystem.output.data}
+                      />
+                    </div>
                     )
                     // case 0 is at the last
                     default:
@@ -178,10 +175,10 @@ export default class Settings extends Component {
           ))}
         </div>
       </div>
-    )
+      )
+    }
   }
-}
 
-Settings.contextTypes = {
-  muiTheme: PropTypes.object
-}
+  Settings.contextTypes = {
+    muiTheme: PropTypes.object
+  }

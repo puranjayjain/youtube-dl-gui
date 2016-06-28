@@ -35,3 +35,4 @@ jspm_packages
 
 # project specific
 build
+platform_build

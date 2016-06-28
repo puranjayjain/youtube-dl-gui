@@ -9,6 +9,7 @@ let stored = {
   theme: {},
   download: {},
   filesystem: {},
+  workarounds: {},
   desktop: {},
   youtubedl: {},
   hashidcount: 0
@@ -29,6 +30,13 @@ export default class SettingsHandler {
     stored.filesystem.id = new Storage('id', false)
     stored.filesystem.output = new Storage('output', 'default')
     stored.filesystem.restrict = new Storage('restrict', false)
+    // Workarounds
+    stored.workarounds.encoding = new Storage('encoding', '')
+    stored.workarounds.no_check_certificate = new Storage('no-check-certificate', false)
+    stored.workarounds.prefer_insecure = new Storage('prefer-insecure', false)
+    stored.workarounds.user_agent = new Storage('user-agent', '')
+    stored.workarounds.referer = new Storage('referer', '')
+    stored.workarounds.add_header = new Storage('add-header', '')
     // desktop options
     stored.desktop.status = new Storage('status', true)
     // also initiate the settings that are not being displayed

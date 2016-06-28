@@ -2,7 +2,7 @@
 
 [![Join the chat at https://gitter.im/puranjayjain/Youtube-dl-gui](https://badges.gitter.im/puranjayjain/Youtube-dl-gui.svg)](https://gitter.im/puranjayjain/Youtube-dl-gui?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-A Cross Platform GUI Client for youtube-dl written in react, electron and material ui.
+A Cross Platform GUI Client for [youtube-dl](http://rg3.github.io/youtube-dl/) written in react, electron and material ui.
 
 #Requirements
 Currently supports Windows only. Need collaborators for other platforms (Building and Testing).
@@ -18,6 +18,7 @@ Released Developer build please test it.
 
 # Features
  - [x] Drop links to start downloading
+ - [x] Supports all sites that youtube-dl does [see](https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md)
 
 ## Configurable
 Most of these features match the ones found [here](https://github.com/rg3/youtube-dl/blob/master/README.md#options)
@@ -39,6 +40,14 @@ If you think a feature is missing or needs improvement please file a new issue o
 ### Authentication Options:
 - [x] username
 - [x] password
+
+### Workarounds:
+- [ ] encoding
+- [ ] no-check-certificate
+- [ ] prefer-insecure
+- [ ] user-agent
+- [ ] referer
+- [ ] add-header
 
 ### Our options (these are found in our app exclusively)
 - [x] Dark theme support
