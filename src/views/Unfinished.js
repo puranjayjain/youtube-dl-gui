@@ -238,8 +238,8 @@ export default class Unfinished extends Component {
         width: '100%',
         top: 0,
         left: 0,
-        paddingLeft: '32px',
-        height: '64px',
+        paddingLeft: 32,
+        height: 64,
         alignItems: 'center',
         visibility: this.state.toolbar ? 'visible' : 'hidden',
         zIndex: 2
@@ -264,8 +264,8 @@ export default class Unfinished extends Component {
         borderRadius: '50%'
       },
       tableColumn: {
-        width: '24px',
-        paddingLeft: '20px'
+        width: 24,
+        paddingLeft: 20
       },
       table: {
         display: this.state.table ? 'table' : 'none'

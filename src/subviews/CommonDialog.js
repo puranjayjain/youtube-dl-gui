@@ -23,11 +23,11 @@ style = {
     padding: 0
   },
   listItem: {
-    paddingTop: '12px',
-    paddingBottom: '12px'
+    paddingTop: 12,
+    paddingBottom: 12
   },
   textPopOver: {
-    width: '600px'
+    width: 600
   }
 },
 settingsHandle = new SettingsHandler(),

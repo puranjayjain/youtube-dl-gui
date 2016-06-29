@@ -25,8 +25,8 @@ export default class DownloadedPlaceHolder extends React.Component {
         justifyContent: 'center',
         flexDirection: 'column',
         display: 'flex',
-        minWidth: '325px',
-        minHeight: '325px',
+        minWidth: 325,
+        minHeight: 325,
         visibility: this.state.visible ? 'visible' : 'collapse'
       },
       icon: {

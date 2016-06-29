@@ -6,8 +6,12 @@ import Checkbox from 'material-ui/Checkbox'
 
 export default class ListCheckbox extends Component {
   static propTypes = {
-    text: React.PropTypes.string,
-    check: React.PropTypes.object
+    text: PropTypes.string,
+    check: PropTypes.object
+  }
+
+  static contextTypes = {
+    muiTheme: PropTypes.object.isRequired
   }
 
   // on toggle a property
@@ -26,8 +30,4 @@ export default class ListCheckbox extends Component {
       />
     )
   }
-}
-
-ListCheckbox.contextTypes = {
-  muiTheme: PropTypes.object
 }

@@ -506,15 +506,15 @@ export default class Addurl extends Component {
     const style = {
       fab: {
         position: 'fixed',
-        bottom: '25px',
-        right: '20px',
+        bottom: 25,
+        right: 20,
         visibility: this.state.fab ? 'visible' : 'collapse',
         zIndex: 2
       },
       tooltip: {
         position: 'fixed',
         top: 'calc(100% - 100px)',
-        right: '15px'
+        right: 15
       },
       dialogTitle: {
         display: 'flex',
@@ -543,12 +543,12 @@ export default class Addurl extends Component {
         flex: 1
       },
       fileButton: {
-        marginLeft: '8px',
-        marginBottom: '8px'
+        marginLeft: 8
+        marginBottom: 8
       },
       format: {
-        marginLeft: '-24px',
-        width: '550px',
+        marginLeft: -24,
+        width: 550,
         overflow: 'hidden'
       },
       initLoader: {
