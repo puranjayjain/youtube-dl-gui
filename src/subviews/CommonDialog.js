@@ -106,10 +106,14 @@ export default class CommonDialog extends Component {
       textPopOver: this.state[edit]
     })
     // focus the textfield inside
-    setTimeout(() => this.refs.editPopover.focus(), 500)
+    this.openPopOverTimeout = setTimeout(() => this.refs.editPopover.focus(), 500)
   }
 
-  onCloseEdit = () => this.setState({openPopOver: false})
+  onCloseEdit = () => {
+    // clear timeouts if any
+    clearTimeout(this.openPopOverTimeout)
+    this.setState({openPopOver: false})
+  }
 
   onConfirmOkdelete = (tableData) => {
     // delete files from the list and the disk

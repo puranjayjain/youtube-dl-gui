@@ -543,7 +543,7 @@ export default class Addurl extends Component {
         flex: 1
       },
       fileButton: {
-        marginLeft: 8
+        marginLeft: 8,
         marginBottom: 8
       },
       format: {

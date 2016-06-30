@@ -108,13 +108,13 @@ export default class All extends Component {
     // if table's length is zero show the EmptyPlaceHolder and hide the table
     if (!this.state.tableData.length) {
       this.setState({table: false})
-      setTimeout(() => {
+      this.allPlaceHolderTimeoutTrue = setTimeout(() => {
         this.refs.allPlaceHolder.setState({visible: true})
       }, 700)
     }
     else {
       this.setState({table: true})
-      setTimeout(() => {
+      this.allPlaceHolderTimeoutFalse = setTimeout(() => {
         this.refs.allPlaceHolder.setState({visible: false})
       }, 700)
     }
@@ -126,13 +126,17 @@ export default class All extends Component {
     // add emitter event listener
     Subscriptions.push(mrEmitter.addListener('onUpdateData', (updateData) => {
       this.setState({tableData: updateData})
-      setTimeout(() => {
+      this.onShowPlaceholderTimeout = setTimeout(() => {
         this.onShowPlaceholder()
       }, 300)
     }))
   }
 
   componentWillUnmount() {
+    // cleanup timeouts
+    clearTimeout(this.onShowPlaceholderTimeout)
+    clearTimeout(this.allPlaceHolderTimeoutTrue)
+    clearTimeout(this.allPlaceHolderTimeoutFalse)
     // remove emitter event listeners
     for (let Subscription of Subscriptions) {
       Subscription.remove()

@@ -49,7 +49,7 @@ export default class Downloading extends Component {
     // if table's length is zero show the EmptyPlaceHolder and hide the table
     if (!this.state.tableData.length) {
       this.setState({table: false})
-      setTimeout(() => {
+      this.allPlaceHolderTimeout = setTimeout(() => {
         this.refs.allPlaceHolder.setState({visible: true})
       }, 700)
     }
@@ -58,6 +58,8 @@ export default class Downloading extends Component {
   }
 
   componentWillUnmount() {
+    // cleanup timeouts
+    clearTimeout(this.allPlaceHolderTimeout)
     // remove emitter event listeners
     for (let Subscription of Subscriptions) {
       Subscription.remove()

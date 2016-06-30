@@ -183,7 +183,7 @@ export default class Downloaded extends Component {
     // if table's length is zero show the EmptyPlaceHolder and hide the table
     if (!this.state.tableData.length) {
       this.setState({table: false})
-      setTimeout(() => {
+      this.downloadedPlaceHolderTimeout = setTimeout(() => {
         this.refs.downloadedPlaceHolder.setState({visible: true})
       }, 700)
     }
@@ -206,7 +206,7 @@ export default class Downloaded extends Component {
           cData.selected = false
         }
         this.setState({tableData: tempData})
-        setTimeout(() => {
+        this.onShowPlaceholderTimeout = setTimeout(() => {
           this.onShowPlaceholder()
         }, 300)
       }),
@@ -216,6 +216,9 @@ export default class Downloaded extends Component {
   }
 
   componentWillUnmount() {
+    // clean up timeouts
+    clearTimeout(this.onShowPlaceholderTimeout)
+    clearTimeout(this.downloadedPlaceHolderTimeout)
     // remove emitter event listeners
     for (let Subscription of Subscriptions) {
       Subscription.remove()

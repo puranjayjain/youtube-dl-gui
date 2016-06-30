@@ -187,13 +187,13 @@ export default class Unfinished extends Component {
     // if table's length is zero show the EmptyPlaceHolder and hide the table
     if (!this.state.tableData.length) {
       this.setState({table: false})
-      setTimeout(() => {
+      this.allPlaceHolderTimeoutTrue = setTimeout(() => {
         this.refs.downloadedPlaceHolder.setState({visible: true})
       }, 700)
     }
     else {
       this.setState({table: true})
-      setTimeout(() => {
+      this.allPlaceHolderTimeoutFalse = setTimeout(() => {
         this.refs.downloadedPlaceHolder.setState({visible: false})
       }, 700)
     }
@@ -212,7 +212,7 @@ export default class Unfinished extends Component {
           cData.selected = false
         }
         this.setState({tableData: tempData})
-        setTimeout(() => {
+        this.onShowPlaceholderTimeout = setTimeout(() => {
           this.onShowPlaceholder()
         }, 300)
       }),
@@ -222,6 +222,10 @@ export default class Unfinished extends Component {
   }
 
   componentWillUnmount() {
+    // cleanup timeouts
+    clearTimeout(this.onShowPlaceholderTimeout)
+    clearTimeout(this.allPlaceHolderTimeoutTrue)
+    clearTimeout(this.allPlaceHolderTimeoutFalse)
     // remove emitter event listeners
     for (let Subscription of Subscriptions) {
       Subscription.remove()
