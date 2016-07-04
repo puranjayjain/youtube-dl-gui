@@ -6,6 +6,7 @@ const {dialog, app, shell, clipboard} = window.require('electron').remote
 
 // import necessary components
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card'
+import ReactMaterialUiNotifications from 'react-materialui-notifications'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 import CircularProgress from 'material-ui/CircularProgress'
 import DropDownMenu from 'material-ui/DropDownMenu'
