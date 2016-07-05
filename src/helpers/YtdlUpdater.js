@@ -26,7 +26,8 @@ export default class YtdlUpdater {
   startUpdateExe = (published_at, url) => {
     this.getExeLocation((pathToExe) => {
       let filePath = path.join(pathToExe, 'youtube-dl.exe.temp')
-
+      // show notification that it is being updated
+      mrEmitter.emit('onShowNotification', 'Updating', 'Don\'t close the application as youtube-dl.exe is updating')
       // start download of youtube-dl
       wget({
         url:  url,

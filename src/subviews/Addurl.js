@@ -99,6 +99,8 @@ export default class Addurl extends Component {
     errorSnackbar: false,
     // snackbar action text
     actionText: '',
+    // each notification is stored here
+    Notifications: [],
     // function to call with the action button on click
     actionFunc: this.noop
   }
@@ -201,6 +203,23 @@ export default class Addurl extends Component {
       errorSnackbar: true,
       actionText: action,
       actionFunc: actionFunc
+    })
+  }
+
+  /**
+   * show a notification
+   */
+  openNotification = (title, message) => {
+    let tempNotifications = this.state.Notifications
+    tempNotifications.push(
+      {
+        title: title,
+        additionalText: message,
+        timestamp: moment().format('h:mm A')
+      }
+    )
+    this.setState({
+      Notifications: tempNotifications
     })
   }
 
@@ -449,8 +468,15 @@ export default class Addurl extends Component {
       mrEmitter.addListener('onRouteChange', (newLocation) => this.isActive(newLocation)),
       // show error text
       mrEmitter.addListener('onShowError', (error) => this.openSnackBar(error)),
+      // show a Notification
+      mrEmitter.addListener('onShowNotification', (title, message) => {
+        this.openNotification(title, message)
+      }),
       // Toolbar action of restart, for update complete
-      mrEmitter.addListener('onYoutubeDlUpdate', (message) => this.openActionSnackBar(message, 'restart', () => location.reload())),
+      mrEmitter.addListener('onYoutubeDlUpdate', (message) => {
+        this.openNotification('Restart Application', message)
+        // this.openActionSnackBar(message, 'restart', () => location.reload()))
+      }),
       // Toolbar action of removing items from list => display snackbar
       mrEmitter.addListener('onClearList', (count, originalTableData) => {
         this.openActionSnackBar(`${count} removed from List`, 'undo',
@@ -554,6 +580,10 @@ export default class Addurl extends Component {
       },
       initLoader: {
         visibility: this.state.initLoader ? 'visible' : 'collapse'
+      },
+      notificationsStyle: {
+        top: 66,
+        right: 20
       }
     }
 
@@ -725,6 +755,12 @@ export default class Addurl extends Component {
           onActionTouchTap={this.state.actionFunc}
           autoHideDuration={4000}
           onRequestClose={() => this.setComponentState('errorSnackbar', false)}
+        />
+        <ReactMaterialUiNotifications
+          desktop={true}
+          maxNotifications={12}
+          rootStyle={style.notificationsStyle}
+          children={this.state.Notifications}
         />
       </div>
     )
