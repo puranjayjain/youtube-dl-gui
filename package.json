@@ -40,6 +40,7 @@
     "gulp-util": "^3.0.7",
     "node-pre-gyp": "git+https://git@github.com/enlight/node-pre-gyp.git#detect-electron-runtime-in-find",
     "pretty-hrtime": "^1.0.2",
+    "recompose": "^0.20.2",
     "require-dir": "^0.3.0",
     "underscore": "^1.8.3",
     "vinyl-source-stream": "^1.1.0",

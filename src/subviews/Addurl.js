@@ -29,6 +29,7 @@ import moment from 'moment'
 import MoreHoriz from 'material-ui/svg-icons/navigation/more-horiz'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import Info from 'material-ui/svg-icons/action/info'
+import Lightning from '../assets/Lightning'
 
 import getHashid from '../helpers/HashidStore'
 import mrEmitter from '../helpers/mrEmitter'
@@ -56,7 +57,6 @@ loadFormat = true,
 snackbarErrorText = '',
 // to store the currently downloaded progress
 tableData = {}
-
 export default class Addurl extends Component {
   //keep tooltip state
   state = {
@@ -215,7 +215,8 @@ export default class Addurl extends Component {
       {
         title: title,
         additionalText: message,
-        timestamp: moment().format('h:mm A')
+        timestamp: moment().format('h:mm A'),
+        style: {backgroundColor: this.context.muiTheme.palette.accent1Color}
       }
     )
     this.setState({
@@ -469,14 +470,9 @@ export default class Addurl extends Component {
       // show error text
       mrEmitter.addListener('onShowError', (error) => this.openSnackBar(error)),
       // show a Notification
-      mrEmitter.addListener('onShowNotification', (title, message) => {
-        this.openNotification(title, message)
-      }),
+      mrEmitter.addListener('onShowNotification', (title, message) => this.openNotification(title, message)),
       // Toolbar action of restart, for update complete
-      mrEmitter.addListener('onYoutubeDlUpdate', (message) => {
-        this.openNotification('Restart Application', message)
-        // this.openActionSnackBar(message, 'restart', () => location.reload()))
-      }),
+      mrEmitter.addListener('onYoutubeDlUpdate', (message) => this.openNotification('Restart Application', message)),
       // Toolbar action of removing items from list => display snackbar
       mrEmitter.addListener('onClearList', (count, originalTableData) => {
         this.openActionSnackBar(`${count} removed from List`, 'undo',
@@ -531,12 +527,22 @@ export default class Addurl extends Component {
 
   render() {
     const style = {
-      fab: {
+      fabContainer: {
         position: 'fixed',
         bottom: 25,
         right: 20,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
         visibility: this.state.fab ? 'visible' : 'collapse',
         zIndex: 2
+      },
+      lightning: {
+        marginBottom: 15
+      },
+      lightningIcon: {
+        width: 40,
+        height: 40
       },
       tooltip: {
         position: 'fixed',
@@ -583,7 +589,8 @@ export default class Addurl extends Component {
       },
       notificationsStyle: {
         top: 66,
-        right: 20
+        right: 20,
+        zIndex: 1
       }
     }
 
@@ -618,24 +625,34 @@ export default class Addurl extends Component {
 
     return (
       <div>
-        <ReactCSSTransitionGroup
-          transitionName="downloadedAnimate"
-          transitionEnterTimeout={200}
-          transitionLeaveTimeout={200}
-          transitionAppear={true}
-          transitionAppearTimeout={200}
-        >
+        <div style={style.fabContainer}>
           <FloatingActionButton
+            mini={true}
             secondary={true}
-            key={this.state.fab}
-            style={style.fab}
-            onTouchTap={this.openDownloadDialog}
-            onMouseEnter={()=>{this.setState({tooltipShown: true})}}
-            onMouseLeave={()=>{this.setState({tooltipShown: false})}}
+            className="lightningBtn"
+            style={style.lightning}
+            iconStyle={style.lightningIcon}
           >
-            <ContentAdd />
+            <Lightning viewBox="0 0 16px 16px" />
           </FloatingActionButton>
-        </ReactCSSTransitionGroup>
+          <ReactCSSTransitionGroup
+            transitionName="downloadedAnimate"
+            transitionEnterTimeout={200}
+            transitionLeaveTimeout={200}
+            transitionAppear={true}
+            transitionAppearTimeout={200}
+          >
+            <FloatingActionButton
+              secondary={true}
+              key={this.state.fab}
+              onTouchTap={this.openDownloadDialog}
+              onMouseEnter={()=>{this.setState({tooltipShown: true})}}
+              onMouseLeave={()=>{this.setState({tooltipShown: false})}}
+            >
+              <ContentAdd />
+            </FloatingActionButton>
+          </ReactCSSTransitionGroup>
+        </div>
         <Tooltip
           show={this.state.tooltipShown}
           label={"Download from a new URL"}

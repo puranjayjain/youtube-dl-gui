@@ -17,4 +17,4 @@
 - [x] reset Starting and past states, do clean up to necessary states like canceled or error etc.
 - [ ] dynamically calculate the right side toolbar position
 - [ ] A quick download feature where you just put the download link and it begins with the default options
-- [ ] persistent or native notifications for operations like update done or updating or restart to complete update
+- [x] persistent or native notifications for operations like update done or updating or restart to complete update

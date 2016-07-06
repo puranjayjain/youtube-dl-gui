@@ -58,6 +58,11 @@ body {
   background: transparent;
 }
 
+/*svg button fix*/
+.lightningBtn svg {
+  padding: 11px;
+}
+
 /*popover fix*/
 .popover-fix {
   padding: 16px;
