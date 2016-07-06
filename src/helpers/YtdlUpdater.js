@@ -1,6 +1,6 @@
 // updates the ytdl binary on demand
 import SettingsHandler from '../helpers/SettingsHandler'
-import {ErrorData, SuccessData, InfoData} from '../Data/Messagedata'
+import {ErrorData, InfoData} from '../Data/Messagedata'
 import mrEmitter from '../helpers/mrEmitter'
 import moment from 'moment'
 
@@ -27,7 +27,7 @@ export default class YtdlUpdater {
     this.getExeLocation((pathToExe) => {
       let filePath = path.join(pathToExe, 'youtube-dl.exe.temp')
       // show notification that it is being updated
-      mrEmitter.emit('onShowNotification', 'Updating', 'Don\'t close the application as youtube-dl.exe is updating')
+      mrEmitter.emit('onShowNotification', 'Updating', InfoData.updateDownloading)
       // start download of youtube-dl
       wget({
         url:  url,
@@ -35,6 +35,7 @@ export default class YtdlUpdater {
         timeout: 10000       // duration to wait for request fulfillment in milliseconds, default is 2 seconds
       }, (error, response, body) => {
         if (error) {
+          mrEmitter.emit('onShowNotification', 'Update Failed', ErrorData.couldntDownloadYtdl)
           throw error
         } else {
           // update the stored data
@@ -46,7 +47,7 @@ export default class YtdlUpdater {
             toUpdate: true
           })
           // show a message that you need to restart or close and open youtube dl next time to see an updated version
-          mrEmitter.emit('onYoutubeDlUpdate', InfoData.updateDownloaded)
+          mrEmitter.emit('onShowNotification', 'Restart Application', InfoData.updateDownloaded)
         }
       })
     })

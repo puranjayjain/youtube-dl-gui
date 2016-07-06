@@ -19,7 +19,9 @@ const ErrorData = {
   // could'nt delete youtube-dl's old exe, it is in use
   couldntDeleteYtdl: 'Unable to delete old youtubedl exe',
   // could'nt rename youtube-dl's new exe, it is in use
-  couldntRenameYtdl: 'Unable to rename new youtubedl exe'
+  couldntRenameYtdl: 'Unable to rename new youtubedl exe',
+  // failed update
+  couldntDownloadYtdl: 'Couldnt download youtubedl exe'
 }
 // on successful job
 const SuccessData = {
@@ -29,7 +31,9 @@ const SuccessData = {
 // on giving out an info which is neutral or a required action
 const InfoData = {
   // the exe has been updated and will be complete next time
-  updateDownloaded: 'Youtubedl update scheduled for next run'
+  updateDownloaded: 'Youtubedl update scheduled for next run',
+  // updating message don't close app
+  updateDownloading: 'Don\'t close the application as youtube-dl.exe is updating'
 }
 
 export {ErrorData, SuccessData, InfoData}

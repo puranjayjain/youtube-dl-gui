@@ -64,12 +64,18 @@ export default class Addurl extends Component {
     authentication: false,
     // tooltip state for the info button in the main dialog
     tooltipShown: false,
+    // tooltip text
+    tooltipText: '',
+    // tooltip bottom
+    tooltipBottom: 0,
     // main dialog display state
     dialog: false,
     // confirm dialog display state
     confirmDialog: false,
     // main fab display state
     fab: true,
+    // quick download visible state
+    quickDownload: false,
     // to store the url in the input of the main dialog
     url: '',
     // to store the error text in the input of the main dialog
@@ -207,8 +213,8 @@ export default class Addurl extends Component {
   }
 
   /**
-   * show a notification
-   */
+  * show a notification
+  */
   openNotification = (title, message) => {
     let tempNotifications = this.state.Notifications
     tempNotifications.push(
@@ -333,6 +339,9 @@ export default class Addurl extends Component {
 
   // authentication checkbox
   onAuthCheck = () => this.setState({authentication: !this.state.authentication})
+
+  // on change any state
+  onChangeState = (key, state) => this.setState({[key]: state})
 
   // handle expansion panel or the card
   onAuthenticationCheck = (check) => this.setState({authentication: check})
@@ -471,8 +480,6 @@ export default class Addurl extends Component {
       mrEmitter.addListener('onShowError', (error) => this.openSnackBar(error)),
       // show a Notification
       mrEmitter.addListener('onShowNotification', (title, message) => this.openNotification(title, message)),
-      // Toolbar action of restart, for update complete
-      mrEmitter.addListener('onYoutubeDlUpdate', (message) => this.openNotification('Restart Application', message)),
       // Toolbar action of removing items from list => display snackbar
       mrEmitter.addListener('onClearList', (count, originalTableData) => {
         this.openActionSnackBar(`${count} removed from List`, 'undo',
@@ -538,7 +545,8 @@ export default class Addurl extends Component {
         zIndex: 2
       },
       lightning: {
-        marginBottom: 15
+        marginBottom: 15,
+        display: this.state.quickDownload ? 'block' : 'none'
       },
       lightningIcon: {
         width: 40,
@@ -546,8 +554,9 @@ export default class Addurl extends Component {
       },
       tooltip: {
         position: 'fixed',
-        top: 'calc(100% - 100px)',
-        right: 15
+        top: 'auto',
+        bottom: this.state.tooltipBottom,
+        right: 90
       },
       dialogTitle: {
         display: 'flex',
@@ -625,16 +634,31 @@ export default class Addurl extends Component {
 
     return (
       <div>
-        <div style={style.fabContainer}>
-          <FloatingActionButton
-            mini={true}
-            secondary={true}
-            className="lightningBtn"
-            style={style.lightning}
-            iconStyle={style.lightningIcon}
+        <div
+          onMouseEnter={() => this.onChangeState('quickDownload', true)}
+          onMouseLeave={() => this.onChangeState('quickDownload', false)}
+          style={style.fabContainer}
+        >
+          <ReactCSSTransitionGroup
+            transitionName="downloadedAnimate"
+            transitionEnterTimeout={200}
+            transitionLeaveTimeout={200}
+            transitionAppear={true}
+            transitionAppearTimeout={200}
           >
-            <Lightning viewBox="0 0 16px 16px" />
-          </FloatingActionButton>
+            <FloatingActionButton
+              key={this.state.quickDownload}
+              mini={true}
+              secondary={true}
+              className="lightningBtn"
+              style={style.lightning}
+              iconStyle={style.lightningIcon}
+              onMouseEnter={() => this.setState({tooltipShown: true, tooltipText: 'Quick Download from a new URL', tooltipBottom: 76})}
+              onMouseLeave={() => this.setState({tooltipShown: false})}
+            >
+              <Lightning viewBox="0 0 16px 16px" />
+            </FloatingActionButton>
+          </ReactCSSTransitionGroup>
           <ReactCSSTransitionGroup
             transitionName="downloadedAnimate"
             transitionEnterTimeout={200}
@@ -646,8 +670,8 @@ export default class Addurl extends Component {
               secondary={true}
               key={this.state.fab}
               onTouchTap={this.openDownloadDialog}
-              onMouseEnter={()=>{this.setState({tooltipShown: true})}}
-              onMouseLeave={()=>{this.setState({tooltipShown: false})}}
+              onMouseEnter={() => this.setState({tooltipShown: true, tooltipText: 'Download from a new URL', tooltipBottom: 12})}
+              onMouseLeave={() => this.setState({tooltipShown: false})}
             >
               <ContentAdd />
             </FloatingActionButton>
@@ -655,10 +679,10 @@ export default class Addurl extends Component {
         </div>
         <Tooltip
           show={this.state.tooltipShown}
-          label={"Download from a new URL"}
+          label={this.state.tooltipText}
           style={style.tooltip}
           horizontalPosition="left"
-          verticalPosition="top"
+          verticalPosition="left"
           touch={true}
         />
         <Dialog

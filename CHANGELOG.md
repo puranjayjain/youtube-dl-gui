@@ -3,7 +3,7 @@
 
 First Release
 
-## v0.0.2
+## v0.2.0
 >
 
 1. Removed some options as they lost relevance
