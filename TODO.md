@@ -15,6 +15,8 @@
 - [ ] confirm before closing if downloads are remaining or if the option is set or if an update is going on
 - [ ] disable auto update in data saver mode and not check for newer versions automatically etc.
 - [x] reset Starting and past states, do clean up to necessary states like canceled or error etc.
-- [ ] dynamically calculate the right side toolbar position
+- [ ] dynamically calculate the right side toolbar position https://github.com/digidem/react-dimensions
 - [ ] A quick download feature where you just put the download link and it begins with the default options
 - [x] persistent or native notifications for operations like update done or updating or restart to complete update
+- [ ] notifications animations like https://developer.mozilla.org/en/docs/Web/API/notification using https://facebook.github.io/react/docs/animation.html
+- [ ] sorting download tables http://www.listjs.com/

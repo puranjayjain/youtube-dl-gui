@@ -334,6 +334,11 @@ export default class Addurl extends Component {
     })
   }
 
+  // quick download
+  onQuickDownload = () => {
+    
+  }
+
   // on info button click
   onInfoButton = () => shell.openExternal('https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md')
 
