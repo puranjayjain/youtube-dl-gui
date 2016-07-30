@@ -56,7 +56,7 @@
     "path-exists": "^3.0.0",
     "react": "^15.2.1",
     "react-addons-css-transition-group": "^15.3.0",
-    "react-dom": "^15.2.1",
+    "react-dom": "^15.3.0",
     "react-materialui-notifications": "^0.4.0",
     "react-router": "^2.6.1",
     "react-tap-event-plugin": "^1.0.0",
