@@ -21,7 +21,7 @@
   "author": "Puranjay Jain <puranjay.jain@st.niituniversity.in>",
   "license": "MIT",
   "devDependencies": {
-    "babel-core": "^6.10.4",
+    "babel-core": "^6.13.1",
     "babel-eslint": "^6.1.2",
     "babel-plugin-transform-class-properties": "^6.11.5",
     "babel-plugin-transform-es2015-duplicate-keys": "^6.8.0",
