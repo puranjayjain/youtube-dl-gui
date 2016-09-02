@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "bytes": "^2.4.0",
-    "fbemitter": "^2.0.2",
+    "fbemitter": "^2.0.3",
     "hashids": "1.1.1",
     "material-ui": "^0.15.4",
     "moment": "^2.14.1",
