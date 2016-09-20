@@ -55,7 +55,7 @@
     "node-wget": "^0.4.2",
     "path-exists": "^3.0.0",
     "react": "^15.3.1",
-    "react-addons-css-transition-group": "^15.3.1",
+    "react-addons-css-transition-group": "^15.3.2",
     "react-dom": "^15.3.1",
     "react-materialui-notifications": "^0.4.1",
     "react-router": "^2.8.1",
