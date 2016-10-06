@@ -31,7 +31,7 @@
     "babelify": "^7.3.0",
     "browser-sync": "^2.16.1",
     "browserify": "^13.1.0",
-    "electron-prebuilt": "1.4.2",
+    "electron-prebuilt": "1.4.3",
     "electron-rebuild": "^1.2.1",
     "electron-winstaller": "^2.3.4",
     "eslint": "^3.7.1",
