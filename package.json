@@ -34,7 +34,7 @@
     "electron-prebuilt": "1.4.3",
     "electron-rebuild": "^1.2.1",
     "electron-winstaller": "^2.3.4",
-    "eslint": "^3.8.0",
+    "eslint": "^3.8.1",
     "gulp": "^3.9.1",
     "gulp-notify": "^2.2.0",
     "gulp-util": "^3.0.7",
