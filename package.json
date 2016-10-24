@@ -51,7 +51,7 @@
     "fbemitter": "^2.1.1",
     "hashids": "1.1.1",
     "material-ui": "^0.16.1",
-    "moment": "^2.15.1",
+    "moment": "^2.15.2",
     "node-wget": "^0.4.2",
     "path-exists": "^3.0.0",
     "react": "^15.3.2",
