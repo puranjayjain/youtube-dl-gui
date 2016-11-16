@@ -54,7 +54,7 @@
     "moment": "^2.16.0",
     "node-wget": "^0.4.2",
     "path-exists": "^3.0.0",
-    "react": "^15.3.2",
+    "react": "^15.4.0",
     "react-addons-css-transition-group": "^15.4.0",
     "react-dom": "^15.3.2",
     "react-materialui-notifications": "^0.4.1",
