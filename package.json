@@ -50,7 +50,7 @@
     "bytes": "^2.4.0",
     "fbemitter": "^2.1.1",
     "hashids": "1.1.1",
-    "material-ui": "^0.16.3",
+    "material-ui": "^0.16.4",
     "moment": "^2.16.0",
     "node-wget": "^0.4.2",
     "path-exists": "^3.0.0",
