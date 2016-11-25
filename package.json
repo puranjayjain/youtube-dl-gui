@@ -56,6 +56,7 @@
     "path-exists": "^3.0.0",
     "react": "^15.4.1",
     "react-addons-css-transition-group": "^15.4.0",
+    "react-canvas": "^1.2.1",
     "react-dom": "^15.4.1",
     "react-materialui-notifications": "^0.4.1",
     "react-router": "^3.0.0",
