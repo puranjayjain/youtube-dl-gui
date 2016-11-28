@@ -12,14 +12,19 @@
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
-<link rel="import" href="my-icons.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../bower_components/paper-styles/color.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="lightning.html">
 
 <dom-module id="youtube-dl">
   <template>
-  <style>
+  <style include="shared-styles">
   :host {
-    --app-primary-color: #f44336;/*#4285f4;*/
-    --app-secondary-color: black;
+    --app-primary-color: var(--paper-red-500);/*#4285f4;*/
+    --app-secondary-color: var(--paper-deep-purple-500);
 
     display: block;
   }
@@ -49,6 +54,41 @@
 
     font-weight: bold;
   }
+
+  paper-item.iron-selected:before {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: currentColor;
+    content: '';
+    opacity: 0.12;
+    pointer-events: none;
+  }
+
+  .ytdl-fab-container {
+    position: fixed;
+    bottom: 25px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  paper-fab {
+    background-color: var(--app-secondary-color);
+  }
+
+  paper-fab.lightning {
+    margin-bottom: 15px;
+  }
+
+  paper-tooltip #tooltip {
+    line-height: 14px;
+    font-size: 14px;
+    padding: 16px;
+  }
   </style>
 
   <app-location route="{{route}}"></app-location>
@@ -61,7 +101,7 @@
   <app-drawer-layout fullbleed>
     <!-- Drawer content -->
     <app-drawer>
-      <paper-menu selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+      <paper-menu id="mainMenu" selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
         <paper-item name="view1">View One</paper-item>
         <paper-item name="view2">View Two</paper-item>
         <paper-item name="view3">View Three</paper-item>
@@ -89,6 +129,13 @@
     </iron-pages>
   </app-header-layout>
 </app-drawer-layout>
+<!-- main fab -->
+<div class="ytdl-fab-container">
+  <paper-fab mini id="fabQuickDownload" class="lightning" icon="youtube-dl:lightning"></paper-fab>
+  <paper-tooltip for="fabQuickDownload" position="left">Quick Download from a new URL</paper-tooltip>
+  <paper-fab id="fabDownload" icon="add"></paper-fab>
+  <paper-tooltip for="fabDownload" position="left">Download from a new URL</paper-tooltip>
+</div>
 </template>
 
 <script>
@@ -119,7 +166,20 @@ Polymer({
 
   _showPage404: function() {
     this.page = 'view404';
-  }
+  },
+
+  ready: function() {
+    // attach event listeners on dom ready
+    this.listen(this.$.mainMenu, 'tap', 'onMenuTap');
+  },
+
+  // handle tap events of all kinds and purposes
+  onMenuTap: function(e) {
+    // for main menu
+    if (e.target.nodeName === 'PAPER-ITEM') {
+      window.location.href = e.target.getAttribute('name');
+    }
+  },
 });
 </script>
 </dom-module>

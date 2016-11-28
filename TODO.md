@@ -1,6 +1,6 @@
-- [ ] Showcase the app on the material-ui docs site
+- [ ] Showcase the app on the material-ui or polymer docs site
 - [x] remove all inline TODO statements and make it work
-- [ ] add a linter
+- [x] add a linter
 - [ ] Always remove all inline TODOs and console.logs on release build
 - [ ] implement the offline/online feature detection http://electron.atom.io/docs/all/#onlineoffline-event-detection
 - [ ] decide between tray icon change or overlay status and implement it http://electron.atom.io/docs/all/#icon-overlays-in-taskbar-windows

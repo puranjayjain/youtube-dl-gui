@@ -1,52 +1,93 @@
-<!--
-@license
-Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-styles/color.html">
 
 <!-- shared styles for all views -->
 <dom-module id="shared-styles">
   <template>
-    <style>
-      .card {
-        margin: 24px;
-        padding: 16px;
+  <style>
+  .card {
+    margin: 24px;
+    padding: 16px;
 
-        color: #757575;
-        border-radius: 5px;
-        background-color: #fff;
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-      }
+    color: #757575;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+  }
 
-      .circle {
-        display: inline-block;
+  .circle {
+    display: inline-block;
 
-        width: 64px;
-        height: 64px;
+    width: 64px;
+    height: 64px;
 
-        text-align: center;
+    text-align: center;
 
-        color: #555;
-        border-radius: 50%;
-        background: #ddd;
+    color: #555;
+    border-radius: 50%;
+    background: #ddd;
 
-        font-size: 30px;
-        line-height: 64px;
-      }
+    font-size: 30px;
+    line-height: 64px;
+  }
 
-      h1 {
-        margin: 16px 0;
+  h1 {
+    margin: 16px 0;
 
-        color: #212121;
+    color: #212121;
 
-        font-size: 22px;
-      }
-    </style>
-  </template>
+    font-size: 22px;
+  }
+
+  /* user selection color */
+  ::selection {
+    background: var(--paper-red-900); /* WebKit/Blink Browsers */
+    color: #fff;
+  }
+
+  /*custom scroll bars*/
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-button {
+    width: 0;
+    height: 0;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--paper-deep-purple-a700);
+    border: 0 none transparent;
+    border-radius: 50px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--paper-deep-purple-a400);
+  }
+
+  ::-webkit-scrollbar-thumb:active {
+    background: var(--paper-deep-purple-a200);
+    border-radius: 0;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+    border: 0 none transparent;
+    border-radius: 50px;
+  }
+
+  ::-webkit-scrollbar-track:hover {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-track:active {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+  </style>
+</template>
 </dom-module>
