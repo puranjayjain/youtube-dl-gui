@@ -11,11 +11,11 @@
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-menu/paper-menu.html">
-<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
-<link rel="import" href="../bower_components/paper-styles/color.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-icons/places-icons.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="lightning.html">
 
@@ -23,18 +23,20 @@
   <template>
   <style include="shared-styles">
   :host {
-    --app-primary-color: var(--paper-red-500);/*#4285f4;*/
-    --app-secondary-color: var(--paper-deep-purple-500);
-
     display: block;
   }
 
-  app-header {
-    color: #fff;
-    background-color: var(--app-primary-color);
+  app-header-layout {
+    background-color: var(--secondary-background-color);
   }
-  app-header paper-icon-button {
-    --paper-icon-button-ink-color: white;
+
+  app-header {
+    color: var(--primary-text-color);
+    background-color: var(--primary-color);
+  }
+
+  paper-icon-button {
+    --paper-icon-button-ink-color: var(--primary-text-color);
   }
 
   paper-icon-button + [main-title] {
@@ -45,17 +47,16 @@
     display: block;
     padding: 0 16px;
     text-decoration: none;
-    color: var(--app-secondary-color);
+    color: var(--accent-color);
     line-height: 40px;
   }
 
   .drawer-list a.iron-selected {
     color: black;
-
     font-weight: bold;
   }
 
-  paper-item.iron-selected:before {
+  paper-icon-item.iron-selected:before {
     position: absolute;
     top: 0;
     right: 0;
@@ -65,6 +66,13 @@
     content: '';
     opacity: 0.12;
     pointer-events: none;
+  }
+
+  hr.paper-icon-item-divider {
+    margin: 8px 0;
+    height: 1px;
+    border: none;
+    background-color: var(--divider-color);
   }
 
   .ytdl-fab-container {
@@ -77,17 +85,20 @@
   }
 
   paper-fab {
-    background-color: var(--app-secondary-color);
+    --paper-fab-background: var(--accent-color);
+    --paper-fab-keyboard-focus-background: var(--paper-deep-purple-300);
   }
 
   paper-fab.lightning {
     margin-bottom: 15px;
   }
 
-  paper-tooltip #tooltip {
-    line-height: 14px;
-    font-size: 14px;
-    padding: 16px;
+  paper-tooltip {
+    --paper-tooltip: {
+      line-height: 14px;
+      font-size: 14px;
+      padding: 16px;
+    }
   }
   </style>
 
@@ -100,11 +111,33 @@
 
   <app-drawer-layout fullbleed>
     <!-- Drawer content -->
-    <app-drawer>
+    <app-drawer swipe-open="true">
       <paper-menu id="mainMenu" selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-        <paper-item name="view1">View One</paper-item>
-        <paper-item name="view2">View Two</paper-item>
-        <paper-item name="view3">View Three</paper-item>
+        <paper-icon-item name="all">
+          <iron-icon icon="places:all-inclusive" item-icon></iron-icon>
+          All
+        </paper-icon-item>
+        <paper-icon-item name="downloading">
+          <iron-icon icon="file-download" item-icon></iron-icon>
+          Downloading
+        </paper-icon-item>
+        <paper-icon-item name="unfinished">
+          <iron-icon icon="error" item-icon></iron-icon>
+          Unfinished
+        </paper-icon-item>
+        <paper-icon-item name="downloaded">
+          <iron-icon icon="done" item-icon></iron-icon>
+          Downloaded
+        </paper-icon-item>
+        <hr class="paper-icon-item-divider"/>
+        <paper-icon-item name="settings">
+          <iron-icon icon="settings" item-icon></iron-icon>
+          Settings
+        </paper-icon-item>
+        <paper-icon-item name="about">
+          <iron-icon icon="help" item-icon></iron-icon>
+          About
+        </paper-icon-item>
       </paper-menu>
     </app-drawer>
 
@@ -113,7 +146,7 @@
       <app-header condenses fixed effects="waterfall">
         <app-toolbar>
           <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-          <div main-title>Youtube-dl GUI</div>
+          <div main-title>[[pageTitle]]</div>
         </app-toolbar>
       </app-header>
 
@@ -122,10 +155,13 @@
       attr-for-selected="name"
       fallback-selection="view404"
       role="main">
-      <my-view1 name="view1"></my-view1>
-      <my-view2 name="view2"></my-view2>
-      <my-view3 name="view3"></my-view3>
-      <my-view404 name="view404"></my-view404>
+      <all-view name="all"></all-view>
+      <downloading-view name="downloading"></downloading-view>
+      <unfinished-view name="unfinished"></unfinished-view>
+      <downloaded-view name="downloaded"></downloaded-view>
+      <settings-view name="settings"></settings-view>
+      <about-view name="about"></about-view>
+      <view404-view name="view404"></view404-view>
     </iron-pages>
   </app-header-layout>
 </app-drawer-layout>
@@ -147,6 +183,10 @@ Polymer({
       type: String,
       reflectToAttribute: true,
       observer: '_pageChanged'
+    },
+    pageTitle: {
+      type: String,
+      reflectToAttribute: true
     }
   },
 
@@ -155,13 +195,18 @@ Polymer({
   ],
 
   _routePageChanged: function(page) {
-    this.page = page || 'view1';
+    this.page = page || 'all';
+    this.pageTitle = this.capitalizeFirstLetter(page);
   },
 
   _pageChanged: function(page) {
     // Load page import on demand. Show 404 page if fails
-    var resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
+    var resolvedPageUrl = this.resolveUrl(page + '-view' + '.html');
     this.importHref(resolvedPageUrl, null, this._showPage404, true);
+  },
+
+  capitalizeFirstLetter: function(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
   },
 
   _showPage404: function() {
@@ -171,12 +216,20 @@ Polymer({
   ready: function() {
     // attach event listeners on dom ready
     this.listen(this.$.mainMenu, 'tap', 'onMenuTap');
+    this.listen(this.$.mainMenu, 'keydown', 'onMenuEnter');
+  },
+
+  onMenuEnter: function(e) {
+    // for main menu
+    if (e.key === 'Enter' && e.target.nodeName === 'PAPER-ICON-ITEM') {
+      window.location.href = e.target.getAttribute('name');
+    }
   },
 
   // handle tap events of all kinds and purposes
   onMenuTap: function(e) {
     // for main menu
-    if (e.target.nodeName === 'PAPER-ITEM') {
+    if (e.target.nodeName === 'PAPER-ICON-ITEM') {
       window.location.href = e.target.getAttribute('name');
     }
   },

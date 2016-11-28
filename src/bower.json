@@ -21,7 +21,8 @@
     "paper-fab": "PolymerElements/paper-fab#^1.2.1",
     "iron-icons": "PolymerElements/iron-icons#^1.2.0",
     "paper-datatable": "David-Mulder/paper-datatable#^0.9.8",
-    "paper-tooltip": "PolymerElements/paper-tooltip#^1.1.3"
+    "paper-tooltip": "PolymerElements/paper-tooltip#^1.1.3",
+    "paper-dialog": "PolymerElements/paper-dialog#^1.1.0"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

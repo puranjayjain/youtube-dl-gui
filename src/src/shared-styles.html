@@ -1,10 +1,43 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-styles/color.html">
+<link rel="import" href="../bower_components/paper-styles/default-theme.html">
 
-<!-- shared styles for all views -->
+<!-- shared styles for all views along with the base theme-->
 <dom-module id="shared-styles">
   <template>
   <style>
+  /*base theme which can be switched b/w light and dark*/
+  :root {
+    /*
+     * You can use these generic variables in your elements for easy theming.
+     * For example, if all your elements use `--primary-text-color` as its main
+     * color, then switching from a light to a dark theme is just a matter of
+     * changing the value of `--primary-text-color` in your application.
+     */
+    --primary-text-color: var(--light-theme-text-color);
+    --primary-background-color: var(--light-theme-background-color);
+    --secondary-background-color: #eeeeee;
+    --secondary-text-color: var(--light-theme-secondary-color);
+    --disabled-text-color: var(--light-theme-disabled-color);
+    --divider-color: var(--light-theme-divider-color);
+    --error-color: var(--paper-deep-orange-a700);
+
+    /*
+     * Primary and accent colors. Also see color.html for more colors.
+     */
+    --primary-color: var(--paper-red-500);
+    --light-primary-color: var(--paper-red-100);
+    --dark-primary-color: var(--paper-red-700);
+    --accent-color: var(--paper-deep-purple-a200);
+    --light-accent-color: var(--paper-deep-purple-a100);
+    --dark-accent-color: var(--paper-deep-purple-a400);
+
+    /*
+    * selection color
+     */
+     --selection-color: var(--dark-primary-color);
+  }
+
   .card {
     margin: 24px;
     padding: 16px;
@@ -33,15 +66,14 @@
 
   h1 {
     margin: 16px 0;
-
-    color: #212121;
-
+    /*color: #212121;*/
+    color: var(--primary-text-color);
     font-size: 22px;
   }
 
   /* user selection color */
   ::selection {
-    background: var(--paper-red-900); /* WebKit/Blink Browsers */
+    background: var(--selection-color); /* WebKit/Blink Browsers */
     color: #fff;
   }
 
