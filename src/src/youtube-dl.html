@@ -7,17 +7,17 @@
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
-<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
-<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
-<link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
 <link rel="import" href="../bower_components/iron-icons/places-icons.html">
 <link rel="import" href="shared-styles.html">
-<link rel="import" href="lightning.html">
+
+<link rel="import" href="components/ytdl-fab-container.html">
 
 <dom-module id="youtube-dl">
   <template>
@@ -27,7 +27,7 @@
   }
 
   app-header-layout {
-    background-color: var(--secondary-background-color);
+    background-color: var(--primary-background-color);
   }
 
   app-header {
@@ -36,7 +36,7 @@
   }
 
   paper-icon-button {
-    --paper-icon-button-ink-color: var(--primary-text-color);
+    --paper-icon-button-ink-color: var(--primary-base-color);
   }
 
   paper-icon-button + [main-title] {
@@ -56,53 +56,40 @@
     font-weight: bold;
   }
 
-  paper-icon-item.iron-selected:before {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: currentColor;
-    content: '';
-    opacity: 0.12;
-    pointer-events: none;
+  paper-menu {
+    --paper-menu-background-color: none;
+    --paper-menu-focused-item-after: {
+      background: none;
+    };
+  }
+
+  paper-icon-item {
+    --paper-icon-item: {
+      user-select: none;
+    };
+    --paper-item-selected: {
+      color: var(--primary-color);
+      background-color: #f5f5f5;
+    };
+  }
+
+  paper-icon-item iron-icon {
+    opacity: .54;
+  }
+
+  paper-icon-item.iron-selected iron-icon {
+    opacity: 1;
   }
 
   hr.paper-icon-item-divider {
     margin: 8px 0;
     height: 1px;
     border: none;
-    background-color: var(--divider-color);
-  }
-
-  .ytdl-fab-container {
-    position: fixed;
-    bottom: 25px;
-    right: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  paper-fab {
-    --paper-fab-background: var(--accent-color);
-    --paper-fab-keyboard-focus-background: var(--paper-deep-purple-300);
-  }
-
-  paper-fab.lightning {
-    margin-bottom: 15px;
-  }
-
-  paper-tooltip {
-    --paper-tooltip: {
-      line-height: 14px;
-      font-size: 14px;
-      padding: 16px;
-    }
+    @apply(--divider-theme);
   }
   </style>
 
-  <app-location route="{{route}}"></app-location>
+  <app-location route="{{route}}" use-hash-as-path></app-location>
   <app-route
   route="{{route}}"
   pattern="/:page"
@@ -116,27 +103,33 @@
         <paper-icon-item name="all">
           <iron-icon icon="places:all-inclusive" item-icon></iron-icon>
           All
+          <paper-ripple></paper-ripple>
         </paper-icon-item>
         <paper-icon-item name="downloading">
           <iron-icon icon="file-download" item-icon></iron-icon>
           Downloading
+          <paper-ripple></paper-ripple>
         </paper-icon-item>
         <paper-icon-item name="unfinished">
           <iron-icon icon="error" item-icon></iron-icon>
           Unfinished
+          <paper-ripple></paper-ripple>
         </paper-icon-item>
         <paper-icon-item name="downloaded">
           <iron-icon icon="done" item-icon></iron-icon>
           Downloaded
+          <paper-ripple></paper-ripple>
         </paper-icon-item>
         <hr class="paper-icon-item-divider"/>
         <paper-icon-item name="settings">
           <iron-icon icon="settings" item-icon></iron-icon>
           Settings
+          <paper-ripple></paper-ripple>
         </paper-icon-item>
         <paper-icon-item name="about">
           <iron-icon icon="help" item-icon></iron-icon>
           About
+          <paper-ripple></paper-ripple>
         </paper-icon-item>
       </paper-menu>
     </app-drawer>
@@ -149,12 +142,15 @@
           <div main-title>[[pageTitle]]</div>
         </app-toolbar>
       </app-header>
-
-      <iron-pages
+      <neon-animated-pages
+      id="pages"
+      class="flex"
       selected="[[page]]"
       attr-for-selected="name"
       fallback-selection="view404"
-      role="main">
+      role="main"
+      entry-animation="fade-in-animation"
+      exit-animation="fade-out-animation">
       <all-view name="all"></all-view>
       <downloading-view name="downloading"></downloading-view>
       <unfinished-view name="unfinished"></unfinished-view>
@@ -162,16 +158,22 @@
       <settings-view name="settings"></settings-view>
       <about-view name="about"></about-view>
       <view404-view name="view404"></view404-view>
-    </iron-pages>
+    </neon-animated-pages>
+
+    <!-- main fab -->
+    <ytdl-fab-container page=[[page]]></ytdl-fab-container>
+    <paper-dialog>
+      <h2>Header</h2>
+      <paper-dialog-scrollable>
+        Lorem ipsum...
+      </paper-dialog-scrollable>
+      <div class="buttons">
+        <paper-button dialog-dismiss>Cancel</paper-button>
+        <paper-button dialog-confirm autofocus>Accept</paper-button>
+      </div>
+    </paper-dialog>
   </app-header-layout>
 </app-drawer-layout>
-<!-- main fab -->
-<div class="ytdl-fab-container">
-  <paper-fab mini id="fabQuickDownload" class="lightning" icon="youtube-dl:lightning"></paper-fab>
-  <paper-tooltip for="fabQuickDownload" position="left">Quick Download from a new URL</paper-tooltip>
-  <paper-fab id="fabDownload" icon="add"></paper-fab>
-  <paper-tooltip for="fabDownload" position="left">Download from a new URL</paper-tooltip>
-</div>
 </template>
 
 <script>
@@ -196,7 +198,7 @@ Polymer({
 
   _routePageChanged: function(page) {
     this.page = page || 'all';
-    this.pageTitle = this.capitalizeFirstLetter(page);
+    this.pageTitle = this.capitalizeFirstLetter(this.page);
   },
 
   _pageChanged: function(page) {
@@ -222,7 +224,8 @@ Polymer({
   onMenuEnter: function(e) {
     // for main menu
     if (e.key === 'Enter' && e.target.nodeName === 'PAPER-ICON-ITEM') {
-      window.location.href = e.target.getAttribute('name');
+      // window.location.href = e.target.getAttribute('name');
+      window.location.hash = '/' + e.target.getAttribute('name');
     }
   },
 
@@ -230,7 +233,8 @@ Polymer({
   onMenuTap: function(e) {
     // for main menu
     if (e.target.nodeName === 'PAPER-ICON-ITEM') {
-      window.location.href = e.target.getAttribute('name');
+      // window.location.href = e.target.getAttribute('name');
+      window.location.hash = '/' + e.target.getAttribute('name');
     }
   },
 });

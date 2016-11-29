@@ -16,10 +16,12 @@
      */
     --primary-text-color: var(--light-theme-text-color);
     --primary-background-color: var(--light-theme-background-color);
-    --secondary-background-color: #eeeeee;
+    --primary-card-color: var(--light-theme-card-color);
+    --primary-base-color: var(--light-theme-base-color);
+    --primary-text-color: var(--light-theme-text-color);
     --secondary-text-color: var(--light-theme-secondary-color);
     --disabled-text-color: var(--light-theme-disabled-color);
-    --divider-color: var(--light-theme-divider-color);
+    --divider-theme: var(--light-divider-theme);
     --error-color: var(--paper-deep-orange-a700);
 
     /*
@@ -33,6 +35,28 @@
     --dark-accent-color: var(--paper-deep-purple-a400);
 
     /*
+     * Material Design Light background theme
+     */
+    --light-theme-background-color: var(--paper-grey-50);
+    --light-theme-card-color: #fff;
+    --light-theme-text-color: var(--paper-grey-900);
+    --light-divider-theme: {
+      background-color: var(--light-theme-base-color);
+      opacity: .12;
+    };
+
+    /*
+     * Material Design Dark background theme
+     */
+    --dark-theme-background-color: #303030;
+    --dark-theme-card-color: var(--paper-grey-800);
+    --dark-theme-text-color: #fff;
+    --dark-divider-theme: {
+      background-color: var(--dark-theme-base-color);
+      opacity: .12;
+    };
+
+    /*
     * selection color
      */
      --selection-color: var(--dark-primary-color);
@@ -42,9 +66,9 @@
     margin: 24px;
     padding: 16px;
 
-    color: #757575;
+    color: var(--primary-text-color);
     border-radius: 5px;
-    background-color: #fff;
+    background-color: var(--primary-card-color);
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
   }
 
