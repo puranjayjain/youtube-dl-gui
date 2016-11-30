@@ -1,7 +1,9 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/neon-animation/neon-animation.html">
 <link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
 
+<link rel="import" href="fab-download.html">
 <link rel="import" href="lightning.html">
 
 <dom-module id="ytdl-fab-container">
@@ -39,8 +41,11 @@
   </style>
   <paper-fab mini id="fabQuickDownload" class="lightning" icon="youtube-dl:lightning"></paper-fab>
   <paper-tooltip for="fabQuickDownload" position="left">Quick Download from a new URL</paper-tooltip>
-  <paper-fab id="fabDownload" icon="add"></paper-fab>
-  <paper-tooltip for="fabDownload" position="left">Download from a new URL</paper-tooltip>
+  <fab-download
+  id="fabDownload"
+  newDownloadState={{newDownloadState}}
+  newdownloaddialog={{newdownloaddialog}}
+  ></fab-download>
 </template>
 
 </dom-module>
@@ -59,8 +64,9 @@ Polymer({
       type: String,
       observer: '_pageNameChanged'
     },
-    opened: {
-      type: Boolean
+    newdownloaddialog: {
+      type: Boolean,
+      notify: true
     },
 
     animationConfig: {

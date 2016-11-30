@@ -9,7 +9,6 @@
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
@@ -17,7 +16,7 @@
 <link rel="import" href="../bower_components/iron-icons/places-icons.html">
 <link rel="import" href="shared-styles.html">
 
-<link rel="import" href="components/ytdl-fab-container.html">
+<link rel="import" href="components/common-element.html">
 
 <dom-module id="youtube-dl">
   <template>
@@ -79,13 +78,6 @@
 
   paper-icon-item.iron-selected iron-icon {
     opacity: 1;
-  }
-
-  hr.paper-icon-item-divider {
-    margin: 8px 0;
-    height: 1px;
-    border: none;
-    @apply(--divider-theme);
   }
   </style>
 
@@ -159,19 +151,8 @@
       <about-view name="about"></about-view>
       <view404-view name="view404"></view404-view>
     </neon-animated-pages>
-
-    <!-- main fab -->
-    <ytdl-fab-container page=[[page]]></ytdl-fab-container>
-    <paper-dialog>
-      <h2>Header</h2>
-      <paper-dialog-scrollable>
-        Lorem ipsum...
-      </paper-dialog-scrollable>
-      <div class="buttons">
-        <paper-button dialog-dismiss>Cancel</paper-button>
-        <paper-button dialog-confirm autofocus>Accept</paper-button>
-      </div>
-    </paper-dialog>
+    <!-- common elements like fab etc. -->
+    <common-element page=[[page]]></common-element>
   </app-header-layout>
 </app-drawer-layout>
 </template>
@@ -188,7 +169,8 @@ Polymer({
     },
     pageTitle: {
       type: String,
-      reflectToAttribute: true
+      reflectToAttribute: true,
+      computed: 'computePageTitle(page)'
     }
   },
 
@@ -198,7 +180,6 @@ Polymer({
 
   _routePageChanged: function(page) {
     this.page = page || 'all';
-    this.pageTitle = this.capitalizeFirstLetter(this.page);
   },
 
   _pageChanged: function(page) {
@@ -207,7 +188,7 @@ Polymer({
     this.importHref(resolvedPageUrl, null, this._showPage404, true);
   },
 
-  capitalizeFirstLetter: function(string) {
+  computePageTitle: function(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   },
 
@@ -224,7 +205,6 @@ Polymer({
   onMenuEnter: function(e) {
     // for main menu
     if (e.key === 'Enter' && e.target.nodeName === 'PAPER-ICON-ITEM') {
-      // window.location.href = e.target.getAttribute('name');
       window.location.hash = '/' + e.target.getAttribute('name');
     }
   },
@@ -233,7 +213,6 @@ Polymer({
   onMenuTap: function(e) {
     // for main menu
     if (e.target.nodeName === 'PAPER-ICON-ITEM') {
-      // window.location.href = e.target.getAttribute('name');
       window.location.hash = '/' + e.target.getAttribute('name');
     }
   },
