@@ -1,7 +1,7 @@
 {
-  "name": "polymer-starter-kit",
+  "name": "youtube-dl-gui",
   "authors": [
-    "The Polymer Authors"
+    "Puranjay Jain <me+bower@puranjayjain.com>"
   ],
   "private": true,
   "dependencies": {

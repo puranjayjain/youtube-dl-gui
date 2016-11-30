@@ -14,10 +14,11 @@
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
 <link rel="import" href="../bower_components/iron-icons/places-icons.html">
-<link rel="import" href="shared-styles.html">
 
 <link rel="import" href="components/ytdl-fab-container.html">
 <link rel="import" href="components/new-download.html">
+
+<link rel="import" href="shared-styles.html">
 
 <dom-module id="youtube-dl">
   <template>
@@ -168,6 +169,10 @@ newdownloaddialog={{newdownloaddialog}}
 <script>
 Polymer({
   is: 'youtube-dl',
+
+  behaviors: [
+    Polymer.AppLocalizeBehavior
+  ],
 
   properties: {
     page: {

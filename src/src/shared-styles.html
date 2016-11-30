@@ -40,10 +40,7 @@
     --light-theme-background-color: var(--paper-grey-50);
     --light-theme-card-color: #fff;
     --light-theme-text-color: var(--paper-grey-900);
-    --light-divider-theme: {
-      background-color: var(--light-theme-base-color);
-      opacity: .12;
-    };
+    --light-divider-theme: #000;
 
     /*
     * Material Design Dark background theme
@@ -51,10 +48,7 @@
     --dark-theme-background-color: #303030;
     --dark-theme-card-color: var(--paper-grey-800);
     --dark-theme-text-color: #fff;
-    --dark-divider-theme: {
-      background-color: var(--dark-theme-base-color);
-      opacity: .12;
-    };
+    --dark-divider-theme: #fff;
 
     /*
     * selection color
@@ -149,7 +143,8 @@
     margin: 8px 0;
     height: 1px;
     border: none;
-    @apply(--divider-theme);
+    opacity: .12;
+    background-color: var(--divider-theme);
   }
   </style>
 </template>
