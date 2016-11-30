@@ -6,31 +6,22 @@
 
 <dom-module id="new-download">
   <template>
-  <style>
-  #dialog {
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-  }
-  </style>
-  <paper-dialog
-  id="dialog"
-  opened={{newdownloaddialog}}
-  entry-animation="scale-up-animation"
-  exit-animation="fade-out-animation"
-  with-backdrop
-  >
-  <h2>Header</h2>
-  <paper-dialog-scrollable>
-    Lorem ipsum...
-  </paper-dialog-scrollable>
-  <div class="buttons">
-    <paper-button dialog-dismiss>Cancel</paper-button>
-    <paper-button dialog-confirm autofocus>Accept</paper-button>
-  </div>
-</paper-dialog>
+    <paper-dialog
+    id="dialog"
+    opened={{newdownloaddialog}}
+    entry-animation="scale-up-animation"
+    exit-animation="fade-out-animation"
+    with-backdrop
+    >
+    <h2>Header</h2>
+    <paper-dialog-scrollable>
+      Lorem ipsum...
+    </paper-dialog-scrollable>
+    <div class="buttons">
+      <paper-button dialog-dismiss>Cancel</paper-button>
+      <paper-button dialog-confirm autofocus>Accept</paper-button>
+    </div>
+  </paper-dialog>
 </template>
 
 </dom-module>

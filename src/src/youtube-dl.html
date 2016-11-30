@@ -16,7 +16,8 @@
 <link rel="import" href="../bower_components/iron-icons/places-icons.html">
 <link rel="import" href="shared-styles.html">
 
-<link rel="import" href="components/common-element.html">
+<link rel="import" href="components/ytdl-fab-container.html">
+<link rel="import" href="components/new-download.html">
 
 <dom-module id="youtube-dl">
   <template>
@@ -151,10 +152,17 @@
       <about-view name="about"></about-view>
       <view404-view name="view404"></view404-view>
     </neon-animated-pages>
-    <!-- common elements like fab etc. -->
-    <common-element page=[[page]]></common-element>
+    <!-- common fab -->
+    <ytdl-fab-container
+    page=[[page]]
+    newdownloaddialog={{newdownloaddialog}}
+    ></ytdl-fab-container>
   </app-header-layout>
 </app-drawer-layout>
+<!-- dialogs -->
+<new-download
+newdownloaddialog={{newdownloaddialog}}
+></new-download>
 </template>
 
 <script>
@@ -171,7 +179,10 @@ Polymer({
       type: String,
       reflectToAttribute: true,
       computed: 'computePageTitle(page)'
-    }
+    },
+    newdownloaddialog: {
+      type: Boolean
+    },
   },
 
   observers: [
