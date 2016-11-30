@@ -1,0 +1,221 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../bower_components/iron-icons/places-icons.html">
+<link rel="import" href="shared-styles.html">
+
+<link rel="import" href="components/common-element.html">
+
+<dom-module id="youtube-dl">
+  <template>
+  <style include="shared-styles">
+  :host {
+    display: block;
+  }
+
+  app-header-layout {
+    background-color: var(--primary-background-color);
+  }
+
+  app-header {
+    color: var(--primary-text-color);
+    background-color: var(--primary-color);
+  }
+
+  paper-icon-button {
+    --paper-icon-button-ink-color: var(--primary-base-color);
+  }
+
+  paper-icon-button + [main-title] {
+    margin-left: 24px;
+  }
+
+  .drawer-list a {
+    display: block;
+    padding: 0 16px;
+    text-decoration: none;
+    color: var(--accent-color);
+    line-height: 40px;
+  }
+
+  .drawer-list a.iron-selected {
+    color: black;
+    font-weight: bold;
+  }
+
+  paper-menu {
+    --paper-menu-background-color: none;
+    --paper-menu-focused-item-after: {
+      background: none;
+    };
+  }
+
+  paper-icon-item {
+    --paper-icon-item: {
+      user-select: none;
+    };
+    --paper-item-selected: {
+      color: var(--primary-color);
+      background-color: #f5f5f5;
+    };
+  }
+
+  paper-icon-item iron-icon {
+    opacity: .54;
+  }
+
+  paper-icon-item.iron-selected iron-icon {
+    opacity: 1;
+  }
+  </style>
+
+  <app-location route="{{route}}" use-hash-as-path></app-location>
+  <app-route
+  route="{{route}}"
+  pattern="/:page"
+  data="{{routeData}}"
+  tail="{{subroute}}"></app-route>
+
+  <app-drawer-layout fullbleed>
+    <!-- Drawer content -->
+    <app-drawer swipe-open="true">
+      <paper-menu id="mainMenu" selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+        <paper-icon-item name="all">
+          <iron-icon icon="places:all-inclusive" item-icon></iron-icon>
+          All
+          <paper-ripple></paper-ripple>
+        </paper-icon-item>
+        <paper-icon-item name="downloading">
+          <iron-icon icon="file-download" item-icon></iron-icon>
+          Downloading
+          <paper-ripple></paper-ripple>
+        </paper-icon-item>
+        <paper-icon-item name="unfinished">
+          <iron-icon icon="error" item-icon></iron-icon>
+          Unfinished
+          <paper-ripple></paper-ripple>
+        </paper-icon-item>
+        <paper-icon-item name="downloaded">
+          <iron-icon icon="done" item-icon></iron-icon>
+          Downloaded
+          <paper-ripple></paper-ripple>
+        </paper-icon-item>
+        <hr class="paper-icon-item-divider"/>
+        <paper-icon-item name="settings">
+          <iron-icon icon="settings" item-icon></iron-icon>
+          Settings
+          <paper-ripple></paper-ripple>
+        </paper-icon-item>
+        <paper-icon-item name="about">
+          <iron-icon icon="help" item-icon></iron-icon>
+          About
+          <paper-ripple></paper-ripple>
+        </paper-icon-item>
+      </paper-menu>
+    </app-drawer>
+
+    <!-- Main content -->
+    <app-header-layout has-scrolling-region>
+      <app-header condenses fixed effects="waterfall">
+        <app-toolbar>
+          <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+          <div main-title>[[pageTitle]]</div>
+        </app-toolbar>
+      </app-header>
+      <neon-animated-pages
+      id="pages"
+      class="flex"
+      selected="[[page]]"
+      attr-for-selected="name"
+      fallback-selection="view404"
+      role="main"
+      entry-animation="fade-in-animation"
+      exit-animation="fade-out-animation">
+      <all-view name="all"></all-view>
+      <downloading-view name="downloading"></downloading-view>
+      <unfinished-view name="unfinished"></unfinished-view>
+      <downloaded-view name="downloaded"></downloaded-view>
+      <settings-view name="settings"></settings-view>
+      <about-view name="about"></about-view>
+      <view404-view name="view404"></view404-view>
+    </neon-animated-pages>
+    <!-- common elements like fab etc. -->
+    <common-element page=[[page]]></common-element>
+  </app-header-layout>
+</app-drawer-layout>
+</template>
+
+<script>
+Polymer({
+  is: 'youtube-dl',
+
+  properties: {
+    page: {
+      type: String,
+      reflectToAttribute: true,
+      observer: '_pageChanged'
+    },
+    pageTitle: {
+      type: String,
+      reflectToAttribute: true,
+      computed: 'computePageTitle(page)'
+    }
+  },
+
+  observers: [
+    '_routePageChanged(routeData.page)'
+  ],
+
+  _routePageChanged: function(page) {
+    this.page = page || 'all';
+  },
+
+  _pageChanged: function(page) {
+    // Load page import on demand. Show 404 page if fails
+    var resolvedPageUrl = this.resolveUrl(page + '-view' + '.html');
+    this.importHref(resolvedPageUrl, null, this._showPage404, true);
+  },
+
+  computePageTitle: function(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  },
+
+  _showPage404: function() {
+    this.page = 'view404';
+  },
+
+  ready: function() {
+    // attach event listeners on dom ready
+    this.listen(this.$.mainMenu, 'tap', 'onMenuTap');
+    this.listen(this.$.mainMenu, 'keydown', 'onMenuEnter');
+  },
+
+  onMenuEnter: function(e) {
+    // for main menu
+    if (e.key === 'Enter' && e.target.nodeName === 'PAPER-ICON-ITEM') {
+      window.location.hash = '/' + e.target.getAttribute('name');
+    }
+  },
+
+  // handle tap events of all kinds and purposes
+  onMenuTap: function(e) {
+    // for main menu
+    if (e.target.nodeName === 'PAPER-ICON-ITEM') {
+      window.location.hash = '/' + e.target.getAttribute('name');
+    }
+  },
+});
+</script>
+</dom-module>

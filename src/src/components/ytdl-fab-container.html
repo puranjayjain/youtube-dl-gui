@@ -1,0 +1,128 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animation.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
+
+<link rel="import" href="fab-download.html">
+<link rel="import" href="lightning.html">
+
+<dom-module id="ytdl-fab-container">
+  <template>
+  <style>
+  :host {
+    position: fixed;
+    bottom: 25px;
+    right: 20px;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  paper-fab {
+    --paper-fab-background: var(--accent-color);
+    --paper-fab-keyboard-focus-background: var(--light-accent-color);
+  }
+
+  paper-fab.lightning {
+    margin-bottom: 15px;
+    --paper-fab-iron-icon: {
+      width: 18px;
+      height: 18px;
+    };
+  }
+
+  paper-tooltip {
+    --paper-tooltip: {
+      line-height: 14px;
+      font-size: 14px;
+      padding: 16px;
+    };
+  }
+  </style>
+  <paper-fab mini id="fabQuickDownload" class="lightning" icon="youtube-dl:lightning"></paper-fab>
+  <paper-tooltip for="fabQuickDownload" position="left">Quick Download from a new URL</paper-tooltip>
+  <fab-download
+  id="fabDownload"
+  newDownloadState={{newDownloadState}}
+  newdownloaddialog={{newdownloaddialog}}
+  ></fab-download>
+</template>
+
+</dom-module>
+
+<script>
+
+Polymer({
+  is: 'ytdl-fab-container',
+
+  behaviors: [
+    Polymer.NeonAnimationRunnerBehavior
+  ],
+
+  properties: {
+    page: {
+      type: String,
+      observer: '_pageNameChanged'
+    },
+    newdownloaddialog: {
+      type: Boolean,
+      notify: true
+    },
+
+    animationConfig: {
+      type: Object,
+      value: function() {
+        return {
+          'entry': [{
+            name: 'scale-up-animation',
+            node: this
+          }],
+          'exit': [{
+            name: 'scale-down-animation',
+            node: this
+          }]
+        }
+      }
+    }
+  },
+
+  listeners: {
+    'neon-animation-finish': '_onAnimationFinish'
+  },
+
+  _onAnimationFinish: function() {
+    if (!this.opened) {
+      this.style.display = '';
+    }
+  },
+
+  _show: function() {
+    // if not shown
+    if (!this.opened) {
+      this.opened = true;
+      this.style.display = 'flex';
+      this.playAnimation('entry');
+    }
+  },
+
+  _hide: function() {
+    // if shown
+    if (this.opened) {
+      this.style.display = 'flex';
+      this.opened = false;
+      this.playAnimation('exit');
+    }
+  },
+
+  _pageNameChanged: function(page) {
+    // open or keep the animation closed
+    if (['all','downloading','unfinished','downloaded'].indexOf(page) > -1) {
+      this._show();
+    }
+    else {
+      this._hide();
+    }
+  },
+});
+
+</script>

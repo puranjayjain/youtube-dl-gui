@@ -1,0 +1,156 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-styles/color.html">
+<link rel="import" href="../bower_components/paper-styles/default-theme.html">
+
+<!-- shared styles for all views along with the base theme-->
+<dom-module id="shared-styles">
+  <template>
+  <style>
+  /*base theme which can be switched b/w light and dark*/
+  :root {
+    /*
+    * You can use these generic variables in your elements for easy theming.
+    * For example, if all your elements use `--primary-text-color` as its main
+    * color, then switching from a light to a dark theme is just a matter of
+    * changing the value of `--primary-text-color` in your application.
+    */
+    --primary-text-color: var(--light-theme-text-color);
+    --primary-background-color: var(--light-theme-background-color);
+    --primary-card-color: var(--light-theme-card-color);
+    --primary-base-color: var(--light-theme-base-color);
+    --primary-text-color: var(--light-theme-text-color);
+    --secondary-text-color: var(--light-theme-secondary-color);
+    --disabled-text-color: var(--light-theme-disabled-color);
+    --divider-theme: var(--light-divider-theme);
+    --error-color: var(--paper-deep-orange-a700);
+
+    /*
+    * Primary and accent colors. Also see color.html for more colors.
+    */
+    --primary-color: var(--paper-red-500);
+    --light-primary-color: var(--paper-red-100);
+    --dark-primary-color: var(--paper-red-700);
+    --accent-color: var(--paper-deep-purple-a200);
+    --light-accent-color: var(--paper-deep-purple-a100);
+    --dark-accent-color: var(--paper-deep-purple-a400);
+
+    /*
+    * Material Design Light background theme
+    */
+    --light-theme-background-color: var(--paper-grey-50);
+    --light-theme-card-color: #fff;
+    --light-theme-text-color: var(--paper-grey-900);
+    --light-divider-theme: {
+      background-color: var(--light-theme-base-color);
+      opacity: .12;
+    };
+
+    /*
+    * Material Design Dark background theme
+    */
+    --dark-theme-background-color: #303030;
+    --dark-theme-card-color: var(--paper-grey-800);
+    --dark-theme-text-color: #fff;
+    --dark-divider-theme: {
+      background-color: var(--dark-theme-base-color);
+      opacity: .12;
+    };
+
+    /*
+    * selection color
+    */
+    --selection-color: var(--dark-primary-color);
+  }
+
+  .card {
+    margin: 24px;
+    padding: 16px;
+
+    color: var(--primary-text-color);
+    border-radius: 5px;
+    background-color: var(--primary-card-color);
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+  }
+
+  .circle {
+    display: inline-block;
+
+    width: 64px;
+    height: 64px;
+
+    text-align: center;
+
+    color: #555;
+    border-radius: 50%;
+    background: #ddd;
+
+    font-size: 30px;
+    line-height: 64px;
+  }
+
+  h1 {
+    margin: 16px 0;
+    /*color: #212121;*/
+    color: var(--primary-text-color);
+    font-size: 22px;
+  }
+
+  /* user selection color */
+  ::selection {
+    background: var(--selection-color); /* WebKit/Blink Browsers */
+    color: #fff;
+  }
+
+  /*custom scroll bars*/
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-button {
+    width: 0;
+    height: 0;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--paper-deep-purple-a700);
+    border: 0 none transparent;
+    border-radius: 50px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--paper-deep-purple-a400);
+  }
+
+  ::-webkit-scrollbar-thumb:active {
+    background: var(--paper-deep-purple-a200);
+    border-radius: 0;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+    border: 0 none transparent;
+    border-radius: 50px;
+  }
+
+  ::-webkit-scrollbar-track:hover {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-track:active {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  hr.paper-icon-item-divider {
+    margin: 8px 0;
+    height: 1px;
+    border: none;
+    @apply(--divider-theme);
+  }
+  </style>
+</template>
+</dom-module>
