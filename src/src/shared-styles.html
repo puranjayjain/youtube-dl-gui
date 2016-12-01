@@ -18,10 +18,11 @@
     --primary-background-color: var(--light-theme-background-color);
     --primary-card-color: var(--light-theme-card-color);
     --primary-base-color: var(--light-theme-base-color);
-    --primary-text-color: var(--light-theme-text-color);
-    --secondary-text-color: var(--light-theme-secondary-color);
-    --disabled-text-color: var(--light-theme-disabled-color);
-    --divider-theme: var(--light-divider-theme);
+
+    --primary-text-color: var(--light-theme-primary-text-color);
+    --secondary-text-color: var(--light-theme-secondary-text-color);
+    --disabled-text-color: var(--light-theme-disabled-text-color);
+    --divider-theme-color: var(--light-divider-theme-color);
     --error-color: var(--paper-deep-orange-a700);
 
     /*
@@ -40,7 +41,10 @@
     --light-theme-background-color: var(--paper-grey-50);
     --light-theme-card-color: #fff;
     --light-theme-text-color: var(--paper-grey-900);
-    --light-divider-theme: #000;
+    --light-theme-primary-text-color: rgba(0, 0, 0, .87);
+    --light-theme-secondary-text-color: rgba(0, 0, 0, .54);
+    --light-theme-disabled-text-color: rgba(0, 0, 0, .38);
+    --light-divider-theme-color: rgba(0, 0, 0, .12);
 
     /*
     * Material Design Dark background theme
@@ -48,7 +52,10 @@
     --dark-theme-background-color: #303030;
     --dark-theme-card-color: var(--paper-grey-800);
     --dark-theme-text-color: #fff;
-    --dark-divider-theme: #fff;
+    --dark-theme-primary-text-color: #fff;
+    --dark-theme-secondary-text-color: rgba(255, 255, 255, .7);
+    --dark-theme-disabled-text-color: rgba(255, 255, 255, .5);
+    --dark-divider-theme-color: rgba(255, 255, 255, .12);
 
     /*
     * selection color
@@ -143,8 +150,7 @@
     margin: 8px 0;
     height: 1px;
     border: none;
-    opacity: .12;
-    background-color: var(--divider-theme);
+    background-color: var(--divider-theme-color);
   }
   </style>
 </template>

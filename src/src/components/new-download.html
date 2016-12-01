@@ -6,20 +6,28 @@
 
 <dom-module id="new-download">
   <template>
-    <paper-dialog
-    id="dialog"
-    opened={{newdownloaddialog}}
-    entry-animation="scale-up-animation"
-    exit-animation="fade-out-animation"
-    with-backdrop
-    >
-    <h2>Download a video or a playlist (if-supported)</h2>
-    <paper-input always-float-label label="Enter or paste the video url here"></paper-input>
-    <div class="buttons">
-      <paper-button dialog-dismiss>Cancel</paper-button>
-      <paper-button dialog-confirm autofocus>Accept</paper-button>
-    </div>
-  </paper-dialog>
+  <style include="shared-styles">
+  paper-input {
+    --paper-input-container-color: var(--divider-theme-color);
+    --paper-input-container-label: {
+      color: var(--secondary-text-color);
+    };
+  }
+  </style>
+  <paper-dialog
+  id="dialog"
+  opened={{newdownloaddialog}}
+  entry-animation="scale-up-animation"
+  exit-animation="fade-out-animation"
+  with-backdrop
+  >
+  <h2>Download a video or a playlist (if-supported)</h2>
+  <paper-input always-float-label label="Enter or paste the video url here"></paper-input>
+  <div class="buttons">
+    <paper-button dialog-dismiss>Cancel</paper-button>
+    <paper-button dialog-confirm autofocus>Accept</paper-button>
+  </div>
+</paper-dialog>
 </template>
 
 </dom-module>
