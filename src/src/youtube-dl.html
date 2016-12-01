@@ -16,6 +16,7 @@
 
 <link rel="import" href="components/ytdl-fab-container.html">
 <link rel="import" href="components/new-download.html">
+<link rel="import" href="components/final-download.html">
 
 <dom-module id="youtube-dl">
   <template>
@@ -160,7 +161,18 @@
 <!-- dialogs -->
 <new-download
 newdownloaddialog={{newdownloaddialog}}
+finaldownloaddialog={{finaldownloaddialog}}
+url={{url}}
+username={{username}}
+password={{password}}
 ></new-download>
+<final-download
+newdownloaddialog={{newdownloaddialog}}
+finaldownloaddialog={{finaldownloaddialog}}
+url={{url}}
+username={{username}}
+password={{password}}
+></final-download>
 </template>
 
 <script>
@@ -181,6 +193,18 @@ Polymer({
     newdownloaddialog: {
       type: Boolean
     },
+    finaldownloaddialog: {
+      type: Boolean
+    },
+    url: {
+      type: String
+    },
+    username: {
+      type: String
+    },
+    password: {
+      type: String
+    }
   },
 
   observers: [

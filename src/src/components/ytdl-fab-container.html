@@ -8,7 +8,7 @@
 
 <dom-module id="ytdl-fab-container">
   <template>
-  <style>
+  <style is="custom-style" include="shared-styles">
   :host {
     position: fixed;
     bottom: 25px;
@@ -18,24 +18,11 @@
     align-items: center;
   }
 
-  paper-fab {
-    --paper-fab-background: var(--accent-color);
-    --paper-fab-keyboard-focus-background: var(--light-accent-color);
-  }
-
   paper-fab.lightning {
     margin-bottom: 15px;
     --paper-fab-iron-icon: {
       width: 18px;
       height: 18px;
-    };
-  }
-
-  paper-tooltip {
-    --paper-tooltip: {
-      line-height: 14px;
-      font-size: 14px;
-      padding: 16px;
     };
   }
   </style>
