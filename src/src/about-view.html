@@ -1,27 +1,76 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/paper-styles/typography.html">
+<link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="about-view">
   <template>
-    <style include="shared-styles">
-      :host {
-        display: block;
+  <style include="iron-flex iron-flex-alignment iron-flex-factors shared-styles">
+  .cardItem {
+    position: relative;
+    padding: 16px;
+    user-select: none;
+    border-radius: 3px;
+    @apply(--paper-font-title);
+  }
 
-        padding: 10px;
-      }
-    </style>
+  paper-ripple {
+    color: var(--primary-color);
+  }
 
-    <div class="card">
-      <div class="circle">3</div>
-      <h1>View Three</h1>
-      <p>Modus commodo minimum eum te, vero utinam assueverit per eu.</p>
-      <p>Ea duis bonorum nec, falli paulo aliquid ei eum.Has at minim mucius aliquam, est id tempor laoreet.Pro saepe pertinax ei, ad pri animal labores suscipiantur.</p>
+  .check {
+    color: #fff;
+    background: var(--accent-color);
+  }
+  </style>
+
+  <div class="card">
+    <div class="cardTitle">Youtube Dl GUI - v0.0.3</div>
+    <div class="cardItem">
+      Node Js Version 6.5.0
+      <paper-ripple></paper-ripple>
     </div>
-  </template>
+    <div class="cardItem">
+      Chrome 53.0.2785.113
+      <paper-ripple></paper-ripple>
+    </div>
+    <div class="cardItem">
+      Electron 1.4.3
+      <paper-ripple></paper-ripple>
+    </div>
+    <div class="cardItem">
+      Youtubedl 2016.12.01
+      <paper-ripple></paper-ripple>
+    </div>
+  </div>
+  <div class="card">
+    <div class="cardTitle">Help and Feedback</div>
+    <paper-button class="layout horizontal">
+      <div class="flex-1">
+        Reset to Default Settings
+      </div>
+      <iron-icon icon="history"></iron-icon>
+    </paper-button>
+    <paper-button class="layout horizontal">
+      <div class="flex-1">
+        Report a Bug
+      </div>
+      <iron-icon icon="bug-report"></iron-icon>
+    </paper-button>
+    <paper-button class="check" raised>
+      Check for Updates
+    </paper-button>
+  </div>
+</template>
 
-  <script>
-    Polymer({
-      is: 'about-view'
-    });
-  </script>
+<script>
+Polymer({
+  is: 'about-view'
+});
+</script>
 </dom-module>

@@ -16,7 +16,9 @@
 
     <div class="card">
       <div class="cardTitle">Theme</div>
-      <paper-toggle-button>Use Dark Theme</paper-toggle-button>
+      <paper-toggle-button>
+        Use Dark Theme
+      </paper-toggle-button>
     </div>
     <div class="card">
       <div class="cardTitle">Download Options</div>
@@ -37,13 +39,14 @@
         class="flex-1"
         label="Default folder for downloads"
         placeholder="e.g C:\Users\Foo\Downloads"
+        error-message="This is not a valid folder path"
         ></paper-input>
         <paper-icon-button
         id="selectButton"
-        icon="more-horiz"
-        alt="Select file path"
+        icon="folder"
+        alt="Select folder path"
         ></paper-icon-button>
-        <paper-tooltip for="selectButton">Select file path</paper-tooltip>
+        <paper-tooltip for="selectButton">Select folder path</paper-tooltip>
       </div>
     </div>
     <div class="card">
@@ -51,7 +54,7 @@
       <paper-toggle-button>Show download progress in taskbar</paper-toggle-button>
     </div>
     <div class="card">
-      <div class="cardTitle"></div>
+      <div class="cardTitle">Workarounds</div>
       <paper-input
       label="Encoding (experimental)"
       placeholder="Force the specified encoding"
