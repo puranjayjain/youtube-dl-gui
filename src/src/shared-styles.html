@@ -1,6 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-styles/color.html">
 <link rel="import" href="../bower_components/paper-styles/default-theme.html">
+<link rel="import" href="../bower_components/paper-styles/classes/shadow.html">
 
 <!-- shared styles for all views along with the base theme-->
 <dom-module id="shared-styles">
@@ -18,10 +19,11 @@
     --primary-background-color: var(--light-theme-background-color);
     --primary-card-color: var(--light-theme-card-color);
     --primary-base-color: var(--light-theme-base-color);
-    --primary-text-color: var(--light-theme-text-color);
-    --secondary-text-color: var(--light-theme-secondary-color);
-    --disabled-text-color: var(--light-theme-disabled-color);
-    --divider-theme: var(--light-divider-theme);
+
+    --primary-text-color: var(--light-theme-primary-text-color);
+    --secondary-text-color: var(--light-theme-secondary-text-color);
+    --disabled-text-color: var(--light-theme-disabled-text-color);
+    --divider-theme-color: var(--light-divider-theme-color);
     --error-color: var(--paper-deep-orange-a700);
 
     /*
@@ -40,10 +42,10 @@
     --light-theme-background-color: var(--paper-grey-50);
     --light-theme-card-color: #fff;
     --light-theme-text-color: var(--paper-grey-900);
-    --light-divider-theme: {
-      background-color: var(--light-theme-base-color);
-      opacity: .12;
-    };
+    --light-theme-primary-text-color: rgba(0, 0, 0, .87);
+    --light-theme-secondary-text-color: rgba(0, 0, 0, .54);
+    --light-theme-disabled-text-color: rgba(0, 0, 0, .38);
+    --light-divider-theme-color: rgba(0, 0, 0, .12);
 
     /*
     * Material Design Dark background theme
@@ -51,10 +53,10 @@
     --dark-theme-background-color: #303030;
     --dark-theme-card-color: var(--paper-grey-800);
     --dark-theme-text-color: #fff;
-    --dark-divider-theme: {
-      background-color: var(--dark-theme-base-color);
-      opacity: .12;
-    };
+    --dark-theme-primary-text-color: #fff;
+    --dark-theme-secondary-text-color: rgba(255, 255, 255, .7);
+    --dark-theme-disabled-text-color: rgba(255, 255, 255, .5);
+    --dark-divider-theme-color: rgba(255, 255, 255, .12);
 
     /*
     * selection color
@@ -63,13 +65,18 @@
   }
 
   .card {
-    margin: 24px;
+    margin: 12px;
     padding: 16px;
 
     color: var(--primary-text-color);
-    border-radius: 5px;
+    border-radius: 3px;
     background-color: var(--primary-card-color);
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+    @apply(--shadow-elevation-2dp);
+  }
+
+  .card .cardTitle {
+    margin-bottom: 24px;
+    @apply(--paper-font-body2);
   }
 
   .circle {
@@ -149,7 +156,48 @@
     margin: 8px 0;
     height: 1px;
     border: none;
-    @apply(--divider-theme);
+    background-color: var(--divider-theme-color);
+  }
+
+  paper-tooltip {
+    --paper-tooltip: {
+      line-height: 14px;
+      font-size: 14px;
+      padding: 16px;
+    };
+  }
+
+  paper-toggle-button {
+    user-select: none;
+  }
+
+  paper-input {
+    --paper-input-container-color: var(--divider-theme-color);
+    --paper-input-container-label: {
+      color: var(--secondary-text-color);
+    };
+  }
+
+  paper-dialog {
+    --paper-dialog: {
+      background: var(--primary-card-color);
+    }
+  }
+
+  paper-fab {
+    --paper-fab-background: var(--accent-color);
+    --paper-fab-keyboard-focus-background: var(--light-accent-color);
+  }
+
+  paper-icon-button {
+    --paper-icon-button-ink-color: var(--accent-color);
+    --paper-icon-button: {
+      color: var(--accent-color);
+    };
+  }
+
+  paper-spinner-lite {
+    --paper-spinner-color: var(--primary-color);
   }
   </style>
 </template>
