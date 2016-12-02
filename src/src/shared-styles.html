@@ -1,6 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-styles/color.html">
 <link rel="import" href="../bower_components/paper-styles/default-theme.html">
+<link rel="import" href="../bower_components/paper-styles/classes/shadow.html">
 
 <!-- shared styles for all views along with the base theme-->
 <dom-module id="shared-styles">
@@ -64,13 +65,18 @@
   }
 
   .card {
-    margin: 24px;
+    margin: 12px;
     padding: 16px;
 
     color: var(--primary-text-color);
-    border-radius: 5px;
+    border-radius: 3px;
     background-color: var(--primary-card-color);
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+    @apply(--shadow-elevation-2dp);
+  }
+
+  .card .cardTitle {
+    margin-bottom: 24px;
+    @apply(--paper-font-body2);
   }
 
   .circle {
@@ -188,6 +194,10 @@
     --paper-icon-button: {
       color: var(--accent-color);
     };
+  }
+
+  paper-spinner-lite {
+    --paper-spinner-color: var(--primary-color);
   }
   </style>
 </template>

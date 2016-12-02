@@ -8,10 +8,19 @@
 <link rel="import" href="../../bower_components/iron-collapse/iron-collapse.html">
 <link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner-lite.html">
 
 <dom-module id="final-download">
   <template>
   <style is="custom-style" include="iron-flex iron-flex-alignment iron-flex-factors shared-styles">
+  paper-dialog {
+    --paper-dialog: {
+      min-width: 500px;
+    }
+  }
   </style>
   <paper-dialog
   opened={{finaldownloaddialog}}
@@ -27,22 +36,49 @@
     label="Path to save file"
     placeholder="e.g. C:\Users\User\Videos"
     error-message="This is not a valid file path"
-    auto-validate
     ></paper-input>
     <paper-icon-button
     id="selectButton"
     icon="more-horiz"
     alt="Select file path"
     ></paper-icon-button>
-    <paper-tooltip for="filepath">Select file path</paper-tooltip>
+    <paper-tooltip for="selectButton">Select file path</paper-tooltip>
   </div>
-  <div class="buttons">
-    <paper-button dialog-dismiss>cancel</paper-button>
-    <paper-button
-    id="start"
-    dialog-confirm
-    >start</paper-button>
-  </div>
+  <paper-dropdown-menu label="Choose a format">
+    <paper-listbox
+    class="dropdown-content"
+    selected=[[format]]>
+    <paper-item>Default</paper-item>
+    <paper-item>144p</paper-item>
+    <paper-item>240p</paper-item>
+    <paper-item>720p</paper-item>
+    <paper-item>144p</paper-item>
+    <paper-item>240p</paper-item>
+    <paper-item>720p</paper-item>
+    <paper-item>144p</paper-item>
+    <paper-item>240p</paper-item>
+    <paper-item>720p</paper-item>
+    <paper-item>144p</paper-item>
+    <paper-item>240p</paper-item>
+    <paper-item>720p</paper-item>
+    <paper-item>144p</paper-item>
+    <paper-item>240p</paper-item>
+    <paper-item>720p</paper-item>
+    <paper-item>144p</paper-item>
+    <paper-item>240p</paper-item>
+    <paper-item>720p</paper-item>
+    <paper-item>144p</paper-item>
+    <paper-item>240p</paper-item>
+    <paper-item>72dddsss0p</paper-item>
+  </paper-listbox>
+</paper-dropdown-menu>
+<paper-spinner-lite
+alt="fetching formats"
+active=[[active]]></paper-spinner-lite>
+<div class="buttons">
+  <paper-button dialog-dismiss>cancel</paper-button>
+  <paper-button id="start">start</paper-button>
+</div>
 </paper-dialog>
 </template>
 
@@ -76,12 +112,22 @@ Polymer({
     password: {
       type: String,
       notify: true
-    }
+    },
+    format: {
+      type: Number,
+      value: 0
+    },
+    active: {
+      type: Boolean,
+      value: true
+    },
   },
 
   ready: function() {
     // attach event listeners on dom ready
     this.listen(this.$.start, 'tap', 'onStart');
+    // reset loader
+    this.active = true;
   },
 
   onStart: function () {
