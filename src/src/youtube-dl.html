@@ -10,6 +10,7 @@
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/iron-icons/places-icons.html">
+<link rel="import" href="../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
@@ -32,6 +33,10 @@
   app-header {
     color: var(--primary-text-color);
     background-color: var(--primary-color);
+  }
+
+  paper-material {
+    height: 100%;
   }
 
   paper-icon-button {
@@ -72,12 +77,24 @@
     };
   }
 
+  paper-icon-button {
+    --paper-icon-button-ink-color: var(--primary-text-color);
+    --paper-icon-button: {
+      color: var(--primary-text-color);
+    };
+  }
+
   paper-icon-item iron-icon {
     opacity: .54;
   }
 
   paper-icon-item.iron-selected iron-icon {
     opacity: 1;
+  }
+
+  neon-animated-pages {
+    overflow: hidden;
+    height: 100%;
   }
   </style>
 
@@ -91,39 +108,41 @@
   <app-drawer-layout fullbleed>
     <!-- Drawer content -->
     <app-drawer swipe-open="true">
-      <paper-menu id="mainMenu" selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-        <paper-icon-item name="all">
-          <iron-icon icon="places:all-inclusive" item-icon></iron-icon>
-          All
-          <paper-ripple></paper-ripple>
-        </paper-icon-item>
-        <paper-icon-item name="downloading">
-          <iron-icon icon="file-download" item-icon></iron-icon>
-          Downloading
-          <paper-ripple></paper-ripple>
-        </paper-icon-item>
-        <paper-icon-item name="unfinished">
-          <iron-icon icon="error" item-icon></iron-icon>
-          Unfinished
-          <paper-ripple></paper-ripple>
-        </paper-icon-item>
-        <paper-icon-item name="downloaded">
-          <iron-icon icon="done" item-icon></iron-icon>
-          Downloaded
-          <paper-ripple></paper-ripple>
-        </paper-icon-item>
-        <hr class="paper-icon-item-divider"/>
-        <paper-icon-item name="settings">
-          <iron-icon icon="settings" item-icon></iron-icon>
-          Settings
-          <paper-ripple></paper-ripple>
-        </paper-icon-item>
-        <paper-icon-item name="about">
-          <iron-icon icon="help" item-icon></iron-icon>
-          About
-          <paper-ripple></paper-ripple>
-        </paper-icon-item>
-      </paper-menu>
+      <paper-material elevation="1">
+        <paper-menu id="mainMenu" selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+          <paper-icon-item name="all">
+            <iron-icon icon="places:all-inclusive" item-icon></iron-icon>
+            All
+            <paper-ripple></paper-ripple>
+          </paper-icon-item>
+          <paper-icon-item name="downloading">
+            <iron-icon icon="file-download" item-icon></iron-icon>
+            Downloading
+            <paper-ripple></paper-ripple>
+          </paper-icon-item>
+          <paper-icon-item name="unfinished">
+            <iron-icon icon="error" item-icon></iron-icon>
+            Unfinished
+            <paper-ripple></paper-ripple>
+          </paper-icon-item>
+          <paper-icon-item name="downloaded">
+            <iron-icon icon="done" item-icon></iron-icon>
+            Downloaded
+            <paper-ripple></paper-ripple>
+          </paper-icon-item>
+          <hr class="paper-icon-item-divider"/>
+          <paper-icon-item name="settings">
+            <iron-icon icon="settings" item-icon></iron-icon>
+            Settings
+            <paper-ripple></paper-ripple>
+          </paper-icon-item>
+          <paper-icon-item name="about">
+            <iron-icon icon="help" item-icon></iron-icon>
+            About
+            <paper-ripple></paper-ripple>
+          </paper-icon-item>
+        </paper-menu>
+      </paper-material>
     </app-drawer>
 
     <!-- Main content -->
@@ -187,7 +206,6 @@ Polymer({
     },
     pageTitle: {
       type: String,
-      reflectToAttribute: true,
       computed: 'computePageTitle(page)'
     },
     newdownloaddialog: {

@@ -1,22 +1,167 @@
-<link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
-<link rel="import" href="../bower_components/paper-styles/typography.html">
-<link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
-<link rel="import" href="../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<link rel="import" href="shared-styles.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+<link rel="import" href="../../bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="../shared-styles.html">
 
 <dom-module id="custom-datatable">
   <template>
   <style include="iron-flex iron-flex-alignment iron-flex-factors shared-styles">
-  </style>
+  :host {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+  }
 
+  .row {
+    height: 48px;
+    background-color: var(--primary-card-color);
+    color: var(--primary-text-color);
+    border-bottom: 1px solid var(--divider-theme-color);
+    padding-right: 24px;
+    font-family: 'robotoregular';
+    font-size: 13px;
+  }
+
+  .row:last-child {
+    height: 56px;
+  }
+
+  .row.header {
+    box-sizing: border-box;
+    position: absolute;
+    z-index: 1;
+    height: 64px;
+    top: 0;
+    width: 100%;
+    padding-right: 40px;
+    font-family: 'robotomedium';
+    font-size: 12px;
+    color: var(--secondary-text-color);
+    user-select: none;
+  }
+
+  .row.header .cell iron-icon {
+    opacity: 0;
+    transform: scale(.5);
+    transition: .3s ease-out;
+  }
+
+  iron-icon {
+    --iron-icon-height:: 16px;
+    --iron-icon-width: 16px;
+    --iron-icon-fill-color: var(--secondary-text-color);
+    padding-right: 2px;
+  }
+
+  .row:not(.header):hover {
+    background-color: var(--paper-grey-100);
+  }
+
+  .row.header .cell:hover iron-icon {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  .cell:not(.check) {
+    padding-left: 56px;
+    text-align: right;
+    min-width: 100px;
+    line-height: 64px;
+    position: relative;
+  }
+
+  .cell.check {
+    line-height: 64px;
+    width: 20px;
+  }
+
+  .cell:first-child, .cell:nth-child(2) {
+    padding-left: 24px;
+  }
+
+  .cell.num {
+    text-align: right;
+  }
+
+  iron-list {
+    top: 64px;
+    height: calc(100% - 64px);
+    width: 100%;
+  }
+
+  paper-checkbox {
+    --paper-checkbox-checked-ink-color: var(--accent-color);
+    --paper-checkbox-checked-color: var(--accent-color);
+  }
+  </style>
+  <iron-ajax url="data/contacts.json" last-response="{{data}}" auto></iron-ajax>
+
+  <div class="layout horizontal row header">
+    <div class="cell check">
+      <paper-checkbox></paper-checkbox>
+    </div>
+    <template is="dom-repeat" items=[[tableheaders]] as="heading">
+      <div class="flex cell">
+        <iron-icon icon=[[heading.icon]]></iron-icon>
+        [[heading.title]]
+        <paper-ripple></paper-ripple>
+      </div>
+    </template>
+  </div>
+  <iron-list class="layout vertical" items=[[data]] as="item">
+    <template>
+      <div class="layout horizontal row center">
+        <div class="cell check">
+          <paper-checkbox></paper-checkbox>
+        </div>
+        <div class="flex cell">
+          [[item.name]]
+        </div>
+        <div class="flex cell">
+          [[item.phone]]
+        </div>
+        <div class="flex cell">
+          [[item.email]]
+        </div>
+      </div>
+    </template>
+  </iron-list>
 </template>
 
 <script>
 Polymer({
-  is: 'custom-datatable'
+  is: 'custom-datatable',
+
+  properties: {
+    tableheaders: {
+      type: Array,
+      value: [
+        {
+          title: 'Number',
+          icon: 'arrow-upward'
+        },
+        {
+          title: 'Page',
+          icon: 'arrow-upward'
+        },
+        {
+          title: 'Last Try',
+          icon: 'arrow-downward'
+        }
+      ]
+    },
+  }
 });
 </script>
 </dom-module>

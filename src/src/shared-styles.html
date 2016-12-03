@@ -110,8 +110,9 @@
 
   /*custom scroll bars*/
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    height: 16px;
+    overflow: visible;
+    width: 16px;
   }
 
   ::-webkit-scrollbar-button {
@@ -120,36 +121,59 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: var(--paper-deep-purple-a700);
-    border: 0 none transparent;
-    border-radius: 50px;
+    background-color: rgba(0,0,0,.2);
+    background-clip: padding-box;
+    border: solid transparent;
+    /* dupe duplicate */
+    border-width: 1px 1px 1px 2px;
+    border-width: 1px 1px 1px 6px;
+    min-height: 28px;
+    padding: 100px 0 0;
+    -webkit-box-shadow: inset 1px 1px 0 rgba(0,0,0,.1),inset 0 -1px 0 rgba(0,0,0,.07);
+    box-shadow: inset 1px 1px 0 rgba(0,0,0,.1),inset 0 -1px 0 rgba(0,0,0,.07);
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--paper-deep-purple-a400);
+    background-color: rgba(0,0,0,.4);
+    -webkit-box-shadow: inset 1px 1px 1px rgba(0,0,0,.25);
+    box-shadow: inset 1px 1px 1px rgba(0,0,0,.25);
   }
 
   ::-webkit-scrollbar-thumb:active {
-    background: var(--paper-deep-purple-a200);
-    border-radius: 0;
+    background-color: rgba(0,0,0,.6);
   }
 
   ::-webkit-scrollbar-track {
-    background: transparent;
-    border: 0 none transparent;
-    border-radius: 50px;
+    background-clip: padding-box;
+    border: solid transparent;
+    border-width: 0 0 0 4px;
+  }
+
+  ::-webkit-scrollbar-track-piece {
+    background-clip: padding-box;
+    background-color: #f5f5f5;
+    border: solid #fff;
+    -webkit-box-shadow: inset 1px 0 0 rgba(0,0,0,.14),inset -1px 0 0 rgba(0,0,0,.07);
+    box-shadow: inset 1px 0 0 rgba(0,0,0,.14),inset -1px 0 0 rgba(0,0,0,.07);
   }
 
   ::-webkit-scrollbar-track:hover {
-    background: transparent;
+    background-color: rgba(0,0,0,.05);
+    -webkit-box-shadow: inset 1px 0 0 rgba(0,0,0,.1);
+    box-shadow: inset 1px 0 0 rgba(0,0,0,.1);
   }
 
   ::-webkit-scrollbar-track:active {
     background: transparent;
   }
 
-  ::-webkit-scrollbar-corner {
-    background: transparent;
+  -webkit-scrollbar-corner {
+    background-clip: padding-box;
+    background-color: #f5f5f5;
+    border: solid #fff;
+    border-width: 3px 0 0 3px;
+    -webkit-box-shadow: inset 1px 1px 0 rgba(0,0,0,.14);
+    box-shadow: inset 1px 1px 0 rgba(0,0,0,.14);
   }
 
   hr.paper-icon-item-divider {
