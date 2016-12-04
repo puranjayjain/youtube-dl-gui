@@ -198,8 +198,7 @@
           type: Boolean
         },
         toolbaritems: {
-          type: Number,
-          value: 0
+          type: Number
         }
       },
 
@@ -211,7 +210,7 @@
 
       _pageChanged: function (page) {
         // Load page import on demand. Show 404 page if fails
-        var resolvedPageUrl = this.resolveUrl(page + '-view.html');
+        var resolvedPageUrl = this.resolveUrl(`${page}-view.html`);
         this.importHref(resolvedPageUrl, null, this._showPage404, true);
       },
 
@@ -236,7 +235,7 @@
       onMenuEnter: function (e) {
         // for main menu
         if (e.key === 'Enter' && e.target.nodeName === 'PAPER-ICON-ITEM') {
-          window.location.hash = '/' + e.target.getAttribute('name');
+          window.location.hash = `/${e.target.getAttribute('name')}`;
         }
       },
 
@@ -244,7 +243,7 @@
       onMenuTap: function (e) {
         // for main menu
         if (e.target.nodeName === 'PAPER-ICON-ITEM') {
-          window.location.hash = '/' + e.target.getAttribute('name');
+          window.location.hash = `/${e.target.getAttribute('name')}`;
         }
       }
     });

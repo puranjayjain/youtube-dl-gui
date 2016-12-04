@@ -6,7 +6,7 @@
 <dom-module id="all-view">
   <template>
     <style include="shared-styles"></style>
-    <custom-datatable drawer=[[drawer]]></custom-datatable>
+    <custom-datatable drawer=[[drawer]] toolbaritems={{toolbaritems}}></custom-datatable>
   </template>
 
   <script>
@@ -16,6 +16,10 @@
       properties: {
         drawer: {
           type: Boolean
+        },
+        toolbaritems: {
+          type: Number,
+          notify: true
         }
       }
     });

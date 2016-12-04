@@ -3,6 +3,9 @@
 <link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../../bower_components/paper-styles/typography.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-menu-button/paper-menu-button.html">
 
 <link rel="import" href="../shared-styles.html">
 
@@ -10,7 +13,6 @@
   <template>
     <style include="iron-flex iron-flex-alignment iron-flex-factors iron-positioning shared-styles">
       :host {
-        display: none;
         background-color: var(--accent-color);
         user-select: none;
       }
@@ -24,20 +26,30 @@
 
       paper-toolbar {
         height: 100%;
+        padding-left: 14px;
         padding-right: 8px;
         color: #fff;
       }
 
       .title {
-        margin-left: 24px;
+        margin-left: 8px;
         @apply(--paper-font-title);
       }
 
     </style>
     <paper-toolbar class="horizontal center layout">
-      <div class="title flex-1">[[items]] Selected</div>
+      <paper-icon-button icon="clear" alt="clear selection"></paper-icon-button>
+      <div class="title flex-1">[[items]] &mdash; Selected</div>
       <!-- use dom if statements to check if we need to add some buttons or not -->
-      <paper-icon-button icon="more-vert" on-tap="moreAction"></paper-icon-button>
+      <paper-menu-button vertical-align="top" horizontal-align="right" ignore-select>
+        <paper-icon-button icon="more-vert" class="dropdown-trigger" alt="menu"></paper-icon-button>
+        <paper-menu class="dropdown-content" selectable="false">
+          <paper-item>gale</paper-item>
+          <paper-item>se</paper-item>
+          <paper-item>mere</paper-item>
+          <paper-item>tha</paper-item>
+        </paper-menu>
+      </paper-menu-button>
     </paper-toolbar>
   </template>
 
@@ -49,11 +61,14 @@
 
       properties: {
         opened: {
-          type: Boolean
+          type: Boolean,
+          value: true
         },
         items: {
           type: Number,
-          value: 0
+          value: 0,
+          notify: true,
+          observer: '_itemCountChanged'
         },
         page: {
           type: String,
@@ -111,6 +126,14 @@
       _pageNameChanged: function (page) {
         // hide if visible
         this._hide();
+      },
+
+      _itemCountChanged: function (count) {
+        if (count > 0 && ['all', 'downloading', 'unfinished', 'downloaded'].indexOf(this.page) > -1) {
+          this._show();
+        } else {
+          this._hide();
+        }
       }
     });
   </script>
