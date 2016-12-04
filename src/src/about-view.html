@@ -9,67 +9,66 @@
 
 <dom-module id="about-view">
   <template>
-  <style include="iron-flex iron-flex-alignment iron-flex-factors shared-styles">
-  .cardItem {
-    position: relative;
-    padding: 16px;
-    user-select: none;
-    border-radius: 3px;
-    @apply(--paper-font-title);
-  }
+    <style include="iron-flex iron-flex-alignment iron-flex-factors shared-styles">
+      .cardItem {
+        position: relative;
+        padding: 16px;
+        user-select: none;
+        border-radius: 3px;
+        @apply(--paper-font-title);
+      }
 
-  paper-ripple {
-    color: var(--primary-color);
-  }
+      paper-ripple {
+        color: var(--primary-color);
+      }
 
-  .check {
-    color: #fff;
-    background: var(--accent-color);
-  }
-  </style>
+      .check {
+        color: #fff;
+        background: var(--accent-color);
+      }
 
-  <div class="card">
-    <div class="cardTitle">Youtube Dl GUI - v0.0.3</div>
-    <div class="cardItem">
-      Node Js Version 6.5.0
-      <paper-ripple></paper-ripple>
-    </div>
-    <div class="cardItem">
-      Chrome 53.0.2785.113
-      <paper-ripple></paper-ripple>
-    </div>
-    <div class="cardItem">
-      Electron 1.4.3
-      <paper-ripple></paper-ripple>
-    </div>
-    <div class="cardItem">
-      Youtubedl 2016.12.01
-      <paper-ripple></paper-ripple>
-    </div>
-  </div>
-  <div class="card">
-    <div class="cardTitle">Help and Feedback</div>
-    <paper-button class="layout horizontal">
-      <div class="flex-1">
-        Reset to Default Settings
+    </style>
+
+    <div class="card">
+      <div class="cardTitle">Youtube Dl GUI - v0.0.3</div>
+      <div class="cardItem">
+        Node Js Version 6.5.0
+        <paper-ripple></paper-ripple>
       </div>
-      <iron-icon icon="history"></iron-icon>
-    </paper-button>
-    <paper-button class="layout horizontal">
-      <div class="flex-1">
-        Report a Bug
+      <div class="cardItem">
+        Chrome 53.0.2785.113
+        <paper-ripple></paper-ripple>
       </div>
-      <iron-icon icon="bug-report"></iron-icon>
-    </paper-button>
-    <paper-button class="check" raised>
-      Check for Updates
-    </paper-button>
-  </div>
-</template>
+      <div class="cardItem">
+        Electron 1.4.3
+        <paper-ripple></paper-ripple>
+      </div>
+      <div class="cardItem">
+        Youtubedl 2016.12.01
+        <paper-ripple></paper-ripple>
+      </div>
+    </div>
+    <div class="card">
+      <div class="cardTitle">Help and Feedback</div>
+      <paper-button class="layout horizontal">
+        <div class="flex-1">
+          Reset to Default Settings
+        </div>
+        <iron-icon icon="history"></iron-icon>
+      </paper-button>
+      <paper-button class="layout horizontal">
+        <div class="flex-1">
+          Report a Bug
+        </div>
+        <iron-icon icon="bug-report"></iron-icon>
+      </paper-button>
+      <paper-button class="check" raised>
+        Check for Updates
+      </paper-button>
+    </div>
+  </template>
 
-<script>
-Polymer({
-  is: 'about-view'
-});
-</script>
+  <script>
+    Polymer({is: 'about-view'});
+  </script>
 </dom-module>

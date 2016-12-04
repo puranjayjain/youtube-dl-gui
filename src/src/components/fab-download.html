@@ -7,46 +7,46 @@
 
 <dom-module id="fab-download">
   <template>
-  <style>
-  paper-fab {
-    --paper-fab-background: var(--accent-color);
-    --paper-fab-keyboard-focus-background: var(--light-accent-color);
-  }
+    <style>
+      paper-fab {
+        --paper-fab-background: var(--accent-color);
+        --paper-fab-keyboard-focus-background: var(--light-accent-color);
+      }
 
-  paper-tooltip {
-    --paper-tooltip: {
-      line-height: 14px;
-      font-size: 14px;
-      padding: 16px;
-    };
-  }
-  </style>
-  <paper-fab id="fabDownload" icon="add"></paper-fab>
-  <paper-tooltip for="fabDownload" position="left">Download from a new URL</paper-tooltip>
-</template>
+      paper-tooltip {
+        --paper-tooltip: {
+          line-height: 14px;
+          font-size: 14px;
+          padding: 16px;
+        };
+      }
+
+    </style>
+    <paper-fab id="fabDownload" icon="add"></paper-fab>
+    <paper-tooltip for="fabDownload" position="left">Download from a new URL</paper-tooltip>
+  </template>
 
 </dom-module>
 
 <script>
 
-Polymer({
-  is: 'fab-download',
+  Polymer({
+    is: 'fab-download',
 
-  properties: {
-    newdownloaddialog: {
-      type: Boolean,
-      notify: true
+    properties: {
+      newdownloaddialog: {
+        type: Boolean,
+        notify: true
+      }
     },
-  },
 
-  onNewDownload: function() {
-    this.newdownloaddialog = true;
-  },
+    onNewDownload: function () {
+      this.newdownloaddialog = true;
+    },
 
-  ready: function() {
-    // attach event listeners on dom ready
-    this.listen(this.$.fabDownload, 'tap', 'onNewDownload');
-  },
-});
-
+    ready: function () {
+      // attach event listeners on dom ready
+      this.listen(this.$.fabDownload, 'tap', 'onNewDownload');
+    }
+  });
 </script>

@@ -37,7 +37,8 @@
     "paper-listbox": "PolymerElements/paper-listbox#^1.1.2",
     "paper-spinner": "PolymerElements/paper-spinner#^1.2.1",
     "iron-list": "PolymerElements/iron-list#^1.3.14",
-    "paper-material": "PolymerElements/paper-material#^1.0.6"
+    "paper-material": "PolymerElements/paper-material#^1.0.6",
+    "paper-toolbar": "PolymerElements/paper-toolbar#^1.1.7"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

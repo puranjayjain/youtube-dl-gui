@@ -17,125 +17,105 @@
 
 <dom-module id="final-download">
   <template>
-  <style is="custom-style" include="iron-flex iron-flex-alignment iron-flex-factors shared-styles">
-  paper-dialog {
-    --paper-dialog: {
-      min-width: 500px;
-    }
-  }
-  </style>
-  <paper-dialog
-  opened={{finaldownloaddialog}}
-  entry-animation="scale-up-animation"
-  exit-animation="fade-out-animation"
-  with-backdrop
-  >
-  <h2>Confirm download options</h2>
-  <div class="layout horizontal center-center">
-    <paper-input
-    id="filepath"
-    class="flex-1"
-    label="Path to save file"
-    placeholder="e.g. C:\Users\User\Videos"
-    error-message="This is not a valid folder path"
-    ></paper-input>
-    <paper-icon-button
-    id="selectButton"
-    icon="folder"
-    alt="Select folder path"
-    ></paper-icon-button>
-    <paper-tooltip for="selectButton">Select folder path</paper-tooltip>
-  </div>
-  <paper-dropdown-menu label="Choose a format">
-    <paper-listbox
-    class="dropdown-content"
-    selected=[[format]]>
-    <paper-item>Default</paper-item>
-    <paper-item>144p</paper-item>
-    <paper-item>240p</paper-item>
-    <paper-item>720p</paper-item>
-    <paper-item>144p</paper-item>
-    <paper-item>240p</paper-item>
-    <paper-item>720p</paper-item>
-    <paper-item>144p</paper-item>
-    <paper-item>240p</paper-item>
-    <paper-item>720p</paper-item>
-    <paper-item>144p</paper-item>
-    <paper-item>240p</paper-item>
-    <paper-item>720p</paper-item>
-    <paper-item>144p</paper-item>
-    <paper-item>240p</paper-item>
-    <paper-item>720p</paper-item>
-    <paper-item>144p</paper-item>
-    <paper-item>240p</paper-item>
-    <paper-item>720p</paper-item>
-    <paper-item>144p</paper-item>
-    <paper-item>240p</paper-item>
-    <paper-item>72dddsss0p</paper-item>
-  </paper-listbox>
-</paper-dropdown-menu>
-<paper-spinner-lite
-alt="fetching formats"
-active=[[active]]></paper-spinner-lite>
-<div class="buttons">
-  <paper-button dialog-dismiss>cancel</paper-button>
-  <paper-button id="start">start</paper-button>
-</div>
-</paper-dialog>
-</template>
+    <style is="custom-style" include="iron-flex iron-flex-alignment iron-flex-factors shared-styles">
+      paper-dialog {
+        --paper-dialog: {
+          min-width: 500px;
+        }
+      }
+
+    </style>
+    <paper-dialog opened={{finaldownloaddialog}} entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+      <h2>Confirm download options</h2>
+      <div class="layout horizontal center-center">
+        <paper-input id="filepath" class="flex-1" label="Path to save file" placeholder="e.g. C:\Users\User\Videos" error-message="This is not a valid folder path"></paper-input>
+        <paper-icon-button id="selectButton" icon="folder" alt="Select folder path"></paper-icon-button>
+        <paper-tooltip for="selectButton">Select folder path</paper-tooltip>
+      </div>
+      <paper-dropdown-menu label="Choose a format">
+        <paper-listbox class="dropdown-content" selected=[[format]]>
+          <paper-item>Default</paper-item>
+          <paper-item>144p</paper-item>
+          <paper-item>240p</paper-item>
+          <paper-item>720p</paper-item>
+          <paper-item>144p</paper-item>
+          <paper-item>240p</paper-item>
+          <paper-item>720p</paper-item>
+          <paper-item>144p</paper-item>
+          <paper-item>240p</paper-item>
+          <paper-item>720p</paper-item>
+          <paper-item>144p</paper-item>
+          <paper-item>240p</paper-item>
+          <paper-item>720p</paper-item>
+          <paper-item>144p</paper-item>
+          <paper-item>240p</paper-item>
+          <paper-item>720p</paper-item>
+          <paper-item>144p</paper-item>
+          <paper-item>240p</paper-item>
+          <paper-item>720p</paper-item>
+          <paper-item>144p</paper-item>
+          <paper-item>240p</paper-item>
+          <paper-item>72dddsss0p</paper-item>
+        </paper-listbox>
+      </paper-dropdown-menu>
+      <paper-spinner-lite alt="fetching formats" active=[[active]]></paper-spinner-lite>
+      <div class="buttons">
+        <paper-button dialog-dismiss>cancel</paper-button>
+        <paper-button id="start">start</paper-button>
+      </div>
+    </paper-dialog>
+  </template>
 
 </dom-module>
 
 <script>
 
-Polymer({
-  is: 'final-download',
+  Polymer({
+    is: 'final-download',
 
-  behaviors: [
-    Polymer.NeonAnimationRunnerBehavior
-  ],
+    behaviors: [Polymer.NeonAnimationRunnerBehavior],
 
-  properties: {
-    auth: {
-      type: Boolean
+    properties: {
+      auth: {
+        type: Boolean
+      },
+      finaldownloaddialog: {
+        type: Boolean,
+        notify: true
+      },
+      url: {
+        type: String,
+        notify: true
+      },
+      username: {
+        type: String,
+        notify: true
+      },
+      password: {
+        type: String,
+        notify: true
+      },
+      format: {
+        type: Number,
+        value: 0
+      },
+      active: {
+        type: Boolean,
+        value: true
+      }
     },
-    finaldownloaddialog: {
-      type: Boolean,
-      notify: true
-    },
-    url: {
-      type: String,
-      notify: true
-    },
-    username: {
-      type: String,
-      notify: true
-    },
-    password: {
-      type: String,
-      notify: true
-    },
-    format: {
-      type: Number,
-      value: 0
-    },
-    active: {
-      type: Boolean,
-      value: true
-    },
-  },
 
-  ready: function() {
-    // attach event listeners on dom ready
-    this.listen(this.$.start, 'tap', 'onStart');
-    // reset loader
-    this.active = true;
-  },
+    ready: function () {
+      // attach event listeners on dom ready
+      this.listen(this.$.start, 'tap', 'onStart');
+      // reset loader
+      this.active = true;
+    },
 
-  onStart: function () {
-    // clear user name and password as well
-    this.username = '';
-    this.password = '';
-  }
-});
+    onStart: function () {
+      // clear user name and password as well
+      this.username = '';
+      this.password = '';
+    }
+  });
 </script>

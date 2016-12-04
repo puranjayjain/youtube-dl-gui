@@ -18,258 +18,235 @@
 <link rel="import" href="components/ytdl-fab-container.html">
 <link rel="import" href="components/new-download.html">
 <link rel="import" href="components/final-download.html">
+<link rel="import" href="components/options-toolbar.html">
 
 <dom-module id="youtube-dl">
   <template>
-  <style include="shared-styles">
-  :host {
-    display: block;
-  }
+    <style include="iron-flex iron-positioning shared-styles">
+      :host {
+        display: block;
+      }
 
-  app-header-layout {
-    background-color: var(--primary-background-color);
-  }
+      app-header-layout {
+        background-color: var(--primary-background-color);
+      }
 
-  app-header {
-    color: var(--primary-text-color);
-    background-color: var(--primary-color);
-  }
+      app-header {
+        color: var(--primary-text-color);
+        background-color: var(--primary-color);
+      }
 
-  paper-material {
-    height: 100%;
-  }
+      paper-material {
+        height: 100%;
+      }
 
-  paper-icon-button {
-    --paper-icon-button-ink-color: var(--primary-base-color);
-  }
+      paper-icon-button {
+        --paper-icon-button-ink-color: var(--primary-base-color);
+      }
 
-  paper-icon-button + [main-title] {
-    margin-left: 24px;
-  }
+      paper-icon-button + [main-title] {
+        margin-left: 24px;
+      }
 
-  .drawer-list a {
-    display: block;
-    padding: 0 16px;
-    text-decoration: none;
-    color: var(--accent-color);
-    line-height: 40px;
-  }
+      .drawer-list a {
+        display: block;
+        padding: 0 16px;
+        text-decoration: none;
+        color: var(--accent-color);
+        line-height: 40px;
+      }
 
-  .drawer-list a.iron-selected {
-    color: black;
-    font-weight: bold;
-  }
+      .drawer-list a.iron-selected {
+        color: black;
+        font-weight: bold;
+      }
 
-  paper-menu {
-    --paper-menu-background-color: none;
-    --paper-menu-focused-item-after: {
-      background: none;
-    };
-  }
+      paper-menu {
+        --paper-menu-background-color: none;
+        --paper-menu-focused-item-after: {
+          background: none;
+        };
+      }
 
-  paper-icon-item {
-    --paper-icon-item: {
-      user-select: none;
-    };
-    --paper-item-selected: {
-      color: var(--primary-color);
-      background-color: #f5f5f5;
-    };
-  }
+      paper-icon-item {
+        --paper-icon-item: {
+          user-select: none;
+        };
+        --paper-item-selected: {
+          color: var(--primary-color);
+          background-color: #f5f5f5;
+        };
+      }
 
-  paper-icon-button {
-    --paper-icon-button-ink-color: var(--primary-text-color);
-    --paper-icon-button: {
-      color: var(--primary-text-color);
-    };
-  }
+      paper-icon-button {
+        --paper-icon-button-ink-color: var(--primary-text-color);
+        --paper-icon-button: {
+          color: var(--primary-text-color);
+        };
+      }
 
-  paper-icon-item iron-icon {
-    opacity: .54;
-  }
+      paper-icon-item iron-icon {
+        opacity: 0.54;
+      }
 
-  paper-icon-item.iron-selected iron-icon {
-    opacity: 1;
-  }
-  </style>
+      paper-icon-item.iron-selected iron-icon {
+        opacity: 1;
+      }
 
-  <app-location route="{{route}}" use-hash-as-path></app-location>
-  <app-route
-  route="{{route}}"
-  pattern="/:page"
-  data="{{routeData}}"
-  tail="{{subroute}}"></app-route>
+    </style>
 
-  <app-drawer-layout fullbleed>
-    <!-- Drawer content -->
-    <app-drawer swipe-open="true" opened={{drawer}}>
-      <paper-material elevation="1">
-        <paper-menu id="mainMenu" selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <paper-icon-item name="all">
-            <iron-icon icon="places:all-inclusive" item-icon></iron-icon>
-            All
-            <paper-ripple></paper-ripple>
-          </paper-icon-item>
-          <paper-icon-item name="downloading">
-            <iron-icon icon="file-download" item-icon></iron-icon>
-            Downloading
-            <paper-ripple></paper-ripple>
-          </paper-icon-item>
-          <paper-icon-item name="unfinished">
-            <iron-icon icon="error" item-icon></iron-icon>
-            Unfinished
-            <paper-ripple></paper-ripple>
-          </paper-icon-item>
-          <paper-icon-item name="downloaded">
-            <iron-icon icon="done" item-icon></iron-icon>
-            Downloaded
-            <paper-ripple></paper-ripple>
-          </paper-icon-item>
-          <hr class="paper-icon-item-divider"/>
-          <paper-icon-item name="settings">
-            <iron-icon icon="settings" item-icon></iron-icon>
-            Settings
-            <paper-ripple></paper-ripple>
-          </paper-icon-item>
-          <paper-icon-item name="about">
-            <iron-icon icon="help" item-icon></iron-icon>
-            About
-            <paper-ripple></paper-ripple>
-          </paper-icon-item>
-        </paper-menu>
-      </paper-material>
-    </app-drawer>
+    <app-location route="{{route}}" use-hash-as-path></app-location>
+    <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
 
-    <!-- Main content -->
-    <app-header-layout id="headerLayout" has-scrolling-region>
-      <app-header condenses fixed effects="waterfall">
-        <app-toolbar>
-          <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-          <div main-title>[[pageTitle]]</div>
-        </app-toolbar>
-      </app-header>
-      <neon-animated-pages
-      id="pages"
-      class="flex"
-      selected="[[page]]"
-      attr-for-selected="name"
-      fallback-selection="view404"
-      role="main"
-      entry-animation="fade-in-animation"
-      exit-animation="fade-out-animation">
-      <all-view name="all" drawer={{drawer}}></all-view>
-      <downloading-view name="downloading"></downloading-view>
-      <unfinished-view name="unfinished"></unfinished-view>
-      <downloaded-view name="downloaded"></downloaded-view>
-      <settings-view name="settings"></settings-view>
-      <about-view name="about"></about-view>
-      <view404-view name="view404"></view404-view>
-    </neon-animated-pages>
-    <!-- common fab -->
-    <ytdl-fab-container
-    page=[[page]]
-    newdownloaddialog={{newdownloaddialog}}
-    ></ytdl-fab-container>
-  </app-header-layout>
-</app-drawer-layout>
-<!-- dialogs -->
-<new-download
-newdownloaddialog={{newdownloaddialog}}
-finaldownloaddialog={{finaldownloaddialog}}
-url={{url}}
-username={{username}}
-password={{password}}
-></new-download>
-<final-download
-newdownloaddialog={{newdownloaddialog}}
-finaldownloaddialog={{finaldownloaddialog}}
-url={{url}}
-username={{username}}
-password={{password}}
-></final-download>
-</template>
+    <app-drawer-layout fullbleed>
+      <!-- Drawer content -->
+      <app-drawer swipe-open="true" opened={{drawer}}>
+        <paper-material elevation="1">
+          <paper-menu id="mainMenu" selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+            <paper-icon-item name="all">
+              <iron-icon icon="places:all-inclusive" item-icon></iron-icon>
+              All
+              <paper-ripple></paper-ripple>
+            </paper-icon-item>
+            <paper-icon-item name="downloading">
+              <iron-icon icon="file-download" item-icon></iron-icon>
+              Downloading
+              <paper-ripple></paper-ripple>
+            </paper-icon-item>
+            <paper-icon-item name="unfinished">
+              <iron-icon icon="error" item-icon></iron-icon>
+              Unfinished
+              <paper-ripple></paper-ripple>
+            </paper-icon-item>
+            <paper-icon-item name="downloaded">
+              <iron-icon icon="done" item-icon></iron-icon>
+              Downloaded
+              <paper-ripple></paper-ripple>
+            </paper-icon-item>
+            <hr class="paper-icon-item-divider"/>
+            <paper-icon-item name="settings">
+              <iron-icon icon="settings" item-icon></iron-icon>
+              Settings
+              <paper-ripple></paper-ripple>
+            </paper-icon-item>
+            <paper-icon-item name="about">
+              <iron-icon icon="help" item-icon></iron-icon>
+              About
+              <paper-ripple></paper-ripple>
+            </paper-icon-item>
+          </paper-menu>
+        </paper-material>
+      </app-drawer>
 
-<script>
-Polymer({
-  is: 'youtube-dl',
+      <!-- Main content -->
+      <app-header-layout id="headerLayout" has-scrolling-region>
+        <app-header condenses fixed effects="waterfall">
+          <app-toolbar>
+            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+            <div main-title>[[pageTitle]]</div>
+          </app-toolbar>
+          <options-toolbar class="fit" page=[[page]] items={{toolbaritems}}></options-toolbar>
+        </app-header>
+        <neon-animated-pages id="pages" class="flex" selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
+          <all-view name="all" drawer=[[drawer]] toolbaritems={{toolbaritems}}></all-view>
+          <downloading-view name="downloading" drawer=[[drawer]] toolbaritems={{toolbaritems}}></downloading-view>
+          <unfinished-view name="unfinished" drawer=[[drawer]] toolbaritems={{toolbaritems}}></unfinished-view>
+          <downloaded-view name="downloaded" drawer=[[drawer]] toolbaritems={{toolbaritems}}></downloaded-view>
+          <settings-view name="settings"></settings-view>
+          <about-view name="about"></about-view>
+          <view404-view name="view404"></view404-view>
+        </neon-animated-pages>
+        <!-- common fab -->
+        <ytdl-fab-container page=[[page]] newdownloaddialog={{newdownloaddialog}}></ytdl-fab-container>
+      </app-header-layout>
+    </app-drawer-layout>
+    <!-- dialogs -->
+    <new-download newdownloaddialog={{newdownloaddialog}} finaldownloaddialog={{finaldownloaddialog}} url={{url}} username={{username}} password={{password}}></new-download>
+    <final-download newdownloaddialog={{newdownloaddialog}} finaldownloaddialog={{finaldownloaddialog}} url={{url}} username={{username}} password={{password}}></final-download>
+  </template>
 
-  properties: {
-    page: {
-      type: String,
-      reflectToAttribute: true,
-      observer: '_pageChanged'
-    },
-    pageTitle: {
-      type: String,
-      computed: 'computePageTitle(page)'
-    },
-    newdownloaddialog: {
-      type: Boolean
-    },
-    finaldownloaddialog: {
-      type: Boolean
-    },
-    url: {
-      type: String
-    },
-    username: {
-      type: String
-    },
-    password: {
-      type: String
-    },
-    drawer: {
-      type: Boolean
-    }
-  },
+  <script>
+    Polymer({
+      is: 'youtube-dl',
 
-  observers: [
-    '_routePageChanged(routeData.page)'
-  ],
+      properties: {
+        page: {
+          type: String,
+          reflectToAttribute: true,
+          observer: '_pageChanged'
+        },
+        pageTitle: {
+          type: String,
+          computed: 'computePageTitle(page)'
+        },
+        newdownloaddialog: {
+          type: Boolean
+        },
+        finaldownloaddialog: {
+          type: Boolean
+        },
+        url: {
+          type: String
+        },
+        username: {
+          type: String
+        },
+        password: {
+          type: String
+        },
+        drawer: {
+          type: Boolean
+        },
+        toolbaritems: {
+          type: Number,
+          value: 0
+        }
+      },
 
-  _routePageChanged: function(page) {
-    this.page = page || 'all';
-  },
+      observers: ['_routePageChanged(routeData.page)'],
 
-  _pageChanged: function(page) {
-    // Load page import on demand. Show 404 page if fails
-    var resolvedPageUrl = this.resolveUrl(page + '-view' + '.html');
-    this.importHref(resolvedPageUrl, null, this._showPage404, true);
-  },
+      _routePageChanged: function (page) {
+        this.page = page || 'all';
+      },
 
-  computePageTitle: function(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  },
+      _pageChanged: function (page) {
+        // Load page import on demand. Show 404 page if fails
+        var resolvedPageUrl = this.resolveUrl(page + '-view.html');
+        this.importHref(resolvedPageUrl, null, this._showPage404, true);
+      },
 
-  _showPage404: function() {
-    this.page = 'view404';
-  },
+      computePageTitle: function (string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+      },
 
-  ready: function() {
-    // attach event listeners on dom ready
-    this.listen(this.$.mainMenu, 'tap', 'onMenuTap');
-    this.listen(this.$.mainMenu, 'keydown', 'onMenuEnter');
-    // force style app header layout
-    // http://stackoverflow.com/questions/35149624/dynamically-inject-shared-styles-in-polymer-element-polymer-1-2-3
-    var myDomModule = document.createElement('style', 'custom-style');
-    myDomModule.setAttribute('include', 'shared-styles');
-    Polymer.dom(this.$.headerLayout.root).appendChild(myDomModule);
-  },
+      _showPage404: function () {
+        this.page = 'view404';
+      },
 
-  onMenuEnter: function(e) {
-    // for main menu
-    if (e.key === 'Enter' && e.target.nodeName === 'PAPER-ICON-ITEM') {
-      window.location.hash = '/' + e.target.getAttribute('name');
-    }
-  },
+      ready: function () {
+        // attach event listeners on dom ready
+        this.listen(this.$.mainMenu, 'tap', 'onMenuTap');
+        this.listen(this.$.mainMenu, 'keydown', 'onMenuEnter');
+        // force style app header layout http://stackoverflow.com/questions/35149624/dynamically-inject-shared-styles-in-polymer-element-polymer-1-2-3
+        var myDomModule = document.createElement('style', 'custom-style');
+        myDomModule.setAttribute('include', 'shared-styles');
+        Polymer.dom(this.$.headerLayout.root).appendChild(myDomModule);
+      },
 
-  // handle tap events of all kinds and purposes
-  onMenuTap: function(e) {
-    // for main menu
-    if (e.target.nodeName === 'PAPER-ICON-ITEM') {
-      window.location.hash = '/' + e.target.getAttribute('name');
-    }
-  },
-});
-</script>
+      onMenuEnter: function (e) {
+        // for main menu
+        if (e.key === 'Enter' && e.target.nodeName === 'PAPER-ICON-ITEM') {
+          window.location.hash = '/' + e.target.getAttribute('name');
+        }
+      },
+
+      // handle tap events of all kinds and purposes
+      onMenuTap: function (e) {
+        // for main menu
+        if (e.target.nodeName === 'PAPER-ICON-ITEM') {
+          window.location.hash = '/' + e.target.getAttribute('name');
+        }
+      }
+    });
+  </script>
 </dom-module>

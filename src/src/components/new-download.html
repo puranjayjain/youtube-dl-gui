@@ -13,144 +13,110 @@
 
 <dom-module id="new-download">
   <template>
-  <style is="custom-style" include="iron-flex iron-flex-alignment iron-flex-factors shared-styles">
-  paper-dialog {
-    --paper-dialog: {
-      min-width: 500px;
-    }
-  }
-  </style>
-  <paper-dialog
-  opened={{newdownloaddialog}}
-  entry-animation="scale-up-animation"
-  exit-animation="fade-out-animation"
-  with-backdrop
-  >
-  <h2>
-    Download a video or a playlist (if-supported)
-    <paper-icon-button
-    id="infoButton"
-    icon="info"
-    alt="More Information regarding list of supported formats and websites"
-    ></paper-icon-button>
-    <paper-tooltip for="infoButton">More Information regarding list of supported formats and websites</paper-tooltip>
-  </h2>
-  <div class="layout horizontal center-center">
-    <paper-input
-    id="url"
-    class="flex-1"
-    label="Enter or Paste the video url here"
-    placeholder="e.g. https://www.youtube.com/watch?v=foE1mO2yM04"
-    error-message="Enter a valid url"
-    type="url"
-    autofocus
-    auto-validate
-    required
-    ></paper-input>
-    <paper-icon-button
-    id="pasteButton"
-    icon="content-paste"
-    alt="Paste url from clipboard"
-    ></paper-icon-button>
-    <paper-tooltip for="pasteButton">Paste url from clipboard</paper-tooltip>
-  </div>
-  <paper-toggle-button checked={{auth}}>Enable Authentication</paper-toggle-button>
-  <iron-collapse opened={{auth}}>
-    <paper-input
-    id="username"
-    label="Username"
-    autofocus
-    ></paper-input>
-    <paper-input
-    id="password"
-    label="Password"
-    type="password"
-    autofocus
-    ></paper-input>
-  </iron-collapse>
-  <div class="buttons">
-    <paper-button dialog-dismiss>cancel</paper-button>
-    <paper-button id="next">next</paper-button>
-  </div>
-</paper-dialog>
-</template>
+    <style is="custom-style" include="iron-flex iron-flex-alignment iron-flex-factors shared-styles">
+      paper-dialog {
+        --paper-dialog: {
+          min-width: 500px;
+        }
+      }
+
+    </style>
+    <paper-dialog opened={{newdownloaddialog}} entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+      <h2>
+        Download a video or a playlist (if-supported)
+        <paper-icon-button id="infoButton" icon="info" alt="More Information regarding list of supported formats and websites"></paper-icon-button>
+        <paper-tooltip for="infoButton">More Information regarding list of supported formats and websites</paper-tooltip>
+      </h2>
+      <div class="layout horizontal center-center">
+        <paper-input id="url" class="flex-1" label="Enter or Paste the video url here" placeholder="e.g. https://www.youtube.com/watch?v=foE1mO2yM04" error-message="Enter a valid url" type="url" autofocus auto-validate required></paper-input>
+        <paper-icon-button id="pasteButton" icon="content-paste" alt="Paste url from clipboard"></paper-icon-button>
+        <paper-tooltip for="pasteButton">Paste url from clipboard</paper-tooltip>
+      </div>
+      <paper-toggle-button checked={{auth}}>Enable Authentication</paper-toggle-button>
+      <iron-collapse opened={{auth}}>
+        <paper-input id="username" label="Username" autofocus></paper-input>
+        <paper-input id="password" label="Password" type="password" autofocus></paper-input>
+      </iron-collapse>
+      <div class="buttons">
+        <paper-button dialog-dismiss>cancel</paper-button>
+        <paper-button id="next">next</paper-button>
+      </div>
+    </paper-dialog>
+  </template>
 
 </dom-module>
 
 <script>
 
-Polymer({
-  is: 'new-download',
+  Polymer({
+    is: 'new-download',
 
-  behaviors: [
-    Polymer.NeonAnimationRunnerBehavior
-  ],
+    behaviors: [Polymer.NeonAnimationRunnerBehavior],
 
-  properties: {
-    auth: {
-      type: Boolean
-    },
-    newdownloaddialog: {
-      type: Boolean,
-      notify: true,
-      observer: '_dialogChange'
-    },
-    finaldownloaddialog: {
-      type: Boolean,
-      notify: true
-    },
-    url: {
-      type: String,
-      notify: true
-    },
-    username: {
-      type: String,
-      notify: true
-    },
-    password: {
-      type: String,
-      notify: true
-    }
-  },
-
-  ready: function() {
-    this.auth = false;
-    // attach event listeners on dom ready
-    this.listen(this.$.pasteButton, 'tap', 'onPaste');
-    this.listen(this.$.next, 'tap', 'onNext');
-    // clear to defaults
-    this.username = '';
-    this.password = '';
-    this.url = '';
-  },
-
-  _dialogChange: function (opened) {
-    if (opened) {
-      this.exitAnimation = 'fade-out-animation';
-    }
-  },
-
-  onNext: function () {
-    if (this.$.url.validate()) {
-      this.url = this.$.url.value;
-      this.newdownloaddialog = false;
-      this.finaldownloaddialog = true;
-
-      // if auth is true, set auth
-      if (this.auth) {
-        this.username = this.$.username.value;
-        this.password = this.$.password.value;
+    properties: {
+      auth: {
+        type: Boolean
+      },
+      newdownloaddialog: {
+        type: Boolean,
+        notify: true,
+        observer: '_dialogChange'
+      },
+      finaldownloaddialog: {
+        type: Boolean,
+        notify: true
+      },
+      url: {
+        type: String,
+        notify: true
+      },
+      username: {
+        type: String,
+        notify: true
+      },
+      password: {
+        type: String,
+        notify: true
       }
-      else {
-        this.username = '';
-        this.password = '';
-      }
-    }
-  },
+    },
 
-  onPaste: function() {
-    this.$.url.focus();
-    // now paste the text to the element
-  },
-});
+    ready: function () {
+      this.auth = false;
+      // attach event listeners on dom ready
+      this.listen(this.$.pasteButton, 'tap', 'onPaste');
+      this.listen(this.$.next, 'tap', 'onNext');
+      // clear to defaults
+      this.username = '';
+      this.password = '';
+      this.url = '';
+    },
+
+    _dialogChange: function (opened) {
+      if (opened) {
+        this.exitAnimation = 'fade-out-animation';
+      }
+    },
+
+    onNext: function () {
+      if (this.$.url.validate()) {
+        this.url = this.$.url.value;
+        this.newdownloaddialog = false;
+        this.finaldownloaddialog = true;
+
+        // if auth is true, set auth
+        if (this.auth) {
+          this.username = this.$.username.value;
+          this.password = this.$.password.value;
+        } else {
+          this.username = '';
+          this.password = '';
+        }
+      }
+    },
+
+    onPaste: function () {
+      this.$.url.focus();
+      // now paste the text to the element
+    }
+  });
 </script>

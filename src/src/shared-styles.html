@@ -6,232 +6,230 @@
 <!-- shared styles for all views along with the base theme-->
 <dom-module id="shared-styles">
   <template>
-  <style>
-  /*base theme which can be switched b/w light and dark*/
-  :root {
-    /*
+    <style>
+      /*base theme which can be switched b/w light and dark*/
+      :root {
+        /*
     * You can use these generic variables in your elements for easy theming.
     * For example, if all your elements use `--primary-text-color` as its main
     * color, then switching from a light to a dark theme is just a matter of
     * changing the value of `--primary-text-color` in your application.
     */
-    --primary-text-color: var(--light-theme-text-color);
-    --primary-background-color: var(--light-theme-background-color);
-    --primary-card-color: var(--light-theme-card-color);
-    --primary-base-color: var(--light-theme-base-color);
+        --primary-text-color: var(--light-theme-text-color);
+        --primary-background-color: var(--light-theme-background-color);
+        --primary-card-color: var(--light-theme-card-color);
+        --primary-base-color: var(--light-theme-base-color);
 
-    --primary-text-color: var(--light-theme-primary-text-color);
-    --secondary-text-color: var(--light-theme-secondary-text-color);
-    --disabled-text-color: var(--light-theme-disabled-text-color);
-    --divider-theme-color: var(--light-divider-theme-color);
-    --error-color: var(--paper-deep-orange-a700);
+        --primary-text-color: var(--light-theme-primary-text-color);
+        --secondary-text-color: var(--light-theme-secondary-text-color);
+        --disabled-text-color: var(--light-theme-disabled-text-color);
+        --divider-theme-color: var(--light-divider-theme-color);
+        --error-color: var(--paper-deep-orange-a700);
 
-    /*
+        /*
     * Primary and accent colors. Also see color.html for more colors.
     */
-    --primary-color: var(--paper-red-500);
-    --light-primary-color: var(--paper-red-100);
-    --dark-primary-color: var(--paper-red-700);
-    --accent-color: var(--paper-deep-purple-a200);
-    --light-accent-color: var(--paper-deep-purple-a100);
-    --dark-accent-color: var(--paper-deep-purple-a400);
+        --primary-color: var(--paper-red-500);
+        --light-primary-color: var(--paper-red-100);
+        --dark-primary-color: var(--paper-red-700);
+        --accent-color: var(--paper-deep-purple-a200);
+        --light-accent-color: var(--paper-deep-purple-a100);
+        --dark-accent-color: var(--paper-deep-purple-a400);
 
-    /*
+        /*
     * Material Design Light background theme
     */
-    --light-theme-background-color: var(--paper-grey-50);
-    --light-theme-card-color: #fff;
-    --light-theme-text-color: var(--paper-grey-900);
-    --light-theme-primary-text-color: rgba(0, 0, 0, .87);
-    --light-theme-secondary-text-color: rgba(0, 0, 0, .54);
-    --light-theme-disabled-text-color: rgba(0, 0, 0, .38);
-    --light-divider-theme-color: rgba(0, 0, 0, .12);
+        --light-theme-background-color: var(--paper-grey-50);
+        --light-theme-card-color: #fff;
+        --light-theme-text-color: var(--paper-grey-900);
+        --light-theme-primary-text-color: rgba(0, 0, 0, .87);
+        --light-theme-secondary-text-color: rgba(0, 0, 0, .54);
+        --light-theme-disabled-text-color: rgba(0, 0, 0, .38);
+        --light-divider-theme-color: rgba(0, 0, 0, .12);
 
-    /*
+        /*
     * Material Design Dark background theme
     */
-    --dark-theme-background-color: #303030;
-    --dark-theme-card-color: var(--paper-grey-800);
-    --dark-theme-text-color: #fff;
-    --dark-theme-primary-text-color: #fff;
-    --dark-theme-secondary-text-color: rgba(255, 255, 255, .7);
-    --dark-theme-disabled-text-color: rgba(255, 255, 255, .5);
-    --dark-divider-theme-color: rgba(255, 255, 255, .12);
+        --dark-theme-background-color: #303030;
+        --dark-theme-card-color: var(--paper-grey-800);
+        --dark-theme-text-color: #fff;
+        --dark-theme-primary-text-color: #fff;
+        --dark-theme-secondary-text-color: rgba(255, 255, 255, .7);
+        --dark-theme-disabled-text-color: rgba(255, 255, 255, .5);
+        --dark-divider-theme-color: rgba(255, 255, 255, .12);
 
-    /*
+        /*
     * selection color
     */
-    --selection-color: var(--dark-primary-color);
-  }
+        --selection-color: var(--dark-primary-color);
+      }
 
-  .card {
-    margin: 12px;
-    padding: 16px;
+      .card {
+        margin: 12px;
+        padding: 16px;
 
-    color: var(--primary-text-color);
-    border-radius: 3px;
-    background-color: var(--primary-card-color);
-    @apply(--shadow-elevation-2dp);
-  }
+        color: var(--primary-text-color);
+        border-radius: 3px;
+        background-color: var(--primary-card-color);
+        @apply(--shadow-elevation-2dp);
+      }
 
-  .card .cardTitle {
-    margin-bottom: 24px;
-    @apply(--paper-font-body2);
-  }
+      .card .cardTitle {
+        margin-bottom: 24px;
+        @apply(--paper-font-body2);
+      }
 
-  .circle {
-    display: inline-block;
+      .circle {
+        display: inline-block;
 
-    width: 64px;
-    height: 64px;
+        width: 64px;
+        height: 64px;
 
-    text-align: center;
+        text-align: center;
 
-    color: #555;
-    border-radius: 50%;
-    background: #ddd;
+        color: #555;
+        border-radius: 50%;
+        background: #ddd;
 
-    font-size: 30px;
-    line-height: 64px;
-  }
+        font-size: 30px;
+        line-height: 64px;
+      }
 
-  h1 {
-    margin: 16px 0;
-    /*color: #212121;*/
-    color: var(--primary-text-color);
-    font-size: 22px;
-  }
+      h1 {
+        margin: 16px 0;
+        /*color: #212121;*/
+        color: var(--primary-text-color);
+        font-size: 22px;
+      }
 
-  /* user selection color */
-  ::selection {
-    background: var(--selection-color); /* WebKit/Blink Browsers */
-    color: #fff;
-  }
+      /* user selection color */
+      ::selection {
+        background: var(--selection-color);
+        /* WebKit/Blink Browsers */
+        color: #fff;
+      }
 
-  /*custom scroll bars*/
-  ::-webkit-scrollbar {
-    height: 16px;
-    overflow: visible;
-    width: 16px;
-  }
+      /*custom scroll bars*/
+      ::-webkit-scrollbar {
+        height: 16px;
+        overflow: visible;
+        width: 16px;
+      }
 
-  ::-webkit-scrollbar-button {
-    width: 0;
-    height: 0;
-  }
+      ::-webkit-scrollbar-button {
+        width: 0;
+        height: 0;
+      }
 
-  ::-webkit-scrollbar-thumb {
-    background-color: rgba(0,0,0,.2);
-    background-clip: padding-box;
-    border: solid transparent;
-    /* dupe duplicate */
-    border-width: 1px 1px 1px 2px;
-    border-width: 1px 1px 1px 6px;
-    min-height: 28px;
-    padding: 100px 0 0;
-    -webkit-box-shadow: inset 1px 1px 0 rgba(0,0,0,.1),inset 0 -1px 0 rgba(0,0,0,.07);
-    box-shadow: inset 1px 1px 0 rgba(0,0,0,.1),inset 0 -1px 0 rgba(0,0,0,.07);
-  }
+      ::-webkit-scrollbar-thumb {
+        background-color: rgba(0,0,0,.2);
+        background-clip: padding-box;
+        border: solid transparent;
+        /* dupe duplicate */
+        border-width: 1px 1px 1px 2px;
+        border-width: 1px 1px 1px 6px;
+        min-height: 28px;
+        padding: 100px 0 0;
+        -webkit-box-shadow: inset 1px 1px 0 rgba(0,0,0,.1),inset 0 -1px 0 rgba(0,0,0,.07);
+        box-shadow: inset 1px 1px 0 rgba(0,0,0,.1),inset 0 -1px 0 rgba(0,0,0,.07);
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(0,0,0,.4);
+        -webkit-box-shadow: inset 1px 1px 1px rgba(0,0,0,.25);
+        box-shadow: inset 1px 1px 1px rgba(0,0,0,.25);
+      }
+      ::-webkit-scrollbar-thumb:active {
+        background-color: rgba(0,0,0,.6);
+      }
 
-  ::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(0,0,0,.4);
-    -webkit-box-shadow: inset 1px 1px 1px rgba(0,0,0,.25);
-    box-shadow: inset 1px 1px 1px rgba(0,0,0,.25);
-  }
+      ::-webkit-scrollbar-track {
+        background-clip: padding-box;
+        border: solid transparent;
+        border-width: 0 0 0 4px;
+      }
 
-  ::-webkit-scrollbar-thumb:active {
-    background-color: rgba(0,0,0,.6);
-  }
+      ::-webkit-scrollbar-track-piece {
+        background-clip: padding-box;
+        background-color: #f5f5f5;
+        border: solid #fff;
+        -webkit-box-shadow: inset 1px 0 0 rgba(0,0,0,.14),inset -1px 0 0 rgba(0,0,0,.07);
+        box-shadow: inset 1px 0 0 rgba(0,0,0,.14),inset -1px 0 0 rgba(0,0,0,.07);
+      }
+      ::-webkit-scrollbar-track:hover {
+        background-color: rgba(0,0,0,.05);
+        -webkit-box-shadow: inset 1px 0 0 rgba(0,0,0,.1);
+        box-shadow: inset 1px 0 0 rgba(0,0,0,.1);
+      }
+      ::-webkit-scrollbar-track:active {
+        background: transparent;
+      }
 
-  ::-webkit-scrollbar-track {
-    background-clip: padding-box;
-    border: solid transparent;
-    border-width: 0 0 0 4px;
-  }
+      -webkit-scrollbar-corner {
+        background-clip: padding-box;
+        background-color: #f5f5f5;
+        border: solid #fff;
+        border-width: 3px 0 0 3px;
+        -webkit-box-shadow: inset 1px 1px 0 rgba(0,0,0,.14);
+        box-shadow: inset 1px 1px 0 rgba(0,0,0,.14);
+      }
 
-  ::-webkit-scrollbar-track-piece {
-    background-clip: padding-box;
-    background-color: #f5f5f5;
-    border: solid #fff;
-    -webkit-box-shadow: inset 1px 0 0 rgba(0,0,0,.14),inset -1px 0 0 rgba(0,0,0,.07);
-    box-shadow: inset 1px 0 0 rgba(0,0,0,.14),inset -1px 0 0 rgba(0,0,0,.07);
-  }
+      hr.paper-icon-item-divider {
+        margin: 8px 0;
+        height: 1px;
+        border: none;
+        background-color: var(--divider-theme-color);
+      }
 
-  ::-webkit-scrollbar-track:hover {
-    background-color: rgba(0,0,0,.05);
-    -webkit-box-shadow: inset 1px 0 0 rgba(0,0,0,.1);
-    box-shadow: inset 1px 0 0 rgba(0,0,0,.1);
-  }
+      paper-tooltip {
+        --paper-tooltip: {
+          line-height: 14px;
+          font-size: 14px;
+          padding: 16px;
+        };
+      }
 
-  ::-webkit-scrollbar-track:active {
-    background: transparent;
-  }
+      paper-toggle-button {
+        user-select: none;
+        --paper-toggle-button-label-spacing: 16px;
+      }
 
-  -webkit-scrollbar-corner {
-    background-clip: padding-box;
-    background-color: #f5f5f5;
-    border: solid #fff;
-    border-width: 3px 0 0 3px;
-    -webkit-box-shadow: inset 1px 1px 0 rgba(0,0,0,.14);
-    box-shadow: inset 1px 1px 0 rgba(0,0,0,.14);
-  }
+      paper-checkbox {
+        padding: 16px 0;
+        --paper-checkbox-label: {
+          user-select: none;
+          padding-left: 16px;
+        };
+      }
 
-  hr.paper-icon-item-divider {
-    margin: 8px 0;
-    height: 1px;
-    border: none;
-    background-color: var(--divider-theme-color);
-  }
+      paper-input {
+        --paper-input-container-color: var(--divider-theme-color);
+        --paper-input-container-label: {
+          color: var(--secondary-text-color);
+        };
+      }
 
-  paper-tooltip {
-    --paper-tooltip: {
-      line-height: 14px;
-      font-size: 14px;
-      padding: 16px;
-    };
-  }
+      paper-dialog {
+        --paper-dialog: {
+          background: var(--primary-card-color);
+        }
+      }
 
-  paper-toggle-button {
-    user-select: none;
-    --paper-toggle-button-label-spacing: 16px;
-  }
+      paper-fab {
+        --paper-fab-background: var(--accent-color);
+        --paper-fab-keyboard-focus-background: var(--light-accent-color);
+      }
 
-  paper-checkbox {
-    padding: 16px 0;
-    --paper-checkbox-label: {
-      user-select: none;
-      padding-left: 16px;
-    };
-  }
+      paper-icon-button {
+        --paper-icon-button-ink-color: var(--accent-color);
+        --paper-icon-button: {
+          color: var(--accent-color);
+        };
+      }
 
-  paper-input {
-    --paper-input-container-color: var(--divider-theme-color);
-    --paper-input-container-label: {
-      color: var(--secondary-text-color);
-    };
-  }
+      paper-spinner-lite {
+        --paper-spinner-color: var(--primary-color);
+      }
 
-  paper-dialog {
-    --paper-dialog: {
-      background: var(--primary-card-color);
-    }
-  }
-
-  paper-fab {
-    --paper-fab-background: var(--accent-color);
-    --paper-fab-keyboard-focus-background: var(--light-accent-color);
-  }
-
-  paper-icon-button {
-    --paper-icon-button-ink-color: var(--accent-color);
-    --paper-icon-button: {
-      color: var(--accent-color);
-    };
-  }
-
-  paper-spinner-lite {
-    --paper-spinner-color: var(--primary-color);
-  }
-  </style>
-</template>
+    </style>
+  </template>
 </dom-module>

@@ -13,162 +13,165 @@
 
 <dom-module id="custom-datatable">
   <template>
-  <style include="iron-flex iron-flex-alignment iron-flex-factors shared-styles">
-  .row {
-    height: 48px;
-    background-color: var(--primary-card-color);
-    color: var(--primary-text-color);
-    border-bottom: 1px solid var(--divider-theme-color);
-    padding-right: 24px;
-    font-family: 'robotoregular';
-    font-size: 13px;
-  }
+    <style include="iron-flex iron-flex-alignment iron-flex-factors shared-styles">
+      .row {
+        height: 48px;
+        background-color: var(--primary-card-color);
+        color: var(--primary-text-color);
+        border-bottom: 1px solid var(--divider-theme-color);
+        padding-right: 24px;
+        font-family: 'robotoregular';
+        font-size: 13px;
+      }
+      .row:last-child {
+        height: 56px;
+      }
 
-  .row:last-child {
-    height: 56px;
-  }
+      .row.header {
+        box-sizing: border-box;
+        z-index: 1;
+        height: 64px;
+        padding-right: 27px;
+        font-family: 'robotomedium';
+        font-size: 12px;
+        color: rgba(0, 0, 0, .54);
+        user-select: none;
+        position: fixed;
+        top: 64px;
+        right: 11px;
+      }
 
-  .row.header {
-    box-sizing: border-box;
-    z-index: 1;
-    height: 64px;
-    padding-right: 27px;
-    font-family: 'robotomedium';
-    font-size: 12px;
-    color: rgba(0, 0, 0, .54);
-    user-select: none;
-    position: fixed;
-    top: 64px;
-    right: 11px;
-  }
+      .row.header .cell iron-icon {
+        opacity: 0;
+        transform: scale(.5);
+        transition: 0.3s ease-out;
+      }
 
-  .row.header .cell iron-icon {
-    opacity: 0;
-    transform: scale(.5);
-    transition: .3s ease-out;
-  }
+      iron-icon {
+        --iron-icon-height:: 16px;
+        --iron-icon-width: 16px;
+        --iron-icon-fill-color: var(--secondary-text-color);
+        padding-right: 2px;
+      }
+      .row:not(.header):hover {
+        background-color: var(--paper-grey-100);
+      }
+      .row.header .cell:hover iron-icon {
+        transform: scale(1);
+        opacity: 1;
+      }
+      .cell:not(.check) {
+        padding-left: 56px;
+        text-align: right;
+        min-width: 100px;
+        line-height: 64px;
+        position: relative;
+      }
 
-  iron-icon {
-    --iron-icon-height:: 16px;
-    --iron-icon-width: 16px;
-    --iron-icon-fill-color: var(--secondary-text-color);
-    padding-right: 2px;
-  }
+      .cell.check {
+        line-height: 64px;
+        width: 20px;
+      }
+      .cell:first-child,
+      .cell:nth-child(2) {
+        padding-left: 24px;
+      }
 
-  .row:not(.header):hover {
-    background-color: var(--paper-grey-100);
-  }
+      .cell.num {
+        text-align: right;
+      }
 
-  .row.header .cell:hover iron-icon {
-    transform: scale(1);
-    opacity: 1;
-  }
+      iron-list {
+        overflow: visible !important;
+        margin-top: 64px;
+      }
 
-  .cell:not(.check) {
-    padding-left: 56px;
-    text-align: right;
-    min-width: 100px;
-    line-height: 64px;
-    position: relative;
-  }
+      paper-checkbox {
+        --paper-checkbox-checked-ink-color: var(--accent-color);
+        --paper-checkbox-checked-color: var(--accent-color);
+      }
 
-  .cell.check {
-    line-height: 64px;
-    width: 20px;
-  }
+    </style>
+    <iron-ajax url="data/contacts.json" last-response="{{data}}" auto></iron-ajax>
 
-  .cell:first-child, .cell:nth-child(2) {
-    padding-left: 24px;
-  }
-
-  .cell.num {
-    text-align: right;
-  }
-
-  iron-list {
-    overflow: visible !important;
-    margin-top: 64px;
-  }
-
-  paper-checkbox {
-    --paper-checkbox-checked-ink-color: var(--accent-color);
-    --paper-checkbox-checked-color: var(--accent-color);
-  }
-  </style>
-  <iron-ajax url="data/contacts.json" last-response="{{data}}" auto></iron-ajax>
-
-  <div class="layout horizontal row header" style=[[headerLeft]]>
-    <div class="cell check">
-      <paper-checkbox></paper-checkbox>
+    <div class="layout horizontal row header" style=[[headerLeft]]>
+      <div class="cell check">
+        <paper-checkbox></paper-checkbox>
+      </div>
+      <template is="dom-repeat" items=[[tableheaders]] as="heading">
+        <div class="flex cell">
+          <iron-icon icon=[[heading.icon]]></iron-icon>
+          [[heading.title]]
+          <paper-ripple></paper-ripple>
+        </div>
+      </template>
     </div>
-    <template is="dom-repeat" items=[[tableheaders]] as="heading">
-      <div class="flex cell">
-        <iron-icon icon=[[heading.icon]]></iron-icon>
-        [[heading.title]]
-        <paper-ripple></paper-ripple>
-      </div>
-    </template>
-  </div>
-  <iron-list items=[[data]] as="item" multi-selection>
-    <template>
-      <div class="layout horizontal row center">
-        <div class="cell check">
-          <paper-checkbox></paper-checkbox>
+    <iron-list items=[[data]] as="item" selected-items="{{selectedItems}}" selection-enabled multi-selection>
+      <template>
+        <div class="layout horizontal row center">
+          <div class="cell check">
+            <paper-checkbox checked={{selected}}></paper-checkbox>
+          </div>
+          <div class="flex cell">
+            [[item.name]]
+          </div>
+          <div class="flex cell">
+            [[item.phone]]
+          </div>
+          <div class="flex cell">
+            [[item.email]]
+          </div>
+          <paper-ripple></paper-ripple>
         </div>
-        <div class="flex cell">
-          [[item.name]]
-        </div>
-        <div class="flex cell">
-          [[item.phone]]
-        </div>
-        <div class="flex cell">
-          [[item.email]]
-        </div>
-        <paper-ripple></paper-ripple>
-      </div>
-    </template>
-  </iron-list>
-</template>
+      </template>
+    </iron-list>
+  </template>
 
-<script>
-Polymer({
-  is: 'custom-datatable',
+  <script>
+    Polymer({
+      is: 'custom-datatable',
 
-  properties: {
-    tableheaders: {
-      type: Array,
-      value: [
-        {
-          title: 'Number',
-          icon: 'arrow-upward'
+      properties: {
+        tableheaders: {
+          type: Array,
+          value: [
+            {
+              title: 'Number',
+              icon: 'arrow-upward'
+            }, {
+              title: 'Page',
+              icon: 'arrow-upward'
+            }, {
+              title: 'Last Try',
+              icon: 'arrow-downward'
+            }
+          ]
         },
-        {
-          title: 'Page',
-          icon: 'arrow-upward'
+        drawer: {
+          type: Boolean,
+          observer: '_drawerState'
         },
-        {
-          title: 'Last Try',
-          icon: 'arrow-downward'
+        headerLeft: {
+          type: String
+        },
+        selectedItems: {
+          type: Object
         }
-      ]
-    },
-    drawer: {
-      type: Boolean,
-      observer: '_drawerState'
-    },
-    headerLeft: {
-      type: String
-    }
-  },
+      },
 
-  _drawerState: function (e) {
-    if (e) {
-      this.headerLeft = 'left: 256px';
-    }
-    else {
-      this.headerLeft = 'left: 0';
-    }
-  }
-});
-</script>
+      observers: ['_lussan(selectedItems.length)'],
+
+      _drawerState: function (e) {
+        if (e) {
+          this.headerLeft = 'left: 256px';
+        } else {
+          this.headerLeft = 'left: 0';
+        }
+      },
+
+      _lussan: function (e) {
+        console.log(e);
+      }
+    });
+  </script>
 </dom-module>
