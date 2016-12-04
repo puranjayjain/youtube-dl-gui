@@ -9,20 +9,11 @@
 <link rel="import" href="../../bower_components/iron-list/iron-list.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
-
 <link rel="import" href="../shared-styles.html">
 
 <dom-module id="custom-datatable">
   <template>
   <style include="iron-flex iron-flex-alignment iron-flex-factors shared-styles">
-  :host {
-    display: block;
-    position: relative;
-    overflow: hidden;
-    height: 100%;
-    width: 100%;
-  }
-
   .row {
     height: 48px;
     background-color: var(--primary-card-color);
@@ -39,16 +30,16 @@
 
   .row.header {
     box-sizing: border-box;
-    position: absolute;
     z-index: 1;
     height: 64px;
-    top: 0;
-    width: 100%;
-    padding-right: 40px;
+    padding-right: 27px;
     font-family: 'robotomedium';
     font-size: 12px;
-    color: var(--secondary-text-color);
+    color: rgba(0, 0, 0, .54);
     user-select: none;
+    position: fixed;
+    top: 64px;
+    right: 11px;
   }
 
   .row.header .cell iron-icon {
@@ -95,9 +86,8 @@
   }
 
   iron-list {
-    top: 64px;
-    height: calc(100% - 64px);
-    width: 100%;
+    overflow: visible !important;
+    margin-top: 64px;
   }
 
   paper-checkbox {
@@ -107,7 +97,7 @@
   </style>
   <iron-ajax url="data/contacts.json" last-response="{{data}}" auto></iron-ajax>
 
-  <div class="layout horizontal row header">
+  <div class="layout horizontal row header" style=[[headerLeft]]>
     <div class="cell check">
       <paper-checkbox></paper-checkbox>
     </div>
@@ -119,7 +109,7 @@
       </div>
     </template>
   </div>
-  <iron-list class="layout vertical" items=[[data]] as="item">
+  <iron-list items=[[data]] as="item" multi-selection>
     <template>
       <div class="layout horizontal row center">
         <div class="cell check">
@@ -134,6 +124,7 @@
         <div class="flex cell">
           [[item.email]]
         </div>
+        <paper-ripple></paper-ripple>
       </div>
     </template>
   </iron-list>
@@ -161,6 +152,22 @@ Polymer({
         }
       ]
     },
+    drawer: {
+      type: Boolean,
+      observer: '_drawerState'
+    },
+    headerLeft: {
+      type: String
+    }
+  },
+
+  _drawerState: function (e) {
+    if (e) {
+      this.headerLeft = 'left: 256px';
+    }
+    else {
+      this.headerLeft = 'left: 0';
+    }
   }
 });
 </script>

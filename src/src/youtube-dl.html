@@ -91,11 +91,6 @@
   paper-icon-item.iron-selected iron-icon {
     opacity: 1;
   }
-
-  neon-animated-pages {
-    overflow: hidden;
-    height: 100%;
-  }
   </style>
 
   <app-location route="{{route}}" use-hash-as-path></app-location>
@@ -107,7 +102,7 @@
 
   <app-drawer-layout fullbleed>
     <!-- Drawer content -->
-    <app-drawer swipe-open="true">
+    <app-drawer swipe-open="true" opened={{drawer}}>
       <paper-material elevation="1">
         <paper-menu id="mainMenu" selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <paper-icon-item name="all">
@@ -146,7 +141,7 @@
     </app-drawer>
 
     <!-- Main content -->
-    <app-header-layout has-scrolling-region>
+    <app-header-layout id="headerLayout" has-scrolling-region>
       <app-header condenses fixed effects="waterfall">
         <app-toolbar>
           <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
@@ -162,7 +157,7 @@
       role="main"
       entry-animation="fade-in-animation"
       exit-animation="fade-out-animation">
-      <all-view name="all"></all-view>
+      <all-view name="all" drawer={{drawer}}></all-view>
       <downloading-view name="downloading"></downloading-view>
       <unfinished-view name="unfinished"></unfinished-view>
       <downloaded-view name="downloaded"></downloaded-view>
@@ -222,6 +217,9 @@ Polymer({
     },
     password: {
       type: String
+    },
+    drawer: {
+      type: Boolean
     }
   },
 
@@ -251,6 +249,11 @@ Polymer({
     // attach event listeners on dom ready
     this.listen(this.$.mainMenu, 'tap', 'onMenuTap');
     this.listen(this.$.mainMenu, 'keydown', 'onMenuEnter');
+    // force style app header layout
+    // http://stackoverflow.com/questions/35149624/dynamically-inject-shared-styles-in-polymer-element-polymer-1-2-3
+    var myDomModule = document.createElement('style', 'custom-style');
+    myDomModule.setAttribute('include', 'shared-styles');
+    Polymer.dom(this.$.headerLayout.root).appendChild(myDomModule);
   },
 
   onMenuEnter: function(e) {

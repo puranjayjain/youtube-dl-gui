@@ -5,16 +5,18 @@
 
 <dom-module id="all-view">
   <template>
-    <style include="shared-styles">
-    </style>
-    <custom-datatable
-    >
-    </custom-datatable>
-  </template>
+  <style include="shared-styles">
+  </style>
+  <custom-datatable drawer=[[drawer]]></custom-datatable>
+</template>
 
-  <script>
-    Polymer({
-      is: 'all-view'
-    });
-  </script>
+<script>
+Polymer({
+  is: 'all-view',
+
+  drawer: {
+    type: Boolean
+  }
+});
+</script>
 </dom-module>
