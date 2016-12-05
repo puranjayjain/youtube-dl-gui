@@ -7,8 +7,9 @@
         "test": "test"
     },
     "window": {
-        "toolbar": false,
-        "frame": false
+        "frame": false,
+        "width": 800,
+        "height": 600
     },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"

@@ -27,7 +27,7 @@
       :host {
         display: block;
       }
-      
+
       app-drawer-layout {
         position: absolute;
         left: 0;
@@ -107,10 +107,10 @@
 
     <app-location route="{{route}}" use-hash-as-path></app-location>
     <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
-     
+
     <app-drawer-layout>
       <!-- Drawer content -->
-      <app-drawer swipe-open="true" opened={{drawer}}>
+      <app-drawer swipe-open="true">
         <paper-material elevation="1">
           <paper-menu id="mainMenu" selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
             <paper-icon-item name="all">
@@ -174,13 +174,13 @@
     <new-download newdownloaddialog={{newdownloaddialog}} finaldownloaddialog={{finaldownloaddialog}} url={{url}} username={{username}} password={{password}}></new-download>
     <final-download newdownloaddialog={{newdownloaddialog}} finaldownloaddialog={{finaldownloaddialog}} url={{url}} username={{username}} password={{password}}></final-download>
     <!-- app's window -->
-    <title-bar></title-bar>   
+    <title-bar></title-bar>
   </template>
 
   <script>
     Polymer({
       is: 'youtube-dl',
-      
+
       properties: {
         page: {
           type: String,
@@ -210,13 +210,12 @@
           type: Number
         },
         appscrolltop: {
-          type: Number,
-          value: 0
+          type: Number
         }
       },
 
       observers: ['_routePageChanged(routeData.page)'],
-    
+
       _routePageChanged: function (page) {
         this.page = page || 'all';
       },
@@ -246,7 +245,7 @@
         // read scroll changes
         this.listen(Polymer.dom(this.$.headerLayout.$.contentContainer).node, 'scroll', '_onScrollApp');
       },
-      
+
       _onScrollApp: function (e) {
         this.appscrolltop = e.path[0].scrollTop;
       },
