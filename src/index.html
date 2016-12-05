@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
     <title>Youtube-dl GUI</title>
     <meta name="description" content="Youtube-dl GUI description">
+    <link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32"/>
+    <link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16"/>
     <link rel="icon" href="images/favicon.ico">
     <link rel="stylesheet" href="src/font/roboto.css" async>
 
@@ -28,23 +30,8 @@
 
         var webComponentsSupported = ('registerElement' in document && 'import' in document.createElement('link') && 'content' in document.createElement('template'));
 
-        if (!webComponentsSupported) {
-          var script = document.createElement('script');
-          script.async = true;
-          script.src = '/bower_components/webcomponentsjs/webcomponents-lite.min.js';
-          script.onload = onload;
-          document.head.appendChild(script);
-        } else {
-          onload();
-        }
+        onload();
       })();
-
-      // Load pre-caching Service Worker
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function () {
-          navigator.serviceWorker.register('/service-worker.js');
-        });
-      }
     </script>
 
     <link rel="import" href="src/youtube-dl.html">
@@ -52,7 +39,7 @@
     <style>
       body {
         margin: 0;
-        font-family: 'Roboto', 'Noto', sans-serif;
+        font-family: 'Roboto', 'robotoregular', 'Noto',sans-serif;
         line-height: 1.5;
         padding-top: 32px;
       }

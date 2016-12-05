@@ -9,7 +9,8 @@
     "window": {
         "frame": false,
         "width": 800,
-        "height": 600
+        "height": 600,
+        "icon": "images/favicon-32x32.png"
     },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
