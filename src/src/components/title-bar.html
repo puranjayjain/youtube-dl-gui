@@ -13,23 +13,25 @@
         height: 32px;
         box-sizing: border-box;
         background-color: var(--primary-window-color);
+        /* https://developer.chrome.com/apps/app_window */
         -webkit-app-region: drag;
         @apply(--layout-horizontal);
         @apply(--layout-center);
         @apply(--layout-fixed-top);
-        z-index: 1;
+        z-index: 99999;
         padding-left: 16px;
-        color: var(--primary-text-color);
+        color: var(--primary-inverted-text-color);
         user-select: none;
       }
 
       paper-icon-button {
-        --paper-icon-button-ink-color: var(--primary-text-color);
+        --paper-icon-button-ink-color: var(--primary-inverted-text-color);
         --paper-icon-button: {
           position: relative;
-          color: var(--primary-text-color);
+          color: var(--primary-inverted-text-color);
           width: 32px;
           height: 32px;
+          /* https://developer.chrome.com/apps/app_window */
           -webkit-app-region: no-drag;
         };
       }
@@ -37,15 +39,64 @@
     </style>
     <div class="flex-1 paper-font-body2">
       Youtube-dl GUI
-    </div>    
+    </div>
     <div>
       <paper-icon-button id="minimize" icon="mdi:window-minimize" alt="window minimize"></paper-icon-button>
-      <paper-icon-button id="maximize" icon="mdi:window-maximize" alt="window maximize"></paper-icon-button>
+      <paper-icon-button id="maximize" icon=[[icon]] alt="window maximize"></paper-icon-button>
       <paper-icon-button id="close" icon="clear" alt="close the application"></paper-icon-button>
     </div>
   </template>
 
   <script>
-    Polymer({is: 'title-bar'});
+    Polymer({
+      is: 'title-bar',
+
+      properties: {
+        maximize: {
+          type: Boolean,
+          value: false
+        },
+        icon: {
+          type: String,
+          value: 'mdi:window-maximize'
+        }
+      },
+
+      onMinimize: function () {
+        let win = nw.Window.get();
+        win.minimize();
+      },
+
+      onMaximize: function () {
+        let win = nw.Window.get();
+        if (this.maximize) {
+          win.restore();
+        } else {
+          win.maximize();
+        }
+      },
+
+      onClose: function () {
+        let win = nw.Window.get();
+        win.close();
+      },
+
+      ready: function () {
+        let win = nw.Window.get();
+        // attach event listeners on dom ready
+        this.listen(this.$.minimize, 'tap', 'onMinimize');
+        this.listen(this.$.maximize, 'tap', 'onMaximize');
+        this.listen(this.$.close, 'tap', 'onClose');
+        // window maximize and restore event
+        win.on('maximize', () => {
+          this.icon = 'mdi:window-restore';
+          this.maximize = true;
+        });
+        win.on('restore', () => {
+          this.icon = 'mdi:window-maximize';
+          this.maximize = false;
+        });
+      }
+    });
   </script>
 </dom-module>

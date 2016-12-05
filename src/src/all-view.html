@@ -6,7 +6,7 @@
 <dom-module id="all-view">
   <template>
     <style include="shared-styles"></style>
-    <custom-datatable drawer=[[drawer]] toolbaritems={{toolbaritems}}></custom-datatable>
+    <custom-datatable toolbaritems={{toolbaritems}} appscrolltop=[[appscrolltop]]></custom-datatable>
   </template>
 
   <script>
@@ -14,12 +14,12 @@
       is: 'all-view',
 
       properties: {
-        drawer: {
-          type: Boolean
-        },
         toolbaritems: {
           type: Number,
           notify: true
+        },
+        appscrolltop: {
+          type: Number
         }
       }
     });

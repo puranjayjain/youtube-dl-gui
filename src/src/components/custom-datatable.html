@@ -36,9 +36,8 @@
         font-size: 12px;
         color: rgba(0, 0, 0, .54);
         user-select: none;
-        position: fixed;
-        top: 96px;
-        right: 11px;
+        position: absolute;
+        width: 100%;
       }
 
       .row.header .cell iron-icon {
@@ -90,14 +89,15 @@
         --paper-checkbox-checked-ink-color: var(--accent-color);
         --paper-checkbox-checked-color: var(--accent-color);
       }
-      
+
       paper-checkbox.check {
         pointer-events: none;
       }
+
     </style>
     <iron-ajax url="data/contacts.json" last-response="{{data}}" auto></iron-ajax>
 
-    <div class="layout horizontal row header" style=[[headerLeft]]>
+    <div class="layout horizontal row header" style="top: [[appscrolltop]]px;">
       <div class="cell check">
         <paper-checkbox checked={{allCheck}}></paper-checkbox>
       </div>
@@ -131,9 +131,7 @@
           <paper-ripple></paper-ripple>
         </div>
       </template>
-      <script>
-      
-      </script>
+      <script></script>
     </iron-list>
   </template>
 
@@ -157,10 +155,6 @@
             }
           ]
         },
-        drawer: {
-          type: Boolean,
-          observer: '_drawerState'
-        },
         headerLeft: {
           type: String
         },
@@ -174,18 +168,13 @@
         allCheck: {
           type: Boolean,
           observer: '_allCheckedChanged'
+        },
+        appscrolltop: {
+          type: Number
         }
       },
 
       observers: ['_itemsChanged(selectedItems.length)'],
-
-      _drawerState: function (e) {
-        if (e) {
-          this.headerLeft = 'left: 256px';
-        } else {
-          this.headerLeft = 'left: 0';
-        }
-      },
 
       _allCheckedChanged: function (checked) {
         if (checked) {
@@ -201,7 +190,7 @@
 
       _itemsChanged: function (items) {
         this.toolbaritems = items;
-      },
+      }
     });
   </script>
 </dom-module>

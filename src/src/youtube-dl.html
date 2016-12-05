@@ -29,6 +29,11 @@
       }
       
       app-drawer-layout {
+        position: absolute;
+        left: 0;
+        top: 32px;
+        right: 0;
+        bottom: 0;
       }
 
       app-header-layout {
@@ -36,7 +41,7 @@
       }
 
       app-header {
-        color: var(--primary-text-color);
+        color: var(--primary-inverted-text-color);
         background-color: var(--primary-color);
       }
 
@@ -66,6 +71,7 @@
       }
 
       paper-menu {
+        margin-top: 32px;
         --paper-menu-background-color: none;
         --paper-menu-focused-item-after: {
           background: none;
@@ -83,9 +89,9 @@
       }
 
       paper-icon-button {
-        --paper-icon-button-ink-color: var(--primary-text-color);
+        --paper-icon-button-ink-color: var(--primary-inverted-text-color);
         --paper-icon-button: {
-          color: var(--primary-text-color);
+          color: var(--primary-inverted-text-color);
         };
       }
 
@@ -152,10 +158,10 @@
           <options-toolbar class="fit" page=[[page]] items={{toolbaritems}}></options-toolbar>
         </app-header>
         <neon-animated-pages id="pages" class="flex" selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
-          <all-view name="all" drawer=[[drawer]] toolbaritems={{toolbaritems}}></all-view>
-          <downloading-view name="downloading" drawer=[[drawer]] toolbaritems={{toolbaritems}}></downloading-view>
-          <unfinished-view name="unfinished" drawer=[[drawer]] toolbaritems={{toolbaritems}}></unfinished-view>
-          <downloaded-view name="downloaded" drawer=[[drawer]] toolbaritems={{toolbaritems}}></downloaded-view>
+          <all-view name="all" toolbaritems={{toolbaritems}} appscrolltop=[[appscrolltop]]></all-view>
+          <downloading-view name="downloading" toolbaritems={{toolbaritems}}></downloading-view>
+          <unfinished-view name="unfinished" toolbaritems={{toolbaritems}}></unfinished-view>
+          <downloaded-view name="downloaded" toolbaritems={{toolbaritems}}></downloaded-view>
           <settings-view name="settings"></settings-view>
           <about-view name="about"></about-view>
           <view404-view name="view404"></view404-view>
@@ -174,7 +180,7 @@
   <script>
     Polymer({
       is: 'youtube-dl',
-
+      
       properties: {
         page: {
           type: String,
@@ -200,16 +206,17 @@
         password: {
           type: String
         },
-        drawer: {
-          type: Boolean
-        },
         toolbaritems: {
           type: Number
+        },
+        appscrolltop: {
+          type: Number,
+          value: 0
         }
       },
 
       observers: ['_routePageChanged(routeData.page)'],
-
+    
       _routePageChanged: function (page) {
         this.page = page || 'all';
       },
@@ -236,6 +243,12 @@
         var myDomModule = document.createElement('style', 'custom-style');
         myDomModule.setAttribute('include', 'shared-styles');
         Polymer.dom(this.$.headerLayout.root).appendChild(myDomModule);
+        // read scroll changes
+        this.listen(Polymer.dom(this.$.headerLayout.$.contentContainer).node, 'scroll', '_onScrollApp');
+      },
+      
+      _onScrollApp: function (e) {
+        this.appscrolltop = e.path[0].scrollTop;
       },
 
       onMenuEnter: function (e) {
