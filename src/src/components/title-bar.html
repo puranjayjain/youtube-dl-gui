@@ -1,0 +1,51 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+
+<link rel="import" href="../shared-styles.html">
+
+<dom-module id="title-bar">
+  <template>
+    <style include="iron-flex-factors shared-styles">
+      :host {
+        height: 32px;
+        box-sizing: border-box;
+        background-color: var(--primary-window-color);
+        -webkit-app-region: drag;
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+        @apply(--layout-fixed-top);
+        z-index: 1;
+        padding-left: 16px;
+        color: var(--primary-text-color);
+        user-select: none;
+      }
+
+      paper-icon-button {
+        --paper-icon-button-ink-color: var(--primary-text-color);
+        --paper-icon-button: {
+          position: relative;
+          color: var(--primary-text-color);
+          width: 32px;
+          height: 32px;
+          -webkit-app-region: no-drag;
+        };
+      }
+
+    </style>
+    <div class="flex-1 paper-font-body2">
+      Youtube-dl GUI
+    </div>    
+    <div>
+      <paper-icon-button id="minimize" icon="mdi:window-minimize" alt="window minimize"></paper-icon-button>
+      <paper-icon-button id="maximize" icon="mdi:window-maximize" alt="window maximize"></paper-icon-button>
+      <paper-icon-button id="close" icon="clear" alt="close the application"></paper-icon-button>
+    </div>
+  </template>
+
+  <script>
+    Polymer({is: 'title-bar'});
+  </script>
+</dom-module>

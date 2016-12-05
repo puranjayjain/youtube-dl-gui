@@ -19,12 +19,16 @@
 <link rel="import" href="components/new-download.html">
 <link rel="import" href="components/final-download.html">
 <link rel="import" href="components/options-toolbar.html">
+<link rel="import" href="components/title-bar.html">
 
 <dom-module id="youtube-dl">
   <template>
     <style include="iron-flex iron-positioning shared-styles">
       :host {
         display: block;
+      }
+      
+      app-drawer-layout {
       }
 
       app-header-layout {
@@ -97,8 +101,8 @@
 
     <app-location route="{{route}}" use-hash-as-path></app-location>
     <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
-
-    <app-drawer-layout fullbleed>
+     
+    <app-drawer-layout>
       <!-- Drawer content -->
       <app-drawer swipe-open="true" opened={{drawer}}>
         <paper-material elevation="1">
@@ -163,6 +167,8 @@
     <!-- dialogs -->
     <new-download newdownloaddialog={{newdownloaddialog}} finaldownloaddialog={{finaldownloaddialog}} url={{url}} username={{username}} password={{password}}></new-download>
     <final-download newdownloaddialog={{newdownloaddialog}} finaldownloaddialog={{finaldownloaddialog}} url={{url}} username={{username}} password={{password}}></final-download>
+    <!-- app's window -->
+    <title-bar></title-bar>   
   </template>
 
   <script>
@@ -235,7 +241,10 @@
       onMenuEnter: function (e) {
         // for main menu
         if (e.key === 'Enter' && e.target.nodeName === 'PAPER-ICON-ITEM') {
-          window.location.hash = `/${e.target.getAttribute('name')}`;
+          let me = e.target;
+          setTimeout(() => {
+            window.location.hash = `/${me.getAttribute('name')}`;
+          }, 300);
         }
       },
 
@@ -243,7 +252,10 @@
       onMenuTap: function (e) {
         // for main menu
         if (e.target.nodeName === 'PAPER-ICON-ITEM') {
-          window.location.hash = `/${e.target.getAttribute('name')}`;
+          let me = e.target;
+          setTimeout(() => {
+            window.location.hash = `/${me.getAttribute('name')}`;
+          }, 300);
         }
       }
     });
