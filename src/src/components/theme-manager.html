@@ -1,4 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+<link rel="import" href="../../bower_components/paper-styles/default-theme.html">
+<link rel="import" href="../../bower_components/paper-styles/classes/shadow.html">
 <link rel="import" href="../../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
 
 <link rel="import" href="../shared-styles.html">
@@ -30,33 +33,88 @@
 
       // update theme if any of the params change
       updateTheme: function () {
-        let docRoot = Polymer.dom(this).getOwnerRoot().host;
-        if (this.iscontrastmode) {} else {
-          let theme,
-            modifiers = [
-              'background-color',
-              'card-color',
-              'base-color',
-              'primary-text-color',
-              'secondary-text-color',
-              'disabled-text-color',
-              'divider-color',
-              'highlight-color'
-            ];
+        let i,
+          theme,
+          docRoot = Polymer.dom(this).getOwnerRoot().host,
+          themedefinitions = {
+            '--light-theme-background-color': 'var(--paper-grey-50)',
+            '--light-theme-card-color': '#fff',
+            '--light-theme-text-color': 'var(--paper-grey-900)',
+            '--light-theme-primary-text-color': 'rgba(0, 0, 0, .87)',
+            '--light-theme-secondary-text-color': 'rgba(0, 0, 0, .54)',
+            '--light-theme-disabled-text-color': 'rgba(0, 0, 0, .38)',
+            '--light-theme-divider-color': 'rgba(0, 0, 0, .12)',
+            '--light-theme-highlight-color': 'var(--paper-grey-50)',
+            '--dark-theme-background-color': '#303030',
+            '--dark-theme-card-color': 'var(--paper-grey-800)',
+            '--dark-theme-text-color': '#fff',
+            '--dark-theme-primary-text-color': '#fff',
+            '--dark-theme-secondary-text-color': 'rgba(255, 255, 255, .7)',
+            '--dark-theme-disabled-text-color': 'rgba(255, 255, 255, .5)',
+            '--dark-theme-divider-color': 'rgba(255, 255, 255, .12)',
+            '--dark-theme-highlight-color': 'var(--paper-grey-900)'
+          },
+          modifiers = [
+            'background-color',
+            'card-color',
+            'primary-text-color',
+            'secondary-text-color',
+            'disabled-text-color',
+            'divider-color'
+          ];
+        if (this.iscontrastmode) {
           if (this.isdarktheme) {
             theme = 'dark-theme';
-            docRoot.customStyle[`--primary-inverted-text-color`] = 'var(--light-theme-primary-text-color)';
+            docRoot.customStyle['--primary-inverted-text-color'] = themedefinitions['--light-theme-primary-text-color'];
+            docRoot.customStyle['--window-background-color'] = '#000';
+            docRoot.customStyle['--primary-color'] = 'var(--paper-grey-900)';
+            docRoot.customStyle['--accent-color'] = 'var(--paper-grey-100)';
+            docRoot.customStyle['--light-accent-color'] = 'var(--paper-grey-300)';
           } else {
             theme = 'light-theme';
-            docRoot.customStyle[`--primary-inverted-text-color`] = 'var(--dark-theme-primary-text-color)';
+            docRoot.customStyle['--primary-inverted-text-color'] = themedefinitions['--dark-theme-primary-text-color'];
+            docRoot.customStyle['--window-background-color'] = 'var(--paper-grey-300)';
+            docRoot.customStyle['--primary-color'] = 'var(--paper-grey-100)';
+            docRoot.customStyle['--accent-color'] = 'var(--paper-grey-900)';
+            docRoot.customStyle['--light-accent-color'] = 'var(--paper-grey-700)';
           }
-          for (let i in modifiers) {
-            if (i < 3) {
-              docRoot.customStyle[`--primary-${modifiers[i]}`] = `var(--${theme}-${modifiers[i]})`;
+          // add highlight to list
+          modifiers.push('highlight-color');
+          i = modifiers.length;
+          while (i--) {
+            if (i < 2) {
+              docRoot.customStyle[`--primary-${modifiers[i]}`] = themedefinitions[`--${theme}-${modifiers[i]}`];
             } else {
-              docRoot.customStyle[`--${modifiers[i]}`] = `var(--${theme}-${modifiers[i]})`;
+              docRoot.customStyle[`--${modifiers[i]}`] = themedefinitions[`--${theme}-${modifiers[i]}`];
             }
           }
+          docRoot.customStyle['--menu-select-color'] = 'var(--secondary-text-color)';
+          docRoot.customStyle['--complementary-text-color'] = 'var(--primary-text-color)';
+          docRoot.customStyle['--input-focus-color'] = 'var(--complementary-text-color)';
+        } else {
+          if (this.isdarktheme) {
+            theme = 'dark-theme';
+            docRoot.customStyle['--primary-inverted-text-color'] = themedefinitions['--light-theme-primary-text-color'];
+          } else {
+            theme = 'light-theme';
+            docRoot.customStyle['--primary-inverted-text-color'] = themedefinitions['--dark-theme-primary-text-color'];
+          }
+          i = modifiers.length;
+          while (i--) {
+            if (i < 2) {
+              docRoot.customStyle[`--primary-${modifiers[i]}`] = themedefinitions[`--${theme}-${modifiers[i]}`];
+            } else {
+              docRoot.customStyle[`--${modifiers[i]}`] = themedefinitions[`--${theme}-${modifiers[i]}`];
+            }
+          }
+          docRoot.customStyle['--primary-color'] = 'var(--paper-red-500)';
+          docRoot.customStyle['--menu-select-color'] = 'var(--paper-red-500)';
+          docRoot.customStyle['--accent-color'] = 'var(--paper-deep-purple-a200)';
+          docRoot.customStyle['--window-background-color'] = 'var(--dark-primary-color)';
+          docRoot.customStyle['--highlight-color'] = 'var(--light-primary-color)';
+          docRoot.customStyle['--light-accent-color'] = 'var(--paper-deep-purple-a100)';
+          docRoot.customStyle['--complementary-text-color'] = 'var(--primary-inverted-text-color)';
+          docRoot.customStyle['--input-focus-color'] = 'var(--primary-color)';
         }
         // finally update the document styles
         docRoot.updateStyles();

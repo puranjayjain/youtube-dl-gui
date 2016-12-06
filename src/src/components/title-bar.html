@@ -12,7 +12,7 @@
       :host {
         height: 32px;
         box-sizing: border-box;
-        background-color: var(--primary-window-color);
+        background-color: var(--window-background-color);
         /* https://developer.chrome.com/apps/app_window */
         -webkit-app-region: drag;
         @apply(--layout-horizontal);
@@ -20,7 +20,7 @@
         @apply(--layout-fixed-top);
         z-index: 99999;
         padding-left: 8px;
-        color: var(--primary-inverted-text-color);
+        color: var(--complementary-text-color);
         user-select: none;
       }
       
@@ -32,7 +32,7 @@
         --paper-icon-button-ink-color: var(--primary-inverted-text-color);
         --paper-icon-button: {
           position: relative;
-          color: var(--primary-inverted-text-color);
+          color: var(--complementary-text-color);
           width: 32px;
           height: 32px;
           /* https://developer.chrome.com/apps/app_window */

@@ -16,16 +16,19 @@
     * changing the value of `--primary-text-color` in your application.
     */
         --primary-background-color: var(--light-theme-background-color);
-        --primary-window-color: var(--dark-primary-color);
         --primary-card-color: var(--light-theme-card-color);
-        --primary-base-color: var(--light-theme-base-color);
+
+        --window-background-color: var(--dark-primary-color);
+        --complementary-text-color: var(--primary-inverted-text-color);
+        --input-focus-color: var(--primary-color);
 
         --primary-text-color: var(--light-theme-primary-text-color);
         --primary-inverted-text-color: var(--dark-theme-primary-text-color);
         --secondary-text-color: var(--light-theme-secondary-text-color);
         --disabled-text-color: var(--light-theme-disabled-text-color);
         --divider-color: var(--light-theme-divider-color);
-        --highlight-color: var(--light-theme-highlight-color);
+        --menu-select-color: var(--primary-color);
+        --highlight-color: var(--light-primary-color);
         --error-color: var(--paper-deep-orange-a700);
         /*
     * Primary and accent colors. Also see color.html for more colors.
@@ -99,7 +102,6 @@
 
       h1 {
         margin: 16px 0;
-        /*color: #212121;*/
         color: var(--primary-text-color);
         font-size: 22px;
       }
@@ -110,6 +112,10 @@
         border: none;
         background-color: var(--divider-color);
       }
+      
+      iron-collapse {
+        margin-top: 0 !important;
+      }
 
       paper-tooltip {
         --paper-tooltip: {
@@ -117,6 +123,12 @@
           font-size: 14px;
           padding: 16px;
         };
+      }
+      
+      paper-button {
+        --paper-button: {
+          color: var(--complementary-text-color);
+        }
       }
 
       paper-toggle-button {
@@ -126,6 +138,7 @@
 
       paper-checkbox {
         padding: 16px 0;
+        --paper-checkbox-checkmark-color: var(--complementary-text-color);
         --paper-checkbox-label: {
           user-select: none;
           padding-left: 16px;
@@ -134,6 +147,7 @@
 
       paper-input {
         --paper-input-container-color: var(--divider-color);
+        --paper-input-container-focus-color: var(--input-focus-color);
         --paper-input-container-label: {
           color: var(--secondary-text-color);
         };
@@ -148,6 +162,9 @@
       paper-fab {
         --paper-fab-background: var(--accent-color);
         --paper-fab-keyboard-focus-background: var(--light-accent-color);
+        --paper-fab: {
+          color: var(--primary-inverted-text-color);
+        };
       }
 
       paper-icon-button {

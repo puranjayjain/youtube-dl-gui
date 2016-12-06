@@ -7,20 +7,7 @@
 
 <dom-module id="fab-download">
   <template>
-    <style>
-      paper-fab {
-        --paper-fab-background: var(--accent-color);
-        --paper-fab-keyboard-focus-background: var(--light-accent-color);
-      }
-
-      paper-tooltip {
-        --paper-tooltip: {
-          line-height: 14px;
-          font-size: 14px;
-          padding: 16px;
-        };
-      }
-
+    <style include="shared-styles">
     </style>
     <paper-fab id="fabDownload" icon="add"></paper-fab>
     <paper-tooltip for="fabDownload" position="left">Download from a new URL</paper-tooltip>

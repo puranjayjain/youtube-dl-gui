@@ -43,7 +43,7 @@
       }
 
       app-header {
-        color: var(--primary-inverted-text-color);
+        color: var(--complementary-text-color);
         background-color: var(--primary-color);
       }
 
@@ -53,7 +53,7 @@
       }
 
       paper-icon-button {
-        --paper-icon-button-ink-color: var(--primary-base-color);
+        --paper-icon-button-ink-color: var(--primary-card-color);
       }
 
       paper-icon-button + [main-title] {
@@ -86,7 +86,7 @@
           user-select: none;
         };
         --paper-item-selected: {
-          color: var(--primary-color);
+          color: var(--menu-select-color);
           background-color: var(--highlight-color);
         };
       }
@@ -243,7 +243,7 @@
         this.listen(this.$.mainMenu, 'tap', 'onMenuTap');
         this.listen(this.$.mainMenu, 'keydown', 'onMenuEnter');
         // force style app header layout http://stackoverflow.com/questions/35149624/dynamically-inject-shared-styles-in-polymer-element-polymer-1-2-3
-        var myDomModule = document.createElement('style', 'custom-style');
+        let myDomModule = document.createElement('style', 'custom-style');
         myDomModule.setAttribute('include', 'shared-styles');
         Polymer.dom(this.$.headerLayout.root).appendChild(myDomModule);
         // read scroll changes
