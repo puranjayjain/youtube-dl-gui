@@ -1,6 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 
-<link rel="import" href="shared-styles.html">
+<link rel="import" href="components/theme-manager.html">
 
 <link rel="import" href="../bower_components/app-layout/app-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
@@ -21,9 +21,11 @@
 <link rel="import" href="components/options-toolbar.html">
 <link rel="import" href="components/title-bar.html">
 
+<link rel="import" href="shared-styles.html">
+
 <dom-module id="youtube-dl">
   <template>
-    <style include="iron-flex iron-positioning shared-styles">
+    <style is="custom-style" include="iron-flex iron-positioning shared-styles">
       :host {
         display: block;
       }
@@ -46,6 +48,7 @@
       }
 
       paper-material {
+        background-color: var(--primary-card-color);
         height: 100%;
       }
 
@@ -84,7 +87,7 @@
         };
         --paper-item-selected: {
           color: var(--primary-color);
-          background-color: #f5f5f5;
+          background-color: var(--highlight-color);
         };
       }
 
@@ -104,14 +107,13 @@
       }
 
     </style>
-
     <app-location route="{{route}}" use-hash-as-path></app-location>
     <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
 
     <app-drawer-layout>
       <!-- Drawer content -->
       <app-drawer swipe-open="true">
-        <paper-material elevation="1">
+        <paper-material elevation="3">
           <paper-menu id="mainMenu" selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
             <paper-icon-item name="all">
               <iron-icon icon="places:all-inclusive" item-icon></iron-icon>
@@ -175,6 +177,8 @@
     <final-download newdownloaddialog={{newdownloaddialog}} finaldownloaddialog={{finaldownloaddialog}} url={{url}} username={{username}} password={{password}}></final-download>
     <!-- app's window -->
     <title-bar></title-bar>
+    <!-- manages the app's theme -->
+    <theme-manager></theme-manager>
   </template>
 
   <script>

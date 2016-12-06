@@ -1,0 +1,66 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
+
+<link rel="import" href="../shared-styles.html">
+
+<dom-module id="theme-manager">
+  <template>
+    <app-localstorage-document key="isdarktheme" data="{{isdarktheme}}"></app-localstorage-document>
+    <app-localstorage-document key="iscontrastmode" data="{{iscontrastmode}}"></app-localstorage-document>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'theme-manager',
+
+      behaviors: [Polymer.AppStorageBehavior],
+
+      properties: {
+        isdarktheme: {
+          type: Boolean,
+          value: false
+        },
+        iscontrastmode: {
+          type: Boolean,
+          value: false
+        }
+      },
+
+      observers: ['updateTheme(isdarktheme, iscontrastmode)'],
+
+      // update theme if any of the params change
+      updateTheme: function () {
+        let docRoot = Polymer.dom(this).getOwnerRoot().host;
+        if (this.iscontrastmode) {} else {
+          let theme,
+            modifiers = [
+              'background-color',
+              'card-color',
+              'base-color',
+              'primary-text-color',
+              'secondary-text-color',
+              'disabled-text-color',
+              'divider-color',
+              'highlight-color'
+            ];
+          if (this.isdarktheme) {
+            theme = 'dark-theme';
+            docRoot.customStyle[`--primary-inverted-text-color`] = 'var(--light-theme-primary-text-color)';
+          } else {
+            theme = 'light-theme';
+            docRoot.customStyle[`--primary-inverted-text-color`] = 'var(--dark-theme-primary-text-color)';
+          }
+          for (let i in modifiers) {
+            if (i < 3) {
+              docRoot.customStyle[`--primary-${modifiers[i]}`] = `var(--${theme}-${modifiers[i]})`;
+            } else {
+              docRoot.customStyle[`--${modifiers[i]}`] = `var(--${theme}-${modifiers[i]})`;
+            }
+          }
+        }
+        // finally update the document styles
+        docRoot.updateStyles();
+      }
+    });
+  </script>
+</dom-module>

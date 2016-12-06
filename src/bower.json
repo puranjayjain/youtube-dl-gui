@@ -39,7 +39,8 @@
     "iron-list": "PolymerElements/iron-list#^1.3.14",
     "paper-material": "PolymerElements/paper-material#^1.0.6",
     "paper-toolbar": "PolymerElements/paper-toolbar#^1.1.7",
-    "iron-scroll-target-behavior": "PolymerElements/iron-scroll-target-behavior#^1.1.0"
+    "iron-scroll-target-behavior": "PolymerElements/iron-scroll-target-behavior#^1.1.0",
+    "app-storage": "PolymerElements/app-storage#^0.9.7"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

@@ -15,7 +15,6 @@
     * color, then switching from a light to a dark theme is just a matter of
     * changing the value of `--primary-text-color` in your application.
     */
-        --primary-text-color: var(--light-theme-text-color);
         --primary-background-color: var(--light-theme-background-color);
         --primary-window-color: var(--dark-primary-color);
         --primary-card-color: var(--light-theme-card-color);
@@ -25,9 +24,9 @@
         --primary-inverted-text-color: var(--dark-theme-primary-text-color);
         --secondary-text-color: var(--light-theme-secondary-text-color);
         --disabled-text-color: var(--light-theme-disabled-text-color);
-        --divider-theme-color: var(--light-divider-theme-color);
+        --divider-color: var(--light-theme-divider-color);
+        --highlight-color: var(--light-theme-highlight-color);
         --error-color: var(--paper-deep-orange-a700);
-
         /*
     * Primary and accent colors. Also see color.html for more colors.
     */
@@ -47,8 +46,8 @@
         --light-theme-primary-text-color: rgba(0, 0, 0, .87);
         --light-theme-secondary-text-color: rgba(0, 0, 0, .54);
         --light-theme-disabled-text-color: rgba(0, 0, 0, .38);
-        --light-divider-theme-color: rgba(0, 0, 0, .12);
-
+        --light-theme-divider-color: rgba(0, 0, 0, .12);
+        --light-theme-highlight-color: var(--paper-grey-50);
         /*
     * Material Design Dark background theme
     */
@@ -58,7 +57,8 @@
         --dark-theme-primary-text-color: #fff;
         --dark-theme-secondary-text-color: rgba(255, 255, 255, .7);
         --dark-theme-disabled-text-color: rgba(255, 255, 255, .5);
-        --dark-divider-theme-color: rgba(255, 255, 255, .12);
+        --dark-theme-divider-color: rgba(255, 255, 255, .12);
+        --dark-theme-highlight-color: var(--paper-grey-900);
 
         /*
     * selection color
@@ -72,7 +72,7 @@
 
         color: var(--primary-text-color);
         border-radius: 3px;
-        background-color: var(--primary-card-color);
+        background: var(--primary-card-color);
         @apply(--shadow-elevation-2dp);
       }
 
@@ -102,6 +102,63 @@
         /*color: #212121;*/
         color: var(--primary-text-color);
         font-size: 22px;
+      }
+
+      hr.paper-icon-item-divider {
+        margin: 8px 0;
+        height: 1px;
+        border: none;
+        background-color: var(--divider-color);
+      }
+
+      paper-tooltip {
+        --paper-tooltip: {
+          line-height: 14px;
+          font-size: 14px;
+          padding: 16px;
+        };
+      }
+
+      paper-toggle-button {
+        user-select: none;
+        --paper-toggle-button-label-spacing: 16px;
+      }
+
+      paper-checkbox {
+        padding: 16px 0;
+        --paper-checkbox-label: {
+          user-select: none;
+          padding-left: 16px;
+        };
+      }
+
+      paper-input {
+        --paper-input-container-color: var(--divider-color);
+        --paper-input-container-label: {
+          color: var(--secondary-text-color);
+        };
+      }
+
+      paper-dialog {
+        --paper-dialog: {
+          background: var(--primary-card-color);
+        }
+      }
+
+      paper-fab {
+        --paper-fab-background: var(--accent-color);
+        --paper-fab-keyboard-focus-background: var(--light-accent-color);
+      }
+
+      paper-icon-button {
+        --paper-icon-button-ink-color: var(--accent-color);
+        --paper-icon-button: {
+          color: var(--accent-color);
+        };
+      }
+
+      paper-spinner-lite {
+        --paper-spinner-color: var(--primary-color);
       }
 
       /* user selection color */
@@ -173,63 +230,6 @@
         border-width: 3px 0 0 3px;
         -webkit-box-shadow: inset 1px 1px 0 rgba(0,0,0,.14);
         box-shadow: inset 1px 1px 0 rgba(0,0,0,.14);
-      }
-
-      hr.paper-icon-item-divider {
-        margin: 8px 0;
-        height: 1px;
-        border: none;
-        background-color: var(--divider-theme-color);
-      }
-
-      paper-tooltip {
-        --paper-tooltip: {
-          line-height: 14px;
-          font-size: 14px;
-          padding: 16px;
-        };
-      }
-
-      paper-toggle-button {
-        user-select: none;
-        --paper-toggle-button-label-spacing: 16px;
-      }
-
-      paper-checkbox {
-        padding: 16px 0;
-        --paper-checkbox-label: {
-          user-select: none;
-          padding-left: 16px;
-        };
-      }
-
-      paper-input {
-        --paper-input-container-color: var(--divider-theme-color);
-        --paper-input-container-label: {
-          color: var(--secondary-text-color);
-        };
-      }
-
-      paper-dialog {
-        --paper-dialog: {
-          background: var(--primary-card-color);
-        }
-      }
-
-      paper-fab {
-        --paper-fab-background: var(--accent-color);
-        --paper-fab-keyboard-focus-background: var(--light-accent-color);
-      }
-
-      paper-icon-button {
-        --paper-icon-button-ink-color: var(--accent-color);
-        --paper-icon-button: {
-          color: var(--accent-color);
-        };
-      }
-
-      paper-spinner-lite {
-        --paper-spinner-color: var(--primary-color);
       }
 
     </style>

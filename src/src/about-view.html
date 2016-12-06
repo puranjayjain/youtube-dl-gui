@@ -32,19 +32,19 @@
     <div class="card">
       <div class="cardTitle">Youtube Dl GUI - v0.0.3</div>
       <div class="cardItem">
-        Node Js Version 6.5.0
+        Node Js Version [[node]]
         <paper-ripple></paper-ripple>
       </div>
       <div class="cardItem">
-        Chrome 53.0.2785.113
+        Chrome [[chrome]]
         <paper-ripple></paper-ripple>
       </div>
       <div class="cardItem">
-        Electron 1.4.3
+        Nwjs [[nwjs]]
         <paper-ripple></paper-ripple>
       </div>
       <div class="cardItem">
-        Youtubedl 2016.12.01
+        Youtubedl [[youtubedlversion]]
         <paper-ripple></paper-ripple>
       </div>
     </div>
@@ -66,9 +66,47 @@
         Check for Updates
       </paper-button>
     </div>
+    <!-- manages the app's theme -->
+    <theme-manager></theme-manager>
   </template>
 
   <script>
-    Polymer({is: 'about-view'});
+    Polymer({
+      is: 'about-view',
+      
+      properties: {
+        chrome: {
+          type: String,
+          value: process.versions['chromium']
+        },
+        nwjs: {
+          type: String,
+          value: process.versions['nw']
+        },
+        node: {
+          type: String,
+          value: process.versions['node']
+        },
+        youtubedlversion: {
+          type: String,
+          value: ''
+        }
+      },
+      
+      ready: function () {
+        // FIXME
+        // youtubedl.exec('', ['--version'], {}, (err, output) => {
+        //   if (err) {
+        //     throw err;
+        //     return
+        //   }
+        //   let ytdl = stored.youtubedl.data;
+        //   ytdl.version = output[0];
+        //   this.youtubedlversion = ytdl.version;
+        //   // update the item in storage
+        //   // this.setStored('youtubedl', ytdl)
+        // })
+      }
+    });
   </script>
 </dom-module>

@@ -1,4 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/iron-collapse/iron-collapse.html">
@@ -16,12 +17,15 @@
         width: 100%;
         display: block;
       }
+
     </style>
+    <app-localstorage-document key="isdarktheme" data="{{isdarktheme}}"></app-localstorage-document>
+    <app-localstorage-document key="iscontrastmode" data="{{iscontrastmode}}"></app-localstorage-document>
 
     <div class="card">
       <div class="cardTitle">Theme</div>
-      <paper-checkbox>Use Dark Theme</paper-checkbox>
-      <paper-checkbox>Full contrast mode</paper-checkbox>
+      <paper-checkbox checked={{isdarktheme}}>Use Dark Theme</paper-checkbox>
+      <paper-checkbox checked={{iscontrastmode}}>Full contrast mode</paper-checkbox>
     </div>
     <div class="card">
       <div class="cardTitle">Download Options</div>
@@ -49,9 +53,22 @@
       <paper-input label="Referer Url" placeholder="Specify a custom referer, use if the video access is restricted to one domain"></paper-input>
       <paper-input label="Add HTTP Headers" placeholder="e.g HTTP_header:value (also with multiple headers seperated by ,)"></paper-input>
     </div>
+    <!-- manages the app's theme -->
+    <theme-manager></theme-manager>
   </template>
 
   <script>
-    Polymer({is: 'settings-view'});
+    Polymer({
+      is: 'settings-view',
+
+      properties: {
+        isdarktheme: {
+          type: Boolean
+        },
+        iscontrastmode: {
+          type: Boolean
+        }
+      }
+    });
   </script>
 </dom-module>

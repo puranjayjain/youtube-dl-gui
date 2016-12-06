@@ -13,12 +13,12 @@
 
 <dom-module id="custom-datatable">
   <template>
-    <style include="iron-flex iron-flex-alignment iron-flex-factors shared-styles">
+    <style is="custom-style" include="iron-flex iron-flex-alignment iron-flex-factors shared-styles">
       .row {
         height: 48px;
         background-color: var(--primary-card-color);
         color: var(--primary-text-color);
-        border-bottom: 1px solid var(--divider-theme-color);
+        border-bottom: 1px solid var(--divider-color);
         padding-right: 24px;
         font-family: 'robotoregular';
         font-size: 13px;
@@ -34,7 +34,7 @@
         padding-right: 27px;
         font-family: 'robotomedium';
         font-size: 12px;
-        color: rgba(0, 0, 0, .54);
+        color: var(--secondary-text-color);
         user-select: none;
         position: absolute;
         width: 100%;
@@ -53,7 +53,7 @@
         padding-right: 2px;
       }
       .row:not(.header):hover {
-        background-color: var(--paper-grey-100);
+        background-color: var(--highlight-color);
       }
       .row.header .cell:hover iron-icon {
         transform: scale(1);
@@ -133,6 +133,8 @@
       </template>
       <script></script>
     </iron-list>
+    <!-- manages the app's theme -->
+    <theme-manager></theme-manager>
   </template>
 
   <script>
