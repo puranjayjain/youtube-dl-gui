@@ -29,9 +29,13 @@
           color: var(--primary-text-color);
         }
       }
-      
+
       .file {
         display: none;
+      }
+      
+      .format {
+        margin-right: 8px;
       }
 
     </style>
@@ -39,37 +43,39 @@
       <h2>Confirm download options</h2>
       <div class="layout horizontal center-center">
         <paper-input id="filepath" class="flex-1" label="Path to save file" placeholder="e.g. C:\Users\User\Videos" error-message="This is not a valid folder path"></paper-input>
-        <input id="file" class="file" type="file" tabindex="-1" nwsaveas nwworkingdir  accept=".mp4,.flv">
+        <input id="file" class="file" type="file" tabindex="-1" nwsaveas nwworkingdir accept=".mp4,.flv">
         <paper-icon-button id="selectButton" icon="folder" alt="Select folder path"></paper-icon-button>
         <paper-tooltip for="selectButton">Select folder path</paper-tooltip>
       </div>
-      <paper-dropdown-menu label="Choose a format">
-        <paper-listbox class="dropdown-content" selected=[[format]]>
-          <paper-item>Default</paper-item>
-          <paper-item>144p</paper-item>
-          <paper-item>240p</paper-item>
-          <paper-item>720p</paper-item>
-          <paper-item>144p</paper-item>
-          <paper-item>240p</paper-item>
-          <paper-item>720p</paper-item>
-          <paper-item>144p</paper-item>
-          <paper-item>240p</paper-item>
-          <paper-item>720p</paper-item>
-          <paper-item>144p</paper-item>
-          <paper-item>240p</paper-item>
-          <paper-item>720p</paper-item>
-          <paper-item>144p</paper-item>
-          <paper-item>240p</paper-item>
-          <paper-item>720p</paper-item>
-          <paper-item>144p</paper-item>
-          <paper-item>240p</paper-item>
-          <paper-item>720p</paper-item>
-          <paper-item>144p</paper-item>
-          <paper-item>240p</paper-item>
-          <paper-item>72dddsss0p</paper-item>
-        </paper-listbox>
-      </paper-dropdown-menu>
-      <paper-spinner-lite alt="fetching formats" active=[[active]]></paper-spinner-lite>
+      <div class="layout horizontal center-center">
+        <paper-dropdown-menu id="format" class="flex-1 format" label="Choose a format">
+          <paper-listbox class="dropdown-content" selected=[[format]]>
+            <paper-item>Default</paper-item>
+            <paper-item>144p</paper-item>
+            <paper-item>24ddddddddddddddddddddddddddddd0p</paper-item>
+            <paper-item>720p</paper-item>
+            <paper-item>144p</paper-item>
+            <paper-item>2ddddddddddddddddddddddddddddd40p</paper-item>
+            <paper-item>720p</paper-item>
+            <paper-item>1ddddddddddddddddddddddddddddd44p</paper-item>
+            <paper-item>240p</paper-item>
+            <paper-item>720p</paper-item>
+            <paper-item>144p</paper-item>
+            <paper-item>240p</paper-item>
+            <paper-item>720p</paper-item>
+            <paper-item>144p</paper-item>
+            <paper-item>240p</paper-item>
+            <paper-item>720p</paper-item>
+            <paper-item>144p</paper-item>
+            <paper-item>240p</paper-item>
+            <paper-item>720p</paper-item>
+            <paper-item>144p</paper-item>
+            <paper-item>240p</paper-item>
+            <paper-item>72ddddddddddddddddddddddddddddddddsss0p</paper-item>
+          </paper-listbox>
+        </paper-dropdown-menu>
+        <paper-spinner-lite alt="fetching formats" active=[[active]]></paper-spinner-lite>
+      </div>
       <div class="buttons">
         <paper-button dialog-dismiss>cancel</paper-button>
         <paper-button id="start">start</paper-button>
@@ -122,8 +128,13 @@
       // attach event listeners on dom ready
       this.listen(this.$.start, 'tap', 'onStart');
       this.listen(this.$.selectButton, 'tap', 'onSelect');
+      this.listen(this.$.file, 'change', 'onFile');
       // reset loader
       this.active = true;
+      // force style app header layout http://stackoverflow.com/questions/35149624/dynamically-inject-shared-styles-in-polymer-element-polymer-1-2-3
+      let myDomModule = document.createElement('style', 'custom-style');
+      myDomModule.setAttribute('include', 'shared-styles');
+      Polymer.dom(this.$.format.$.menuButton.root).appendChild(myDomModule);
     },
 
     onStart: function () {
@@ -131,9 +142,17 @@
       this.username = '';
       this.password = '';
     },
-    
+
     onSelect: function () {
       this.$.file.click();
     },
+
+    onFile: function () {
+      let filePath = this.$.file.value;
+      if (filePath) {
+        // if file path is not empty set it to text
+        this.$.filepath.value = filePath;
+      }
+    }
   });
 </script>

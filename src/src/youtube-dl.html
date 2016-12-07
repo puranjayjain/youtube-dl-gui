@@ -3,6 +3,7 @@
 <link rel="import" href="components/theme-manager.html">
 
 <link rel="import" href="../bower_components/app-layout/app-layout.html">
+<link rel="import" href="../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
 <link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
 <link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
 <link rel="import" href="../bower_components/app-route/app-location.html">
@@ -109,8 +110,9 @@
     </style>
     <app-location route="{{route}}" use-hash-as-path></app-location>
     <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
+    <app-localstorage-document key="isalwaysopenmenu" data="{{isalwaysopenmenu}}"></app-localstorage-document>
 
-    <app-drawer-layout>
+    <app-drawer-layout force-narrow=[[isalwaysopenmenu]]>
       <!-- Drawer content -->
       <app-drawer swipe-open="true">
         <paper-material elevation="3">
@@ -152,15 +154,15 @@
 
       <!-- Main content -->
       <app-header-layout id="headerLayout" has-scrolling-region>
-        <app-header condenses fixed effects="waterfall">
+        <app-header fixed effects="waterfall">
           <app-toolbar>
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
             <div main-title>[[pageTitle]]</div>
           </app-toolbar>
-          <options-toolbar class="fit" page=[[page]] items={{toolbaritems}}></options-toolbar>
+          <options-toolbar class="fit" page=[[page]] items={{toolbaritems}} tableclearall={{tableclearall}}></options-toolbar>
         </app-header>
         <neon-animated-pages id="pages" class="flex" selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
-          <all-view name="all" toolbaritems={{toolbaritems}} appscrolltop=[[appscrolltop]]></all-view>
+          <all-view name="all" toolbaritems={{toolbaritems}} appscrolltop=[[appscrolltop]] tableclearall={{tableclearall}}></all-view>
           <downloading-view name="downloading" toolbaritems={{toolbaritems}}></downloading-view>
           <unfinished-view name="unfinished" toolbaritems={{toolbaritems}}></unfinished-view>
           <downloaded-view name="downloaded" toolbaritems={{toolbaritems}}></downloaded-view>
@@ -184,6 +186,8 @@
   <script>
     Polymer({
       is: 'youtube-dl',
+      
+      behaviors: [Polymer.AppStorageBehavior],
 
       properties: {
         page: {
@@ -215,6 +219,13 @@
         },
         appscrolltop: {
           type: Number
+        },
+        isalwaysopenmenu: {
+          type: Boolean,
+          value: false
+        },
+        tableclearall: {
+          type: Boolean
         }
       },
 
@@ -238,11 +249,7 @@
         this.page = 'view404';
       },
 
-      ready: function () {
-        // standard regex for matching the urls
-        // see https://gist.github.com/dperini/729294
-        const urlPattern = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i
-        
+      ready: function () {        
         // attach event listeners on dom ready        
         this.listen(this.$.mainMenu, 'tap', 'onMenuTap');
         this.listen(this.$.mainMenu, 'keydown', 'onMenuEnter');
@@ -252,19 +259,6 @@
         Polymer.dom(this.$.headerLayout.root).appendChild(myDomModule);
         // read scroll changes
         this.listen(Polymer.dom(this.$.headerLayout.$.contentContainer).node, 'scroll', '_onScrollApp');
-        // add event listeners to trigger file download if necessary
-        window.ondragover = window.ondragleave = window.ondragend = () => false;
-        window.ondrop = (event) => {
-          event.preventDefault();
-          // capture dropped urls and start download process if a url
-          const dropUrl = event.dataTransfer.getData("text/plain");
-          if (urlPattern.test(dropUrl)) {
-            // copy text to the url input of the dialog
-            this.url = dropUrl;
-            // open the dialog
-            this.newdownloaddialog = true;
-          }
-        }
       },
 
       _onScrollApp: function (e) {

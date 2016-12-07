@@ -38,8 +38,8 @@
 
     </style>
     <paper-toolbar class="horizontal center layout">
-      <paper-icon-button icon="clear" alt="clear selection"></paper-icon-button>
-      <paper-tooltip for="clear">clear selection</paper-tooltip>
+      <paper-icon-button id="close" icon="clear" alt="clear selection"></paper-icon-button>
+      <paper-tooltip for="close" position="right">clear selection</paper-tooltip>
       <div class="title flex-1">[[items]] &mdash; Selected</div>
       <!-- use dom if statements to check if we need to add some buttons or not -->
       <template is="dom-if" if="{{_showResumePause(page)}}">
@@ -55,7 +55,7 @@
       <paper-icon-button id="fileinfo" icon="mdi:information" alt="see file details"></paper-icon-button>
       <paper-tooltip for="fileinfo">see file details</paper-tooltip>
       <paper-icon-button id="delete" icon="mdi:delete-forever" alt="delete file from disk"></paper-icon-button>
-      <paper-tooltip for="delete">delete file from disk</paper-tooltip>
+      <paper-tooltip for="delete" position="left">delete file from disk</paper-tooltip>
     </paper-toolbar>
     <!-- manages the app's theme -->
     <theme-manager></theme-manager>
@@ -81,6 +81,10 @@
         page: {
           type: String,
           observer: '_pageNameChanged'
+        },
+        tableclearall: {
+          type: Boolean,
+          notify: true
         },
 
         animationConfig: {
@@ -143,13 +147,22 @@
           this._hide();
         }
       },
-      
+
       _showResumePause(page) {
         if (['all', 'downloading'].indexOf(page) > -1) {
           return true;
         } else {
           return false;
         }
+      },
+      
+      onClose: function () {
+        this.items = 0;
+        this.tableclearall = true;
+      },
+      
+      ready: function () {
+        this.listen(this.$.close, 'tap', 'onClose');
       }
     });
   </script>

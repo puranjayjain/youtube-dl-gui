@@ -89,7 +89,7 @@
       paper-checkbox {
         --paper-checkbox-checked-ink-color: var(--accent-color);
         --paper-checkbox-checked-color: var(--accent-color);
-        --paper-checkbox-checkmark-color: var(--primary-inverted-text-color);
+        --paper-checkbox-checkmark-color: var(--utility-text-color);
       }
 
       paper-checkbox.check {
@@ -171,14 +171,29 @@
         },
         allCheck: {
           type: Boolean,
+          notify: true,
           observer: '_allCheckedChanged'
         },
         appscrolltop: {
           type: Number
+        },
+        tableclearall: {
+          type: Boolean,
+          notify: true,
+          observer: '_onClearAll'
         }
       },
 
       observers: ['_itemsChanged(selectedItems.length)'],
+
+      _onClearAll: function (clearAll) {
+        if (clearAll) {
+          // un select all
+          this.$.list.clearSelection();
+          this.tableclearall = false;
+          this.allCheck = false;
+        }
+      },
 
       _allCheckedChanged: function (checked) {
         if (checked) {
