@@ -20,7 +20,10 @@
 
         --window-background-color: var(--dark-primary-color);
         --complementary-text-color: var(--primary-inverted-text-color);
+        --highlight-text-color: var(--primary-inverted-text-color);
+        --highlight-color: var(--light-primary-color);
         --input-focus-color: var(--primary-color);
+        --utility-text-color: var(--primary-inverted-text-color);
 
         --primary-text-color: var(--light-theme-primary-text-color);
         --primary-inverted-text-color: var(--dark-theme-primary-text-color);
@@ -28,7 +31,6 @@
         --disabled-text-color: var(--light-theme-disabled-text-color);
         --divider-color: var(--light-theme-divider-color);
         --menu-select-color: var(--primary-color);
-        --highlight-color: var(--light-primary-color);
         --error-color: var(--paper-deep-orange-a700);
         /*
     * Primary and accent colors. Also see color.html for more colors.
@@ -146,7 +148,7 @@
       }
 
       paper-input {
-        --paper-input-container-color: var(--divider-color);
+        --paper-input-container-color: var(--disabled-text-color);
         --paper-input-container-focus-color: var(--input-focus-color);
         --paper-input-container-label: {
           color: var(--secondary-text-color);
@@ -163,7 +165,7 @@
         --paper-fab-background: var(--accent-color);
         --paper-fab-keyboard-focus-background: var(--light-accent-color);
         --paper-fab: {
-          color: var(--primary-inverted-text-color);
+          color: var(--utility-text-color);
         };
       }
 

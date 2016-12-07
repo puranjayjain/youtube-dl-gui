@@ -21,10 +21,17 @@
       paper-ripple {
         color: var(--primary-color);
       }
+      paper-button:not(.check) {
+        --paper-button: {
+          color: var(--primary-text-color);
+        }
+      }
 
-      .check {
-        color: #fff;
+      paper-button.check {
         background: var(--accent-color);
+        --paper-button: {
+          color: var(--primary-inverted-text-color);
+        }
       }
 
     </style>
@@ -73,7 +80,7 @@
   <script>
     Polymer({
       is: 'about-view',
-      
+
       properties: {
         chrome: {
           type: String,
@@ -92,20 +99,10 @@
           value: ''
         }
       },
-      
+
       ready: function () {
-        // FIXME
-        // youtubedl.exec('', ['--version'], {}, (err, output) => {
-        //   if (err) {
-        //     throw err;
-        //     return
-        //   }
-        //   let ytdl = stored.youtubedl.data;
-        //   ytdl.version = output[0];
-        //   this.youtubedlversion = ytdl.version;
-        //   // update the item in storage
-        //   // this.setStored('youtubedl', ytdl)
-        // })
+        // FIXME youtubedl.exec('', ['--version'], {}, (err, output) => {   if (err) {     throw err;     return   }   let ytdl = stored.youtubedl.data;   ytdl.version = output[0];   this.youtubedlversion = ytdl.version;   // update the item in storage   //
+        // this.setStored('youtubedl', ytdl) })
       }
     });
   </script>

@@ -24,11 +24,22 @@
         }
       }
 
+      .buttons paper-button {
+        --paper-button: {
+          color: var(--primary-text-color);
+        }
+      }
+      
+      .file {
+        display: none;
+      }
+
     </style>
     <paper-dialog opened={{finaldownloaddialog}} entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
       <h2>Confirm download options</h2>
       <div class="layout horizontal center-center">
         <paper-input id="filepath" class="flex-1" label="Path to save file" placeholder="e.g. C:\Users\User\Videos" error-message="This is not a valid folder path"></paper-input>
+        <input id="file" class="file" type="file" tabindex="-1" nwsaveas nwworkingdir  accept=".mp4,.flv">
         <paper-icon-button id="selectButton" icon="folder" alt="Select folder path"></paper-icon-button>
         <paper-tooltip for="selectButton">Select folder path</paper-tooltip>
       </div>
@@ -110,6 +121,7 @@
     ready: function () {
       // attach event listeners on dom ready
       this.listen(this.$.start, 'tap', 'onStart');
+      this.listen(this.$.selectButton, 'tap', 'onSelect');
       // reset loader
       this.active = true;
     },
@@ -118,6 +130,10 @@
       // clear user name and password as well
       this.username = '';
       this.password = '';
-    }
+    },
+    
+    onSelect: function () {
+      this.$.file.click();
+    },
   });
 </script>

@@ -90,14 +90,18 @@
           }
           docRoot.customStyle['--menu-select-color'] = 'var(--secondary-text-color)';
           docRoot.customStyle['--complementary-text-color'] = 'var(--primary-text-color)';
+          docRoot.customStyle['--highlight-text-color'] = 'var(--complementary-text-color)';
           docRoot.customStyle['--input-focus-color'] = 'var(--complementary-text-color)';
+          docRoot.customStyle['--utility-text-color'] = 'var(--primary-inverted-text-color)';
         } else {
           if (this.isdarktheme) {
             theme = 'dark-theme';
             docRoot.customStyle['--primary-inverted-text-color'] = themedefinitions['--light-theme-primary-text-color'];
+            docRoot.customStyle['--highlight-text-color'] = 'var(--complementary-text-color)';
           } else {
             theme = 'light-theme';
             docRoot.customStyle['--primary-inverted-text-color'] = themedefinitions['--dark-theme-primary-text-color'];
+            docRoot.customStyle['--highlight-text-color'] = 'var(--primary-text-color)';
           }
           i = modifiers.length;
           while (i--) {
@@ -115,6 +119,7 @@
           docRoot.customStyle['--light-accent-color'] = 'var(--paper-deep-purple-a100)';
           docRoot.customStyle['--complementary-text-color'] = 'var(--primary-inverted-text-color)';
           docRoot.customStyle['--input-focus-color'] = 'var(--primary-color)';
+          docRoot.customStyle['--utility-text-color'] = '#fff';
         }
         // finally update the document styles
         docRoot.updateStyles();
