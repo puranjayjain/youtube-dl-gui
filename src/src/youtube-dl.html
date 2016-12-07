@@ -21,6 +21,7 @@
 <link rel="import" href="components/final-download.html">
 <link rel="import" href="components/options-toolbar.html">
 <link rel="import" href="components/title-bar.html">
+<link rel="import" href="components/progress-bar.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -181,12 +182,14 @@
     <title-bar></title-bar>
     <!-- manages the app's theme -->
     <theme-manager></theme-manager>
+    <!-- progress bar -->
+    <progress-bar progress=[[progress]]></progress-bar>
   </template>
 
   <script>
     Polymer({
       is: 'youtube-dl',
-      
+
       behaviors: [Polymer.AppStorageBehavior],
 
       properties: {
@@ -226,6 +229,10 @@
         },
         tableclearall: {
           type: Boolean
+        },
+        progress: {
+          type: Number,
+          default: -1
         }
       },
 
@@ -249,8 +256,8 @@
         this.page = 'view404';
       },
 
-      ready: function () {        
-        // attach event listeners on dom ready        
+      ready: function () {
+        // attach event listeners on dom ready
         this.listen(this.$.mainMenu, 'tap', 'onMenuTap');
         this.listen(this.$.mainMenu, 'keydown', 'onMenuEnter');
         // force style app header layout http://stackoverflow.com/questions/35149624/dynamically-inject-shared-styles-in-polymer-element-polymer-1-2-3

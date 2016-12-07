@@ -63,7 +63,7 @@
         </div>
         <iron-icon icon="history"></iron-icon>
       </paper-button>
-      <paper-button class="layout horizontal">
+      <paper-button id="bugreport" class="layout horizontal">
         <div class="flex-1">
           Report a Bug
         </div>
@@ -100,7 +100,13 @@
         }
       },
 
+      onBugreport: function () {
+        // Open URL with default browser.
+        nw.Shell.openExternal('https://github.com/puranjayjain/youtube-dl-gui/issues');
+      },
+
       ready: function () {
+        this.listen(this.$.bugreport, 'tap', 'onBugreport');
         // FIXME youtubedl.exec('', ['--version'], {}, (err, output) => {   if (err) {     throw err;     return   }   let ytdl = stored.youtubedl.data;   ytdl.version = output[0];   this.youtubedlversion = ytdl.version;   // update the item in storage   //
         // this.setStored('youtubedl', ytdl) })
       }

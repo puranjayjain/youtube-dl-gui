@@ -1,0 +1,43 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
+
+<dom-module id="progress-bar">
+  <template>
+    <!-- controls the logic of progress bar in the taskbar -->
+    <app-localstorage-document key="showprogressbar" data="{{showprogressbar}}"></app-localstorage-document>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'progress-bar',
+
+      properties: {
+        showprogressbar: {
+          type: Boolean,
+          value: false,
+          observer: '_hideProgressbar'
+        },
+        progress: {
+          type: Number,
+          value: -1,
+          observer: '_setProgressbar'
+        }
+      },
+
+      _hideProgressbar: function () {
+        if (!this.showprogressbar) {
+          let win = nw.Window.get();
+          win.setProgressBar(-1);
+        }
+      },
+
+      _setProgressbar: function (progress) {
+        if (this.showprogressbar) {
+          let win = nw.Window.get();
+          win.setProgressBar(progress);
+        }
+      }
+    });
+  </script>
+</dom-module>

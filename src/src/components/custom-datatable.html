@@ -54,7 +54,7 @@
       }
       .row:not(.header):hover {
         color: var(--highlight-text-color);
-        background-color: var(--highlight-color);
+        background-color: var(--table-highlight-color);
       }
       .row.header .cell:hover iron-icon {
         transform: scale(1);
@@ -80,6 +80,10 @@
       .cell.num {
         text-align: right;
       }
+      
+      .tablerow {
+        min-width: 720px;
+      }
 
       iron-list {
         overflow: visible !important;
@@ -99,7 +103,7 @@
     </style>
     <iron-ajax url="data/contacts.json" last-response="{{data}}" auto></iron-ajax>
 
-    <div class="layout horizontal row header" style="top: [[appscrolltop]]px;">
+    <div class="layout horizontal row header tablerow" style="top: [[appscrolltop]]px;">
       <div class="cell check">
         <paper-checkbox checked={{allCheck}}></paper-checkbox>
       </div>
@@ -113,7 +117,7 @@
     </div>
     <iron-list id="list" items=[[data]] as="item" selected-items="{{selectedItems}}" selection-enabled multi-selection>
       <template>
-        <div class="layout horizontal row center">
+        <div class="layout horizontal row center tablerow">
           <div class="cell check">
             <!-- iron list bug prevents checkbox events to propogate back so using my hack now -->
             <!-- https://github.com/PolymerElements/iron-list/issues/163 -->
