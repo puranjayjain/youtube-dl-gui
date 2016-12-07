@@ -14,6 +14,11 @@
 <dom-module id="custom-datatable">
   <template>
     <style is="custom-style" include="iron-flex iron-flex-alignment iron-flex-factors shared-styles">
+      :host {
+        /* table min width default*/
+        --min-width: 720px;
+      }
+
       .row {
         height: 48px;
         background-color: var(--primary-card-color);
@@ -80,9 +85,9 @@
       .cell.num {
         text-align: right;
       }
-      
+
       .tablerow {
-        min-width: 720px;
+        min-width: var(--min-width);
       }
 
       iron-list {
@@ -161,7 +166,8 @@
               title: 'Last Try',
               icon: 'arrow-downward'
             }
-          ]
+          ],
+          notify: true
         },
         headerLeft: {
           type: String
@@ -185,10 +191,19 @@
           type: Boolean,
           notify: true,
           observer: '_onClearAll'
+        },
+        minwidth: {
+          type: 'Number',
+          observer: '_setMinWidth'
         }
       },
 
       observers: ['_itemsChanged(selectedItems.length)'],
+
+      _setMinWidth: function (width) {
+        this.customStyle['--min-width'] = `${width}px`;
+        this.updateStyles();
+      },
 
       _onClearAll: function (clearAll) {
         if (clearAll) {
@@ -202,9 +217,11 @@
       _allCheckedChanged: function (checked) {
         if (checked) {
           // select all items
-          this.$.list.items.forEach((item) => {
-            this.$.list.selectItem(item);
-          });
+          let listItems = this.$.list.items,
+            i = listItems.length;
+          while (i--) {
+            this.$.list.selectItem(listItems[i]);
+          }
         } else {
           // un select all
           this.$.list.clearSelection();

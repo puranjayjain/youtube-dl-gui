@@ -107,6 +107,9 @@
       paper-icon-item.iron-selected iron-icon {
         opacity: 1;
       }
+      paper-menu paper-icon-item:not(.iron-selected):hover {
+        background-color: var(--table-highlight-color);
+      }
 
     </style>
     <app-location route="{{route}}" use-hash-as-path></app-location>
@@ -152,6 +155,9 @@
           </paper-menu>
         </paper-material>
       </app-drawer>
+      <app-drawer id="fileInfo" align="end" opened={{fileinfodialog}}>
+        File info
+      </app-drawer>
 
       <!-- Main content -->
       <app-header-layout id="headerLayout" has-scrolling-region>
@@ -160,7 +166,7 @@
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
             <div main-title>[[pageTitle]]</div>
           </app-toolbar>
-          <options-toolbar class="fit" page=[[page]] items={{toolbaritems}} tableclearall={{tableclearall}}></options-toolbar>
+          <options-toolbar class="fit" page=[[page]] items={{toolbaritems}} tableclearall={{tableclearall}}  fileinfodialog={{fileinfodialog}}></options-toolbar>
         </app-header>
         <neon-animated-pages id="pages" class="flex" selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
           <all-view name="all" toolbaritems={{toolbaritems}} appscrolltop=[[appscrolltop]] tableclearall={{tableclearall}}></all-view>
@@ -206,6 +212,9 @@
           type: Boolean
         },
         finaldownloaddialog: {
+          type: Boolean
+        },
+        fileinfodialog: {
           type: Boolean
         },
         url: {

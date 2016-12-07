@@ -86,6 +86,10 @@
           type: Boolean,
           notify: true
         },
+        fileinfodialog: {
+          type: Boolean,
+          notify: true
+        },
 
         animationConfig: {
           type: Object,
@@ -161,8 +165,14 @@
         this.tableclearall = true;
       },
       
+      onFileInfo: function () {
+        // open the dialog
+        this.fileinfodialog = true;
+      },
+      
       ready: function () {
         this.listen(this.$.close, 'tap', 'onClose');
+        this.listen(this.$.fileinfo, 'tap', 'onFileInfo');
       }
     });
   </script>

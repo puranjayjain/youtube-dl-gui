@@ -35,7 +35,7 @@
       updateTheme: function () {
         let i,
           theme,
-          docRoot = Polymer.dom(this).getOwnerRoot().host,
+          docHostRoot = this.domHost,
           themedefinitions = {
             '--light-theme-background-color': 'var(--paper-grey-50)',
             '--light-theme-card-color': '#fff',
@@ -65,65 +65,65 @@
         if (this.iscontrastmode) {
           if (this.isdarktheme) {
             theme = 'dark-theme';
-            docRoot.customStyle['--primary-inverted-text-color'] = themedefinitions['--light-theme-primary-text-color'];
-            docRoot.customStyle['--window-background-color'] = '#000';
-            docRoot.customStyle['--primary-color'] = 'var(--paper-grey-900)';
-            docRoot.customStyle['--accent-color'] = 'var(--paper-grey-100)';
-            docRoot.customStyle['--light-accent-color'] = 'var(--paper-grey-300)';
+            docHostRoot.customStyle['--primary-inverted-text-color'] = themedefinitions['--light-theme-primary-text-color'];
+            docHostRoot.customStyle['--window-background-color'] = '#000';
+            docHostRoot.customStyle['--primary-color'] = 'var(--paper-grey-900)';
+            docHostRoot.customStyle['--accent-color'] = 'var(--paper-grey-100)';
+            docHostRoot.customStyle['--light-accent-color'] = 'var(--paper-grey-300)';
           } else {
             theme = 'light-theme';
-            docRoot.customStyle['--primary-inverted-text-color'] = themedefinitions['--dark-theme-primary-text-color'];
-            docRoot.customStyle['--window-background-color'] = 'var(--paper-grey-300)';
-            docRoot.customStyle['--primary-color'] = 'var(--paper-grey-100)';
-            docRoot.customStyle['--accent-color'] = 'var(--paper-grey-900)';
-            docRoot.customStyle['--light-accent-color'] = 'var(--paper-grey-700)';
+            docHostRoot.customStyle['--primary-inverted-text-color'] = themedefinitions['--dark-theme-primary-text-color'];
+            docHostRoot.customStyle['--window-background-color'] = 'var(--paper-grey-300)';
+            docHostRoot.customStyle['--primary-color'] = 'var(--paper-grey-100)';
+            docHostRoot.customStyle['--accent-color'] = 'var(--paper-grey-900)';
+            docHostRoot.customStyle['--light-accent-color'] = 'var(--paper-grey-700)';
           }
           // add highlight to list
           modifiers.push('highlight-color');
           i = modifiers.length;
           while (i--) {
             if (i < 2) {
-              docRoot.customStyle[`--primary-${modifiers[i]}`] = themedefinitions[`--${theme}-${modifiers[i]}`];
+              docHostRoot.customStyle[`--primary-${modifiers[i]}`] = themedefinitions[`--${theme}-${modifiers[i]}`];
             } else {
-              docRoot.customStyle[`--${modifiers[i]}`] = themedefinitions[`--${theme}-${modifiers[i]}`];
+              docHostRoot.customStyle[`--${modifiers[i]}`] = themedefinitions[`--${theme}-${modifiers[i]}`];
             }
           }
-          docRoot.customStyle['--table-highlight-color'] = themedefinitions[`--${theme}-highlight-color`];
-          docRoot.customStyle['--menu-select-color'] = 'var(--secondary-text-color)';
-          docRoot.customStyle['--complementary-text-color'] = 'var(--primary-text-color)';
-          docRoot.customStyle['--highlight-text-color'] = 'var(--complementary-text-color)';
-          docRoot.customStyle['--input-focus-color'] = 'var(--complementary-text-color)';
-          docRoot.customStyle['--utility-text-color'] = 'var(--primary-inverted-text-color)';
+          docHostRoot.customStyle['--table-highlight-color'] = themedefinitions[`--${theme}-highlight-color`];
+          docHostRoot.customStyle['--menu-select-color'] = 'var(--secondary-text-color)';
+          docHostRoot.customStyle['--complementary-text-color'] = 'var(--primary-text-color)';
+          docHostRoot.customStyle['--highlight-text-color'] = 'var(--complementary-text-color)';
+          docHostRoot.customStyle['--input-focus-color'] = 'var(--complementary-text-color)';
+          docHostRoot.customStyle['--utility-text-color'] = 'var(--primary-inverted-text-color)';
         } else {
           if (this.isdarktheme) {
             theme = 'dark-theme';
-            docRoot.customStyle['--primary-inverted-text-color'] = themedefinitions['--light-theme-primary-text-color'];
+            docHostRoot.customStyle['--primary-inverted-text-color'] = themedefinitions['--light-theme-primary-text-color'];
           } else {
             theme = 'light-theme';
-            docRoot.customStyle['--primary-inverted-text-color'] = themedefinitions['--dark-theme-primary-text-color'];
+            docHostRoot.customStyle['--primary-inverted-text-color'] = themedefinitions['--dark-theme-primary-text-color'];
           }
           i = modifiers.length;
           while (i--) {
             if (i < 2) {
-              docRoot.customStyle[`--primary-${modifiers[i]}`] = themedefinitions[`--${theme}-${modifiers[i]}`];
+              docHostRoot.customStyle[`--primary-${modifiers[i]}`] = themedefinitions[`--${theme}-${modifiers[i]}`];
             } else {
-              docRoot.customStyle[`--${modifiers[i]}`] = themedefinitions[`--${theme}-${modifiers[i]}`];
+              docHostRoot.customStyle[`--${modifiers[i]}`] = themedefinitions[`--${theme}-${modifiers[i]}`];
             }
           }
-          docRoot.customStyle['--primary-color'] = 'var(--paper-red-500)';
-          docRoot.customStyle['--menu-select-color'] = 'var(--paper-red-500)';
-          docRoot.customStyle['--accent-color'] = 'var(--paper-deep-purple-a200)';
-          docRoot.customStyle['--window-background-color'] = 'var(--dark-primary-color)';
-          docRoot.customStyle['--highlight-color'] = 'var(--light-primary-color)';
-          docRoot.customStyle['--highlight-text-color'] = 'var(--primary-text-color)';
-          docRoot.customStyle['--table-highlight-color'] = themedefinitions[`--${theme}-highlight-color`];
-          docRoot.customStyle['--light-accent-color'] = 'var(--paper-deep-purple-a100)';
-          docRoot.customStyle['--complementary-text-color'] = 'var(--primary-inverted-text-color)';
-          docRoot.customStyle['--input-focus-color'] = 'var(--primary-color)';
-          docRoot.customStyle['--utility-text-color'] = '#fff';
+          docHostRoot.customStyle['--primary-color'] = 'var(--paper-red-500)';
+          docHostRoot.customStyle['--menu-select-color'] = 'var(--paper-red-500)';
+          docHostRoot.customStyle['--accent-color'] = 'var(--paper-deep-purple-a200)';
+          docHostRoot.customStyle['--window-background-color'] = 'var(--dark-primary-color)';
+          docHostRoot.customStyle['--highlight-color'] = 'var(--light-primary-color)';
+          docHostRoot.customStyle['--highlight-text-color'] = 'var(--primary-text-color)';
+          docHostRoot.customStyle['--table-highlight-color'] = themedefinitions[`--${theme}-highlight-color`];
+          docHostRoot.customStyle['--light-accent-color'] = 'var(--paper-deep-purple-a100)';
+          docHostRoot.customStyle['--complementary-text-color'] = 'var(--primary-inverted-text-color)';
+          docHostRoot.customStyle['--input-focus-color'] = 'var(--primary-color)';
+          docHostRoot.customStyle['--utility-text-color'] = '#fff';
         }
         // finally update the document styles
-        docRoot.updateStyles();
+        docHostRoot.updateStyles();
       }
     });
   </script>

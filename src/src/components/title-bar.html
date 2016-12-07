@@ -24,9 +24,9 @@
         color: var(--complementary-text-color);
         user-select: none;
       }
-      
+
       .logo {
-        padding-right: 8px; 
+        padding-right: 8px;
       }
 
       paper-icon-button {
@@ -48,7 +48,12 @@
     </div>
     <div>
       <paper-icon-button id="minimize" icon="mdi:window-minimize" alt="window minimize"></paper-icon-button>
-      <paper-icon-button id="maximize" icon=[[icon]] alt="window maximize"></paper-icon-button>
+      <template is="dom-if" if="{{maximize}}">
+        <paper-icon-button id="restore" icon="mdi:window-restore" alt="window restore"></paper-icon-button>
+      </template>
+      <template is="dom-if" if="{{!maximize}}">
+        <paper-icon-button id="maximize" icon="mdi:window-maximize" alt="window maximize"></paper-icon-button>
+      </template>
       <paper-icon-button id="close" icon="clear" alt="close the application"></paper-icon-button>
     </div>
     <!-- manages the app's theme -->
@@ -63,10 +68,6 @@
         maximize: {
           type: Boolean,
           value: false
-        },
-        icon: {
-          type: String,
-          value: 'mdi:window-maximize'
         }
       },
 
@@ -77,11 +78,12 @@
 
       onMaximize: function () {
         let win = nw.Window.get();
-        if (this.maximize) {
-          win.restore();
-        } else {
-          win.maximize();
-        }
+        win.maximize();
+      },
+
+      onRestore: function () {
+        let win = nw.Window.get();
+        win.restore();
       },
 
       onClose: function () {
@@ -89,19 +91,28 @@
         win.close();
       },
 
+      _onDomChange: function () {
+        let maximize = this.$$('#maximize'),
+          restore = this.$$('#restore');
+        if (maximize) {
+          this.listen(maximize, 'tap', 'onMaximize');
+        }
+        if (restore) {
+          this.listen(restore, 'tap', 'onRestore');
+        }
+      },
+
       ready: function () {
         let win = nw.Window.get();
         // attach event listeners on dom ready
         this.listen(this.$.minimize, 'tap', 'onMinimize');
-        this.listen(this.$.maximize, 'tap', 'onMaximize');
+        this.listen(this.root, 'dom-change', '_onDomChange');
         this.listen(this.$.close, 'tap', 'onClose');
         // window maximize and restore event
         win.on('maximize', () => {
-          this.icon = 'mdi:window-restore';
           this.maximize = true;
         });
         win.on('restore', () => {
-          this.icon = 'mdi:window-maximize';
           this.maximize = false;
         });
       }
