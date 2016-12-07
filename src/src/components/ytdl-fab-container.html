@@ -3,8 +3,10 @@
 <link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
 
+<link rel="import" href="../font/mdi.html">
 <link rel="import" href="fab-download.html">
-<link rel="import" href="lightning.html">
+
+<link rel="import" href="../shared-styles.html">
 
 <dom-module id="ytdl-fab-container">
   <template>
@@ -26,9 +28,11 @@
     };
   }
   </style>
-  <paper-fab mini id="fabQuickDownload" class="lightning" icon="youtube-dl:lightning"></paper-fab>
+  <paper-fab mini id="fabQuickDownload" class="lightning" icon="mdi:flash"></paper-fab>
   <paper-tooltip for="fabQuickDownload" position="left">Quick Download from a new URL</paper-tooltip>
   <fab-download newdownloaddialog={{newdownloaddialog}}></fab-download>
+  <!-- manages the app's theme -->
+  <theme-manager></theme-manager>
 </template>
 
 </dom-module>
@@ -58,6 +62,9 @@ Polymer({
         return {
           'entry': [{
             name: 'scale-up-animation',
+            timing: {
+              delay: 900
+            },
             node: this
           }],
           'exit': [{

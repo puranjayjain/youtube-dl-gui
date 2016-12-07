@@ -1,0 +1,109 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+
+<link rel="import" href="../shared-styles.html">
+
+<dom-module id="title-bar">
+  <template>
+    <style include="iron-flex-factors shared-styles">
+      :host {
+        height: 32px;
+        box-sizing: border-box;
+        background-color: var(--window-background-color);
+        /* https://developer.chrome.com/apps/app_window */
+        -webkit-app-region: drag;
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+        @apply(--layout-fixed-top);
+        z-index: 99999;
+        padding-left: 8px;
+        color: var(--complementary-text-color);
+        user-select: none;
+      }
+      
+      .logo {
+        padding-right: 8px; 
+      }
+
+      paper-icon-button {
+        --paper-icon-button-ink-color: var(--primary-inverted-text-color);
+        --paper-icon-button: {
+          position: relative;
+          color: var(--complementary-text-color);
+          width: 32px;
+          height: 32px;
+          /* https://developer.chrome.com/apps/app_window */
+          -webkit-app-region: no-drag;
+        };
+      }
+
+    </style>
+    <img src="../../images/favicon-16x16.png" alt="logo" class="logo">
+    <div class="flex-1 paper-font-body2">
+      Youtube-dl GUI
+    </div>
+    <div>
+      <paper-icon-button id="minimize" icon="mdi:window-minimize" alt="window minimize"></paper-icon-button>
+      <paper-icon-button id="maximize" icon=[[icon]] alt="window maximize"></paper-icon-button>
+      <paper-icon-button id="close" icon="clear" alt="close the application"></paper-icon-button>
+    </div>
+    <!-- manages the app's theme -->
+    <theme-manager></theme-manager>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'title-bar',
+
+      properties: {
+        maximize: {
+          type: Boolean,
+          value: false
+        },
+        icon: {
+          type: String,
+          value: 'mdi:window-maximize'
+        }
+      },
+
+      onMinimize: function () {
+        let win = nw.Window.get();
+        win.minimize();
+      },
+
+      onMaximize: function () {
+        let win = nw.Window.get();
+        if (this.maximize) {
+          win.restore();
+        } else {
+          win.maximize();
+        }
+      },
+
+      onClose: function () {
+        let win = nw.Window.get();
+        win.close();
+      },
+
+      ready: function () {
+        let win = nw.Window.get();
+        // attach event listeners on dom ready
+        this.listen(this.$.minimize, 'tap', 'onMinimize');
+        this.listen(this.$.maximize, 'tap', 'onMaximize');
+        this.listen(this.$.close, 'tap', 'onClose');
+        // window maximize and restore event
+        win.on('maximize', () => {
+          this.icon = 'mdi:window-restore';
+          this.maximize = true;
+        });
+        win.on('restore', () => {
+          this.icon = 'mdi:window-maximize';
+          this.maximize = false;
+        });
+      }
+    });
+  </script>
+</dom-module>

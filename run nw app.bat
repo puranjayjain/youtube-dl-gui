@@ -1,0 +1,2 @@
+nw.exe src
+exit

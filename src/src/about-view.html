@@ -1,27 +1,109 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/paper-styles/typography.html">
+<link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="about-view">
   <template>
-    <style include="shared-styles">
-      :host {
-        display: block;
-
-        padding: 10px;
+    <style include="iron-flex iron-flex-alignment iron-flex-factors shared-styles">
+      .cardItem {
+        position: relative;
+        padding: 16px;
+        user-select: none;
+        border-radius: 3px;
+        @apply(--paper-font-title);
       }
+
+      paper-ripple {
+        color: var(--primary-color);
+      }
+      paper-button:not(.check) {
+        --paper-button: {
+          color: var(--primary-text-color);
+        }
+      }
+
+      paper-button.check {
+        background: var(--accent-color);
+        --paper-button: {
+          color: var(--primary-inverted-text-color);
+        }
+      }
+
     </style>
 
     <div class="card">
-      <div class="circle">3</div>
-      <h1>View Three</h1>
-      <p>Modus commodo minimum eum te, vero utinam assueverit per eu.</p>
-      <p>Ea duis bonorum nec, falli paulo aliquid ei eum.Has at minim mucius aliquam, est id tempor laoreet.Pro saepe pertinax ei, ad pri animal labores suscipiantur.</p>
+      <div class="cardTitle">Youtube Dl GUI - v0.0.3</div>
+      <div class="cardItem">
+        Node Js Version [[node]]
+        <paper-ripple></paper-ripple>
+      </div>
+      <div class="cardItem">
+        Chrome [[chrome]]
+        <paper-ripple></paper-ripple>
+      </div>
+      <div class="cardItem">
+        Nwjs [[nwjs]]
+        <paper-ripple></paper-ripple>
+      </div>
+      <div class="cardItem">
+        Youtubedl [[youtubedlversion]]
+        <paper-ripple></paper-ripple>
+      </div>
     </div>
+    <div class="card">
+      <div class="cardTitle">Help and Feedback</div>
+      <paper-button class="layout horizontal">
+        <div class="flex-1">
+          Reset to Default Settings
+        </div>
+        <iron-icon icon="history"></iron-icon>
+      </paper-button>
+      <paper-button class="layout horizontal">
+        <div class="flex-1">
+          Report a Bug
+        </div>
+        <iron-icon icon="bug-report"></iron-icon>
+      </paper-button>
+      <paper-button class="check" raised>
+        Check for Updates
+      </paper-button>
+    </div>
+    <!-- manages the app's theme -->
+    <theme-manager></theme-manager>
   </template>
 
   <script>
     Polymer({
-      is: 'about-view'
+      is: 'about-view',
+
+      properties: {
+        chrome: {
+          type: String,
+          value: process.versions['chromium']
+        },
+        nwjs: {
+          type: String,
+          value: process.versions['nw']
+        },
+        node: {
+          type: String,
+          value: process.versions['node']
+        },
+        youtubedlversion: {
+          type: String,
+          value: ''
+        }
+      },
+
+      ready: function () {
+        // FIXME youtubedl.exec('', ['--version'], {}, (err, output) => {   if (err) {     throw err;     return   }   let ytdl = stored.youtubedl.data;   ytdl.version = output[0];   this.youtubedlversion = ytdl.version;   // update the item in storage   //
+        // this.setStored('youtubedl', ytdl) })
+      }
     });
   </script>
 </dom-module>

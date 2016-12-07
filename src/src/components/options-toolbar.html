@@ -1,0 +1,156 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animation.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
+
+<link rel="import" href="../font/mdi.html">
+<link rel="import" href="../shared-styles.html">
+
+<dom-module id="options-toolbar">
+  <template>
+    <style include="iron-flex iron-flex-alignment iron-flex-factors iron-positioning shared-styles">
+      :host {
+        background-color: var(--accent-color);
+        user-select: none;
+      }
+
+      paper-icon-button {
+        --paper-icon-button-ink-color: var(--utility-text-color);
+        --paper-icon-button: {
+          color: var(--utility-text-color);
+        };
+      }
+
+      paper-toolbar {
+        height: 100%;
+        padding-left: 14px;
+        padding-right: 8px;
+        color: var(--utility-text-color);
+      }
+
+      .title {
+        margin-left: 8px;
+        @apply(--paper-font-title);
+      }
+
+    </style>
+    <paper-toolbar class="horizontal center layout">
+      <paper-icon-button icon="clear" alt="clear selection"></paper-icon-button>
+      <paper-tooltip for="clear">clear selection</paper-tooltip>
+      <div class="title flex-1">[[items]] &mdash; Selected</div>
+      <!-- use dom if statements to check if we need to add some buttons or not -->
+      <template is="dom-if" if="{{_showResumePause(page)}}">
+        <paper-icon-button id="resume" icon="mdi:play" alt="resume download"></paper-icon-button>
+        <paper-tooltip for="resume">resume download</paper-tooltip>
+        <paper-icon-button id="pause" icon="mdi:pause" alt="pause file download"></paper-icon-button>
+        <paper-tooltip for="pause">pause file download</paper-tooltip>
+      </template>
+      <paper-icon-button id="clear" icon="delete" alt="clear file from download's list"></paper-icon-button>
+      <paper-tooltip for="clear">Clear file from download's list</paper-tooltip>
+      <paper-icon-button id="download" icon="mdi:download" alt="re-download the file"></paper-icon-button>
+      <paper-tooltip for="download">re-download the file</paper-tooltip>
+      <paper-icon-button id="fileinfo" icon="mdi:information" alt="see file details"></paper-icon-button>
+      <paper-tooltip for="fileinfo">see file details</paper-tooltip>
+      <paper-icon-button id="delete" icon="mdi:delete-forever" alt="delete file from disk"></paper-icon-button>
+      <paper-tooltip for="delete">delete file from disk</paper-tooltip>
+    </paper-toolbar>
+    <!-- manages the app's theme -->
+    <theme-manager></theme-manager>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'options-toolbar',
+
+      behaviors: [Polymer.NeonAnimationRunnerBehavior],
+
+      properties: {
+        opened: {
+          type: Boolean,
+          value: true
+        },
+        items: {
+          type: Number,
+          value: 0,
+          notify: true,
+          observer: '_itemCountChanged'
+        },
+        page: {
+          type: String,
+          observer: '_pageNameChanged'
+        },
+
+        animationConfig: {
+          type: Object,
+          value: function () {
+            return {
+              'entry': [
+                {
+                  name: 'fade-in-animation',
+                  node: this
+                }
+              ],
+              'exit': [
+                {
+                  name: 'fade-out-animation',
+                  node: this
+                }
+              ]
+            }
+          }
+        }
+      },
+
+      listeners: {
+        'neon-animation-finish': '_onAnimationFinish'
+      },
+
+      _onAnimationFinish: function () {
+        if (!this.opened) {
+          this.style.display = 'none';
+        }
+      },
+
+      _show: function () {
+        // if not shown
+        if (!this.opened) {
+          this.opened = true;
+          this.style.display = '';
+          this.playAnimation('entry');
+        }
+      },
+
+      _hide: function () {
+        // if shown
+        if (this.opened) {
+          this.opened = false;
+          this.playAnimation('exit');
+        }
+      },
+
+      _pageNameChanged: function (page) {
+        // hide if visible
+        this._hide();
+      },
+
+      _itemCountChanged: function (count) {
+        if (count > 0 && ['all', 'downloading', 'unfinished', 'downloaded'].indexOf(this.page) > -1) {
+          this._show();
+        } else {
+          this._hide();
+        }
+      },
+      
+      _showResumePause(page) {
+        if (['all', 'downloading'].indexOf(page) > -1) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    });
+  </script>
+</dom-module>

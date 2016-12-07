@@ -1,4 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/iron-collapse/iron-collapse.html">
@@ -12,38 +13,31 @@
 <dom-module id="settings-view">
   <template>
     <style include="iron-flex iron-flex-alignment iron-flex-factors shared-styles">
+      paper-checkbox {
+        width: 100%;
+        display: block;
+      }
+
     </style>
+    <app-localstorage-document key="isdarktheme" data="{{isdarktheme}}"></app-localstorage-document>
+    <app-localstorage-document key="iscontrastmode" data="{{iscontrastmode}}"></app-localstorage-document>
 
     <div class="card">
       <div class="cardTitle">Theme</div>
-      <paper-toggle-button>Use Dark Theme</paper-toggle-button>
+      <paper-checkbox checked={{isdarktheme}}>Use Dark Theme</paper-checkbox>
+      <paper-checkbox checked={{iscontrastmode}}>Full contrast mode</paper-checkbox>
     </div>
     <div class="card">
       <div class="cardTitle">Download Options</div>
-      <paper-input
-      label="Maximum Number of retries"
-      placeholder="(default is 10),supports integer or infinite"
-      ></paper-input>
-      <paper-input
-      label="Rate Limit"
-      placeholder="(default is Infinity), imposes download speed Limit"
-      ></paper-input>
+      <paper-input label="Maximum Number of retries" placeholder="(default is 10),supports integer or infinite"></paper-input>
+      <paper-input label="Rate Limit" placeholder="(default is Infinity), imposes download speed Limit"></paper-input>
     </div>
     <div class="card">
       <div class="cardTitle">Filesystem Options</div>
       <div class="layout horizontal center-center">
-        <paper-input
-        id="filepath"
-        class="flex-1"
-        label="Default folder for downloads"
-        placeholder="e.g C:\Users\Foo\Downloads"
-        ></paper-input>
-        <paper-icon-button
-        id="selectButton"
-        icon="more-horiz"
-        alt="Select file path"
-        ></paper-icon-button>
-        <paper-tooltip for="selectButton">Select file path</paper-tooltip>
+        <paper-input id="filepath" class="flex-1" label="Default folder for downloads" placeholder="e.g C:\Users\Foo\Downloads" error-message="This is not a valid folder path"></paper-input>
+        <paper-icon-button id="selectButton" icon="folder" alt="Select folder path"></paper-icon-button>
+        <paper-tooltip for="selectButton">Select folder path</paper-tooltip>
       </div>
     </div>
     <div class="card">
@@ -51,31 +45,30 @@
       <paper-toggle-button>Show download progress in taskbar</paper-toggle-button>
     </div>
     <div class="card">
-      <div class="cardTitle"></div>
-      <paper-input
-      label="Encoding (experimental)"
-      placeholder="Force the specified encoding"
-      ></paper-input>
+      <div class="cardTitle">Workarounds</div>
+      <paper-input label="Encoding (experimental)" placeholder="Force the specified encoding"></paper-input>
       <paper-checkbox>Suppress HTTPS certificate validation</paper-checkbox>
       <paper-checkbox>Use an unencrypted connection to retrieve information about the video. (Currently supported only for YouTube)</paper-checkbox>
-      <paper-input
-      label="User Agent"
-      placeholder="Specify a custom user agent"
-      ></paper-input>
-      <paper-input
-      label="Referer Url"
-      placeholder="Specify a custom referer, use if the video access is restricted to one domain"
-      ></paper-input>
-      <paper-input
-      label="Add HTTP Headers"
-      placeholder="e.g HTTP_header:value (also with multiple headers seperated by ,)"
-      ></paper-input>
+      <paper-input label="User Agent" placeholder="Specify a custom user agent"></paper-input>
+      <paper-input label="Referer Url" placeholder="Specify a custom referer, use if the video access is restricted to one domain"></paper-input>
+      <paper-input label="Add HTTP Headers" placeholder="e.g HTTP_header:value (also with multiple headers seperated by ,)"></paper-input>
     </div>
+    <!-- manages the app's theme -->
+    <theme-manager></theme-manager>
   </template>
 
   <script>
     Polymer({
-      is: 'settings-view'
+      is: 'settings-view',
+
+      properties: {
+        isdarktheme: {
+          type: Boolean
+        },
+        iscontrastmode: {
+          type: Boolean
+        }
+      }
     });
   </script>
 </dom-module>

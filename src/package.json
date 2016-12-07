@@ -1,0 +1,35 @@
+{
+    "name": "youtube-dl-gui",
+    "version": "0.0.3",
+    "description": "a gui for youtube-dl built with nwjs + polymer + awesome sauce",
+    "main": "index.html",
+    "directories": {
+        "test": "test"
+    },
+    "window": {
+        "frame": false,
+        "width": 800,
+        "height": 600,
+        "icon": "images/favicon-16x16.png"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/puranjayjain/youtube-dl-gui.git"
+    },
+    "keywords": [
+        "youtube-dl",
+        "gui",
+        "nwjs",
+        "polymer",
+        "cross-platform"
+    ],
+    "author": "Puranjay Jain <me+npm@puranjayjain.com>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/puranjayjain/youtube-dl-gui/issues"
+    },
+    "homepage": "https://github.com/puranjayjain/youtube-dl-gui#readme"
+}

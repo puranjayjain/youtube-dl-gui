@@ -1,6 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 
-<link rel="import" href="shared-styles.html">
+<link rel="import" href="components/theme-manager.html">
 
 <link rel="import" href="../bower_components/app-layout/app-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
@@ -10,6 +10,7 @@
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/iron-icons/places-icons.html">
+<link rel="import" href="../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
@@ -17,238 +18,279 @@
 <link rel="import" href="components/ytdl-fab-container.html">
 <link rel="import" href="components/new-download.html">
 <link rel="import" href="components/final-download.html">
+<link rel="import" href="components/options-toolbar.html">
+<link rel="import" href="components/title-bar.html">
+
+<link rel="import" href="shared-styles.html">
 
 <dom-module id="youtube-dl">
   <template>
-  <style include="shared-styles">
-  :host {
-    display: block;
-  }
+    <style is="custom-style" include="iron-flex iron-positioning shared-styles">
+      :host {
+        display: block;
+      }
 
-  app-header-layout {
-    background-color: var(--primary-background-color);
-  }
+      app-drawer-layout {
+        position: absolute;
+        left: 0;
+        top: 32px;
+        right: 0;
+        bottom: 0;
+      }
 
-  app-header {
-    color: var(--primary-text-color);
-    background-color: var(--primary-color);
-  }
+      app-header-layout {
+        background-color: var(--primary-background-color);
+      }
 
-  paper-icon-button {
-    --paper-icon-button-ink-color: var(--primary-base-color);
-  }
+      app-header {
+        color: var(--complementary-text-color);
+        background-color: var(--primary-color);
+      }
 
-  paper-icon-button + [main-title] {
-    margin-left: 24px;
-  }
+      paper-material {
+        background-color: var(--primary-card-color);
+        height: 100%;
+      }
 
-  .drawer-list a {
-    display: block;
-    padding: 0 16px;
-    text-decoration: none;
-    color: var(--accent-color);
-    line-height: 40px;
-  }
+      paper-icon-button {
+        --paper-icon-button-ink-color: var(--primary-card-color);
+      }
 
-  .drawer-list a.iron-selected {
-    color: black;
-    font-weight: bold;
-  }
+      paper-icon-button + [main-title] {
+        margin-left: 24px;
+      }
 
-  paper-menu {
-    --paper-menu-background-color: none;
-    --paper-menu-focused-item-after: {
-      background: none;
-    };
-  }
+      .drawer-list a {
+        display: block;
+        padding: 0 16px;
+        text-decoration: none;
+        color: var(--accent-color);
+        line-height: 40px;
+      }
 
-  paper-icon-item {
-    --paper-icon-item: {
-      user-select: none;
-    };
-    --paper-item-selected: {
-      color: var(--primary-color);
-      background-color: #f5f5f5;
-    };
-  }
+      .drawer-list a.iron-selected {
+        color: black;
+        font-weight: bold;
+      }
 
-  paper-icon-item iron-icon {
-    opacity: .54;
-  }
+      paper-menu {
+        margin-top: 32px;
+        --paper-menu-background-color: none;
+        --paper-menu-focused-item-after: {
+          background: none;
+        };
+      }
 
-  paper-icon-item.iron-selected iron-icon {
-    opacity: 1;
-  }
-  </style>
+      paper-icon-item {
+        --paper-icon-item: {
+          user-select: none;
+        };
+        --paper-item-selected: {
+          color: var(--menu-select-color);
+          background-color: var(--highlight-color);
+        };
+      }
 
-  <app-location route="{{route}}" use-hash-as-path></app-location>
-  <app-route
-  route="{{route}}"
-  pattern="/:page"
-  data="{{routeData}}"
-  tail="{{subroute}}"></app-route>
+      paper-icon-button {
+        --paper-icon-button-ink-color: var(--primary-inverted-text-color);
+        --paper-icon-button: {
+          color: var(--primary-inverted-text-color);
+        };
+      }
 
-  <app-drawer-layout fullbleed>
-    <!-- Drawer content -->
-    <app-drawer swipe-open="true">
-      <paper-menu id="mainMenu" selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-        <paper-icon-item name="all">
-          <iron-icon icon="places:all-inclusive" item-icon></iron-icon>
-          All
-          <paper-ripple></paper-ripple>
-        </paper-icon-item>
-        <paper-icon-item name="downloading">
-          <iron-icon icon="file-download" item-icon></iron-icon>
-          Downloading
-          <paper-ripple></paper-ripple>
-        </paper-icon-item>
-        <paper-icon-item name="unfinished">
-          <iron-icon icon="error" item-icon></iron-icon>
-          Unfinished
-          <paper-ripple></paper-ripple>
-        </paper-icon-item>
-        <paper-icon-item name="downloaded">
-          <iron-icon icon="done" item-icon></iron-icon>
-          Downloaded
-          <paper-ripple></paper-ripple>
-        </paper-icon-item>
-        <hr class="paper-icon-item-divider"/>
-        <paper-icon-item name="settings">
-          <iron-icon icon="settings" item-icon></iron-icon>
-          Settings
-          <paper-ripple></paper-ripple>
-        </paper-icon-item>
-        <paper-icon-item name="about">
-          <iron-icon icon="help" item-icon></iron-icon>
-          About
-          <paper-ripple></paper-ripple>
-        </paper-icon-item>
-      </paper-menu>
-    </app-drawer>
+      paper-icon-item iron-icon {
+        opacity: 0.54;
+      }
 
-    <!-- Main content -->
-    <app-header-layout has-scrolling-region>
-      <app-header condenses fixed effects="waterfall">
-        <app-toolbar>
-          <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-          <div main-title>[[pageTitle]]</div>
-        </app-toolbar>
-      </app-header>
-      <neon-animated-pages
-      id="pages"
-      class="flex"
-      selected="[[page]]"
-      attr-for-selected="name"
-      fallback-selection="view404"
-      role="main"
-      entry-animation="fade-in-animation"
-      exit-animation="fade-out-animation">
-      <all-view name="all"></all-view>
-      <downloading-view name="downloading"></downloading-view>
-      <unfinished-view name="unfinished"></unfinished-view>
-      <downloaded-view name="downloaded"></downloaded-view>
-      <settings-view name="settings"></settings-view>
-      <about-view name="about"></about-view>
-      <view404-view name="view404"></view404-view>
-    </neon-animated-pages>
-    <!-- common fab -->
-    <ytdl-fab-container
-    page=[[page]]
-    newdownloaddialog={{newdownloaddialog}}
-    ></ytdl-fab-container>
-  </app-header-layout>
-</app-drawer-layout>
-<!-- dialogs -->
-<new-download
-newdownloaddialog={{newdownloaddialog}}
-finaldownloaddialog={{finaldownloaddialog}}
-url={{url}}
-username={{username}}
-password={{password}}
-></new-download>
-<final-download
-newdownloaddialog={{newdownloaddialog}}
-finaldownloaddialog={{finaldownloaddialog}}
-url={{url}}
-username={{username}}
-password={{password}}
-></final-download>
-</template>
+      paper-icon-item.iron-selected iron-icon {
+        opacity: 1;
+      }
 
-<script>
-Polymer({
-  is: 'youtube-dl',
+    </style>
+    <app-location route="{{route}}" use-hash-as-path></app-location>
+    <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
 
-  properties: {
-    page: {
-      type: String,
-      reflectToAttribute: true,
-      observer: '_pageChanged'
-    },
-    pageTitle: {
-      type: String,
-      reflectToAttribute: true,
-      computed: 'computePageTitle(page)'
-    },
-    newdownloaddialog: {
-      type: Boolean
-    },
-    finaldownloaddialog: {
-      type: Boolean
-    },
-    url: {
-      type: String
-    },
-    username: {
-      type: String
-    },
-    password: {
-      type: String
-    }
-  },
+    <app-drawer-layout>
+      <!-- Drawer content -->
+      <app-drawer swipe-open="true">
+        <paper-material elevation="3">
+          <paper-menu id="mainMenu" selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+            <paper-icon-item name="all">
+              <iron-icon icon="places:all-inclusive" item-icon></iron-icon>
+              All
+              <paper-ripple></paper-ripple>
+            </paper-icon-item>
+            <paper-icon-item name="downloading">
+              <iron-icon icon="file-download" item-icon></iron-icon>
+              Downloading
+              <paper-ripple></paper-ripple>
+            </paper-icon-item>
+            <paper-icon-item name="unfinished">
+              <iron-icon icon="error" item-icon></iron-icon>
+              Unfinished
+              <paper-ripple></paper-ripple>
+            </paper-icon-item>
+            <paper-icon-item name="downloaded">
+              <iron-icon icon="done" item-icon></iron-icon>
+              Downloaded
+              <paper-ripple></paper-ripple>
+            </paper-icon-item>
+            <hr class="paper-icon-item-divider"/>
+            <paper-icon-item name="settings">
+              <iron-icon icon="settings" item-icon></iron-icon>
+              Settings
+              <paper-ripple></paper-ripple>
+            </paper-icon-item>
+            <paper-icon-item name="about">
+              <iron-icon icon="help" item-icon></iron-icon>
+              About
+              <paper-ripple></paper-ripple>
+            </paper-icon-item>
+          </paper-menu>
+        </paper-material>
+      </app-drawer>
 
-  observers: [
-    '_routePageChanged(routeData.page)'
-  ],
+      <!-- Main content -->
+      <app-header-layout id="headerLayout" has-scrolling-region>
+        <app-header condenses fixed effects="waterfall">
+          <app-toolbar>
+            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+            <div main-title>[[pageTitle]]</div>
+          </app-toolbar>
+          <options-toolbar class="fit" page=[[page]] items={{toolbaritems}}></options-toolbar>
+        </app-header>
+        <neon-animated-pages id="pages" class="flex" selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
+          <all-view name="all" toolbaritems={{toolbaritems}} appscrolltop=[[appscrolltop]]></all-view>
+          <downloading-view name="downloading" toolbaritems={{toolbaritems}}></downloading-view>
+          <unfinished-view name="unfinished" toolbaritems={{toolbaritems}}></unfinished-view>
+          <downloaded-view name="downloaded" toolbaritems={{toolbaritems}}></downloaded-view>
+          <settings-view name="settings"></settings-view>
+          <about-view name="about"></about-view>
+          <view404-view name="view404"></view404-view>
+        </neon-animated-pages>
+        <!-- common fab -->
+        <ytdl-fab-container page=[[page]] newdownloaddialog={{newdownloaddialog}}></ytdl-fab-container>
+      </app-header-layout>
+    </app-drawer-layout>
+    <!-- dialogs -->
+    <new-download newdownloaddialog={{newdownloaddialog}} finaldownloaddialog={{finaldownloaddialog}} url={{url}} username={{username}} password={{password}}></new-download>
+    <final-download newdownloaddialog={{newdownloaddialog}} finaldownloaddialog={{finaldownloaddialog}} url={{url}} username={{username}} password={{password}}></final-download>
+    <!-- app's window -->
+    <title-bar></title-bar>
+    <!-- manages the app's theme -->
+    <theme-manager></theme-manager>
+  </template>
 
-  _routePageChanged: function(page) {
-    this.page = page || 'all';
-  },
+  <script>
+    Polymer({
+      is: 'youtube-dl',
 
-  _pageChanged: function(page) {
-    // Load page import on demand. Show 404 page if fails
-    var resolvedPageUrl = this.resolveUrl(page + '-view' + '.html');
-    this.importHref(resolvedPageUrl, null, this._showPage404, true);
-  },
+      properties: {
+        page: {
+          type: String,
+          reflectToAttribute: true,
+          observer: '_pageChanged'
+        },
+        pageTitle: {
+          type: String,
+          computed: 'computePageTitle(page)'
+        },
+        newdownloaddialog: {
+          type: Boolean
+        },
+        finaldownloaddialog: {
+          type: Boolean
+        },
+        url: {
+          type: String
+        },
+        username: {
+          type: String
+        },
+        password: {
+          type: String
+        },
+        toolbaritems: {
+          type: Number
+        },
+        appscrolltop: {
+          type: Number
+        }
+      },
 
-  computePageTitle: function(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  },
+      observers: ['_routePageChanged(routeData.page)'],
 
-  _showPage404: function() {
-    this.page = 'view404';
-  },
+      _routePageChanged: function (page) {
+        this.page = page || 'all';
+      },
 
-  ready: function() {
-    // attach event listeners on dom ready
-    this.listen(this.$.mainMenu, 'tap', 'onMenuTap');
-    this.listen(this.$.mainMenu, 'keydown', 'onMenuEnter');
-  },
+      _pageChanged: function (page) {
+        // Load page import on demand. Show 404 page if fails
+        var resolvedPageUrl = this.resolveUrl(`${page}-view.html`);
+        this.importHref(resolvedPageUrl, null, this._showPage404, true);
+      },
 
-  onMenuEnter: function(e) {
-    // for main menu
-    if (e.key === 'Enter' && e.target.nodeName === 'PAPER-ICON-ITEM') {
-      window.location.hash = '/' + e.target.getAttribute('name');
-    }
-  },
+      computePageTitle: function (string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+      },
 
-  // handle tap events of all kinds and purposes
-  onMenuTap: function(e) {
-    // for main menu
-    if (e.target.nodeName === 'PAPER-ICON-ITEM') {
-      window.location.hash = '/' + e.target.getAttribute('name');
-    }
-  },
-});
-</script>
+      _showPage404: function () {
+        this.page = 'view404';
+      },
+
+      ready: function () {
+        // standard regex for matching the urls
+        // see https://gist.github.com/dperini/729294
+        const urlPattern = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i
+        
+        // attach event listeners on dom ready        
+        this.listen(this.$.mainMenu, 'tap', 'onMenuTap');
+        this.listen(this.$.mainMenu, 'keydown', 'onMenuEnter');
+        // force style app header layout http://stackoverflow.com/questions/35149624/dynamically-inject-shared-styles-in-polymer-element-polymer-1-2-3
+        let myDomModule = document.createElement('style', 'custom-style');
+        myDomModule.setAttribute('include', 'shared-styles');
+        Polymer.dom(this.$.headerLayout.root).appendChild(myDomModule);
+        // read scroll changes
+        this.listen(Polymer.dom(this.$.headerLayout.$.contentContainer).node, 'scroll', '_onScrollApp');
+        // add event listeners to trigger file download if necessary
+        window.ondragover = window.ondragleave = window.ondragend = () => false;
+        window.ondrop = (event) => {
+          event.preventDefault();
+          // capture dropped urls and start download process if a url
+          const dropUrl = event.dataTransfer.getData("text/plain");
+          if (urlPattern.test(dropUrl)) {
+            // copy text to the url input of the dialog
+            this.url = dropUrl;
+            // open the dialog
+            this.newdownloaddialog = true;
+          }
+        }
+      },
+
+      _onScrollApp: function (e) {
+        this.appscrolltop = e.path[0].scrollTop;
+      },
+
+      onMenuEnter: function (e) {
+        // for main menu
+        if (e.key === 'Enter' && e.target.nodeName === 'PAPER-ICON-ITEM') {
+          let me = e.target;
+          setTimeout(() => {
+            window.location.hash = `/${me.getAttribute('name')}`;
+          }, 300);
+        }
+      },
+
+      // handle tap events of all kinds and purposes
+      onMenuTap: function (e) {
+        // for main menu
+        if (e.target.nodeName === 'PAPER-ICON-ITEM') {
+          let me = e.target;
+          setTimeout(() => {
+            window.location.hash = `/${me.getAttribute('name')}`;
+          }, 300);
+        }
+      }
+    });
+  </script>
 </dom-module>
