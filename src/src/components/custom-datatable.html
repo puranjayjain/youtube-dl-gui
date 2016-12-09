@@ -71,6 +71,10 @@
         min-width: 100px;
         line-height: 64px;
         position: relative;
+        /* https://css-tricks.com/snippets/css/truncate-string-with-ellipsis/ */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       .cell.check {
@@ -131,13 +135,19 @@
             <paper-checkbox class="check" checked=[[selected]]></paper-checkbox>
           </div>
           <div class="flex cell">
-            [[item.name]]
+            [[_convertToFormat(item.name, '0')]]
           </div>
           <div class="flex cell">
-            [[item.phone]]
+            [[_convertToFormat(item.zip, '1')]]
           </div>
           <div class="flex cell">
-            [[item.email]]
+            [[_convertToFormat(item.country, '2')]]
+          </div>
+          <div class="flex cell">
+            [[_convertToFormat(item.integer, '3')]]
+          </div>
+          <div class="flex cell">
+            [[_convertToFormat(item.date, '4')]]
           </div>
           <paper-ripple></paper-ripple>
         </div>
@@ -199,6 +209,21 @@
       },
 
       observers: ['_itemsChanged(selectedItems.length)'],
+
+      // convert to last tried or bytes, etc.
+      _convertToFormat(value, index) {
+        let conversion = '';
+        // find the conversion method
+        if (this.tableheaders[index].hasOwnProperty('conversion')) {
+          conversion = this.tableheaders[index].conversion;
+        }
+        // do the conversion if found
+        if (conversion === 'recent') {
+          let moment = require('moment');
+          value = moment(value).fromNow();
+        }
+        return value;
+      },
 
       _setMinWidth: function (width) {
         this.customStyle['--min-width'] = `${width}px`;
