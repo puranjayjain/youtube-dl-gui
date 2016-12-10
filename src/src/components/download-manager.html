@@ -1,0 +1,52 @@
+<!-- the heart and soul of this project this is the guy who is the one to do all the coordination -->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
+
+<dom-module id="download-manager">
+  <app-localstorage-document key="lastdownloadindex" data="{{lastdownloadindex}}"></app-localstorage-document>
+  <template></template>
+
+  <script>
+    Polymer({
+      is: 'download-manager',
+
+      /**
+       * NOTE some of these properties are not yet used or implemented but just present for future usage, they don't affect the polymer perfomance as they use data paths to update objects and arrays and only update changes
+       * they are marked with FIXME tags
+       * index: 0, //integer index of the current file (unique)
+       * fileName: 'C:\Users\User\Music\Song.mp4', // full path to file
+       * format: 18, //the ytdl format code used for downloading it, defaults to the ytdl default of blank
+       * url: 'the-website-url-download-the-video.com',
+       * dUrl: 'the-link-to-download-the-video-from.mp4',
+       * size: 94, // full size in bytes
+       * FIXME description: 'something about it',
+       * FIXME firstTry: '17/05/2016 9:06 AM', // first attempt at downloading the file
+       * lastTry: '17/05/2016 9:06 AM', // last attempt at downloading the file
+       * downloaded: 5, // downloaded size in bytes
+       * status: 'paused', // can have values as 'starting', 'paused', 'downloading', 'error', 'canceled', 'done'
+       * selected: true // or false for checkbox and other use cases
+      */
+
+      properties: {
+        lastdownloadindex: {
+          type: Number,
+          value: -1
+        },
+        downloads: {
+          type: Array,
+          value: []
+        }
+      },
+
+      // start a download and keep the reference for it in the downloadProcesses
+      startDownload: function () {
+        let child_process = require('child_process'),
+          path = require('path'),
+          downloadProcess = child_process.fork(path.posix.join(nw.__dirname.replace(/\\/g, '/'), 'src', 'workers', 'downloader.js'), [], {cwd: nw.__dirname})
+        // push them to the current downloadProcess array
+        downloadProcesses.push(downloadProcess)
+      }
+    });
+  </script>
+</dom-module>

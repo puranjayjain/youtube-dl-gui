@@ -10,7 +10,7 @@
     "polymer",
     "cross-platform"
   ],
-  "chromium-args" : "--enable-node-worker",
+  "chromium-args": "--enable-node-worker",
   "directories": {
     "test": "test"
   },
@@ -38,6 +38,7 @@
     "hashids": "^1.1.1",
     "moment": "^2.17.1",
     "node-wget": "^0.4.2",
+    "progress-stream": "^1.2.0",
     "youtube-dl": "^1.11.1"
   }
 }

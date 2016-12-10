@@ -22,6 +22,7 @@
       }
 
     </style>
+    <app-localstorage-document key="lastdownloadindex" data="[[lastdownloadindex]]"></app-localstorage-document>
     <app-localstorage-document key="isdarktheme" data="{{isdarktheme}}"></app-localstorage-document>
     <app-localstorage-document key="iscontrastmode" data="{{iscontrastmode}}"></app-localstorage-document>
     <app-localstorage-document key="isalwaysopenmenu" data="{{isalwaysopenmenu}}"></app-localstorage-document>
@@ -70,6 +71,10 @@
       is: 'settings-view',
 
       properties: {
+        lastdownloadindex: {
+          type: Number,
+          readOnly: true
+        },
         isdarktheme: {
           type: Boolean
         },
@@ -87,17 +92,17 @@
           type: Boolean
         }
       },
-      
+
       ready: function () {
         // attach event listeners on dom ready
         this.listen(this.$.selectButton, 'tap', 'onSelect');
         this.listen(this.$.file, 'change', 'onFile');
       },
-      
+
       onSelect: function () {
         this.$.file.click();
       },
-      
+
       onFile: function () {
         let filePath = this.$.file.value;
         if (filePath) {

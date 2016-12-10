@@ -1,7 +1,7 @@
 // contains the logic to run a ytdl downloader in the background.
 // A bonus of multithreading and a faster performance yippy!
 
-// main class for the downloader logic does the orchestrating
+// main class for the downloader logic
 let fs = require('fs'),
   path = require('path'),
   youtubedl = require('youtube-dl'),
@@ -28,7 +28,17 @@ class Dl {
       // initiate the downloader
     this._initYTDL()
   }
-
+  
+  // getters and setters
+  get filename() {
+    return filename
+  }
+  
+  set filename(value) {
+    filename = value
+  }
+  
+  // class functions or prototypes
   // returns all the arguments that need to be passed for youtube-dl
   getArgs() {
     let args = []
@@ -65,7 +75,7 @@ class Dl {
       // Additional options can be given for calling `child_process.execFile()`.
       {
         // add checks for resuming a partially downloaded file
-        // start: this.args.start,
+        start: this.args.start ? this.args.start : 0,
         cwd: this.args.dirname
       })
 
@@ -160,6 +170,8 @@ process.on('message', (message) => {
   // either init or a command
   if(message.type === 'init') {
     download = new Dl(message.args)
+  } else if(message.type === 'setter') {
+    download['']
   } else {
     download[`${message.type}Download`]()
   }
