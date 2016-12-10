@@ -17,12 +17,14 @@ class Dl {
     password,
     workarounds
   }) {
-    this._args = args
+    this.args = args
+    // create video var
+    this.video = ''
   }
 
   // all the getters and setters are declared here https://github.com/fent/node-youtube-dl/issues/112
   get video() {
-    return _video
+    return this.video
   }
 
   // returns all the arguments that need to be passed for youtube-dl
@@ -30,15 +32,15 @@ class Dl {
     let args = []
       // calculate it by default and leave it if no format is chosen (node youtubedl handles for best on it's own)
       // check and push format
-    if(this._args.format) {
-      args.push('-f', this._args.format)
+    if(this.args.format) {
+      args.push('-f', this.args.format)
     }
     // authentication
-    if(this._args.username && this._args.password) {
-      args.push('--u', this._args.username, '--p', this._args.password)
+    if(this.args.username && this.args.password) {
+      args.push('--u', this.args.username, '--p', this.args.password)
     }
     // copy workarounds to the args
-    let workarounds = Object.assign({}, this._args.workarounds)
+    let workarounds = Object.assign({}, this.args.workarounds)
     for(let workaround in workarounds) {
       // if not a header
       if(workaround === 'header') {
@@ -56,52 +58,52 @@ class Dl {
   // instantiate functions
   // start te process and get the video also
   startDowload() {
-    _video = youtubedl(
-      this._args.url,
+    this.video = youtubedl(
+      this.args.url,
       this.getArgs(),
       // Additional options can be given for calling `child_process.execFile()`.
       {
         // add checks for resuming a partially downloaded file
-        start: this._args.start,
-        cwd: this._args.dirname
+        start: this.args.start,
+        cwd: this.args.dirname
       })
 
     // initiate the download status monitors here
-    _video.on('info', (info) => sendMessage({
+    this.video.on('info', (info) => sendMessage({
       type: 'info',
       message: info
     }))
 
     // update on each downloaded chunk
     // the other end of this will read the message for new download size addition
-    _video.on('data', (chunk) => sendMessage({
+    this.video.on('data', (chunk) => sendMessage({
       type: 'data',
       message: chunk.length
     }))
 
     // update the data on download end, error, cancel
     // send the error back
-    _video.on('error', (e) => sendError(e))
+    this.video.on('error', (e) => sendError(e))
 
     // download has been completed
-    _video.on('end', () => sendMessage({
+    this.video.on('end', () => sendMessage({
       type: 'end'
     }))
 
     // start the download here
-    _video.pipe(fs.createWriteStream(this._args.filePath))
+    this.video.pipe(fs.createWriteStream(this.args.filePath))
   }
 
   // all the main functions to proppogate tasks
   resumeDownload() {
-    _video.resume()
+    this.video.resume()
     sendMessage({
       type: 'resume'
     })
   }
 
   pauseDownload() {
-    _video.pause()
+    this.video.pause()
     sendMessage({
       type: 'pause'
     })
@@ -112,7 +114,7 @@ class Dl {
     this.pauseDownload()
     sendMessage({
       type: 'stop',
-      message: _video.unpipe()
+      message: this.video.unpipe()
     })
   }
 }
