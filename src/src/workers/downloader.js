@@ -3,28 +3,30 @@
 
 // main class for the downloader logic does the orchestrating
 let fs = require('fs'),
+  path = require('path'),
   youtubedl = require('youtube-dl'),
-  download
+  download,
+  video,
+  // the original filename
+  filename = ''
 
 class Dl {
-  constructor(args = {
-    url,
-    filePath,
-    dirname,
-    format,
-    start: 0,
+  /*
+  args = {
+  url,
+  filePath,
+  dirname,
+  format
+  start: 0,
     username,
     password,
     workarounds
-  }) {
-    this.args = args
-    // create video var
-    this.video = ''
-  }
-
-  // all the getters and setters are declared here https://github.com/fent/node-youtube-dl/issues/112
-  get video() {
-    return this.video
+} 
+*/
+  constructor(args) {
+    this.args = Object.assign({}, args)
+      // initiate the downloader
+    this._initYTDL()
   }
 
   // returns all the arguments that need to be passed for youtube-dl
@@ -37,7 +39,7 @@ class Dl {
     }
     // authentication
     if(this.args.username && this.args.password) {
-      args.push('--u', this.args.username, '--p', this.args.password)
+      args.push('-u', this.args.username, '-p', this.args.password)
     }
     // copy workarounds to the args
     let workarounds = Object.assign({}, this.args.workarounds)
@@ -55,55 +57,70 @@ class Dl {
     return args
   }
 
-  // instantiate functions
-  // start te process and get the video also
-  startDowload() {
-    this.video = youtubedl(
+  // initiate the ytdl exe
+  _initYTDL() {
+    video = youtubedl(
       this.args.url,
       this.getArgs(),
       // Additional options can be given for calling `child_process.execFile()`.
       {
         // add checks for resuming a partially downloaded file
-        start: this.args.start,
+        // start: this.args.start,
         cwd: this.args.dirname
       })
 
     // initiate the download status monitors here
-    this.video.on('info', (info) => sendMessage({
-      type: 'info',
-      message: info
-    }))
+    video.on('info', (info) => {
+      sendMessage({
+        type: 'info',
+        message: info
+      })
+    })
 
     // update on each downloaded chunk
     // the other end of this will read the message for new download size addition
-    this.video.on('data', (chunk) => sendMessage({
+    video.on('data', (chunk) => sendMessage({
       type: 'data',
       message: chunk.length
     }))
 
     // update the data on download end, error, cancel
     // send the error back
-    this.video.on('error', (e) => sendError(e))
+    video.on('error', (e) => sendError(e))
 
-    // download has been completed
-    this.video.on('end', () => sendMessage({
-      type: 'end'
+    // Will be called if download was already completed and there is nothing more to download.
+    video.on('complete', () => sendMessage({
+      type: 'complete'
     }))
 
-    // start the download here
-    this.video.pipe(fs.createWriteStream(this.args.filePath))
+    // download has been completed
+    video.on('end', () => {
+      // TODO rename the file if needed
+
+      // tell the gui we are done
+      sendMessage({
+        type: 'end'
+      })
+    })
+  }
+
+  // start the download here
+  startDownload() {
+    // TODO changes for resuming partially downloaded file
+    // REVIEW you can also specify start here
+    video.pipe(fs.createWriteStream(path.join(this.args.filePath, filename)))
   }
 
   // all the main functions to proppogate tasks
   resumeDownload() {
-    this.video.resume()
+    video.resume()
     sendMessage({
       type: 'resume'
     })
   }
 
   pauseDownload() {
-    this.video.pause()
+    video.pause()
     sendMessage({
       type: 'pause'
     })
@@ -112,9 +129,10 @@ class Dl {
   // REVIEW this after this is resolved https://github.com/fent/node-youtube-dl/issues/112
   stopDownload() {
     this.pauseDownload()
+      // TODO also close down the child_process
     sendMessage({
       type: 'stop',
-      message: this.video.unpipe()
+      message: video.unpipe()
     })
   }
 }
@@ -132,12 +150,17 @@ function sendMessage(m) {
   process.send(m)
 }
 
+// send back errors and exits
+process.on('close', (e) => sendError(e))
+process.on('error', (e) => sendError(e))
+process.on('exit', (e) => sendError(e))
+
 // receive messages from the gui and act accordinglys
 process.on('message', (message) => {
   // either init or a command
   if(message.type === 'init') {
     download = new Dl(message.args)
   } else {
-    download[message.type]()
+    download[`${message.type}Download`]()
   }
 })
