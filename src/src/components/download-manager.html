@@ -36,16 +36,70 @@
         downloads: {
           type: Array,
           value: []
+        },
+        requestdownload: {
+          type: Object,
+          observer: '_requestDownloadChange',
+          notify: true
+        },
+        downloadinfo: {
+          type: Object,
+          notify: true
         }
       },
 
-      // start a download and keep the reference for it in the downloadProcesses
-      startDownload: function () {
+      ready: function () {
+        // init downloads property
+        this.downloads = [];
+        // TODO add downloads from previously downloaded files
+      },
+
+      _requestDownloadChange: function (requestdownload) {
+        // if there is a new download only then do something
+        if (Object.keys(requestdownload).length > 0) {
+          // check for the download mode
+          if (requestdownload.mode === 'quick') {
+            // quick download mode
+          } else {
+            // new download mode
+            this.initDownload();
+          }
+        }
+      },
+
+      // initiate a download and keep the reference for it in the downloadProcesses
+      initDownload: function () {
         let child_process = require('child_process'),
           path = require('path'),
-          downloadProcess = child_process.fork(path.posix.join(nw.__dirname.replace(/\\/g, '/'), 'src', 'workers', 'downloader.js'), [], {cwd: nw.__dirname})
+          downloadProcess = child_process.fork(path.join(nw.__dirname, 'src', 'workers', 'downloader.js'), [], {cwd: nw.__dirname});
+        // increment the last download index
+        // TODO increment only if necessary else use the previous index if resuming a download
+        this.lastdownloadindex++;
+        const cIndex = this.lastdownloadindex;
+        // request file info
+        // TODO add more parameters from settings and the dialog here e.g. username and password
+        let args = Object.assign({}, this.requestdownload);
+        args.dirname = nw.__dirname;
+        args.index = cIndex;
+        downloadProcess.send({type: 'info', args: Object.assign({}, args)});
+        // read changes from the process
+        downloadProcess.on('message', (message) => {
+          if (message.type === 'info') {
+            // TODO add Information to data array downloadProcess.send({type: 'start'}) send back the info to the dialog
+            this.downloadinfo = message.message;
+          } else {
+            console.log(message);
+          }
+        });
+        // catch error and exit codes
+        downloadProcess.on('error', (message) => {
+          console.log(`error: ${message}`);
+        });
+        downloadProcess.on('exit', (message, signal) => {
+          console.log(`exit: ${message} and ${signal}`);
+        });
         // push them to the current downloadProcess array
-        downloadProcesses.push(downloadProcess)
+        downloadProcesses.push({index: cIndex, process: downloadProcess});
       }
     });
   </script>

@@ -21,6 +21,7 @@
 <link rel="import" href="components/final-download.html">
 <link rel="import" href="components/options-toolbar.html">
 <link rel="import" href="components/title-bar.html">
+<link rel="import" href="components/download-manager.html">
 <link rel="import" href="components/progress-bar.html">
 
 <link rel="import" href="shared-styles.html">
@@ -166,10 +167,10 @@
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
             <div main-title>[[pageTitle]]</div>
           </app-toolbar>
-          <options-toolbar class="fit" page=[[page]] items={{toolbaritems}} tableclearall={{tableclearall}}  fileinfodialog={{fileinfodialog}}></options-toolbar>
+          <options-toolbar class="fit" page=[[page]] items={{toolbaritems}} tableclearall={{tableclearall}} fileinfodialog={{fileinfodialog}}></options-toolbar>
         </app-header>
         <neon-animated-pages id="pages" class="flex" selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
-          <all-view name="all" toolbaritems={{toolbaritems}} appscrolltop=[[appscrolltop]] tableclearall={{tableclearall}}></all-view>
+          <all-view name="all" toolbaritems={{toolbaritems}} appscrolltop=[[appscrolltop]] tableclearall={{tableclearall}} requestdownload={{requestdownload}} downloadinfo={{downloadinfo}}></all-view>
           <downloading-view name="downloading" toolbaritems={{toolbaritems}}></downloading-view>
           <unfinished-view name="unfinished" toolbaritems={{toolbaritems}}></unfinished-view>
           <downloaded-view name="downloaded" toolbaritems={{toolbaritems}}></downloaded-view>
@@ -182,10 +183,12 @@
       </app-header-layout>
     </app-drawer-layout>
     <!-- dialogs -->
-    <new-download newdownloaddialog={{newdownloaddialog}} finaldownloaddialog={{finaldownloaddialog}} url={{url}} username={{username}} password={{password}}></new-download>
-    <final-download newdownloaddialog={{newdownloaddialog}} finaldownloaddialog={{finaldownloaddialog}} url={{url}} username={{username}} password={{password}}></final-download>
+    <new-download newdownloaddialog={{newdownloaddialog}} finaldownloaddialog={{finaldownloaddialog}} requestdownload={{requestdownload}}></new-download>
+    <final-download newdownloaddialog={{newdownloaddialog}} finaldownloaddialog={{finaldownloaddialog}}  requestdownload={{requestdownload}} downloadinfo={{downloadinfo}}></final-download>
     <!-- app's window -->
     <title-bar></title-bar>
+    <!-- download manager -->
+    <download-manager requestdownload={{requestdownload}} downloadinfo={{downloadinfo}}></download-manager>
     <!-- manages the app's theme -->
     <theme-manager></theme-manager>
     <!-- progress bar -->
@@ -217,15 +220,6 @@
         fileinfodialog: {
           type: Boolean
         },
-        url: {
-          type: String
-        },
-        username: {
-          type: String
-        },
-        password: {
-          type: String
-        },
         toolbaritems: {
           type: Number
         },
@@ -242,6 +236,12 @@
         progress: {
           type: Number,
           default: -1
+        },
+        requestdownload: {
+          type: Object
+        },
+        downloadinfo: {
+          type: Object
         }
       },
 

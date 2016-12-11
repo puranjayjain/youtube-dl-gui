@@ -80,15 +80,16 @@
       },
       url: {
         type: String,
-        notify: true,
         observer: '_onDropUrl'
       },
       username: {
         type: String,
-        notify: true
       },
       password: {
         type: String,
+      },
+      requestdownload: {
+        type: Object,
         notify: true
       }
     },
@@ -128,6 +129,20 @@
 
     onNext: function () {
       if (this.$.url.validate()) {
+        // call the download manager
+        let prepDownload = {
+          url: this.url,
+          mode: 'normal'
+        }
+        // if auth add them as well
+        if (this.auth) {
+          prepDownload.username = this.username;
+          prepDownload.password = this.password;
+        }
+        // now send them via requestdownload
+        // https://www.polymer-project.org/1.0/docs/devguide/model-data#override-dirty-check
+        this.requestdownload = {};
+        this.requestdownload = Object.assign({}, prepDownload);
         this.nextaction = true;
         this.newdownloaddialog = false;
         this.finaldownloaddialog = true;
