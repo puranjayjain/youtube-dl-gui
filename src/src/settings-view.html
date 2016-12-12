@@ -28,7 +28,12 @@
     <app-localstorage-document key="isalwaysopenmenu" data="{{isalwaysopenmenu}}"></app-localstorage-document>
     <app-localstorage-document key="defaultfolderpath" data="{{defaultfolderpath}}"></app-localstorage-document>
     <app-localstorage-document key="showprogressbar" data="{{showprogressbar}}"></app-localstorage-document>
-
+    <app-localstorage-document key="autoupdate" data="{{autoupdate}}"></app-localstorage-document>
+    
+    <div class="card">
+      <div class="cardTitle">Core</div>
+      <paper-checkbox checked={{autoupdate}}>Auto update</paper-checkbox>
+    </div>
     <div class="card">
       <div class="cardTitle">Theme and Layout</div>
       <paper-checkbox checked={{isdarktheme}}>Use Dark Theme</paper-checkbox>
@@ -89,6 +94,9 @@
           value: ''
         },
         showprogressbar: {
+          type: Boolean
+        },
+        autoupdate: {
           type: Boolean
         }
       },

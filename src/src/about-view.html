@@ -1,4 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
 <link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
@@ -35,6 +36,9 @@
       }
 
     </style>
+
+    <app-localstorage-document key="autoupdate" data="{{autoupdate}}"></app-localstorage-document>
+    <app-localstorage-document key="lastupdated" data="{{lastupdated}}"></app-localstorage-document>
 
     <div class="card">
       <div class="cardTitle">Youtube Dl GUI - v0.0.3</div>
@@ -102,6 +106,12 @@
           type: String,
           reflectToAttribute: true,
           observer: '_pageChanged'
+        },
+        autoupdate: {
+          type: Boolean
+        },
+        lastupdated: {
+          type: String
         }
       },
 

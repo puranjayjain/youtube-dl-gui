@@ -1,0 +1,45 @@
+<!-- performs tasks on app startup -->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
+
+<app-localstorage-document key="autoupdate" data="{{autoupdate}}"></app-localstorage-document>
+<app-localstorage-document key="lastupdated" data="{{lastupdated}}"></app-localstorage-document>
+<link rel="import" href="../shared-styles.html">
+
+<dom-module id="startup-tasks">
+  <template></template>
+
+  <script>
+    Polymer({
+      is: 'startup-tasks',
+
+      properties: {
+        autoupdate: {
+          type: Boolean,
+          value: true
+        },
+        status: {
+          type: Boolean
+        },
+        lastupdated: {
+          type: String,
+          value: ''
+        }
+      },
+
+      doAutoupdate: function () {
+        // set status to true that i'm doing something
+        this.status = true;
+
+      },
+
+      // performs certain tasks on app startup right here
+      ready: function () {
+        // if autoupdate is on
+        if (this.autoupdate) {
+          this.doAutoupdate();
+        }
+      }
+    });
+  </script>
+</dom-module>
