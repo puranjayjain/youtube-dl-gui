@@ -1,7 +1,7 @@
 {
   "name": "youtube-dl-gui",
   "version": "0.0.3",
-  "description": "a gui for youtube-dl built with nwjs + polymer + awesome sauce",
+  "description": "A Cross Platform GUI Client for youtube-dl written in nwjs + polymer + awesome sauce",
   "main": "index.html",
   "keywords": [
     "youtube-dl",
@@ -37,8 +37,9 @@
     "bytes": "^2.4.0",
     "hashids": "^1.1.1",
     "moment": "^2.17.1",
-    "node-wget": "^0.4.2",
     "progress-stream": "^1.2.0",
+    "rest": "^2.0.0",
+    "wget-improved": "^1.4.0",
     "youtube-dl": "^1.11.1"
   }
 }

@@ -97,6 +97,11 @@
         youtubedlversion: {
           type: String,
           value: ''
+        },
+        page: {
+          type: String,
+          reflectToAttribute: true,
+          observer: '_pageChanged'
         }
       },
 
@@ -107,8 +112,23 @@
 
       ready: function () {
         this.listen(this.$.bugreport, 'tap', 'onBugreport');
-        // FIXME youtubedl.exec('', ['--version'], {}, (err, output) => {   if (err) {     throw err;     return   }   let ytdl = stored.youtubedl.data;   ytdl.version = output[0];   this.youtubedlversion = ytdl.version;   // update the item in storage   //
-        // this.setStored('youtubedl', ytdl) })
+        // TODO the update the ytdl exe forcefully
+      },
+
+      // do stuff on about page entry
+      _pageChanged: function (page) {
+        if (page === 'about' && !this.youtubedlversion) {
+          let fs = require('fs'),
+            path = require('path'),
+            detailsPath = path.join(nw.__dirname, 'node_modules', 'youtube-dl', 'bin', 'details');
+          fs.readFile(detailsPath, 'utf8', (err, contents) => {
+            if (err) 
+              throw err;
+            
+            // set version string
+            this.youtubedlversion = JSON.parse(contents).version;
+          });
+        }
       }
     });
   </script>
