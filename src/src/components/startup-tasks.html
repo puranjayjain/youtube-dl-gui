@@ -2,12 +2,13 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
 
-<app-localstorage-document key="autoupdate" data="{{autoupdate}}"></app-localstorage-document>
-<app-localstorage-document key="lastupdated" data="{{lastupdated}}"></app-localstorage-document>
 <link rel="import" href="../shared-styles.html">
 
 <dom-module id="startup-tasks">
-  <template></template>
+  <template>
+    <app-localstorage-document key="autoupdate" data="{{autoupdate}}"></app-localstorage-document>
+    <app-localstorage-document key="lastupdated" data="{{lastupdated}}"></app-localstorage-document>
+  </template>
 
   <script>
     Polymer({
@@ -28,9 +29,41 @@
       },
 
       doAutoupdate: function () {
+        // get user agent
+        let userAgent = navigator.userAgent
+          ? navigator.userAgent
+          : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.75 Safari/537.36';
         // set status to true that i'm doing something
         this.status = true;
-
+        // check if yupdater is not already in use
+        if (yupdater) {
+          return;
+        }
+        yupdater = child_process.fork(path.join(nw.__dirname, 'src', 'workers', 'ytdlupdater.js'), [], {cwd: nw.__dirname});
+        yupdater.send({type: 'start', version: this.lastupdated, dirname: nw.__dirname, userAgent: userAgent});
+        // read changes from the process
+        yupdater.on('message', (message) => {
+          if (message.type === 'latest') {
+            webnotifications.show('You are already running the latest version', 'Update Information');
+          } else if (message.type === 'dlerror') {
+            webnotifications.show(err, 'Update Error');
+          } else if (message.type === 'done') {
+            this.lastupdated = message.published_at;
+            webnotifications.show('Updates will take effect next time', 'Update complete');
+            // kill the updater and clear updater to empty string
+            yupdater.kill();
+            yupdater = '';
+          } else {
+            console.log(message);
+          }
+        });
+        // catch error and exit codes
+        yupdater.on('error', (message) => {
+          console.error(message);
+        });
+        yupdater.on('exit', (message, signal) => {
+          console.log(`exit: ${message} and ${signal}`);
+        });
       },
 
       // performs certain tasks on app startup right here

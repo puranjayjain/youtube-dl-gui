@@ -165,8 +165,7 @@
 
     _downloadInfoChange: function (info) {
       console.log(info);
-      let path = require('path'),
-        formatList = [],
+      let formatList = [],
         folderPath;
       for (let f of info.formats) {
         formatList.push({
@@ -181,7 +180,9 @@
       this.formats = [];
       this.formats = formatList;
       // update the default path and in dialog too
-      folderPath = this.defaultfolderpath ? this.defaultfolderpath : nw.__dirname;
+      folderPath = this.defaultfolderpath
+        ? this.defaultfolderpath
+        : nw.__dirname;
       this.$.filepath.value = path.join(folderPath, info._filename);
       this.saveas = info._filename;
       this.directory = folderPath;

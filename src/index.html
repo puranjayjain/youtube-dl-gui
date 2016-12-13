@@ -32,10 +32,13 @@
 
         onload();
       })();
-      
-      // although I discourage the use of global vars as they pollute namespace but this makes stuff easy so
-      // similar to the one described in the download-manager
-      let downloadProcesses = []
+
+      // although I discourage the use of global vars as they pollute namespace but this makes stuff easy so similar to the one described in the download-manager also global import node modules
+      let downloadProcesses = [],
+        yupdater,
+        fs = require('fs'),
+        path = require('path'),
+        child_process = require('child_process');
     </script>
 
     <link rel="import" href="src/youtube-dl.html">

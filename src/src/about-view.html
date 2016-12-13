@@ -128,9 +128,7 @@
       // do stuff on about page entry
       _pageChanged: function (page) {
         if (page === 'about' && !this.youtubedlversion) {
-          let fs = require('fs'),
-            path = require('path'),
-            detailsPath = path.join(nw.__dirname, 'node_modules', 'youtube-dl', 'bin', 'details');
+          const detailsPath = path.join(nw.__dirname, 'node_modules', 'youtube-dl', 'bin', 'details');
           fs.readFile(detailsPath, 'utf8', (err, contents) => {
             if (err) 
               throw err;

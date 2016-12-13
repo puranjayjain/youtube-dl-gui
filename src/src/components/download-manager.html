@@ -4,8 +4,9 @@
 <link rel="import" href="../../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
 
 <dom-module id="download-manager">
-  <app-localstorage-document key="lastdownloadindex" data="{{lastdownloadindex}}"></app-localstorage-document>
-  <template></template>
+  <template>
+    <app-localstorage-document key="lastdownloadindex" data="{{lastdownloadindex}}"></app-localstorage-document>
+  </template>
 
   <script>
     Polymer({
@@ -69,9 +70,7 @@
 
       // initiate a download and keep the reference for it in the downloadProcesses
       initDownload: function () {
-        let child_process = require('child_process'),
-          path = require('path'),
-          downloadProcess = child_process.fork(path.join(nw.__dirname, 'src', 'workers', 'downloader.js'), [], {cwd: nw.__dirname});
+        let downloadProcess = child_process.fork(path.join(nw.__dirname, 'src', 'workers', 'downloader.js'), [], {cwd: nw.__dirname});
         // increment the last download index
         // TODO increment only if necessary else use the previous index if resuming a download
         this.lastdownloadindex++;
@@ -93,7 +92,7 @@
         });
         // catch error and exit codes
         downloadProcess.on('error', (message) => {
-          console.log(`error: ${message}`);
+          console.error(message);
         });
         downloadProcess.on('exit', (message, signal) => {
           console.log(`exit: ${message} and ${signal}`);
