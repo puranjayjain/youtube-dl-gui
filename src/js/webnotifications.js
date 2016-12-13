@@ -17,7 +17,7 @@ class wbnfs {
       });
       // auto close the notification after a certain time
       // https://developer.mozilla.org/en-US/docs/Web/API/Notifications_API/Using_the_Notifications_API
-      setTimeout(notification.close.bind(notification), 8000);
+      setTimeout(notification.close.bind(notification), 12000);
     } else if(Notification.permission !== 'denied') {
       this.request(message, title);
     }

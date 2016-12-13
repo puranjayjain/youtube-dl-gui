@@ -63,6 +63,7 @@ function runUpdateIfNecessary(info) {
       newVersion = moment(info.published_at);
     // compare them to see if different
     toUpdate = !!Math.abs(initMoment.diff(newVersion));
+    sendMessage(toUpdate);
   }
   // if we need to update then just do it
   if(toUpdate) {
@@ -100,8 +101,7 @@ process.on('message', (message) => {
   if(message.type === 'start') {
     initVersion = message.version;
     dirname = message.dirname;
-    properties.headers['User-Agent'] = message.userAgent;
-    sendMessage(properties);
+    properties.headers['User-Agent'] = message.useragent;
     checkOnlineVersion();
   }
 });
