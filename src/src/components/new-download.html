@@ -83,10 +83,10 @@
         observer: '_onDropUrl'
       },
       username: {
-        type: String,
+        type: String
       },
       password: {
-        type: String,
+        type: String
       },
       requestdownload: {
         type: Object,
@@ -95,10 +95,6 @@
     },
 
     ready: function () {
-      // attach event listeners on dom ready
-      this.listen(this.$.infoButton, 'tap', 'onInfo');
-      this.listen(this.$.pasteButton, 'tap', 'onPaste');
-      this.listen(this.$.next, 'tap', 'onNext');
       // add event listeners to trigger file download if necessary
       window.ondragover = window.ondragleave = window.ondragend = () => false;
       window.ondrop = (event) => {
@@ -113,6 +109,18 @@
           this.newdownloaddialog = true;
         }
       }
+    },
+
+    attached: function () {
+      this.listen(this.$.infoButton, 'tap', 'onInfo');
+      this.listen(this.$.pasteButton, 'tap', 'onPaste');
+      this.listen(this.$.next, 'tap', 'onNext');
+    },
+
+    detached: function () {
+      this.unlisten(this.$.infoButton, 'tap', 'onInfo');
+      this.unlisten(this.$.pasteButton, 'tap', 'onPaste');
+      this.unlisten(this.$.next, 'tap', 'onNext');
     },
 
     _dialogChange: function (opened) {
@@ -139,8 +147,7 @@
           prepDownload.username = this.username;
           prepDownload.password = this.password;
         }
-        // now send them via requestdownload
-        // https://www.polymer-project.org/1.0/docs/devguide/model-data#override-dirty-check
+        // now send them via requestdownload https://www.polymer-project.org/1.0/docs/devguide/model-data#override-dirty-check
         this.requestdownload = {};
         this.requestdownload = Object.assign({}, prepDownload);
         this.nextaction = true;

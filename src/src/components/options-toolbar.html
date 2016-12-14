@@ -159,20 +159,25 @@
           return false;
         }
       },
-      
+
       onClose: function () {
         this.items = 0;
         this.tableclearall = true;
       },
-      
+
       onFileInfo: function () {
         // open the dialog
         this.fileinfodialog = true;
       },
-      
-      ready: function () {
+
+      attached: function () {
         this.listen(this.$.close, 'tap', 'onClose');
         this.listen(this.$.fileinfo, 'tap', 'onFileInfo');
+      },
+
+      detached: function () {
+        this.unlisten(this.$.close, 'tap', 'onClose');
+        this.unlisten(this.$.fileinfo, 'tap', 'onFileInfo');
       }
     });
   </script>

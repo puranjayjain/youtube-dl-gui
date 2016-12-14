@@ -38,8 +38,17 @@
         yupdater,
         fs = require('fs'),
         path = require('path'),
-        os = require('os'),        
-        child_process = require('child_process');
+        os = require('os'),
+        child_process = require('child_process'),
+        localforage = require('localforage');
+
+      // This will use a different driver order.
+      localforage.config({
+        driver: [
+          localforage.INDEXEDDB, localforage.WEBSQL
+        ],
+        name: 'youtube-dl'
+      });
     </script>
 
     <link rel="import" href="src/youtube-dl.html">
@@ -47,7 +56,7 @@
     <style>
       body {
         margin: 0;
-        font-family: 'Roboto', 'robotoregular', 'Noto',sans-serif;
+        font-family: 'Roboto', 'robotoregular', 'Noto', sans-serif;
         line-height: 1.5;
         padding-top: 32px;
       }

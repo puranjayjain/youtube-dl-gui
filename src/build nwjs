@@ -1,0 +1,8 @@
+SET npm_config_target=0.19.2
+SET npm_config_arch=x64
+SET npm_config_target_arch=x64
+SET npm_config_runtime=node-webkit
+SET npm_config_build_from_source=true
+SET npm_config_node_gyp=C:\Program Files\Nodist\bin\node_modules\nw-gyp\bin\nw-gyp.js
+npm install --verbose
+nw-gyp rebuild

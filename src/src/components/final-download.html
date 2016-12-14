@@ -131,14 +131,22 @@
     },
 
     ready: function () {
-      // attach event listeners on dom ready
-      this.listen(this.$.start, 'tap', 'onStart');
-      this.listen(this.$.selectButton, 'tap', 'onSelect');
-      this.listen(this.$.file, 'change', 'onFile');
       // force style app header layout http://stackoverflow.com/questions/35149624/dynamically-inject-shared-styles-in-polymer-element-polymer-1-2-3
       let myDomModule = document.createElement('style', 'custom-style');
       myDomModule.setAttribute('include', 'shared-styles');
       Polymer.dom(this.$.format.$.menuButton.root).appendChild(myDomModule);
+    },
+
+    attached: function () {
+      this.listen(this.$.start, 'tap', 'onStart');
+      this.listen(this.$.selectButton, 'tap', 'onSelect');
+      this.listen(this.$.file, 'change', 'onFile');
+    },
+
+    detached: function () {
+      this.unlisten(this.$.start, 'tap', 'onStart');
+      this.unlisten(this.$.selectButton, 'tap', 'onSelect');
+      this.unlisten(this.$.file, 'change', 'onFile');
     },
 
     onStart: function () {

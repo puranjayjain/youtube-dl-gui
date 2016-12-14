@@ -100,11 +100,15 @@
           type: Boolean
         }
       },
-
-      ready: function () {
-        // attach event listeners on dom ready
+      
+      attached: function () {
         this.listen(this.$.selectButton, 'tap', 'onSelect');
         this.listen(this.$.file, 'change', 'onFile');
+      },
+      
+      detached: function () {
+        this.unlisten(this.$.selectButton, 'tap', 'onSelect');
+        this.unlisten(this.$.file, 'change', 'onFile');
       },
 
       onSelect: function () {

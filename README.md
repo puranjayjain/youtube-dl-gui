@@ -3,10 +3,10 @@
 # Discussions
 Using github issues for now.
 
-A Cross Platform GUI Client for [youtube-dl](http://rg3.github.io/youtube-dl/) written in nwjs + polymer + awesome sauce
+A Cross Platform GUI Client for [youtube-dl](http://rg3.github.io/youtube-dl/) written in nwjs + polymer + indexdb + awesome sauce
 
 #Requirements
-Supports Windows and Linux not sure for Mac. 
+Supports Windows and Linux not sure for Mac though. 
 
 Need collaborators and testers for all platforms (Building and Testing).
 
@@ -18,6 +18,11 @@ Released Developer build please test it.
   3. From the root of the repository, run `npm i`
   4. Use the `gulp run.bat` and `run app.bat`
   5. Start Testing!
+
+Or use chocolatey:
+```
+Coming soon
+```
 
 # Features
  - [x] Drag and Drop valid urls/links to start downloading
@@ -47,8 +52,9 @@ If you think a feature is missing or needs improvement please file a new issue o
 - [x] referrer
 - [x] add-header
 
-### Our options (these are found in our app exclusively)
+### Our options (these are app exclusive)
 - [x] Dark theme support
+- [x] Full contrast mode
 
 # Dependencies
 
@@ -66,7 +72,7 @@ See link to know more: [here](http://rg3.github.io/youtube-dl/download.html)
 
 2. Motive behind it
 
-  > To learn React, Event Emitters, Material UI, Electron, Nwjs, Polymer, Nodejs and grandma's secret sauce.
+  > To learn React, Event Emitters, Material UI, Electron, Nwjs, Polymer, Nodejs, IndexedDB and grandma's secret sauce.
 
 ## Versioning
 

@@ -73,7 +73,7 @@
         </div>
         <iron-icon icon="bug-report"></iron-icon>
       </paper-button>
-      <paper-button class="check" raised>
+      <paper-button id="checkupdates" class="check" raised>
         Check for Updates
       </paper-button>
     </div>
@@ -84,7 +84,7 @@
   <script>
     Polymer({
       is: 'about-view',
-      
+
       properties: {
         chrome: {
           type: String,
@@ -112,6 +112,10 @@
         },
         lastupdated: {
           type: String
+        },
+        forceupdate: {
+          type: Boolean,
+          notify: true
         }
       },
 
@@ -119,10 +123,19 @@
         // Open URL with default browser.
         nw.Shell.openExternal('https://github.com/puranjayjain/youtube-dl-gui/issues');
       },
+      
+      onCheckupdates: function () {
+        this.forceupdate = true;
+      },
 
-      ready: function () {
+      attached: function () {
         this.listen(this.$.bugreport, 'tap', 'onBugreport');
-        // TODO the update the ytdl exe forcefully
+        this.listen(this.$.checkupdates, 'tap', 'onCheckupdates');
+      },
+      
+      detached: function () {
+        this.unlisten(this.$.bugreport, 'tap', 'onBugreport');
+        this.unlisten(this.$.checkupdates, 'tap', 'onCheckupdates');
       },
 
       // do stuff on about page entry

@@ -176,7 +176,7 @@
           <unfinished-view name="unfinished" toolbaritems={{toolbaritems}}></unfinished-view>
           <downloaded-view name="downloaded" toolbaritems={{toolbaritems}}></downloaded-view>
           <settings-view name="settings"></settings-view>
-          <about-view name="about" page=[[page]]></about-view>
+          <about-view name="about" page=[[page]] forceupdate={{forceupdate}}></about-view>
           <view404-view name="view404"></view404-view>
         </neon-animated-pages>
         <!-- common fab -->
@@ -185,7 +185,7 @@
     </app-drawer-layout>
     <!-- dialogs -->
     <new-download newdownloaddialog={{newdownloaddialog}} finaldownloaddialog={{finaldownloaddialog}} requestdownload={{requestdownload}}></new-download>
-    <final-download newdownloaddialog={{newdownloaddialog}} finaldownloaddialog={{finaldownloaddialog}}  requestdownload={{requestdownload}} downloadinfo={{downloadinfo}}></final-download>
+    <final-download newdownloaddialog={{newdownloaddialog}} finaldownloaddialog={{finaldownloaddialog}} requestdownload={{requestdownload}} downloadinfo={{downloadinfo}}></final-download>
     <!-- app's window -->
     <title-bar></title-bar>
     <!-- download manager -->
@@ -195,7 +195,7 @@
     <!-- progress bar -->
     <progress-bar progress=[[progress]]></progress-bar>
     <!-- taskmanager for ytdl -->
-    <startup-tasks></startup-tasks>
+    <startup-tasks forceupdate={{forceupdate}}></startup-tasks>
   </template>
 
   <script>
@@ -243,6 +243,9 @@
         },
         downloadinfo: {
           type: Object
+        },
+        forceupdate: {
+          type: Boolean
         }
       },
 
@@ -267,15 +270,25 @@
       },
 
       ready: function () {
-        // attach event listeners on dom ready
-        this.listen(this.$.mainMenu, 'tap', 'onMenuTap');
-        this.listen(this.$.mainMenu, 'keydown', 'onMenuEnter');
         // force style app header layout http://stackoverflow.com/questions/35149624/dynamically-inject-shared-styles-in-polymer-element-polymer-1-2-3
         let myDomModule = document.createElement('style', 'custom-style');
         myDomModule.setAttribute('include', 'shared-styles');
         Polymer.dom(this.$.headerLayout.root).appendChild(myDomModule);
+      },
+
+      // https://www.polymer-project.org/1.0/docs/devguide/registering-elements https://www.polymer-project.org/1.0/docs/devguide/events#annotated-listeners
+      attached: function () {
+        this.listen(this.$.mainMenu, 'tap', 'onMenuTap');
+        this.listen(this.$.mainMenu, 'keydown', 'onMenuEnter');
         // read scroll changes
         this.listen(Polymer.dom(this.$.headerLayout.$.contentContainer).node, 'scroll', '_onScrollApp');
+      },
+
+      detached: function () {
+        this.unlisten(this.$.mainMenu, 'tap', 'onMenuTap');
+        this.unlisten(this.$.mainMenu, 'keydown', 'onMenuEnter');
+        // read scroll changes
+        this.unlisten(Polymer.dom(this.$.headerLayout.$.contentContainer).node, 'scroll', '_onScrollApp');
       },
 
       _onScrollApp: function (e) {

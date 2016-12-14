@@ -30,6 +30,17 @@
         replaceexec: {
           type: Boolean,
           value: false
+        },
+        forceupdate: {
+          type: Boolean,
+          observer: '_forceupdateChange',
+          notify: true
+        }
+      },
+      
+      _forceupdateChange: function (force) {
+        if (force && !this.status) {
+          this.doAutoupdate(this.lastupdated);
         }
       },
 
@@ -89,10 +100,11 @@
             this.lastupdated = message.published_at;
             webnotifications.show('Updates will take effect next time', 'Update pending');
             // kill the updater and clear updater to empty string
-            yupdater.kill();
+            yupdater.kill('SIGKILL');
             yupdater = '';
             this.status = false;
             this.replaceexec = true;
+            this.forceupdate = false;
           } else {
             console.log(message);
           }

@@ -48,10 +48,10 @@
     </div>
     <div>
       <paper-icon-button id="minimize" icon="mdi:window-minimize" alt="window minimize"></paper-icon-button>
-      <template is="dom-if" if="{{maximize}}">
+      <template is="dom-if" if="[[maximize]]">
         <paper-icon-button id="restore" icon="mdi:window-restore" alt="window restore"></paper-icon-button>
       </template>
-      <template is="dom-if" if="{{!maximize}}">
+      <template is="dom-if" if="[[!maximize]]">
         <paper-icon-button id="maximize" icon="mdi:window-maximize" alt="window maximize"></paper-icon-button>
       </template>
       <paper-icon-button id="close" icon="clear" alt="close the application"></paper-icon-button>
@@ -92,7 +92,7 @@
       },
 
       _onDomChange: function () {
-        let maximize = this.$$('#maximize'),
+        const maximize = this.$$('#maximize'),
           restore = this.$$('#restore');
         if (maximize) {
           this.listen(maximize, 'tap', 'onMaximize');
@@ -103,11 +103,13 @@
       },
 
       ready: function () {
-        let win = nw.Window.get();
-        // attach event listeners on dom ready
-        this.listen(this.$.minimize, 'tap', 'onMinimize');
         this.listen(this.root, 'dom-change', '_onDomChange');
+      },
+
+      attached: function () {
+        this.listen(this.$.minimize, 'tap', 'onMinimize');
         this.listen(this.$.close, 'tap', 'onClose');
+        const win = nw.Window.get();
         // window maximize and restore event
         win.on('maximize', () => {
           this.maximize = true;
@@ -115,6 +117,12 @@
         win.on('restore', () => {
           this.maximize = false;
         });
+      },
+
+      detached: function () {
+        this.unlisten(this.$.minimize, 'tap', 'onMinimize');
+        this.unlisten(this.root, 'dom-change', '_onDomChange');
+        this.unlisten(this.$.close, 'tap', 'onClose');
       }
     });
   </script>
