@@ -17,15 +17,28 @@
         width: 100%;
         display: block;
       }
+      .file {
+        display: none;
+      }
 
     </style>
+    <app-localstorage-document key="lastdownloadindex" data="[[lastdownloadindex]]"></app-localstorage-document>
     <app-localstorage-document key="isdarktheme" data="{{isdarktheme}}"></app-localstorage-document>
     <app-localstorage-document key="iscontrastmode" data="{{iscontrastmode}}"></app-localstorage-document>
-
+    <app-localstorage-document key="isalwaysopenmenu" data="{{isalwaysopenmenu}}"></app-localstorage-document>
+    <app-localstorage-document key="defaultfolderpath" data="{{defaultfolderpath}}"></app-localstorage-document>
+    <app-localstorage-document key="showprogressbar" data="{{showprogressbar}}"></app-localstorage-document>
+    <app-localstorage-document key="autoupdate" data="{{autoupdate}}"></app-localstorage-document>
+    
     <div class="card">
-      <div class="cardTitle">Theme</div>
+      <div class="cardTitle">Core</div>
+      <paper-checkbox checked={{autoupdate}}>Auto update</paper-checkbox>
+    </div>
+    <div class="card">
+      <div class="cardTitle">Theme and Layout</div>
       <paper-checkbox checked={{isdarktheme}}>Use Dark Theme</paper-checkbox>
       <paper-checkbox checked={{iscontrastmode}}>Full contrast mode</paper-checkbox>
+      <paper-checkbox checked={{isalwaysopenmenu}}>Always show menu button, keep the drawer closed</paper-checkbox>
     </div>
     <div class="card">
       <div class="cardTitle">Download Options</div>
@@ -35,7 +48,8 @@
     <div class="card">
       <div class="cardTitle">Filesystem Options</div>
       <div class="layout horizontal center-center">
-        <paper-input id="filepath" class="flex-1" label="Default folder for downloads" placeholder="e.g C:\Users\Foo\Downloads" error-message="This is not a valid folder path"></paper-input>
+        <paper-input id="filepath" class="flex-1" label="Default folder for downloads" placeholder="e.g C:\Users\Foo\Downloads" error-message="This is not a valid folder path" value={{defaultfolderpath}}></paper-input>
+        <input id="file" class="file" type="file" tabindex="-1" nwworkingdir=[[defaultfolderpath]] nwdirectory>
         <paper-icon-button id="selectButton" icon="folder" alt="Select folder path"></paper-icon-button>
         <paper-tooltip for="selectButton">Select folder path</paper-tooltip>
       </div>
@@ -62,11 +76,50 @@
       is: 'settings-view',
 
       properties: {
+        lastdownloadindex: {
+          type: Number,
+          readOnly: true
+        },
         isdarktheme: {
           type: Boolean
         },
         iscontrastmode: {
           type: Boolean
+        },
+        isalwaysopenmenu: {
+          type: Boolean
+        },
+        defaultfolderpath: {
+          type: String,
+          value: ''
+        },
+        showprogressbar: {
+          type: Boolean
+        },
+        autoupdate: {
+          type: Boolean
+        }
+      },
+      
+      attached: function () {
+        this.listen(this.$.selectButton, 'tap', 'onSelect');
+        this.listen(this.$.file, 'change', 'onFile');
+      },
+      
+      detached: function () {
+        this.unlisten(this.$.selectButton, 'tap', 'onSelect');
+        this.unlisten(this.$.file, 'change', 'onFile');
+      },
+
+      onSelect: function () {
+        this.$.file.click();
+      },
+
+      onFile: function () {
+        let filePath = this.$.file.value;
+        if (filePath) {
+          // if file path is not empty set it to text
+          this.defaultfolderpath = filePath;
         }
       }
     });

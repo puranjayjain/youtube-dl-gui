@@ -1,4 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
 <link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
@@ -36,6 +37,9 @@
 
     </style>
 
+    <app-localstorage-document key="autoupdate" data="{{autoupdate}}"></app-localstorage-document>
+    <app-localstorage-document key="lastupdated" data="{{lastupdated}}"></app-localstorage-document>
+
     <div class="card">
       <div class="cardTitle">Youtube Dl GUI - v0.0.3</div>
       <div class="cardItem">
@@ -63,13 +67,13 @@
         </div>
         <iron-icon icon="history"></iron-icon>
       </paper-button>
-      <paper-button class="layout horizontal">
+      <paper-button id="bugreport" class="layout horizontal">
         <div class="flex-1">
           Report a Bug
         </div>
         <iron-icon icon="bug-report"></iron-icon>
       </paper-button>
-      <paper-button class="check" raised>
+      <paper-button id="checkupdates" class="check" raised>
         Check for Updates
       </paper-button>
     </div>
@@ -97,12 +101,55 @@
         youtubedlversion: {
           type: String,
           value: ''
+        },
+        page: {
+          type: String,
+          reflectToAttribute: true,
+          observer: '_pageChanged'
+        },
+        autoupdate: {
+          type: Boolean
+        },
+        lastupdated: {
+          type: String
+        },
+        forceupdate: {
+          type: Boolean,
+          notify: true
         }
       },
 
-      ready: function () {
-        // FIXME youtubedl.exec('', ['--version'], {}, (err, output) => {   if (err) {     throw err;     return   }   let ytdl = stored.youtubedl.data;   ytdl.version = output[0];   this.youtubedlversion = ytdl.version;   // update the item in storage   //
-        // this.setStored('youtubedl', ytdl) })
+      onBugreport: function () {
+        // Open URL with default browser.
+        nw.Shell.openExternal('https://github.com/puranjayjain/youtube-dl-gui/issues');
+      },
+      
+      onCheckupdates: function () {
+        this.forceupdate = true;
+      },
+
+      attached: function () {
+        this.listen(this.$.bugreport, 'tap', 'onBugreport');
+        this.listen(this.$.checkupdates, 'tap', 'onCheckupdates');
+      },
+      
+      detached: function () {
+        this.unlisten(this.$.bugreport, 'tap', 'onBugreport');
+        this.unlisten(this.$.checkupdates, 'tap', 'onCheckupdates');
+      },
+
+      // do stuff on about page entry
+      _pageChanged: function (page) {
+        if (page === 'about' && !this.youtubedlversion) {
+          const detailsPath = path.join(nw.__dirname, 'node_modules', 'youtube-dl', 'bin', 'details');
+          fs.readFile(detailsPath, 'utf8', (err, contents) => {
+            if (err) 
+              throw err;
+            
+            // set version string
+            this.youtubedlversion = JSON.parse(contents).version;
+          });
+        }
       }
     });
   </script>

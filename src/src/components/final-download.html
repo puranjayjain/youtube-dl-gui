@@ -1,5 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/neon-animation/neon-animation.html">
+<link rel="import" href="../../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
@@ -29,47 +30,38 @@
           color: var(--primary-text-color);
         }
       }
-      
+
       .file {
         display: none;
       }
 
+      .format {
+        margin-right: 8px;
+      }
+
     </style>
+    <app-localstorage-document key="defaultfolderpath" data="{{defaultfolderpath}}"></app-localstorage-document>
     <paper-dialog opened={{finaldownloaddialog}} entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
       <h2>Confirm download options</h2>
       <div class="layout horizontal center-center">
-        <paper-input id="filepath" class="flex-1" label="Path to save file" placeholder="e.g. C:\Users\User\Videos" error-message="This is not a valid folder path"></paper-input>
-        <input id="file" class="file" type="file" tabindex="-1" nwsaveas nwworkingdir  accept=".mp4,.flv">
-        <paper-icon-button id="selectButton" icon="folder" alt="Select folder path"></paper-icon-button>
+        <paper-input id="filepath" class="flex-1" label="Path to save file" placeholder="e.g. C:\Users\User\Videos" error-message="This is not a valid folder path" disabled$="{{areenabled}}"></paper-input>
+        <input id="file" class="file" type="file" tabindex="-1" nwsaveas$="[[saveas]]" nwworkingdir$="[[directory]]" accept=".mp4,.flv">
+        <paper-icon-button id="selectButton" icon="folder" alt="Select folder path" disabled$="{{areenabled}}"></paper-icon-button>
         <paper-tooltip for="selectButton">Select folder path</paper-tooltip>
       </div>
-      <paper-dropdown-menu label="Choose a format">
-        <paper-listbox class="dropdown-content" selected=[[format]]>
-          <paper-item>Default</paper-item>
-          <paper-item>144p</paper-item>
-          <paper-item>240p</paper-item>
-          <paper-item>720p</paper-item>
-          <paper-item>144p</paper-item>
-          <paper-item>240p</paper-item>
-          <paper-item>720p</paper-item>
-          <paper-item>144p</paper-item>
-          <paper-item>240p</paper-item>
-          <paper-item>720p</paper-item>
-          <paper-item>144p</paper-item>
-          <paper-item>240p</paper-item>
-          <paper-item>720p</paper-item>
-          <paper-item>144p</paper-item>
-          <paper-item>240p</paper-item>
-          <paper-item>720p</paper-item>
-          <paper-item>144p</paper-item>
-          <paper-item>240p</paper-item>
-          <paper-item>720p</paper-item>
-          <paper-item>144p</paper-item>
-          <paper-item>240p</paper-item>
-          <paper-item>72dddsss0p</paper-item>
-        </paper-listbox>
-      </paper-dropdown-menu>
-      <paper-spinner-lite alt="fetching formats" active=[[active]]></paper-spinner-lite>
+      <div class="layout horizontal center-center">
+        <paper-dropdown-menu id="format" class="flex-1 format" label="Choose a format" disabled$="{{areenabled}}">
+          <paper-listbox class="dropdown-content" selected=[[format]]>
+            <paper-item>Default</paper-item>
+            <template is="dom-repeat" items="{{formats}}" as="item">
+              <paper-item>
+                {{item.text}}
+              </paper-item>
+            </template>
+          </paper-listbox>
+        </paper-dropdown-menu>
+        <paper-spinner-lite alt="fetching formats" active=[[areenabled]]></paper-spinner-lite>
+      </div>
       <div class="buttons">
         <paper-button dialog-dismiss>cancel</paper-button>
         <paper-button id="start">start</paper-button>
@@ -94,36 +86,67 @@
       },
       finaldownloaddialog: {
         type: Boolean,
+        observer: '_finalDownloadDialogChange',
         notify: true
+      },
+      areenabled: {
+        type: Boolean
       },
       url: {
-        type: String,
-        notify: true
+        type: String
       },
       username: {
-        type: String,
-        notify: true
+        type: String
       },
       password: {
-        type: String,
-        notify: true
+        type: String
+      },
+      saveas: {
+        type: String
+      },
+      directory: {
+        type: String
       },
       format: {
         type: Number,
         value: 0
       },
-      active: {
-        type: Boolean,
-        value: true
+      formats: {
+        type: Array,
+        value: []
+      },
+      defaultfolderpath: {
+        type: String,
+        value: ''
+      },
+      requestdownload: {
+        type: Object,
+        notify: true
+      },
+      downloadinfo: {
+        type: Object,
+        observer: '_downloadInfoChange',
+        notify: true
       }
     },
 
     ready: function () {
-      // attach event listeners on dom ready
+      // force style app header layout http://stackoverflow.com/questions/35149624/dynamically-inject-shared-styles-in-polymer-element-polymer-1-2-3
+      let myDomModule = document.createElement('style', 'custom-style');
+      myDomModule.setAttribute('include', 'shared-styles');
+      Polymer.dom(this.$.format.$.menuButton.root).appendChild(myDomModule);
+    },
+
+    attached: function () {
       this.listen(this.$.start, 'tap', 'onStart');
       this.listen(this.$.selectButton, 'tap', 'onSelect');
-      // reset loader
-      this.active = true;
+      this.listen(this.$.file, 'change', 'onFile');
+    },
+
+    detached: function () {
+      this.unlisten(this.$.start, 'tap', 'onStart');
+      this.unlisten(this.$.selectButton, 'tap', 'onSelect');
+      this.unlisten(this.$.file, 'change', 'onFile');
     },
 
     onStart: function () {
@@ -131,9 +154,48 @@
       this.username = '';
       this.password = '';
     },
-    
+
     onSelect: function () {
       this.$.file.click();
     },
+
+    onFile: function () {
+      let filePath = this.$.file.value;
+      if (filePath) {
+        // if file path is not empty set it to text
+        this.$.filepath.value = filePath;
+      }
+    },
+
+    _finalDownloadDialogChange: function (opened) {
+      this.areenabled = opened;
+    },
+
+    _downloadInfoChange: function (info) {
+      console.log(info);
+      let formatList = [],
+        folderPath;
+      for (let f of info.formats) {
+        formatList.push({
+          text: `${f.format.split(' - ')[1]} [.${f.ext}] codec(a+v): ${f.acodec}+${f.vcodec}} @${f.abr
+            ? f.abr
+            : 'N/A'}+${f.vbr
+              ? f.vbr
+              : 'N/A'}`
+        });
+      }
+      // update the list https://www.polymer-project.org/1.0/docs/devguide/model-data#override-dirty-check
+      this.formats = [];
+      this.formats = formatList;
+      // update the default path and in dialog too
+      folderPath = this.defaultfolderpath
+        ? this.defaultfolderpath
+        : nw.__dirname;
+      this.$.filepath.value = path.join(folderPath, info._filename);
+      this.saveas = info._filename;
+      this.directory = folderPath;
+      // re enable controls
+      this.areenabled = false;
+    }
   });
 </script>

@@ -1,5 +1,4 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../bower_components/paper-styles/typography.html">
 <link rel="import" href="../../bower_components/paper-styles/color.html">
@@ -8,12 +7,17 @@
 <link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../../bower_components/iron-list/iron-list.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
 <link rel="import" href="../shared-styles.html">
 
 <dom-module id="custom-datatable">
   <template>
     <style is="custom-style" include="iron-flex iron-flex-alignment iron-flex-factors shared-styles">
+      :host {
+        /* table min width default*/
+        --min-width: 720px;
+      }
+
       .row {
         height: 48px;
         background-color: var(--primary-card-color);
@@ -54,7 +58,7 @@
       }
       .row:not(.header):hover {
         color: var(--highlight-text-color);
-        background-color: var(--highlight-color);
+        background-color: var(--table-highlight-color);
       }
       .row.header .cell:hover iron-icon {
         transform: scale(1);
@@ -66,6 +70,10 @@
         min-width: 100px;
         line-height: 64px;
         position: relative;
+        /* https://css-tricks.com/snippets/css/truncate-string-with-ellipsis/ */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       .cell.check {
@@ -81,6 +89,10 @@
         text-align: right;
       }
 
+      .tablerow {
+        min-width: var(--min-width);
+      }
+
       iron-list {
         overflow: visible !important;
         margin-top: 64px;
@@ -89,7 +101,7 @@
       paper-checkbox {
         --paper-checkbox-checked-ink-color: var(--accent-color);
         --paper-checkbox-checked-color: var(--accent-color);
-        --paper-checkbox-checkmark-color: var(--primary-inverted-text-color);
+        --paper-checkbox-checkmark-color: var(--utility-text-color);
       }
 
       paper-checkbox.check {
@@ -97,23 +109,21 @@
       }
 
     </style>
-    <iron-ajax url="data/contacts.json" last-response="{{data}}" auto></iron-ajax>
-
-    <div class="layout horizontal row header" style="top: [[appscrolltop]]px;">
+    <div class="layout horizontal row header tablerow" style="top: [[appscrolltop]]px;">
       <div class="cell check">
         <paper-checkbox checked={{allCheck}}></paper-checkbox>
       </div>
-      <template is="dom-repeat" items=[[tableheaders]] as="heading">
+      <template is="dom-repeat" items="[[tableheaders]]" as="heading">
         <div class="flex cell">
-          <iron-icon icon=[[heading.icon]]></iron-icon>
+          <iron-icon icon="[[heading.icon]]"></iron-icon>
           [[heading.title]]
           <paper-ripple></paper-ripple>
         </div>
       </template>
     </div>
-    <iron-list id="list" items=[[data]] as="item" selected-items="{{selectedItems}}" selection-enabled multi-selection>
+    <iron-list id="list" items=[[tabledata]] as="item" selected-items="{{selectedItems}}" selection-enabled multi-selection>
       <template>
-        <div class="layout horizontal row center">
+        <div class="layout horizontal row center tablerow">
           <div class="cell check">
             <!-- iron list bug prevents checkbox events to propogate back so using my hack now -->
             <!-- https://github.com/PolymerElements/iron-list/issues/163 -->
@@ -122,13 +132,19 @@
             <paper-checkbox class="check" checked=[[selected]]></paper-checkbox>
           </div>
           <div class="flex cell">
-            [[item.name]]
+            [[_convertToFormat(item.file, '0')]]
           </div>
           <div class="flex cell">
-            [[item.phone]]
+            [[_convertToFormat(item.downloaded, '1')]]
           </div>
           <div class="flex cell">
-            [[item.email]]
+            [[_convertToFormat(item.status, '2')]]
+          </div>
+          <div class="flex cell">
+            [[_convertToFormat(item.size, '3')]]
+          </div>
+          <div class="flex cell">
+            [[_convertToFormat(item.lasttry, '4')]]
           </div>
           <paper-ripple></paper-ripple>
         </div>
@@ -157,7 +173,11 @@
               title: 'Last Try',
               icon: 'arrow-downward'
             }
-          ]
+          ],
+          notify: true
+        },
+        tabledata: {
+          type: Array
         },
         headerLeft: {
           type: String
@@ -171,21 +191,62 @@
         },
         allCheck: {
           type: Boolean,
+          notify: true,
           observer: '_allCheckedChanged'
         },
         appscrolltop: {
           type: Number
+        },
+        tableclearall: {
+          type: Boolean,
+          notify: true,
+          observer: '_onClearAll'
+        },
+        minwidth: {
+          type: 'Number',
+          observer: '_setMinWidth'
         }
       },
 
       observers: ['_itemsChanged(selectedItems.length)'],
 
+      // convert to last tried or bytes, etc.
+      _convertToFormat(value, index) {
+        let conversion = '';
+        // find the conversion method
+        if (this.tableheaders[index].hasOwnProperty('conversion')) {
+          conversion = this.tableheaders[index].conversion;
+        }
+        // do the conversion if found
+        if (conversion === 'recent') {
+          let moment = require('moment');
+          value = moment(value).fromNow();
+        }
+        return value;
+      },
+
+      _setMinWidth: function (width) {
+        this.customStyle['--min-width'] = `${width}px`;
+        this.updateStyles();
+      },
+
+      _onClearAll: function (clearAll) {
+        if (clearAll) {
+          // un select all
+          this.$.list.clearSelection();
+          this.tableclearall = false;
+          this.allCheck = false;
+        }
+      },
+
       _allCheckedChanged: function (checked) {
         if (checked) {
           // select all items
-          this.$.list.items.forEach((item) => {
-            this.$.list.selectItem(item);
-          });
+          let listItems = this.$.list.items,
+            i = listItems.length;
+          while (i--) {
+            this.$.list.selectItem(listItems[i]);
+          }
         } else {
           // un select all
           this.$.list.clearSelection();

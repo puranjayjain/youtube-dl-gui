@@ -1,0 +1,143 @@
+<!-- performs tasks on app startup -->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
+
+<link rel="import" href="../shared-styles.html">
+
+<dom-module id="startup-tasks">
+  <template>
+    <app-localstorage-document key="replaceexec" data="{{replaceexec}}"></app-localstorage-document>
+    <app-localstorage-document key="autoupdate" data="{{autoupdate}}"></app-localstorage-document>
+    <app-localstorage-document key="lastupdated" data="{{lastupdated}}"></app-localstorage-document>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'startup-tasks',
+
+      properties: {
+        autoupdate: {
+          type: Boolean,
+          value: true
+        },
+        status: {
+          type: Boolean
+        },
+        lastupdated: {
+          type: String,
+          value: ''
+        },
+        replaceexec: {
+          type: Boolean,
+          value: false
+        },
+        forceupdate: {
+          type: Boolean,
+          observer: '_forceupdateChange',
+          notify: true
+        }
+      },
+      
+      _forceupdateChange: function (force) {
+        if (force && !this.status) {
+          this.doAutoupdate(this.lastupdated);
+        }
+      },
+
+      doReplaceexec: function () {
+        // delete the older exe and replace it with the newer version
+        let filename = 'youtube-dl',
+          platform = os.platform();
+        this.status = true;
+        // run update according to the Platform check if windows then add extension
+        if (platform === 'win32') {
+          filename += '.exe';
+        }
+        // prepare file path to the new downloaded version
+        let dlpath = path.join(nw.__dirname, 'node_modules', 'youtube-dl', 'bin', filename),
+          temp = dlpath + '.temp';
+        //replace the temp with the old exec remove original exec NOTE its a perfect example of callback hell
+        fs.unlink(dlpath, (err) => {
+          if (err) 
+            return console.error(err);
+          
+          // rename the file
+          fs.rename(temp, dlpath, (err) => {
+            if (err) 
+              return console.error(err);
+            
+            this.replaceexec = false;
+            this.status = false;
+            setTimeout(() => {
+              webnotifications.show('Successfully applied the updates', 'Update complete');
+            }, 900);
+          });
+        });
+      },
+
+      doAutoupdate: function (lastupdated) {
+        // get user agent
+        let useragent = navigator.userAgent
+          ? navigator.userAgent
+          : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.75 Safari/537.36';
+        // set status to true that i'm doing something also the executable status to false
+        this.status = true;
+        // check if yupdater is not already in use
+        if (yupdater) {
+          return;
+        }
+        yupdater = child_process.fork(path.join(nw.__dirname, 'src', 'workers', 'ytdlupdater.js'), [], {cwd: nw.__dirname});
+        yupdater.send({type: 'start', version: lastupdated, dirname: nw.__dirname, useragent: useragent});
+        // read changes from the process
+        yupdater.on('message', (message) => {
+          if (message.type === 'latest') {
+            webnotifications.show('You are already running the latest version', 'Update Information');
+            this.status = false;
+          } else if (message.type === 'dlerror') {
+            webnotifications.show(err, 'Update Error');
+            this.status = false;
+          } else if (message.type === 'done') {
+            this.lastupdated = message.published_at;
+            webnotifications.show('Updates will take effect next time', 'Update pending');
+            // kill the updater and clear updater to empty string
+            yupdater.kill('SIGKILL');
+            yupdater = '';
+            this.status = false;
+            this.replaceexec = true;
+            this.forceupdate = false;
+          } else {
+            console.log(message);
+          }
+        });
+        // catch error and exit codes
+        yupdater.on('error', (message) => {
+          console.error(message);
+          this.status = false;
+        });
+        yupdater.on('exit', (message, signal) => {
+          console.log(`exit: ${message} and ${signal}`);
+          this.status = false;
+        });
+      },
+
+      getLocal(key) {
+        return JSON.parse(localStorage.getItem(key));
+      },
+
+      // performs certain tasks for app startup right here
+      ready: function () {
+        // HACK to determine the currently stored values
+        let replaceexec = this.getLocal('replaceexec'),
+          autoupdate = this.getLocal('autoupdate'),
+          lastupdated = this.getLocal('lastupdated');
+        if (!this.status) {
+          if (replaceexec) {
+            this.doReplaceexec();
+          } else if (autoupdate) {
+            this.doAutoupdate(lastupdated);
+          }
+        }
+      }
+    });
+  </script>
+</dom-module>

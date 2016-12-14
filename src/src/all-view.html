@@ -5,9 +5,7 @@
 
 <dom-module id="all-view">
   <template>
-    <custom-datatable toolbaritems={{toolbaritems}} appscrolltop=[[appscrolltop]]></custom-datatable>
-    <!-- manages the app's theme -->
-    <theme-manager></theme-manager>
+    <custom-datatable toolbaritems="{{toolbaritems}}" appscrolltop="[[appscrolltop]]" tableclearall="{{tableclearall}}" tableheaders="{{tableheaders}}" minwidth="[[minwidth]]" tabledata="[[tabledata]]"></custom-datatable>
   </template>
 
   <script>
@@ -21,7 +19,66 @@
         },
         appscrolltop: {
           type: Number
+        },
+        tableclearall: {
+          type: Boolean,
+          notify: true
+        },
+        minwidth: {
+          type: 'Number',
+          value: 850
+        },
+        tableheaders: {
+          type: Array,
+          value: [
+            {
+              title: 'File',
+              icon: 'arrow-upward'
+            }, {
+              title: 'Downloaded',
+              icon: 'arrow-upward'
+            }, {
+              title: 'Status',
+              icon: 'arrow-upward'
+            }, {
+              title: 'Size',
+              icon: 'arrow-upward'
+            }, {
+              title: 'Last Try',
+              icon: 'arrow-upward',
+              conversion: 'recent'
+            }
+          ]
+        },
+        tabledata: {
+          type: Array
         }
+      },
+
+      attached: function () {
+        this.tabledata = [
+          {
+            "index": 15,
+            "file": "Lizzie Oneal",
+            "downloaded": "sss",
+            "status": "Mercado",
+            "size": 65886,
+            "lasttry": "2016-12-11T18:45:10"
+          }, {
+            "index": 5,
+            "file": "Lizzie Oneal",
+            "downloaded": "sss",
+            "status": "Mercado",
+            "size": 65886,
+            "lasttry": "2016-12-11T18:45:10"
+          }
+        ];
+        setTimeout(() => {
+          this.tabledata[0].file = 'ds';
+        }, 2000);
+        setTimeout(() => {
+          console.log(this.tabledata);
+        }, 5000);
       }
     });
   </script>

@@ -3,6 +3,7 @@
 <link rel="import" href="components/theme-manager.html">
 
 <link rel="import" href="../bower_components/app-layout/app-layout.html">
+<link rel="import" href="../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
 <link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
 <link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
 <link rel="import" href="../bower_components/app-route/app-location.html">
@@ -20,6 +21,9 @@
 <link rel="import" href="components/final-download.html">
 <link rel="import" href="components/options-toolbar.html">
 <link rel="import" href="components/title-bar.html">
+<link rel="import" href="components/download-manager.html">
+<link rel="import" href="components/progress-bar.html">
+<link rel="import" href="components/startup-tasks.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -105,12 +109,16 @@
       paper-icon-item.iron-selected iron-icon {
         opacity: 1;
       }
+      paper-menu paper-icon-item:not(.iron-selected):hover {
+        background-color: var(--table-highlight-color);
+      }
 
     </style>
     <app-location route="{{route}}" use-hash-as-path></app-location>
     <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
+    <app-localstorage-document key="isalwaysopenmenu" data="{{isalwaysopenmenu}}"></app-localstorage-document>
 
-    <app-drawer-layout>
+    <app-drawer-layout force-narrow=[[isalwaysopenmenu]]>
       <!-- Drawer content -->
       <app-drawer swipe-open="true">
         <paper-material elevation="3">
@@ -149,23 +157,26 @@
           </paper-menu>
         </paper-material>
       </app-drawer>
+      <app-drawer id="fileInfo" align="end" opened={{fileinfodialog}}>
+        File info
+      </app-drawer>
 
       <!-- Main content -->
       <app-header-layout id="headerLayout" has-scrolling-region>
-        <app-header condenses fixed effects="waterfall">
+        <app-header fixed effects="waterfall">
           <app-toolbar>
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
             <div main-title>[[pageTitle]]</div>
           </app-toolbar>
-          <options-toolbar class="fit" page=[[page]] items={{toolbaritems}}></options-toolbar>
+          <options-toolbar class="fit" page=[[page]] items={{toolbaritems}} tableclearall={{tableclearall}} fileinfodialog={{fileinfodialog}}></options-toolbar>
         </app-header>
         <neon-animated-pages id="pages" class="flex" selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
-          <all-view name="all" toolbaritems={{toolbaritems}} appscrolltop=[[appscrolltop]]></all-view>
+          <all-view name="all" toolbaritems={{toolbaritems}} appscrolltop=[[appscrolltop]] tableclearall={{tableclearall}} requestdownload={{requestdownload}} downloadinfo={{downloadinfo}}></all-view>
           <downloading-view name="downloading" toolbaritems={{toolbaritems}}></downloading-view>
           <unfinished-view name="unfinished" toolbaritems={{toolbaritems}}></unfinished-view>
           <downloaded-view name="downloaded" toolbaritems={{toolbaritems}}></downloaded-view>
           <settings-view name="settings"></settings-view>
-          <about-view name="about"></about-view>
+          <about-view name="about" page=[[page]] forceupdate={{forceupdate}}></about-view>
           <view404-view name="view404"></view404-view>
         </neon-animated-pages>
         <!-- common fab -->
@@ -173,12 +184,18 @@
       </app-header-layout>
     </app-drawer-layout>
     <!-- dialogs -->
-    <new-download newdownloaddialog={{newdownloaddialog}} finaldownloaddialog={{finaldownloaddialog}} url={{url}} username={{username}} password={{password}}></new-download>
-    <final-download newdownloaddialog={{newdownloaddialog}} finaldownloaddialog={{finaldownloaddialog}} url={{url}} username={{username}} password={{password}}></final-download>
+    <new-download newdownloaddialog={{newdownloaddialog}} finaldownloaddialog={{finaldownloaddialog}} requestdownload={{requestdownload}}></new-download>
+    <final-download newdownloaddialog={{newdownloaddialog}} finaldownloaddialog={{finaldownloaddialog}} requestdownload={{requestdownload}} downloadinfo={{downloadinfo}}></final-download>
     <!-- app's window -->
     <title-bar></title-bar>
+    <!-- download manager -->
+    <download-manager requestdownload={{requestdownload}} downloadinfo={{downloadinfo}}></download-manager>
     <!-- manages the app's theme -->
     <theme-manager></theme-manager>
+    <!-- progress bar -->
+    <progress-bar progress=[[progress]]></progress-bar>
+    <!-- taskmanager for ytdl -->
+    <startup-tasks forceupdate={{forceupdate}}></startup-tasks>
   </template>
 
   <script>
@@ -201,20 +218,34 @@
         finaldownloaddialog: {
           type: Boolean
         },
-        url: {
-          type: String
-        },
-        username: {
-          type: String
-        },
-        password: {
-          type: String
+        fileinfodialog: {
+          type: Boolean
         },
         toolbaritems: {
           type: Number
         },
         appscrolltop: {
           type: Number
+        },
+        isalwaysopenmenu: {
+          type: Boolean,
+          value: false
+        },
+        tableclearall: {
+          type: Boolean
+        },
+        progress: {
+          type: Number,
+          default: -1
+        },
+        requestdownload: {
+          type: Object
+        },
+        downloadinfo: {
+          type: Object
+        },
+        forceupdate: {
+          type: Boolean
         }
       },
 
@@ -239,32 +270,25 @@
       },
 
       ready: function () {
-        // standard regex for matching the urls
-        // see https://gist.github.com/dperini/729294
-        const urlPattern = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i
-        
-        // attach event listeners on dom ready        
-        this.listen(this.$.mainMenu, 'tap', 'onMenuTap');
-        this.listen(this.$.mainMenu, 'keydown', 'onMenuEnter');
         // force style app header layout http://stackoverflow.com/questions/35149624/dynamically-inject-shared-styles-in-polymer-element-polymer-1-2-3
         let myDomModule = document.createElement('style', 'custom-style');
         myDomModule.setAttribute('include', 'shared-styles');
         Polymer.dom(this.$.headerLayout.root).appendChild(myDomModule);
+      },
+
+      // https://www.polymer-project.org/1.0/docs/devguide/registering-elements https://www.polymer-project.org/1.0/docs/devguide/events#annotated-listeners
+      attached: function () {
+        this.listen(this.$.mainMenu, 'tap', 'onMenuTap');
+        this.listen(this.$.mainMenu, 'keydown', 'onMenuEnter');
         // read scroll changes
         this.listen(Polymer.dom(this.$.headerLayout.$.contentContainer).node, 'scroll', '_onScrollApp');
-        // add event listeners to trigger file download if necessary
-        window.ondragover = window.ondragleave = window.ondragend = () => false;
-        window.ondrop = (event) => {
-          event.preventDefault();
-          // capture dropped urls and start download process if a url
-          const dropUrl = event.dataTransfer.getData("text/plain");
-          if (urlPattern.test(dropUrl)) {
-            // copy text to the url input of the dialog
-            this.url = dropUrl;
-            // open the dialog
-            this.newdownloaddialog = true;
-          }
-        }
+      },
+
+      detached: function () {
+        this.unlisten(this.$.mainMenu, 'tap', 'onMenuTap');
+        this.unlisten(this.$.mainMenu, 'keydown', 'onMenuEnter');
+        // read scroll changes
+        this.unlisten(Polymer.dom(this.$.headerLayout.$.contentContainer).node, 'scroll', '_onScrollApp');
       },
 
       _onScrollApp: function (e) {

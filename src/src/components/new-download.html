@@ -37,14 +37,14 @@
         <paper-tooltip for="infoButton">More Information regarding list of supported formats and websites</paper-tooltip>
       </h2>
       <div class="layout horizontal center-center">
-        <paper-input id="url" class="flex-1" label="Enter or Paste the video url here" placeholder="e.g. https://www.youtube.com/watch?v=foE1mO2yM04" error-message="Enter a valid url" type="url" autofocus auto-validate required></paper-input>
+        <paper-input id="url" class="flex-1" label="Enter or Paste the video url here" placeholder="e.g. https://www.youtube.com/watch?v=foE1mO2yM04" error-message="Enter a valid url" type="url" value={{url}} autofocus auto-validate required></paper-input>
         <paper-icon-button id="pasteButton" icon="content-paste" alt="Paste url from clipboard"></paper-icon-button>
         <paper-tooltip for="pasteButton">Paste url from clipboard</paper-tooltip>
       </div>
       <paper-toggle-button checked={{auth}}>Enable Authentication</paper-toggle-button>
       <iron-collapse opened={{auth}}>
-        <paper-input id="username" label="Username" autofocus></paper-input>
-        <paper-input id="password" label="Password" type="password" autofocus></paper-input>
+        <paper-input label="Username" value={{username}}></paper-input>
+        <paper-input label="Password" type="password" value={{password}}></paper-input>
       </iron-collapse>
       <div class="buttons">
         <paper-button dialog-dismiss>cancel</paper-button>
@@ -57,7 +57,6 @@
 </dom-module>
 
 <script>
-
   Polymer({
     is: 'new-download',
 
@@ -65,6 +64,9 @@
 
     properties: {
       auth: {
+        type: Boolean
+      },
+      nextaction: {
         type: Boolean
       },
       newdownloaddialog: {
@@ -78,56 +80,84 @@
       },
       url: {
         type: String,
-        notify: true,
         observer: '_onDropUrl'
       },
       username: {
-        type: String,
-        notify: true
+        type: String
       },
       password: {
-        type: String,
+        type: String
+      },
+      requestdownload: {
+        type: Object,
         notify: true
       }
     },
 
     ready: function () {
-      this.auth = false;
-      // attach event listeners on dom ready
+      // add event listeners to trigger file download if necessary
+      window.ondragover = window.ondragleave = window.ondragend = () => false;
+      window.ondrop = (event) => {
+        event.preventDefault();
+        // capture dropped urls and start download process if a url
+        const dropUrl = event.dataTransfer.getData("text/plain");
+        if (urlPattern.test(dropUrl)) {
+          // copy text to the url input of the dialog
+          this.url = dropUrl;
+          // open the dialog
+          this.nextaction = true;
+          this.newdownloaddialog = true;
+        }
+      }
+    },
+
+    attached: function () {
       this.listen(this.$.infoButton, 'tap', 'onInfo');
       this.listen(this.$.pasteButton, 'tap', 'onPaste');
       this.listen(this.$.next, 'tap', 'onNext');
-      // clear to defaults
-      this.username = '';
-      this.password = '';
-      this.url = '';
+    },
+
+    detached: function () {
+      this.unlisten(this.$.infoButton, 'tap', 'onInfo');
+      this.unlisten(this.$.pasteButton, 'tap', 'onPaste');
+      this.unlisten(this.$.next, 'tap', 'onNext');
     },
 
     _dialogChange: function (opened) {
-      if (opened) {
-        this.exitAnimation = 'fade-out-animation';
+      // clear to defaults if not already
+      if (opened && !this.nextaction) {
+        this.auth = false;
+        this.username = '';
+        this.password = '';
+        this.url = '';
+      } else {
+        this.nextaction = false;
       }
     },
 
     onNext: function () {
       if (this.$.url.validate()) {
-        this.url = this.$.url.value;
+        // call the download manager
+        let prepDownload = {
+          url: this.url,
+          mode: 'normal'
+        }
+        // if auth add them as well
+        if (this.auth) {
+          prepDownload.username = this.username;
+          prepDownload.password = this.password;
+        }
+        // now send them via requestdownload https://www.polymer-project.org/1.0/docs/devguide/model-data#override-dirty-check
+        this.requestdownload = {};
+        this.requestdownload = Object.assign({}, prepDownload);
+        this.nextaction = true;
         this.newdownloaddialog = false;
         this.finaldownloaddialog = true;
-
-        // if auth is true, set auth
-        if (this.auth) {
-          this.username = this.$.username.value;
-          this.password = this.$.password.value;
-        } else {
-          this.username = '';
-          this.password = '';
-        }
       }
     },
 
     _onDropUrl: function (url) {
-      this.$.url.value = url;
+      this.url = url;
     },
 
     onInfo: function () {
@@ -136,16 +166,15 @@
     },
 
     onPaste: function () {
-      // standard regex for matching the urls see https://gist.github.com/dperini/729294
-      const urlPattern = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i
-
       // get clipboard from nw
       let clipboard = nw.Clipboard.get();
       if (urlPattern.test(clipboard.get())) {
         this.$.url.focus();
         // now paste the text to the element
-        this.$.url.value = clipboard.get();
+        this.url = clipboard.get();
       }
     }
   });
+  // standard regex for matching the urls see https://gist.github.com/dperini/729294
+  const urlPattern = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i
 </script>

@@ -1,11 +1,14 @@
 # Youtube-dl-gui  ![Logo](https://raw.githubusercontent.com/puranjayjain/youtube-dl-gui/master/src/assets/icon36.png)
 
-[![Join the chat at https://gitter.im/puranjayjain/Youtube-dl-gui](https://badges.gitter.im/puranjayjain/Youtube-dl-gui.svg)](https://gitter.im/puranjayjain/Youtube-dl-gui?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+# Discussions
+Using github issues for now.
 
-A Cross Platform GUI Client for [youtube-dl](http://rg3.github.io/youtube-dl/) written in react, electron and material ui.
+A Cross Platform GUI Client for [youtube-dl](http://rg3.github.io/youtube-dl/) written in nwjs + polymer + indexdb + awesome sauce
 
 #Requirements
-Currently supports Windows only. Need collaborators for other platforms (Building and Testing).
+Supports Windows and Linux not sure for Mac though. 
+
+Need collaborators and testers for all platforms (Building and Testing).
 
 #Installation
 Released Developer build please test it.
@@ -16,8 +19,13 @@ Released Developer build please test it.
   4. Use the `gulp run.bat` and `run app.bat`
   5. Start Testing!
 
+Or use chocolatey:
+```
+Coming soon
+```
+
 # Features
- - [x] Drop links to start downloading
+ - [x] Drag and Drop valid urls/links to start downloading
  - [x] Supports all sites that youtube-dl does [see](https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md)
 
 ## Configurable
@@ -41,15 +49,20 @@ If you think a feature is missing or needs improvement please file a new issue o
 - [x] no-check-certificate
 - [x] prefer-insecure
 - [x] user-agent
-- [x] referer
+- [x] referrer
 - [x] add-header
 
-### Our options (these are found in our app exclusively)
+### Our options (these are app exclusive)
 - [x] Dark theme support
+- [x] Full contrast mode
 
 # Dependencies
 
-None, All dependencies will auto install with the app now as far as possible.
+* On Windows platform youtube-dl requires [Microsoft Visual C++ 2010 Redistributable Package (x86)](https://www.microsoft.com/en-US/download/details.aspx?id=5555) installed see 
+
+* On linux platform(s) youtube-dl requires python installed see
+
+See link to know more: [here](http://rg3.github.io/youtube-dl/download.html)
 
 # Faqs
 
@@ -59,7 +72,7 @@ None, All dependencies will auto install with the app now as far as possible.
 
 2. Motive behind it
 
-  > To learn React, Event Emitters, Material UI and Electron
+  > To learn React, Event Emitters, Material UI, Electron, Nwjs, Polymer, Nodejs, IndexedDB and grandma's secret sauce.
 
 ## Versioning
 
@@ -71,4 +84,4 @@ but we'll adhere to those rules whenever possible.
 # License
 The Project is Licensed under the [MIT License](https://github.com/puranjayjain/Youtube-dl-gui/blob/master/LICENSE)
 
-All other Licensed are found in the Third Party Licenses Folder
+All other License(s) are found in the Third Party Licenses Folder

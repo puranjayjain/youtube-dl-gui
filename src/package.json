@@ -1,35 +1,47 @@
 {
-    "name": "youtube-dl-gui",
-    "version": "0.0.3",
-    "description": "a gui for youtube-dl built with nwjs + polymer + awesome sauce",
-    "main": "index.html",
-    "directories": {
-        "test": "test"
-    },
-    "window": {
-        "frame": false,
-        "width": 800,
-        "height": 600,
-        "icon": "images/favicon-16x16.png"
-    },
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/puranjayjain/youtube-dl-gui.git"
-    },
-    "keywords": [
-        "youtube-dl",
-        "gui",
-        "nwjs",
-        "polymer",
-        "cross-platform"
-    ],
-    "author": "Puranjay Jain <me+npm@puranjayjain.com>",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/puranjayjain/youtube-dl-gui/issues"
-    },
-    "homepage": "https://github.com/puranjayjain/youtube-dl-gui#readme"
+  "name": "youtube-dl-gui",
+  "version": "0.0.3",
+  "description": "A Cross Platform GUI Client for youtube-dl written in nwjs + polymer + pouchdb + awesome sauce",
+  "main": "index.html",
+  "keywords": [
+    "youtube-dl",
+    "gui",
+    "nwjs",
+    "polymer",
+    "cross-platform"
+  ],
+  "chromium-args": "--enable-node-worker",
+  "directories": {
+    "test": "test"
+  },
+  "window": {
+    "frame": false,
+    "width": 1200,
+    "height": 600,
+    "icon": "images/favicon-16x16.png"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/puranjayjain/youtube-dl-gui.git"
+  },
+  "author": "Puranjay Jain <me+npm@puranjayjain.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/puranjayjain/youtube-dl-gui/issues"
+  },
+  "homepage": "https://github.com/puranjayjain/youtube-dl-gui",
+  "dependencies": {
+    "bytes": "^2.4.0",
+    "hashids": "^1.1.1",
+    "localforage": "^1.4.3",
+    "moment": "^2.17.1",
+    "pouchdb": "^6.1.0",
+    "progress-stream": "^1.2.0",
+    "rest": "^2.0.0",
+    "wget-improved": "^1.4.0",
+    "youtube-dl": "^1.11.1"
+  }
 }

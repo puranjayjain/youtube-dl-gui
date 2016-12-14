@@ -1,88 +1,87 @@
-# Polymer App Toolbox - Starter Kit
+# Youtube-dl-gui  ![Logo](https://raw.githubusercontent.com/puranjayjain/youtube-dl-gui/master/src/assets/icon36.png)
 
-[![Build Status](https://travis-ci.org/PolymerElements/polymer-starter-kit.svg?branch=master)](https://travis-ci.org/PolymerElements/polymer-starter-kit)
+# Discussions
+Using github issues for now.
 
-This template is a starting point for building apps using a drawer-based
-layout. The layout is provided by `app-layout` elements.
+A Cross Platform GUI Client for [youtube-dl](http://rg3.github.io/youtube-dl/) written in nwjs + polymer + IndexedDB + awesome sauce
 
-This template, along with the `polymer-cli` toolchain, also demonstrates use
-of the "PRPL pattern" This pattern allows fast first delivery and interaction with
-the content at the initial route requested by the user, along with fast subsequent
-navigation by pre-caching the remaining components required by the app and
-progressively loading them on-demand as the user navigates through the app.
+#Requirements
+Supports Windows and Linux not sure for Mac though. 
 
-The PRPL pattern, in a nutshell:
+Need collaborators and testers for all platforms (Building and Testing).
 
-* **Push** components required for the initial route
-* **Render** initial route ASAP
-* **Pre-cache** components for remaining routes
-* **Lazy-load** and progressively upgrade next routes on-demand
+#Installation
+Released Developer build please test it.
+  ##Steps:
+  1. Make sure you have the latest version of node.js(6.xx), python (2.xx)
+  2. Now clone the repository or download the latest release
+  3. From the root of the repository, run `npm i`
+  4. Use the `gulp run.bat` and `run app.bat`
+  5. Start Testing!
 
-### Migrating from Polymer Starter Kit v1?
+Or use chocolatey:
+```
+Coming soon
+```
 
-[Check out our blog post that covers what's changed in PSK2 and how to migrate!](https://www.polymer-project.org/1.0/blog/2016-08-18-polymer-starter-kit-or-polymer-cli.html)
+# Features
+ - [x] Drag and Drop valid urls/links to start downloading
+ - [x] Supports all sites that youtube-dl does [see](https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md)
 
-### Setup
+## Configurable
+Most of these features match the ones found [here](https://github.com/rg3/youtube-dl/blob/master/README.md#options)
 
-##### Prerequisites
+If you think a feature is missing or needs improvement please file a new issue or +1 an existing one [here](https://github.com/puranjayjain/Youtube-dl-gui/issues)
 
-Install [polymer-cli](https://github.com/Polymer/polymer-cli):
+### Download Options:
+- [ ] rate-limit
+- [ ] retries
 
-    npm install -g polymer-cli
+### Filesystem Options:
+- [x] default download directory
 
-##### Initialize project from template
+### Authentication Options:
+- [x] username
+- [x] password
 
-    mkdir youtube-dl
-    cd youtube-dl
-    polymer init starter-kit
+### Workarounds:
+- [x] encoding
+- [x] no-check-certificate
+- [x] prefer-insecure
+- [x] user-agent
+- [x] referrer
+- [x] add-header
 
-### Start the development server
+### Our options (these are app exclusive)
+- [x] Dark theme support
+- [x] Full contrast mode
 
-This command serves the app at `http://localhost:8080` and provides basic URL
-routing for the app:
+# Dependencies
 
-    polymer serve --open
+* On Windows platform youtube-dl requires [Microsoft Visual C++ 2010 Redistributable Package (x86)](https://www.microsoft.com/en-US/download/details.aspx?id=5555) installed see 
 
+* On linux platform(s) youtube-dl requires python installed see
 
-### Build
+See link to know more: [here](http://rg3.github.io/youtube-dl/download.html)
 
-This command performs HTML, CSS, and JS minification on the application
-dependencies, and generates a service-worker.js file with code to pre-cache the
-dependencies based on the entrypoint and fragments specified in `polymer.json`.
-The minified files are output to the `build/unbundled` folder, and are suitable
-for serving from a HTTP/2+Push compatible server.
+# Faqs
 
-In addition the command also creates a fallback `build/bundled` folder,
-generated using fragment bundling, suitable for serving from non
-H2/push-compatible servers or to clients that do not support H2/Push.
+1. What all websites does it support?
 
-    polymer build
+  > See [https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md](https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md)
 
-### Preview the build
+2. Motive behind it
 
-This command serves the minified version of the app at `http://localhost:8080`
-in an unbundled state, as it would be served by a push-compatible server:
+  > To learn React, Event Emitters, Material UI, Electron, Nwjs, Polymer, Nodejs, IndexedDB and grandma's secret sauce.
 
-    polymer serve build/unbundled
+## Versioning
 
-This command serves the minified version of the app at `http://localhost:8080`
-generated using fragment bundling:
+For transparency into our release cycle and in striving to maintain backward
+compatibility, the project is maintained under
+[the Semantic Versioning guidelines](http://semver.org/). Sometimes we screw up,
+but we'll adhere to those rules whenever possible.
 
-    polymer serve build/bundled
+# License
+The Project is Licensed under the [MIT License](https://github.com/puranjayjain/Youtube-dl-gui/blob/master/LICENSE)
 
-### Run tests
-
-This command will run
-[Web Component Tester](https://github.com/Polymer/web-component-tester) against the
-browsers currently installed on your machine.
-
-    polymer test
-
-### Adding a new view
-
-You can extend the app by adding more views that will be demand-loaded
-e.g. based on the route, or to progressively render non-critical sections
-of the application.  Each new demand-loaded fragment should be added to the
-list of `fragments` in the included `polymer.json` file.  This will ensure
-those components and their dependencies are added to the list of pre-cached
-components (and will have bundles created in the fallback `bundled` build).
+All other License(s) are found in the Third Party Licenses Folder

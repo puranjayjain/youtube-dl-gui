@@ -1,0 +1,105 @@
+<!-- the heart and soul of this project this is the guy who is the one to do all the coordination -->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
+
+<dom-module id="download-manager">
+  <template>
+    <app-localstorage-document key="lastdownloadindex" data="{{lastdownloadindex}}"></app-localstorage-document>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'download-manager',
+
+      /**
+       * NOTE some of these properties are not yet used or implemented but just present for future usage, they don't affect the polymer perfomance as they use data paths to update objects and arrays and only update changes
+       * they are marked with FIXME tags
+       * index: 0, //integer index of the current file (unique)
+       * fileName: 'C:\Users\User\Music\Song.mp4', // full path to file
+       * format: 18, //the ytdl format code used for downloading it, defaults to the ytdl default of blank
+       * url: 'the-website-url-download-the-video.com',
+       * dUrl: 'the-link-to-download-the-video-from.mp4',
+       * size: 94, // full size in bytes
+       * FIXME description: 'something about it',
+       * FIXME firstTry: '17/05/2016 9:06 AM', // first attempt at downloading the file
+       * lastTry: '17/05/2016 9:06 AM', // last attempt at downloading the file
+       * downloaded: 5, // downloaded size in bytes
+       * status: 'paused', // can have values as 'starting', 'paused', 'downloading', 'error', 'canceled', 'done'
+       * selected: true // or false for checkbox and other use cases
+      */
+
+      properties: {
+        lastdownloadindex: {
+          type: Number,
+          value: -1
+        },
+        downloads: {
+          type: Array,
+          value: []
+        },
+        requestdownload: {
+          type: Object,
+          observer: '_requestDownloadChange',
+          notify: true
+        },
+        downloadinfo: {
+          type: Object,
+          notify: true
+        }
+      },
+
+      ready: function () {
+        // init downloads property
+        this.downloads = [];
+        // TODO add downloads from previously downloaded files
+      },
+
+      _requestDownloadChange: function (requestdownload) {
+        // if there is a new download only then do something
+        if (Object.keys(requestdownload).length > 0) {
+          // check for the download mode
+          if (requestdownload.mode === 'quick') {
+            // quick download mode
+          } else {
+            // new download mode
+            this.initDownload();
+          }
+        }
+      },
+
+      // initiate a download and keep the reference for it in the downloadProcesses
+      initDownload: function () {
+        let downloadProcess = child_process.fork(path.join(nw.__dirname, 'src', 'workers', 'downloader.js'), [], {cwd: nw.__dirname});
+        // increment the last download index
+        // TODO increment only if necessary else use the previous index if resuming a download
+        this.lastdownloadindex++;
+        const cIndex = this.lastdownloadindex;
+        // request file info
+        // TODO add more parameters from settings and the dialog here e.g. username and password
+        let args = Object.assign({}, this.requestdownload);
+        args.dirname = nw.__dirname;
+        args.index = cIndex;
+        downloadProcess.send({type: 'info', args: Object.assign({}, args)});
+        // read changes from the process
+        downloadProcess.on('message', (message) => {
+          if (message.type === 'info') {
+            // TODO add Information to data array downloadProcess.send({type: 'start'}) send back the info to the dialog
+            this.downloadinfo = message.message;
+          } else {
+            console.log(message);
+          }
+        });
+        // catch error and exit codes
+        downloadProcess.on('error', (message) => {
+          console.error(message);
+        });
+        downloadProcess.on('exit', (message, signal) => {
+          console.log(`exit: ${message} and ${signal}`);
+        });
+        // push them to the current downloadProcess array
+        downloadProcesses.push({index: cIndex, process: downloadProcess});
+      }
+    });
+  </script>
+</dom-module>
