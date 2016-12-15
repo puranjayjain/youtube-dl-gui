@@ -35,3 +35,15 @@ jspm_packages
 
 # atom project stuff
 .tern-project
+!.keep
+*.DS_Store
+*.sass-cache
+/.asset-cache/*
+/_site/*
+/_assets/bower/*
+_
+.DS_Store
+.codekit-cache
+.sass-cache
+config.codekit
+TODO

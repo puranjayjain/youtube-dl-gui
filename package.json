@@ -1,55 +1,26 @@
 {
-  "name": "youtube-dl-gui",
-  "version": "0.0.0",
-  "description": "A GUI Client for youtube-dl written in react, electron and material themes",
-  "keywords": [
-    "youtube",
-    "dl",
-    "gui",
-    "node",
-    "electron",
-    "crossplatform",
-    "react",
-    "download"
-  ],
-  "main": "dist/js/index.html",
+  "name": "youtube-dl-gui-pages",
+  "version": "1.0.0",
+  "description": "ummm not needed",
+  "main": "gulpfile.js",
   "scripts": {
-    "start": "electron src/electron_main.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Puranjay Jain <puranjay.jain@st.niituniversity.in>",
+  "author": "Puranjay Jain <me+github@puranjayjain.com>",
   "license": "MIT",
   "devDependencies": {
-    "babel-core": "^6.8.0",
-    "babel-eslint": "^6.0.4",
-    "babel-preset-es2015": "^6.6.0",
-    "babel-preset-react": "^6.5.0",
-    "babelify": "^7.3.0",
-    "browser-sync": "^2.12.8",
-    "browserify": "^13.0.1",
-    "electron-prebuilt": "^1.0.2",
-    "eslint": "^2.9.0",
+    "browser-sync": "^2.18.5",
     "gulp": "^3.9.1",
-    "gulp-notify": "^2.2.0",
-    "gulp-util": "^3.0.7",
-    "pretty-hrtime": "^1.0.2",
-    "require-dir": "^0.3.0",
-    "underscore": "^1.8.3",
-    "vinyl-source-stream": "^1.1.0",
-    "watchify": "^3.7.0"
-  },
-  "dependencies": {
-    "material-ui": "^0.15.0",
-    "react": "^15.0.2",
-    "react-dom": "^15.0.2",
-    "react-tap-event-plugin": "^1.0.0",
-    "youtube-dl": "^1.11.1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/puranjayjain/Youtube-dl-gui.git"
-  },
-  "bugs": {
-    "url": "https://github.com/puranjayjain/Youtube-dl-gui/issues"
-  },
-  "homepage": "https://puranjayjain.github.io/youtube-dl-gui"
+    "gulp-autoprefixer": "^2.3.1",
+    "gulp-babel": "^5.3.0",
+    "gulp-cache": "^0.2.10",
+    "gulp-concat": "^2.6.1",
+    "gulp-imagemin": "^2.4.0",
+    "gulp-jshint": "^1.12.0",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-plumber": "^1.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^3.0.0",
+    "gulp-uglify": "^1.5.4"
+  }
 }

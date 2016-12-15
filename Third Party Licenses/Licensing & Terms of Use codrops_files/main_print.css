@@ -1,0 +1,67 @@
+* { 
+    text-shadow: none !important; 
+    box-shadow: none !important; 
+    float: none !important; 
+    width: auto !important;
+}
+body, 
+.ct-content,
+.ct-main{
+	background: #fff;
+	margin: 0px;
+	font-family: Arial !important;
+}
+.ct-sidebar, 
+.ct-nav-wrapper, 
+.ct-connect, 
+.ct-top-sharing, 
+.ct-tags, 
+.ct-post-nav, 
+.ct-row, 
+.ct-comments, 
+.ct-row-wrapper, 
+.ct-ad-article, 
+.ct-footer, 
+.bsap, 
+.ct-post a.demo, 
+.ct-post a.download{
+	display: none !important;
+}
+h1,h2,.ct-branding,
+.ct-h-shd, 
+.ct-nav-top ul,
+.ct-nav-main, 
+h3#reply-title,
+.ct-post h3,
+.ct-post h4,
+.ct-yearly-archives .ct-box h3,
+.ct-box-pagination a,
+.ct-box-pagination span,
+.ct-box h3 a,
+.ct-post a.demo, 
+.ct-post a.download,
+.ct-latest-any.ct-coll-archive h3,
+.ct-deals article h3,
+.ct-widget-coll h3 a,
+.ct-deals article p em,
+.ct-latest-any h2.ct-headline-ribbon,
+article .ct-subline a, .ct-small-text, h3 small, 
+#respond form input[type="text"], 
+#respond form textarea, 
+.ct-yearly-archives .ct-box p time, 
+.ct-social-profiles li a span{
+	font-family: Arial; text-transform: none;
+}
+h1,h2{ font-size: 22px; font-weight: bold; }
+.ct-post h3{ font-size: 20px; font-weight: bold;}
+.ct-post h4{ font-size: 18px; font-weight: bold;}
+.ct-special-box{ padding: 10px 0; border: none; }
+.ct-branding a.ct-logo{ 
+    text-indent: 0px; 
+    font-size: 26px; 
+    width: auto; 
+    height: auto; 
+    border-bottom: 1px solid #000; 
+    display: block; 
+    padding-bottom: 10px;
+}

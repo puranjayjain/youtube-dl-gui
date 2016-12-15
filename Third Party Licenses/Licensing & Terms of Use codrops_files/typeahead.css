@@ -1,0 +1,82 @@
+#searchform input[type="submit"] {
+	width: 25%;
+	}
+
+.twitter-typeahead {
+	width: 73% !important;
+	}
+
+.twitter-typeahead * {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	}
+
+.tt-query,
+.tt-hint {
+	padding: 6px;
+	outline: none;
+	width: 100% !important;
+	vertical-align: inherit !important;
+	}
+
+.tt-hint {
+	color: #999
+	}
+
+.tt-dropdown-menu {
+	width: 100%;
+	margin-top: 12px;
+	padding: 8px 0;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	-webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+	-moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+	box-shadow: 0 5px 10px rgba(0,0,0,.2);
+	text-shadow: none;
+	}
+
+	.tt-dropdown-menu p {
+		margin: 5px 0 !important;
+		line-height: 1.4 !important;
+		}
+
+	.tt-dropdown-menu a {
+		color: #444 !important;
+		border: 0 !important;
+		display: block;
+		text-decoration: none !important;
+		}
+
+.tt-suggestion {
+	padding: 3px 10px;
+	font-size: 14px;
+	line-height: 18px;
+	}
+
+.tt-suggestion.tt-is-under-cursor {
+	color: #fff;
+	background-color: #0097cf;
+	}
+
+	.tt-suggestion.tt-is-under-cursor a {
+		color: #fff !important;
+		}
+
+.tt-suggestion p {
+	margin: 0;
+	}
+
+/* rtl support */
+.twitter-typeahead.tt-rtl {
+	direction: rtl;
+	}
+
+.twitter-typeahead.tt-rtl .tt-dropdown-menu {
+	left: auto;
+	right: 0;
+	}
