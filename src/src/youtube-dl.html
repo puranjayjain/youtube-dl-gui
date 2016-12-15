@@ -51,6 +51,31 @@
         background-color: var(--primary-color);
       }
 
+      app-header.fileheader {
+        padding-top: 32px;
+        background-color: var(--accent-color);
+        color: var(--utility-text-color);
+        user-select: none;
+      }
+
+      .filetitle {
+        @apply(--paper-font-title);
+      }
+
+      paper-fab.fileshow {
+        position: fixed;
+        right: 35px;
+        top: 198px;
+        --paper-fab-background: var(--primary-color);
+        --paper-fab-keyboard-focus-background: var(--light-primary-color);
+      }
+
+      paper-material.filedetails {
+        height: 100%;
+        color: var(--primary-text-color);
+        overflow: auto;
+      }
+
       paper-material {
         background-color: var(--primary-card-color);
         height: 100%;
@@ -158,7 +183,41 @@
         </paper-material>
       </app-drawer>
       <app-drawer id="fileInfo" align="end" opened={{fileinfodialog}}>
-        File info
+        <app-header class="fileheader" fixed>
+          <app-toolbar>
+            <div class="filetitle">
+              File Information
+            </div>
+          </app-toolbar>
+        </app-header>
+        <paper-material class="filedetails">
+          kdfileshowfileshowfileshowf ileshowfileshowfileshowfilesho
+          wfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfile
+          ileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfile showfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfilesho
+          wfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfi leshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfiles
+          howfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowf
+          ileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfile showfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowkdfileshowfileshowfileshowfileshowfiles
+          howfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshow fileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfil
+          eshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfilesh owfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowf
+          ileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfile showfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfilesho
+          wfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfi leshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfiles
+          howfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshow fileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfil
+          eshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowkdfileshowfileshowfileshowfileshowfileshowfile showfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfilesho
+          wfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfi
+          leshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshow
+          fileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfil eshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfilesh
+          owfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowf ileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfile
+          showfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfilesho wfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfi
+          leshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowkdfileshowfileshowfileshowfileshowfileshowfileshowfil eshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfilesh
+          owfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowf ileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfile
+          showfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfilesho wfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfi
+          leshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfiles howfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshow
+          fileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfil eshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfilesh
+          owfileshowfilesh owfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfilesh
+          owfileshowkdfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfilesho
+          wfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshowfileshow
+        </paper-material>
+        <paper-fab class="fileshow" mini icon="folder-open"></paper-fab>
       </app-drawer>
 
       <!-- Main content -->

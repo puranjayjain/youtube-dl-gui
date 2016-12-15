@@ -96,9 +96,11 @@
           if (this.isdarktheme) {
             theme = 'dark-theme';
             docHostRoot.customStyle['--primary-inverted-text-color'] = themedefinitions['--light-theme-primary-text-color'];
+            docHostRoot.customStyle['--table-highlight-color'] = 'var(--dark-primary-color)';
           } else {
             theme = 'light-theme';
             docHostRoot.customStyle['--primary-inverted-text-color'] = themedefinitions['--dark-theme-primary-text-color'];
+            docHostRoot.customStyle['--table-highlight-color'] = 'var(--light-primary-color)';
           }
           i = modifiers.length;
           while (i--) {
@@ -114,7 +116,6 @@
           docHostRoot.customStyle['--window-background-color'] = 'var(--dark-primary-color)';
           docHostRoot.customStyle['--highlight-color'] = 'var(--light-primary-color)';
           docHostRoot.customStyle['--highlight-text-color'] = 'var(--primary-text-color)';
-          docHostRoot.customStyle['--table-highlight-color'] = themedefinitions[`--${theme}-highlight-color`];
           docHostRoot.customStyle['--light-accent-color'] = 'var(--paper-deep-purple-a100)';
           docHostRoot.customStyle['--complementary-text-color'] = 'var(--primary-inverted-text-color)';
           docHostRoot.customStyle['--input-focus-color'] = 'var(--primary-color)';

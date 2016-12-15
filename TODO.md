@@ -20,3 +20,5 @@
 - [x] persistent or native notifications for operations like update done or updating or restart to complete update
 - [ ] notifications animations like https://developer.mozilla.org/en/docs/Web/API/notification using https://facebook.github.io/react/docs/animation.html
 - [ ] sorting download tables http://www.listjs.com/
+
+NOTE: for custom table implement the data using the old data and add new data via computedlisteners

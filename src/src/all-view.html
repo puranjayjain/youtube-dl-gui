@@ -55,11 +55,11 @@
         }
       },
 
-      attached: function () {
+      ready: function () {
         this.tabledata = [
           {
             "index": 15,
-            "file": "Lizzie Oneal",
+            "file": "Lola Oneal",
             "downloaded": "sss",
             "status": "Mercado",
             "size": 65886,
@@ -71,14 +71,42 @@
             "status": "Mercado",
             "size": 65886,
             "lasttry": "2016-12-11T18:45:10"
+          }, {
+            "index": 7,
+            "file": "L Oneal",
+            "downloaded": "sss",
+            "status": "Mercado",
+            "size": 65886,
+            "lasttry": "2016-12-11T18:45:10"
           }
         ];
+        for (var i = 0; i < 500; i++) {
+          // remove 1 item from 0 index and add
+          this.pushName(i);
+          this.addName(i);
+        }
+      },
+
+      addName: function (i) {
         setTimeout(() => {
-          this.tabledata[0].file = 'ds';
-        }, 2000);
+          var goo = {
+            "index": 16 + i,
+            "file": "L Oneal " + i,
+            "downloaded": "sss",
+            "status": "Mercado",
+            "size": 65886,
+            "lasttry": "2016-12-11T18:45:10"
+          };
+          this.push('tabledata', goo);
+        }, 2000 + (i * 60));
+      },
+
+      pushName: function (i) {
         setTimeout(() => {
-          console.log(this.tabledata);
-        }, 5000);
+          // http://stackoverflow.com/questions/33219982/data-binding-to-array-in-polymer
+          // 1 is according to table index
+          this.set('tabledata.1.file', "L Oneal " + i);
+        }, 2000 + (i * 60));
       }
     });
   </script>
