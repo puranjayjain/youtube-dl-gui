@@ -1,23 +1,25 @@
-# Youtube-dl-gui  ![Logo](https://raw.githubusercontent.com/puranjayjain/youtube-dl-gui/master/src/assets/icon36.png)
+# Youtube-dl-gui  ![Logo](https://github.com/puranjayjain/youtube-dl-gui/raw/master/src/images/favicon-32x32.png)
 
 # Discussions
 Using github issues for now.
 
-A Cross Platform GUI Client for [youtube-dl](http://rg3.github.io/youtube-dl/) written in nwjs + polymer + indexdb + awesome sauce
+A Cross Platform GUI Client for [youtube-dl](http://rg3.github.io/youtube-dl/) written in nwjs + polymer + IndexedDB + awesome sauce
 
 #Requirements
-Supports Windows and Linux not sure for Mac though. 
+Supports Windows and Linux, not sure for Mac though. 
 
 Need collaborators and testers for all platforms (Building and Testing).
 
 #Installation
 Released Developer build please test it.
   ##Steps:
-  1. Make sure you have the latest version of node.js(6.xx), python (2.xx)
+  1. Make sure you have the latest version of node.js(7.xx), npm (4.xx), bower and python (2.xx)
   2. Now clone the repository or download the latest release
-  3. From the root of the repository, run `npm i`
-  4. Use the `gulp run.bat` and `run app.bat`
-  5. Start Testing!
+  3. Download a copy of nwjs (sdk build) from [https://nwjs.io/](https://nwjs.io/)
+  4. Extract it in a directory and set that folder into your environment path
+  5. In the src folder of the repository, run `npm i` then run `bower i`
+  6. Use the `run nw app.bat`
+  7. Happy Testing!
 
 Or use chocolatey:
 ```

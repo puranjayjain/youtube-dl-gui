@@ -1,6 +1,6 @@
 {
   "name": "youtube-dl-gui",
-  "version": "0.0.3",
+  "version": "0.3.0",
   "description": "A Cross Platform GUI Client for youtube-dl written in nwjs + polymer + pouchdb + awesome sauce",
   "main": "index.html",
   "keywords": [
