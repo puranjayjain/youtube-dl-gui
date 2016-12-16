@@ -19,11 +19,10 @@
       }
 
       .row {
+        box-sizing: border-box;
         height: 48px;
         background-color: var(--primary-card-color);
         color: var(--primary-text-color);
-        border-bottom: 1px solid var(--divider-color);
-        padding-right: 24px;
         font-family: 'robotoregular';
         font-size: 13px;
       }
@@ -32,10 +31,8 @@
       }
 
       .row.header {
-        box-sizing: border-box;
         z-index: 1;
         height: 64px;
-        padding-right: 27px;
         font-family: 'robotomedium';
         font-size: 12px;
         color: var(--secondary-text-color);
@@ -64,25 +61,56 @@
         transform: scale(1);
         opacity: 1;
       }
-      .cell:not(.check) {
+      .row:not(.header).selected {
+        color: var(--highlight-text-color);
+        background-color: var(--table-selected-color);
+      }
+      .row:not(.header):focus {
+        outline: none !important;
+        background-color: var(--table-highlight-color);
+      }
+      .row:not(.header).selected:focus {
+        background-color: var(--table-selected-color);
+        border-left: 8px solid var(--table-highlight-color);
+      }
+      .row .cell:not(.check) {
+        box-sizing: border-box;
         padding-left: 56px;
         text-align: right;
         min-width: 100px;
-        line-height: 64px;
         position: relative;
+        border-bottom: 1px solid var(--divider-color);
         /* https://css-tricks.com/snippets/css/truncate-string-with-ellipsis/ */
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
       }
 
-      .cell.check {
+      .row .cell {
+        line-height: 48px;
+        height: 48px;
+      }
+
+      .row.header .cell {
+        height: 64px;
         line-height: 64px;
+      }
+      .row.header .cell:last-of-type {
+        padding-right: 27px;
+      }
+
+      .cell.check {
+        padding-right: 56px;
         width: 20px;
       }
-      .cell:first-child,
-      .cell:nth-child(2) {
+      .cell:first-child {
         padding-left: 24px;
+      }
+      .row .cell:nth-child(2) {
+        padding-left: 0;
+      }
+      .row .cell:last-of-type {
+        padding-right: 24px;
       }
 
       .cell.num {
@@ -123,7 +151,7 @@
     </div>
     <iron-list id="list" items=[[tabledata]] as="item" selected-items="{{selectedItems}}" selection-enabled multi-selection>
       <template>
-        <div class="layout horizontal row center tablerow">
+        <div tabindex$="[[tabIndex]]" aria-label$="Select/Deselect [[item.file]]" class$="[[_computedClass(selected)]]">
           <div class="cell check">
             <!-- iron list bug prevents checkbox events to propogate back so using my hack now -->
             <!-- https://github.com/PolymerElements/iron-list/issues/163 -->
@@ -132,13 +160,13 @@
             <paper-checkbox class="check" checked=[[selected]]></paper-checkbox>
           </div>
           <div class="flex cell">
-            [[_convertToFormat(item.file, '0')]]
+            [[item.file]]
           </div>
           <div class="flex cell">
-            [[_convertToFormat(item.downloaded, '1')]]
+            [[item.downloaded]]
           </div>
           <div class="flex cell">
-            [[_convertToFormat(item.status, '2')]]
+            [[item.status]]
           </div>
           <div class="flex cell">
             [[_convertToFormat(item.size, '3')]]
@@ -223,6 +251,14 @@
           value = moment(value).fromNow();
         }
         return value;
+      },
+
+      _computedClass: function (isSelected) {
+        let classes = 'layout horizontal row center tablerow';
+        if (isSelected) {
+          classes += ' selected';
+        }
+        return classes;
       },
 
       _setMinWidth: function (width) {

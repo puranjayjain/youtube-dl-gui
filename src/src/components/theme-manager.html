@@ -68,6 +68,7 @@
             docHostRoot.customStyle['--primary-color'] = 'var(--paper-grey-900)';
             docHostRoot.customStyle['--accent-color'] = 'var(--paper-grey-100)';
             docHostRoot.customStyle['--light-accent-color'] = 'var(--paper-grey-300)';
+            docHostRoot.customStyle['--table-selected-color'] = 'var(--dark-primary-color)';
           } else {
             theme = 'light-theme';
             docHostRoot.customStyle['--primary-inverted-text-color'] = themedefinitions['--dark-theme-primary-text-color'];
@@ -75,6 +76,7 @@
             docHostRoot.customStyle['--primary-color'] = 'var(--paper-grey-100)';
             docHostRoot.customStyle['--accent-color'] = 'var(--paper-grey-900)';
             docHostRoot.customStyle['--light-accent-color'] = 'var(--paper-grey-700)';
+            docHostRoot.customStyle['--table-selected-color'] = 'var(--light-primary-color)';
           }
           // add highlight to list
           modifiers.push('highlight-color');
@@ -86,7 +88,6 @@
               docHostRoot.customStyle[`--${modifiers[i]}`] = themedefinitions[`--${theme}-${modifiers[i]}`];
             }
           }
-          docHostRoot.customStyle['--table-highlight-color'] = themedefinitions[`--${theme}-highlight-color`];
           docHostRoot.customStyle['--menu-select-color'] = 'var(--secondary-text-color)';
           docHostRoot.customStyle['--complementary-text-color'] = 'var(--primary-text-color)';
           docHostRoot.customStyle['--highlight-text-color'] = 'var(--complementary-text-color)';
@@ -96,11 +97,11 @@
           if (this.isdarktheme) {
             theme = 'dark-theme';
             docHostRoot.customStyle['--primary-inverted-text-color'] = themedefinitions['--light-theme-primary-text-color'];
-            docHostRoot.customStyle['--table-highlight-color'] = 'var(--dark-primary-color)';
+            docHostRoot.customStyle['--table-selected-color'] = 'var(--dark-primary-color)';
           } else {
             theme = 'light-theme';
             docHostRoot.customStyle['--primary-inverted-text-color'] = themedefinitions['--dark-theme-primary-text-color'];
-            docHostRoot.customStyle['--table-highlight-color'] = 'var(--light-primary-color)';
+            docHostRoot.customStyle['--table-selected-color'] = 'var(--light-primary-color)';
           }
           i = modifiers.length;
           while (i--) {
@@ -121,6 +122,7 @@
           docHostRoot.customStyle['--input-focus-color'] = 'var(--primary-color)';
           docHostRoot.customStyle['--utility-text-color'] = '#fff';
         }
+        docHostRoot.customStyle['--table-highlight-color'] = themedefinitions[`--${theme}-highlight-color`];
         // finally update the document styles
         docHostRoot.updateStyles();
       }
