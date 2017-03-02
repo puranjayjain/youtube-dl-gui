@@ -93,6 +93,8 @@
         notify: true
       }
     },
+    
+    observers: ['_onNextChange(url)'],
 
     ready: function () {
       // add event listeners to trigger file download if necessary
@@ -121,6 +123,15 @@
       this.unlisten(this.$.infoButton, 'tap', 'onInfo');
       this.unlisten(this.$.pasteButton, 'tap', 'onPaste');
       this.unlisten(this.$.next, 'tap', 'onNext');
+    },
+    
+    _onNextChange: function (url) {
+      if (url) {
+        this.$.next.disabled = false;
+      }
+      else {
+        this.$.next.disabled = true;
+      }
     },
 
     _dialogChange: function (opened) {

@@ -170,9 +170,9 @@
     _finalDownloadDialogChange: function (opened) {
       this.areenabled = opened;
     },
-
+    
+    // triggered on this dialog after the video has been requested
     _downloadInfoChange: function (info) {
-      console.log(info);
       let formatList = [],
         folderPath;
       for (let f of info.formats) {
