@@ -30,21 +30,21 @@
       }
 
     </style>
-    <paper-dialog opened={{newdownloaddialog}} entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+    <paper-dialog opened="{{newdownloaddialog}}" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
       <h2>
         Download a video or a playlist (if-supported)
         <paper-icon-button id="infoButton" icon="info" alt="More Information regarding list of supported formats and websites"></paper-icon-button>
         <paper-tooltip for="infoButton">More Information regarding list of supported formats and websites</paper-tooltip>
       </h2>
       <div class="layout horizontal center-center">
-        <paper-input id="url" class="flex-1" label="Enter or Paste the video url here" placeholder="e.g. https://www.youtube.com/watch?v=foE1mO2yM04" error-message="Enter a valid url" type="url" value={{url}} autofocus auto-validate required></paper-input>
+        <paper-input id="url" class="flex-1" label="Enter or Paste the video url here" placeholder="e.g. https://www.youtube.com/watch?v=foE1mO2yM04" error-message="Enter a valid url" type="url" value="{{url}}" autofocus auto-validate required></paper-input>
         <paper-icon-button id="pasteButton" icon="content-paste" alt="Paste url from clipboard"></paper-icon-button>
         <paper-tooltip for="pasteButton">Paste url from clipboard</paper-tooltip>
       </div>
-      <paper-toggle-button checked={{auth}}>Enable Authentication</paper-toggle-button>
-      <iron-collapse opened={{auth}}>
-        <paper-input label="Username" value={{username}}></paper-input>
-        <paper-input label="Password" type="password" value={{password}}></paper-input>
+      <paper-toggle-button checked="{{auth}}">Enable Authentication</paper-toggle-button>
+      <iron-collapse opened="{{auth}}">
+        <paper-input label="Username" value="{{username}}"></paper-input>
+        <paper-input label="Password" type="password" value="{{password}}"></paper-input>
       </iron-collapse>
       <div class="buttons">
         <paper-button dialog-dismiss>cancel</paper-button>

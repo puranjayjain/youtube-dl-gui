@@ -41,7 +41,7 @@
 
     </style>
     <app-localstorage-document key="defaultfolderpath" data="{{defaultfolderpath}}"></app-localstorage-document>
-    <paper-dialog opened={{finaldownloaddialog}} entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+    <paper-dialog opened="{{finaldownloaddialog}}" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
       <h2>Confirm download options</h2>
       <div class="layout horizontal center-center">
         <paper-input id="filepath" class="flex-1" label="Path to save file" placeholder="e.g. C:\Users\User\Videos" error-message="This is not a valid folder path" disabled$="{{areenabled}}"></paper-input>
@@ -51,7 +51,7 @@
       </div>
       <div class="layout horizontal center-center">
         <paper-dropdown-menu id="format" class="flex-1 format" label="Choose a format" disabled$="{{areenabled}}">
-          <paper-listbox class="dropdown-content" selected=[[format]]>
+          <paper-listbox class="dropdown-content" selected="[[format]]">
             <paper-item>Default</paper-item>
             <template is="dom-repeat" items="{{formats}}" as="item">
               <paper-item>
@@ -60,7 +60,7 @@
             </template>
           </paper-listbox>
         </paper-dropdown-menu>
-        <paper-spinner-lite alt="fetching formats" active=[[areenabled]]></paper-spinner-lite>
+        <paper-spinner-lite alt="fetching formats" active="[[areenabled]]"></paper-spinner-lite>
       </div>
       <div class="buttons">
         <paper-button dialog-dismiss>cancel</paper-button>

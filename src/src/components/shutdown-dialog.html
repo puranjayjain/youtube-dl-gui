@@ -1,0 +1,79 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animation.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
+
+<link rel="import" href="../shared-styles.html">
+
+<dom-module id="shutdown-dialog">
+  <template>
+    <style is="custom-style" include="iron-flex iron-flex-alignment iron-flex-factors shared-styles">
+      .buttons paper-button {
+        --paper-button: {
+          color: var(--primary-text-color);
+        }
+      }
+
+    </style>
+    <app-localstorage-document key="confirmclose" data="{{confirmclose}}"></app-localstorage-document>
+
+    <paper-dialog id="shutdownDialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+      <h3>
+        Do you really want to close Youtube-dl ?
+      </h3>
+      <div class="buttons">
+        <paper-button dialog-dismiss>no</paper-button>
+        <paper-button id="yes">yes</paper-button>
+      </div>
+    </paper-dialog>
+    <theme-manager></theme-manager>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'shutdown-dialog',
+
+      properties: {
+        confirmclose: {
+          type: Boolean
+        }
+      },
+
+      ready: function () {
+        // Get the current window
+        var win = nw.Window.get();
+        win.on('close', () => {
+          // TODO do save and other operations which are not complete
+          if (this.confirmclose) {
+            this.$.shutdownDialog.open();
+          } else {
+            this.onClosingActions();
+            win.close(true);
+          }
+        });
+      },
+
+      attached: function () {
+        this.listen(this.$.yes, 'tap', 'onYes');
+      },
+
+      detached: function () {
+        this.unlisten(this.$.yes, 'tap', 'onYes');
+      },
+
+      onClosingActions: function () {
+        // TODO do save and other operations which are not complete
+      },
+
+      onYes: function () {
+        var win = nw.Window.get();
+        this.onClosingActions();
+        // then close it forcely
+        win.close(true);
+      }
+    });
+  </script>
+</dom-module>

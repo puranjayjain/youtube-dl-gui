@@ -111,7 +111,7 @@
     </style>
     <div class="layout horizontal row header tablerow" style="top: [[appscrolltop]]px;">
       <div class="cell check">
-        <paper-checkbox checked={{allCheck}}></paper-checkbox>
+        <paper-checkbox checked="{{allCheck}}"></paper-checkbox>
       </div>
       <template is="dom-repeat" items="[[tableheaders]]" as="heading">
         <div class="flex cell">
@@ -121,7 +121,7 @@
         </div>
       </template>
     </div>
-    <iron-list id="list" items=[[tabledata]] as="item" selected-items="{{selectedItems}}" selection-enabled multi-selection>
+    <iron-list id="list" items="[[tabledata]]" as="item" selected-items="{{selectedItems}}" selection-enabled multi-selection>
       <template>
         <div class="layout horizontal row center tablerow">
           <div class="cell check">
@@ -129,7 +129,7 @@
             <!-- https://github.com/PolymerElements/iron-list/issues/163 -->
             <!-- https://github.com/PolymerElements/iron-list/issues/199 -->
             <!-- https://github.com/PolymerElements/iron-list/issues/111 -->
-            <paper-checkbox class="check" checked=[[selected]]></paper-checkbox>
+            <paper-checkbox class="check" checked="[[selected]]"></paper-checkbox>
           </div>
           <div class="flex cell">
             [[_convertToFormat(item.file, '0')]]
