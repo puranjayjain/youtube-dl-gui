@@ -20,6 +20,12 @@
       .file {
         display: none;
       }
+      paper-button {
+        margin: 0;
+        --paper-button: {
+          color: var(--primary-text-color);
+        }
+      }
 
     </style>
     <app-localstorage-document key="lastdownloadindex" data="[[lastdownloadindex]]"></app-localstorage-document>
@@ -30,11 +36,13 @@
     <app-localstorage-document key="showprogressbar" data="{{showprogressbar}}"></app-localstorage-document>
     <app-localstorage-document key="confirmclose" data="{{confirmclose}}"></app-localstorage-document>
     <app-localstorage-document key="autoupdate" data="{{autoupdate}}"></app-localstorage-document>
+    <app-localstorage-document key="recentsearch" data="{{recent}}"></app-localstorage-document>
 
     <div class="card">
       <div class="cardTitle">Core</div>
       <paper-checkbox checked="{{autoupdate}}">Auto update</paper-checkbox>
       <paper-checkbox checked="{{confirmclose}}">Show confirm close dialog</paper-checkbox>
+      <paper-button id="clearButton" raised>Clear recently searched</paper-button>
     </div>
     <div class="card">
       <div class="cardTitle">Theme and Layout</div>
@@ -98,6 +106,9 @@
         showprogressbar: {
           type: Boolean
         },
+        recent: {
+          type: Array
+        },
         autoupdate: {
           type: Boolean
         }
@@ -106,11 +117,13 @@
       attached: function () {
         this.listen(this.$.selectButton, 'tap', 'onSelect');
         this.listen(this.$.file, 'change', 'onFile');
+        this.listen(this.$.clearButton, 'tap', 'onClearButton');
       },
 
       detached: function () {
         this.unlisten(this.$.selectButton, 'tap', 'onSelect');
         this.unlisten(this.$.file, 'change', 'onFile');
+        this.unlisten(this.$.clearButton, 'tap', 'onClearButton');
       },
 
       onSelect: function () {
@@ -123,6 +136,11 @@
           // if file path is not empty set it to text
           this.defaultfolderpath = filePath;
         }
+      },
+
+      onClearButton: function () {
+        // clear search hostory
+        this.set('recent', []);
       }
     });
   </script>

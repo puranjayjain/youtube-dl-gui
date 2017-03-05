@@ -21,27 +21,25 @@
     </paper-material>
     <theme-manager></theme-manager>
   </template>
+  <script>
+    Polymer({
+      is: 'file-info',
 
+      ready: function () {
+        // this.$.shutdownDialog.open();
+      },
+
+      attached: function () {
+        // this.listen(this.$.yes, 'tap', 'onYes');
+      },
+
+      detached: function () {
+        // this.unlisten(this.$.yes, 'tap', 'onYes');
+      },
+
+      onYes: function () {
+        console.log('yes');
+      }
+    });
+  </script>
 </dom-module>
-
-<script>
-  Polymer({
-    is: 'file-info',
-    
-    ready: function () {
-      // this.$.shutdownDialog.open();
-    },
-
-    attached: function () {
-      // this.listen(this.$.yes, 'tap', 'onYes');
-    },
-
-    detached: function () {
-      // this.unlisten(this.$.yes, 'tap', 'onYes');
-    },
-
-    onYes: function () {
-      console.log('yes');
-    }
-  });
-</script>

@@ -11,6 +11,7 @@
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/iron-icons/places-icons.html">
+<link rel="import" href="../bower_components/iron-icons/hardware-icons.html">
 <link rel="import" href="../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
@@ -26,6 +27,7 @@
 <link rel="import" href="components/progress-bar.html">
 <link rel="import" href="components/startup-tasks.html">
 <link rel="import" href="components/file-info.html">
+<link rel="import" href="components/search-element.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -170,6 +172,8 @@
           <app-toolbar>
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
             <div main-title>[[pageTitle]]</div>
+            <paper-icon-button id="searchButton" icon="search"></paper-icon-button>
+            <paper-tooltip position="left" for="searchButton">Search</paper-tooltip>
           </app-toolbar>
           <options-toolbar class="fit" page="[[page]]" items="{{toolbaritems}}" tableclearall="{{tableclearall}}" fileinfodialog="{{fileinfodialog}}"></options-toolbar>
         </app-header>
@@ -186,6 +190,8 @@
         <ytdl-fab-container page="[[page]]" newdownloaddialog="{{newdownloaddialog}}"></ytdl-fab-container>
       </app-header-layout>
     </app-drawer-layout>
+    <!-- ui layouts -->
+    <search-element searchopened="{{searchopened}}"></search-element>
     <!-- dialogs -->
     <new-download newdownloaddialog="{{newdownloaddialog}}" finaldownloaddialog="{{finaldownloaddialog}}" requestdownload="{{requestdownload}}"></new-download>
     <final-download newdownloaddialog="{{newdownloaddialog}}" finaldownloaddialog="{{finaldownloaddialog}}" requestdownload="{{requestdownload}}" downloadinfo="{{downloadinfo}}"></final-download>
@@ -235,6 +241,9 @@
           type: Boolean,
           value: false
         },
+        searchopened: {
+          type: Boolean
+        },
         tableclearall: {
           type: Boolean
         },
@@ -283,6 +292,7 @@
       // https://www.polymer-project.org/1.0/docs/devguide/registering-elements https://www.polymer-project.org/1.0/docs/devguide/events#annotated-listeners
       attached: function () {
         this.listen(this.$.mainMenu, 'tap', 'onMenuTap');
+        this.listen(this.$.searchButton, 'tap', 'onSearchButton');
         this.listen(this.$.mainMenu, 'keydown', 'onMenuEnter');
         // read scroll changes
         this.listen(Polymer.dom(this.$.headerLayout.$.contentContainer).node, 'scroll', '_onScrollApp');
@@ -290,6 +300,7 @@
 
       detached: function () {
         this.unlisten(this.$.mainMenu, 'tap', 'onMenuTap');
+        this.unlisten(this.$.searchButton, 'tap', 'onSearchButton');
         this.unlisten(this.$.mainMenu, 'keydown', 'onMenuEnter');
         // read scroll changes
         this.unlisten(Polymer.dom(this.$.headerLayout.$.contentContainer).node, 'scroll', '_onScrollApp');
@@ -318,6 +329,10 @@
             window.location.hash = `/${me.getAttribute('name')}`;
           }, 300);
         }
+      },
+
+      onSearchButton: function () {
+        this.searchopened = true;
       }
     });
   </script>

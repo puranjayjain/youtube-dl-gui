@@ -1,0 +1,208 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animation.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+
+<link rel="import" href="basic-overlay.html">
+
+<link rel="import" href="../shared-styles.html">
+
+<dom-module id="search-element">
+  <template>
+    <style is="custom-style" include="iron-flex iron-flex-alignment iron-flex-factors shared-styles">
+      basic-overlay {
+        position: fixed;
+        left: 0;
+        top: 32px;
+        right: 0;
+      }
+
+      paper-material {
+        z-index: 1;
+      }
+
+      app-header {
+        color: var(--primary-text-color);
+        background: var(--primary-card-color);
+      }
+
+      paper-icon-button {
+        --paper-icon-button-ink-color: var(--primary-text-color);
+        --paper-icon-button: {
+          color: var(--primary-text-color);
+        };
+      }
+
+      .backTooltip {
+        margin-left: 30px;
+      }
+
+      paper-input {
+        @apply(--layout-flex);
+        margin: 0 8px;
+        --paper-input-container-input: {
+          @apply(--paper-font-title);
+          font-weight: 400;
+        };
+        --paper-input-container-underline: {
+          border-color: transparent;
+        };
+        --paper-input-container-underline-focus: {
+          border-color: transparent;
+        };
+      }
+
+      h5 {
+        color: var(--primary-text-color);
+        background: var(--primary-background-color);
+        margin: 0;
+        padding: 14px 24px 0;
+      }
+
+      paper-icon-item {
+        margin: 0 8px;
+        --paper-icon-item: {
+          user-select: none;
+          cursor: pointer;
+        };
+      }
+
+    </style>
+    <app-localstorage-document key="recentsearch" data="{{recent}}"></app-localstorage-document>
+
+    <basic-overlay opened="{{searchopened}}" with-backdrop>
+      <paper-material elevation="1">
+        <app-header fixed effects="waterfall">
+          <app-toolbar>
+            <paper-icon-button id="backButton" icon="arrow-back"></paper-icon-button>
+            <paper-tooltip class=" backTooltip" for="backButton">Close Search</paper-tooltip>
+            <paper-input id="searchText" value="{{text}}" placeholder="Search &mdash; Settings and Files" no-label-float autofocus>
+              <paper-icon-button suffix id="clearButton" icon="clear"></paper-icon-button>
+            </paper-input>
+            <paper-tooltip for="clearButton">Clear Search</paper-tooltip>
+            <paper-icon-button id="voiceButton" icon="hardware:keyboard-voice"></paper-icon-button>
+            <paper-tooltip position="left" for="voiceButton">Voice Search</paper-tooltip>
+          </app-toolbar>
+        </app-header>
+      </paper-material>
+      <div id="recent">
+        <h5>Recently Searched</h5>
+        <paper-listbox>
+          <template is="dom-repeat" items="[[recent]]" as="item">
+            <paper-icon-item>
+              <iron-icon icon="query-builder" item-icon></iron-icon>
+              [[item]]
+            </paper-icon-item>
+          </template>
+        </paper-listbox>
+      </div>
+    </basic-overlay>
+    <theme-manager></theme-manager>
+  </template>
+  <script>
+    Polymer({
+      is: 'search-element',
+
+      behaviors: [Polymer.NeonAnimationRunnerBehavior],
+
+      properties: {
+        searchopened: {
+          type: Boolean,
+          observer: 'onSearchopenedChange',
+          notify: true
+        },
+        text: {
+          type: String,
+          observer: 'onTextChange'
+        },
+        recent: {
+          type: Array,
+          observer: 'onRecentChange',
+          value: []
+        },
+        animationConfig: {
+          type: Object,
+          value: function () {
+            return {
+              'entry': [
+                {
+                  name: 'fade-in-animation',
+                  node: this.$.recent,
+                  timing: {
+                    duration: 350,
+                    delay: 250
+                  }
+                }, {
+                  name: 'slide-from-top-animation',
+                  node: this.$.recent,
+                  timing: {
+                    duration: 350,
+                    delay: 250
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+
+      attached: function () {
+        this.listen(this.$.clearButton, 'tap', 'onClear');
+        this.listen(this.$.backButton, 'tap', 'onBackButton');
+        this.listen(this.$.searchText, 'keydown', 'onSearchTextEnter');
+      },
+
+      detached: function () {
+        this.unlisten(this.$.clearButton, 'tap', 'onClear');
+        this.unlisten(this.$.backButton, 'tap', 'onBackButton');
+        this.unlisten(this.$.searchText, 'keydown', 'onSearchTextEnter');
+      },
+
+      onRecentChange: function () {
+        if (this.recent.length > 0) {
+          this.$.recent.style.display = '';
+        } else {
+          this.$.recent.style.display = 'none';
+        }
+      },
+
+      onTextChange: function () {
+        if (this.text) {
+          this.$.clearButton.style.display = '';
+        } else {
+          this.$.clearButton.style.display = 'none';
+        }
+      },
+
+      onSearchopenedChange: function () {
+        if (this.searchopened) {
+          this.playAnimation('entry');
+        }
+      },
+
+      onClear: function () {
+        this.text = '';
+      },
+
+      onBackButton: function () {
+        this.text = '';
+        this.searchopened = false;
+      },
+
+      onSearchTextEnter: function (e) {
+        if (e.key === 'Enter') {
+          // add item to recents
+          this.unshift('recent', this.text);
+          // if greater than 3 items then remove one
+          if (this.recent.length > 3) {
+            this.pop('recent');
+          }
+          // notify the updates
+          this.onRecentChange();
+          // TODO search the exact terms
+
+        }
+      }
+    });
+  </script>
+</dom-module>
