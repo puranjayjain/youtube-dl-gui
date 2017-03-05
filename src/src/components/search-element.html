@@ -88,8 +88,8 @@
       <div id="recent">
         <h5>Recently Searched</h5>
         <paper-listbox>
-          <template is="dom-repeat" items="[[recent]]" as="item">
-            <paper-icon-item>
+          <template id="recentList" is="dom-repeat" items="[[recent]]" as="item">
+            <paper-icon-item on-tap="recentSearch">
               <iron-icon icon="query-builder" item-icon></iron-icon>
               [[item]]
             </paper-icon-item>
@@ -189,6 +189,12 @@
         this.searchopened = false;
       },
 
+      recentSearch: function (e) {
+        this.text = this.$.recentList.itemForElement(e.target);
+        // search also
+        this.doSearch();
+      },
+
       onSearchTextEnter: function (e) {
         if (e.key === 'Enter') {
           // add item to recents
@@ -199,9 +205,12 @@
           }
           // notify the updates
           this.onRecentChange();
-          // TODO search the exact terms
-
+          this.doSearch();
         }
+      },
+
+      doSearch: function () {
+        // TODO search the exact terms
       }
     });
   </script>
