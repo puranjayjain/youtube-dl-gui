@@ -34,6 +34,11 @@
           type: Number,
           value: -1
         },
+        currentdownloadindex: {
+          type: Number,
+          notify: true,
+          value: -1
+        },
         downloads: {
           type: Array,
           value: []
@@ -74,6 +79,7 @@
         // increment the last download index
         // TODO increment only if necessary else use the previous index if resuming a download
         this.lastdownloadindex++;
+        this.currentdownloadindex++;
         const cIndex = this.lastdownloadindex;
         // request file info
         // TODO add more parameters from settings and the dialog here e.g. username and password
@@ -98,7 +104,7 @@
           console.log(`exit: ${message} and ${signal}`);
         });
         // push them to the current downloadProcess array
-        downloadProcesses.push({index: cIndex, process: downloadProcess});
+        downloadProcesses.push({lastindex: cIndex, cIndex: this.currentdownloadindex, process: downloadProcess});
       }
     });
   </script>

@@ -89,6 +89,9 @@
         observer: '_finalDownloadDialogChange',
         notify: true
       },
+      currentdownloadindex: {
+        type: Number
+      },
       areenabled: {
         type: Boolean
       },
@@ -150,6 +153,7 @@
     },
 
     onStart: function () {
+      downloadProcesses[this.currentdownloadindex].process.send({type: 'init'});
       // clear user name and password as well
       this.username = '';
       this.password = '';
@@ -164,6 +168,8 @@
       if (filePath) {
         // if file path is not empty set it to text
         this.$.filepath.value = filePath;
+        // also send it back to processes
+        downloadProcesses[this.currentdownloadindex].process.send({type: 'setter', dataKey: 'filename', dataValue: filePath});
       }
     },
 
@@ -172,7 +178,6 @@
     },
 
     _downloadInfoChange: function (info) {
-      console.log(info);
       let formatList = [],
         folderPath;
       for (let f of info.formats) {
