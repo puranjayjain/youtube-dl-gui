@@ -58,8 +58,8 @@
     <div class="card">
       <div class="cardTitle">Filesystem Options</div>
       <div class="layout horizontal center-center">
-        <paper-input id="filepath" class="flex-1" label="Default folder for downloads" placeholder="e.g C:\Users\Foo\Downloads" error-message="This is not a valid folder path" value="{{defaultfolderpath}}"></paper-input>
-        <input id="file" class="file" type="file" tabindex="-1" nwworkingdir="[[defaultfolderpath]]" nwdirectory>
+        <paper-input id="filepath" class="flex-1" value="{{defaultfolderpath}}" label="Default folder for downloads" placeholder="e.g C:\Users\Foo\Downloads" error-message="This is not a valid folder path" value="{{defaultfolderpath}}"></paper-input>
+        <input id="file" class="file" type="file" tabindex="-1" nwworkingdir="{{defaultfolderpath}}" nwdirectory>
         <paper-icon-button id="selectButton" icon="folder" alt="Select folder path"></paper-icon-button>
         <paper-tooltip for="selectButton">Select folder path</paper-tooltip>
       </div>
@@ -101,7 +101,8 @@
         },
         defaultfolderpath: {
           type: String,
-          value: ''
+          value: '',
+          observerL '_onDefaultfolderpathChange'
         },
         showprogressbar: {
           type: Boolean
@@ -124,6 +125,12 @@
         this.unlisten(this.$.selectButton, 'tap', 'onSelect');
         this.unlisten(this.$.file, 'change', 'onFile');
         this.unlisten(this.$.clearButton, 'tap', 'onClearButton');
+      },
+
+      _onDefaultfolderpathChange: function () {
+        if (!this.defaultfolderpath) {
+          this.defaultfolderpath = nw.__dirname;
+        }
       },
 
       onSelect: function () {

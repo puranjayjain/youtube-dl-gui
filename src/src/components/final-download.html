@@ -89,6 +89,9 @@
         observer: '_finalDownloadDialogChange',
         notify: true
       },
+      lastdownloadindex: {
+        type: Number
+      },
       currentdownloadindex: {
         type: Number
       },
@@ -112,6 +115,7 @@
       },
       format: {
         type: Number,
+        observer: '_formatChange',
         value: 0
       },
       formats: {
@@ -121,6 +125,11 @@
       defaultfolderpath: {
         type: String,
         value: ''
+      },
+      downloads: {
+        type: Array,
+        notify: true,
+        value: []
       },
       requestdownload: {
         type: Object,
@@ -157,6 +166,8 @@
       // clear user name and password as well
       this.username = '';
       this.password = '';
+      // and close the dialog
+      this.finaldownloaddialog = false;
     },
 
     onSelect: function () {
@@ -168,8 +179,16 @@
       if (filePath) {
         // if file path is not empty set it to text
         this.$.filepath.value = filePath;
+        // add filepath to download list
+        this.set('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.file', filePath);
         // also send it back to processes
         downloadProcesses[this.currentdownloadindex].process.send({type: 'setter', dataKey: 'filename', dataValue: filePath});
+      }
+    },
+
+    _formatChange: function () {
+      if (this.format) {
+        this.set('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.size', info.formats[this.format].filesize);
       }
     },
 
@@ -188,6 +207,10 @@
               ? f.vbr
               : 'N/A'}`
         });
+        // check if this format_id is the default one, if so update the filesize
+        if (f.format_id === info.format_id) {
+          this.set('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.size', f.filesize);
+        }
       }
       // update the list https://www.polymer-project.org/1.0/docs/devguide/model-data#override-dirty-check
       this.formats = [];

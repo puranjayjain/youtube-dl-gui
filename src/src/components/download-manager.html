@@ -15,23 +15,25 @@
       /**
        * NOTE some of these properties are not yet used or implemented but just present for future usage, they don't affect the polymer perfomance as they use data paths to update objects and arrays and only update changes
        * they are marked with FIXME tags
-       * index: 0, //integer index of the current file (unique)
+       * index: 0, integer index of the current file (unique)
+       * cIndex: 0, integer index of the current file in the downloadProcesses (unique)
        * fileName: 'C:\Users\User\Music\Song.mp4', // full path to file
-       * format: 18, //the ytdl format code used for downloading it, defaults to the ytdl default of blank
+       * format: 18, the ytdl format code used for downloading it, defaults to the ytdl default of blank
        * url: 'the-website-url-download-the-video.com',
        * dUrl: 'the-link-to-download-the-video-from.mp4',
-       * size: 94, // full size in bytes
+       * size: 94, full size in bytes
        * FIXME description: 'something about it',
-       * FIXME firstTry: '17/05/2016 9:06 AM', // first attempt at downloading the file
-       * lastTry: '17/05/2016 9:06 AM', // last attempt at downloading the file
-       * downloaded: 5, // downloaded size in bytes
-       * status: 'paused', // can have values as 'starting', 'paused', 'downloading', 'error', 'canceled', 'done'
-       * selected: true // or false for checkbox and other use cases
+       * firstTry: '17/05/2016 9:06 AM', first attempt at downloading the file
+       * lastTry: '17/05/2016 9:06 AM', last attempt at downloading the file
+       * downloaded: 5, downloaded size in bytes
+       * status: 'paused', can have values as 'starting', 'paused', 'downloading', 'error', 'canceled', 'done'
+       * selected: true or false for checkbox and other use cases
       */
 
       properties: {
         lastdownloadindex: {
           type: Number,
+          notify: true,
           value: -1
         },
         currentdownloadindex: {
@@ -39,8 +41,12 @@
           notify: true,
           value: -1
         },
+        url: {
+          type: String
+        },
         downloads: {
           type: Array,
+          notify: true,
           value: []
         },
         requestdownload: {
@@ -58,6 +64,23 @@
         // init downloads property
         this.downloads = [];
         // TODO add downloads from previously downloaded files
+      },
+
+      // generate new download entry and add it to the top of the list
+      addDownload: function () {
+        this.downloads.unshift('downloads', {
+          index: this.lastdownloadindex,
+          cIndex: this.currentdownloadindex,
+          file: '',
+          downloaded: 0,
+          size: 0,
+          format: 'default',
+          url: this.url,
+          dUrl: this.url,
+          status: 'starting',
+          firstTry: moment().toISOString(),
+          lasttry: moment().toISOString()
+        });
       },
 
       _requestDownloadChange: function (requestdownload) {
@@ -92,6 +115,10 @@
           if (message.type === 'info') {
             // TODO add Information to data array downloadProcess.send({type: 'start'}) send back the info to the dialog
             this.downloadinfo = message.message;
+            addDownload();
+          } else if (message.type === 'data') {
+            this.set('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.status', 'downloading');
+            this.set('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.downloaded', message.message);
           } else {
             console.log(message);
           }

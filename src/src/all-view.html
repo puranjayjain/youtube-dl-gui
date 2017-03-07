@@ -36,13 +36,15 @@
               icon: 'arrow-upward'
             }, {
               title: 'Downloaded',
-              icon: 'arrow-upward'
+              icon: 'arrow-upward',
+              conversion: 'size'
             }, {
               title: 'Status',
               icon: 'arrow-upward'
             }, {
               title: 'Size',
-              icon: 'arrow-upward'
+              icon: 'arrow-upward',
+              conversion: 'size'
             }, {
               title: 'Last Try',
               icon: 'arrow-upward',
@@ -60,25 +62,24 @@
           {
             "index": 15,
             "file": "Lizzie Oneal",
-            "downloaded": "sss",
+            "downloaded": 0,
             "status": "Mercado",
             "size": 65886,
             "lasttry": "2016-12-11T18:45:10"
           }, {
             "index": 5,
             "file": "Lizzie Oneal",
-            "downloaded": "sss",
+            "downloaded": 0,
             "status": "Mercado",
             "size": 65886,
             "lasttry": "2016-12-11T18:45:10"
           }
         ];
-        setTimeout(() => {
-          this.tabledata[0].file = 'ds';
-        }, 2000);
-        setTimeout(() => {
-          console.log(this.tabledata);
-        }, 5000);
+        // console.log(lodash.findIndex(foo, {'index': 15}));
+        this.async(function () {
+          this.set('tabledata.' + lodash.findIndex(this.tabledata, {'index': 15}) + '.file', 'charlotte');
+        }, 4000);
+        // setTimeout(() => { this.tabledata[0].file = 'ds'; }, 2000); setTimeout(() => {   console.log(this.tabledata); }, 5000);
       }
     });
   </script>

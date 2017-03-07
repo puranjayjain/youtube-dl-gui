@@ -195,7 +195,8 @@
           observer: '_allCheckedChanged'
         },
         appscrolltop: {
-          type: Number
+          type: Number,
+          value: 0
         },
         tableclearall: {
           type: Boolean,
@@ -221,6 +222,9 @@
         if (conversion === 'recent') {
           let moment = require('moment');
           value = moment(value).fromNow();
+        }
+        if (conversion === 'size') {
+          value = bytes(value);
         }
         return value;
       },
