@@ -37,3 +37,4 @@ jspm_packages
 build
 platform_build
 dev
+yarn.lock
