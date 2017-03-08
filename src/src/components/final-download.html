@@ -51,8 +51,8 @@
       </div>
       <div class="layout horizontal center-center">
         <paper-dropdown-menu id="format" class="flex-1 format" label="Choose a format" disabled$="{{areenabled}}">
-          <paper-listbox class="dropdown-content" selected="[[format]]">
-            <paper-item>Default</paper-item>
+          <paper-listbox class="dropdown-content" selected="{{format}}">
+            <!-- <paper-item>Default</paper-item> -->
             <template is="dom-repeat" items="{{formats}}" as="item">
               <paper-item>
                 {{item.text}}
@@ -70,160 +70,175 @@
     <!-- manages the app's theme -->
     <theme-manager></theme-manager>
   </template>
+  <script>
 
-</dom-module>
+    Polymer({
+      is: 'final-download',
 
-<script>
+      behaviors: [Polymer.NeonAnimationRunnerBehavior],
 
-  Polymer({
-    is: 'final-download',
+      properties: {
+        auth: {
+          type: Boolean
+        },
+        finaldownloaddialog: {
+          type: Boolean,
+          observer: '_finalDownloadDialogChange',
+          notify: true
+        },
+        lastdownloadindex: {
+          type: Number
+        },
+        currentdownloadindex: {
+          type: Number
+        },
+        areenabled: {
+          type: Boolean
+        },
+        url: {
+          type: String
+        },
+        username: {
+          type: String
+        },
+        password: {
+          type: String
+        },
+        saveas: {
+          type: String
+        },
+        directory: {
+          type: String
+        },
+        format: {
+          type: Number,
+          observer: '_formatChange',
+          value: 0
+        },
+        formats: {
+          type: Array,
+          value: []
+        },
+        originalformats: {
+          type: Array,
+          value: []
+        },
+        defaultfolderpath: {
+          type: String,
+          value: ''
+        },
+        downloads: {
+          type: Array,
+          notify: true,
+          value: []
+        },
+        requestdownload: {
+          type: Object,
+          notify: true
+        },
+        downloadinfo: {
+          type: Object,
+          observer: '_downloadInfoChange',
+          notify: true
+        }
+      },
 
-    behaviors: [Polymer.NeonAnimationRunnerBehavior],
+      ready: function () {
+        // force style app header layout http://stackoverflow.com/questions/35149624/dynamically-inject-shared-styles-in-polymer-element-polymer-1-2-3
+        let myDomModule = document.createElement('style', 'custom-style');
+        myDomModule.setAttribute('include', 'shared-styles');
+        Polymer.dom(this.$.format.$.menuButton.root).appendChild(myDomModule);
+      },
 
-    properties: {
-      auth: {
-        type: Boolean
+      attached: function () {
+        this.listen(this.$.start, 'tap', 'onStart');
+        this.listen(this.$.selectButton, 'tap', 'onSelect');
+        this.listen(this.$.file, 'change', 'onFile');
       },
-      finaldownloaddialog: {
-        type: Boolean,
-        observer: '_finalDownloadDialogChange',
-        notify: true
-      },
-      lastdownloadindex: {
-        type: Number
-      },
-      currentdownloadindex: {
-        type: Number
-      },
-      areenabled: {
-        type: Boolean
-      },
-      url: {
-        type: String
-      },
-      username: {
-        type: String
-      },
-      password: {
-        type: String
-      },
-      saveas: {
-        type: String
-      },
-      directory: {
-        type: String
-      },
-      format: {
-        type: Number,
-        observer: '_formatChange',
-        value: 0
-      },
-      formats: {
-        type: Array,
-        value: []
-      },
-      defaultfolderpath: {
-        type: String,
-        value: ''
-      },
-      downloads: {
-        type: Array,
-        notify: true,
-        value: []
-      },
-      requestdownload: {
-        type: Object,
-        notify: true
-      },
-      downloadinfo: {
-        type: Object,
-        observer: '_downloadInfoChange',
-        notify: true
-      }
-    },
 
-    ready: function () {
-      // force style app header layout http://stackoverflow.com/questions/35149624/dynamically-inject-shared-styles-in-polymer-element-polymer-1-2-3
-      let myDomModule = document.createElement('style', 'custom-style');
-      myDomModule.setAttribute('include', 'shared-styles');
-      Polymer.dom(this.$.format.$.menuButton.root).appendChild(myDomModule);
-    },
+      detached: function () {
+        this.unlisten(this.$.start, 'tap', 'onStart');
+        this.unlisten(this.$.selectButton, 'tap', 'onSelect');
+        this.unlisten(this.$.file, 'change', 'onFile');
+      },
 
-    attached: function () {
-      this.listen(this.$.start, 'tap', 'onStart');
-      this.listen(this.$.selectButton, 'tap', 'onSelect');
-      this.listen(this.$.file, 'change', 'onFile');
-    },
+      onStart: function () {
+        downloadProcesses[this.currentdownloadindex].process.send({type: 'init'});
+        // clear user name and password as well
+        this.username = '';
+        this.password = '';
+        // and close the dialog
+        this.finaldownloaddialog = false;
+      },
 
-    detached: function () {
-      this.unlisten(this.$.start, 'tap', 'onStart');
-      this.unlisten(this.$.selectButton, 'tap', 'onSelect');
-      this.unlisten(this.$.file, 'change', 'onFile');
-    },
+      onSelect: function () {
+        this.$.file.click();
+      },
 
-    onStart: function () {
-      downloadProcesses[this.currentdownloadindex].process.send({type: 'init'});
-      // clear user name and password as well
-      this.username = '';
-      this.password = '';
-      // and close the dialog
-      this.finaldownloaddialog = false;
-    },
+      onFile: function () {
+        let filePath = this.$.file.value;
+        if (filePath) {
+          // if file path is not empty set it to text
+          this.$.filepath.value = filePath;
+          // add filepath to download list
+          this.set('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.file', filePath);
+          // also send it back to processes
+          downloadProcesses[this.currentdownloadindex].process.send({type: 'setter', dataKey: 'filename', dataValue: filePath});
+        }
+      },
 
-    onSelect: function () {
-      this.$.file.click();
-    },
+      _formatChange: function () {
+        if (this.format) {
+          this.set('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.size', this.originalformats[this.format - 1].filesize);
+        }
+      },
 
-    onFile: function () {
-      let filePath = this.$.file.value;
-      if (filePath) {
-        // if file path is not empty set it to text
+      _finalDownloadDialogChange: function (opened) {
+        this.areenabled = opened;
+      },
+
+      _downloadInfoChange: function (info) {
+        let formatList = [],
+          folderPath,
+          filePath;
+        formatList.push({text: 'Default'});
+        for (let f of info.formats) {
+          formatList.push({
+            text: `${f.format.split(' - ')[1]} [.${f.ext}] codec(a+v): ${f.acodec}+${f.vcodec}} @${f.abr
+              ? f.abr
+              : 'N/A'}+${f.vbr
+                ? f.vbr
+                : 'N/A'}`
+          });
+          // check if this format_id is the default one, if so update the filesize
+          if (f.format_id === info.format_id) {
+            if (f.filesize) {
+              this.set('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.size', f.filesize);
+            } else {
+              this.set('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.size', '&mdash;');
+            }
+          }
+        }
+        // update the list https://www.polymer-project.org/1.0/docs/devguide/model-data#override-dirty-check
+        this.formats = [];
+        this.formats = formatList;
+        this.originalformats = [];
+        this.originalformats = info.formats;
+        // update the default path and in dialog too
+        folderPath = this.defaultfolderpath
+          ? this.defaultfolderpath
+          : nw.__dirname;
+        filePath = path.join(folderPath, info._filename);
         this.$.filepath.value = filePath;
-        // add filepath to download list
+        // also send them back and add filepath to download list
         this.set('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.file', filePath);
         // also send it back to processes
         downloadProcesses[this.currentdownloadindex].process.send({type: 'setter', dataKey: 'filename', dataValue: filePath});
+        this.saveas = info._filename;
+        this.directory = folderPath;
+        // re enable controls
+        this.areenabled = false;
       }
-    },
-
-    _formatChange: function () {
-      if (this.format) {
-        this.set('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.size', info.formats[this.format].filesize);
-      }
-    },
-
-    _finalDownloadDialogChange: function (opened) {
-      this.areenabled = opened;
-    },
-
-    _downloadInfoChange: function (info) {
-      let formatList = [],
-        folderPath;
-      for (let f of info.formats) {
-        formatList.push({
-          text: `${f.format.split(' - ')[1]} [.${f.ext}] codec(a+v): ${f.acodec}+${f.vcodec}} @${f.abr
-            ? f.abr
-            : 'N/A'}+${f.vbr
-              ? f.vbr
-              : 'N/A'}`
-        });
-        // check if this format_id is the default one, if so update the filesize
-        if (f.format_id === info.format_id) {
-          this.set('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.size', f.filesize);
-        }
-      }
-      // update the list https://www.polymer-project.org/1.0/docs/devguide/model-data#override-dirty-check
-      this.formats = [];
-      this.formats = formatList;
-      // update the default path and in dialog too
-      folderPath = this.defaultfolderpath
-        ? this.defaultfolderpath
-        : nw.__dirname;
-      this.$.filepath.value = path.join(folderPath, info._filename);
-      this.saveas = info._filename;
-      this.directory = folderPath;
-      // re enable controls
-      this.areenabled = false;
-    }
-  });
-</script>
+    });
+  </script>
+</dom-module>

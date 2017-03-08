@@ -53,33 +53,9 @@
           ]
         },
         tabledata: {
-          type: Array
+          type: Array,
+          value: []
         }
-      },
-
-      attached: function () {
-        this.tabledata = [
-          {
-            "index": 15,
-            "file": "Lizzie Oneal",
-            "downloaded": 0,
-            "status": "Mercado",
-            "size": 65886,
-            "lasttry": "2016-12-11T18:45:10"
-          }, {
-            "index": 5,
-            "file": "Lizzie Oneal",
-            "downloaded": 0,
-            "status": "Mercado",
-            "size": 65886,
-            "lasttry": "2016-12-11T18:45:10"
-          }
-        ];
-        // console.log(lodash.findIndex(foo, {'index': 15}));
-        this.async(function () {
-          this.set('tabledata.' + lodash.findIndex(this.tabledata, {'index': 15}) + '.file', 'charlotte');
-        }, 4000);
-        // setTimeout(() => { this.tabledata[0].file = 'ds'; }, 2000); setTimeout(() => {   console.log(this.tabledata); }, 5000);
       }
     });
   </script>

@@ -2,9 +2,12 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <link rel="import" href="../../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
+<link rel="import" href="../../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
 
 <dom-module id="download-manager">
   <template>
+    <app-indexeddb-mirror key="downloads" online="{{online}}" data="{{downloadsindex}}" persisted-data="{{downloadsdata}}"></app-indexeddb-mirror>
+    <!-- persisted-data="{{persistedData}}"> -->
     <app-localstorage-document key="lastdownloadindex" data="{{lastdownloadindex}}"></app-localstorage-document>
   </template>
 
@@ -26,7 +29,7 @@
        * firstTry: '17/05/2016 9:06 AM', first attempt at downloading the file
        * lastTry: '17/05/2016 9:06 AM', last attempt at downloading the file
        * downloaded: 5, downloaded size in bytes
-       * status: 'paused', can have values as 'starting', 'paused', 'downloading', 'error', 'canceled', 'done'
+       * status: 'paused', can have values as 'starting', 'paused', 'downloading', 'error', 'canceled', 'downloaded'
        * selected: true or false for checkbox and other use cases
       */
 
@@ -43,6 +46,18 @@
         },
         url: {
           type: String
+        },
+        online: {
+          type: Array,
+          observer: 'onlineChange'
+        },
+        downloadsindex: {
+          type: Array,
+          observer: '_downloadsindexChange'
+        },
+        downloadsdata: {
+          type: Array,
+          observer: '_downloadsdataChange'
         },
         downloads: {
           type: Array,
@@ -61,14 +76,13 @@
       },
 
       ready: function () {
-        // init downloads property
-        this.downloads = [];
-        // TODO add downloads from previously downloaded files
+        console.log(this.downloadsindex);
+        console.log(this.downloadsdata);
       },
 
       // generate new download entry and add it to the top of the list
       addDownload: function () {
-        this.downloads.unshift('downloads', {
+        this.unshift('downloads', {
           index: this.lastdownloadindex,
           cIndex: this.currentdownloadindex,
           file: '',
@@ -77,10 +91,34 @@
           format: 'default',
           url: this.url,
           dUrl: this.url,
-          status: 'starting',
+          status: 'Starting',
           firstTry: moment().toISOString(),
           lasttry: moment().toISOString()
         });
+        // update data in the indexeddb
+        this.set('downloadsindex', []);
+        this.set('downloadsindex', this.get('downloads'));
+      },
+
+      onlineChange: function () {
+        
+      },
+
+      // add downloads from previously downloaded files
+      _downloadsindexChange: function () {
+        console.log(this.downloadsindex);
+        if (this.downloadsindex.length > 0) {
+          this.set('downloads', []);
+          this.set('downloads', this.get('downloadsindex'));
+        }
+      },
+
+      _downloadsdataChange: function () {
+        console.log(this.downloadsdata);
+        if (this.downloadsdata.length > 0) {
+          this.set('downloads', []);
+          this.set('downloads', this.get('downloadsdata'));
+        }
       },
 
       _requestDownloadChange: function (requestdownload) {
@@ -106,7 +144,8 @@
         const cIndex = this.lastdownloadindex;
         // request file info
         // TODO add more parameters from settings and the dialog here e.g. username and password
-        let args = Object.assign({}, this.requestdownload);
+        let args = Object.assign({}, this.requestdownload),
+          size;
         args.dirname = nw.__dirname;
         args.index = cIndex;
         downloadProcess.send({type: 'info', args: Object.assign({}, args)});
@@ -114,14 +153,20 @@
         downloadProcess.on('message', (message) => {
           if (message.type === 'info') {
             // TODO add Information to data array downloadProcess.send({type: 'start'}) send back the info to the dialog
+            this.addDownload();
             this.downloadinfo = message.message;
-            addDownload();
           } else if (message.type === 'data') {
-            this.set('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.status', 'downloading');
-            this.set('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.downloaded', message.message);
+            this.set('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.status', 'Downloading');
+            size = this.get('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.downloaded');
+            this.set('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.downloaded', size + message.message);
+          } else if (message.type === 'end') {
+            this.set('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.status', 'Downloaded');
           } else {
             console.log(message);
           }
+          // update data in the indexeddb
+          this.set('downloadsindex', []);
+          this.set('downloadsindex', this.get('downloads'));
         });
         // catch error and exit codes
         downloadProcess.on('error', (message) => {

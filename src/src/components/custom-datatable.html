@@ -223,7 +223,7 @@
           let moment = require('moment');
           value = moment(value).fromNow();
         }
-        if (conversion === 'size') {
+        if (conversion === 'size' && value !== '&mdash;') {
           value = bytes(value);
         }
         return value;

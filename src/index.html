@@ -42,16 +42,7 @@
         bytes = require('bytes'),
         moment = require('moment'),
         lodash = require('lodash'),
-        child_process = require('child_process'),
-        localforage = require('localforage');
-
-      // This will use a different driver order.
-      localforage.config({
-        driver: [
-          localforage.INDEXEDDB, localforage.WEBSQL
-        ],
-        name: 'youtube-dl'
-      });
+        child_process = require('child_process');
     </script>
 
     <link rel="import" href="src/youtube-dl.html">
