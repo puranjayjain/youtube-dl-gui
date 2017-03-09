@@ -2,10 +2,12 @@
 
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="components/custom-datatable.html">
+<link rel="import" href="components/all-placeholder.html">
 
 <dom-module id="all-view">
   <template>
     <custom-datatable toolbaritems="{{toolbaritems}}" appscrolltop="[[appscrolltop]]" tableclearall="{{tableclearall}}" tableheaders="{{tableheaders}}" minwidth="[[minwidth]]" tabledata="[[tabledata]]"></custom-datatable>
+    <all-placeholder opened="{{opened}}"></all-placeholder>
   </template>
 
   <script>
@@ -27,6 +29,13 @@
         minwidth: {
           type: 'Number',
           value: 850
+        },
+        indexeddbready: {
+          type: Boolean
+        },
+        opened: {
+          type: Boolean,
+          value: false
         },
         tableheaders: {
           type: Array,
@@ -54,7 +63,20 @@
         },
         tabledata: {
           type: Array,
+          observer: '',
           value: []
+        }
+      },
+
+      observers: ['onTabledataChange(tabledata, indexeddbready)'],
+
+      onTabledataChange: function (tabledata, indexeddbready) {
+        if (indexeddbready) {
+          if (this.tabledata.length > 0) {
+            this.opened = false;
+          } else {
+            this.opened = true;
+          }
         }
       }
     });

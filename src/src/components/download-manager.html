@@ -64,6 +64,10 @@
           observer: '_requestDownloadChange',
           notify: true
         },
+        indexeddbready: {
+          type: Boolean,
+          notify: true
+        },
         downloadinfo: {
           type: Object,
           notify: true
@@ -96,7 +100,9 @@
             this.set('downloads', []);
             this.set('downloads', response);
           }
+          this.indexeddbready = true;
         }).catch((error) => {
+          this.indexeddbready = true;
           console.error(error);
         });
       },

@@ -1,0 +1,82 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../shared-styles.html">
+
+<dom-module id="all-placeholder">
+  <template>
+    <style is="custom-style" include="iron-flex shared-styles">
+      :host {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: calc(100vw - 12px);
+        height: calc(100vh - 120px);
+      }
+
+      paper-material {
+        position: absolute;
+        height: 50vh;
+        width: 50vh;
+        border-radius: 50%;
+        background: var(--primary-color);
+        left: calc(50% - 25vh);
+        top: calc(50% - 25vh);
+        @apply(--layout);
+        @apply(--layout-vertical);
+        @apply(--layout-center);
+        @apply(--layout-center-justified);
+        min-width: 325px;
+        min-height: 325px;
+      }
+
+      iron-icon {
+        height: 18vh;
+        width: 18vh;
+        --iron-icon-fill-color: var(--paper-amber-500);
+      }
+
+      h2 {
+        margin: 0 auto 0.1em 3.8vh;
+        color: var(--primary-text-color);
+      }
+
+      h3 {
+        margin: 0 2vh 7vh;
+        color: var(--secondary-text-color);
+      }
+
+    </style>
+    <paper-material elevation="1">
+      <iron-icon icon="create-new-folder"></iron-icon>
+      <h2>
+        It's empty here
+      </h2>
+      <h3>
+        Start downloading something to fill it!
+      </h3>
+    </paper-material>
+    <!-- manages the app's theme -->
+    <theme-manager></theme-manager>
+  </template>
+  <script>
+    Polymer({
+      is: 'all-placeholder',
+
+      properties: {
+        opened: {
+          type: Boolean,
+          notify: true,
+          observer: 'onOpenedChange'
+        }
+      },
+
+      onOpenedChange: function () {
+        if (this.opened) {
+          this.style.display = '';
+        } else {
+          this.style.display = 'none';
+        }
+      }
+    });
+  </script>
+</dom-module>

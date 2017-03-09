@@ -215,7 +215,7 @@
             if (f.filesize) {
               this.set('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.size', f.filesize);
             } else {
-              this.set('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.size', '&mdash;');
+              this.set('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.size', '—');
             }
           }
         }

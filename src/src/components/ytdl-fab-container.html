@@ -4,115 +4,140 @@
 <link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
 
 <link rel="import" href="../font/mdi.html">
-<link rel="import" href="fab-download.html">
-
 <link rel="import" href="../shared-styles.html">
 
 <dom-module id="ytdl-fab-container">
   <template>
-  <style is="custom-style" include="shared-styles">
-  :host {
-    position: fixed;
-    bottom: 25px;
-    right: 20px;
-    display: none;
-    flex-direction: column;
-    align-items: center;
-  }
+    <style is="custom-style" include="shared-styles">
+      :host {
+        position: fixed;
+        bottom: 25px;
+        right: 20px;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+      }
 
-  paper-fab.lightning {
-    margin-bottom: 15px;
-    --paper-fab-iron-icon: {
-      width: 18px;
-      height: 18px;
-    };
-  }
-  </style>
-  <paper-fab mini id="fabQuickDownload" class="lightning" icon="mdi:flash"></paper-fab>
-  <paper-tooltip for="fabQuickDownload" position="left">Quick Download from a new URL</paper-tooltip>
-  <fab-download newdownloaddialog="{{newdownloaddialog}}"></fab-download>
-  <!-- manages the app's theme -->
-  <theme-manager></theme-manager>
-</template>
+      paper-fab.lightning {
+        margin-bottom: 15px;
+        --paper-fab-iron-icon: {
+          width: 18px;
+          height: 18px;
+        };
+      }
 
-</dom-module>
+    </style>
+    <paper-fab mini id="fabQuickDownload" class="lightning" icon="mdi:flash"></paper-fab>
+    <paper-tooltip for="fabQuickDownload" position="left">Quick Download from a new URL</paper-tooltip>
+    <paper-fab id="fabDownload" icon="add"></paper-fab>
+    <paper-tooltip for="fabDownload" position="left">Download from a new URL</paper-tooltip>
+    <!-- manages the app's theme -->
+    <theme-manager></theme-manager>
+  </template>
+  <script>
+    Polymer({
+      is: 'ytdl-fab-container',
 
-<script>
+      behaviors: [Polymer.NeonAnimationRunnerBehavior],
 
-Polymer({
-  is: 'ytdl-fab-container',
+      properties: {
+        page: {
+          type: String
+        },
+        items: {
+          type: Number,
+          value: 0
+        },
+        newdownloaddialog: {
+          type: Boolean,
+          notify: true
+        },
 
-  behaviors: [
-    Polymer.NeonAnimationRunnerBehavior
-  ],
+        animationConfig: {
+          type: Object,
+          value: function () {
+            return {
+              'entry': [
+                {
+                  name: 'cascaded-animation',
+                  animation: 'scale-up-animation',
+                  nodes: [
+                    this.$.fabDownload, this.$.fabQuickDownload
+                  ],
+                  nodeDelay: 60,
+                  timing: {
+                    duration: 250,
+                    delay: 900
+                  }
+                }
+              ],
+              'exit': [
+                {
+                  name: 'cascaded-animation',
+                  animation: 'scale-down-animation',
+                  nodes: [
+                    this.$.fabQuickDownload, this.$.fabDownload
+                  ],
+                  nodeDelay: 60,
+                  timing: {
+                    duration: 250
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
 
-  properties: {
-    page: {
-      type: String,
-      observer: '_pageNameChanged'
-    },
-    newdownloaddialog: {
-      type: Boolean,
-      notify: true
-    },
+      listeners: {
+        'neon-animation-finish': '_onAnimationFinish'
+      },
+      
+      observers: ['_stateChanged(page, items)'],
 
-    animationConfig: {
-      type: Object,
-      value: function() {
-        return {
-          'entry': [{
-            name: 'scale-up-animation',
-            timing: {
-              delay: 900
-            },
-            node: this
-          }],
-          'exit': [{
-            name: 'scale-down-animation',
-            node: this
-          }]
+      attached: function () {
+        this.listen(this.$.fabDownload, 'tap', 'onNewDownload');
+      },
+
+      detached: function () {
+        this.unlisten(this.$.fabDownload, 'tap', 'onNewDownload');
+      },
+      _onAnimationFinish: function () {
+        if (!this.opened) {
+          this.style.display = '';
+        }
+      },
+
+      _show: function () {
+        // if not shown
+        if (!this.opened) {
+          this.opened = true;
+          this.style.display = 'flex';
+          this.playAnimation('entry');
+        }
+      },
+
+      _hide: function () {
+        // if shown
+        if (this.opened) {
+          this.style.display = 'flex';
+          this.opened = false;
+          this.playAnimation('exit');
+        }
+      },
+
+      onNewDownload: function () {
+        this.newdownloaddialog = true;
+      },
+
+      _stateChanged: function (page, items) {
+        // open or keep the animation closed
+        if (['all', 'downloading', 'unfinished', 'downloaded'].indexOf(page) > -1 && items === 0) {
+          this._show();
+        } else {
+          this._hide();
         }
       }
-    }
-  },
-
-  listeners: {
-    'neon-animation-finish': '_onAnimationFinish'
-  },
-
-  _onAnimationFinish: function() {
-    if (!this.opened) {
-      this.style.display = '';
-    }
-  },
-
-  _show: function() {
-    // if not shown
-    if (!this.opened) {
-      this.opened = true;
-      this.style.display = 'flex';
-      this.playAnimation('entry');
-    }
-  },
-
-  _hide: function() {
-    // if shown
-    if (this.opened) {
-      this.style.display = 'flex';
-      this.opened = false;
-      this.playAnimation('exit');
-    }
-  },
-
-  _pageNameChanged: function(page) {
-    // open or keep the animation closed
-    if (['all','downloading','unfinished','downloaded'].indexOf(page) > -1) {
-      this._show();
-    }
-    else {
-      this._hide();
-    }
-  },
-});
-
-</script>
+    });
+  </script>
+</dom-module>

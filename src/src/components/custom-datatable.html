@@ -19,11 +19,10 @@
       }
 
       .row {
+        box-sizing: border-box;
         height: 48px;
         background-color: var(--primary-card-color);
         color: var(--primary-text-color);
-        border-bottom: 1px solid var(--divider-color);
-        padding-right: 24px;
         font-family: 'robotoregular';
         font-size: 13px;
       }
@@ -32,10 +31,8 @@
       }
 
       .row.header {
-        box-sizing: border-box;
         z-index: 1;
         height: 64px;
-        padding-right: 27px;
         font-family: 'robotomedium';
         font-size: 12px;
         color: var(--secondary-text-color);
@@ -56,6 +53,11 @@
         --iron-icon-fill-color: var(--secondary-text-color);
         padding-right: 2px;
       }
+      .tableicon {
+        --iron-icon-width: 22px;
+        --iron-icon-height: 22px;
+        margin-left: -2px;
+      }
       .row:not(.header):hover {
         color: var(--highlight-text-color);
         background-color: var(--table-highlight-color);
@@ -64,25 +66,56 @@
         transform: scale(1);
         opacity: 1;
       }
-      .cell:not(.check) {
+      .row:not(.header).selected {
+        color: var(--highlight-text-color);
+        background-color: var(--table-selected-color);
+      }
+      .row:not(.header):focus {
+        outline: none !important;
+        background-color: var(--table-highlight-color);
+      }
+      .row:not(.header).selected:focus {
+        background-color: var(--table-selected-color);
+        border-left: 8px solid var(--table-highlight-color);
+      }
+      .row .cell:not(.check) {
+        box-sizing: border-box;
         padding-left: 56px;
         text-align: right;
         min-width: 100px;
-        line-height: 64px;
         position: relative;
+        border-bottom: 1px solid var(--divider-color);
         /* https://css-tricks.com/snippets/css/truncate-string-with-ellipsis/ */
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
       }
 
-      .cell.check {
+      .row .cell {
+        line-height: 48px;
+        height: 48px;
+      }
+
+      .row.header .cell {
+        height: 64px;
         line-height: 64px;
+      }
+      .row.header .cell:last-of-type {
+        padding-right: 27px;
+      }
+
+      .cell.check {
+        padding-right: 56px;
         width: 20px;
       }
-      .cell:first-child,
-      .cell:nth-child(2) {
+      .cell:first-child {
         padding-left: 24px;
+      }
+      .row .cell:nth-child(2) {
+        padding-left: 0;
+      }
+      .row .cell:last-of-type {
+        padding-right: 24px;
       }
 
       .cell.num {
@@ -91,6 +124,24 @@
 
       .tablerow {
         min-width: var(--min-width);
+      }
+
+      .tablerow paper-checkbox.check {
+        display: none;
+      }
+      .tablerow:hover .tableicon {
+        display: none;
+      }
+      .tablerow:hover paper-checkbox.check {
+        display: block;
+      }
+
+      .tablerow.selected .tableicon {
+        display: none;
+      }
+
+      .tablerow.selected paper-checkbox.check {
+        display: block;
       }
 
       iron-list {
@@ -105,6 +156,7 @@
       }
 
       paper-checkbox.check {
+        cursor: pointer;
         pointer-events: none;
       }
 
@@ -123,13 +175,14 @@
     </div>
     <iron-list id="list" items="[[tabledata]]" as="item" selected-items="{{selectedItems}}" selection-enabled multi-selection>
       <template>
-        <div class="layout horizontal row center tablerow">
+        <div tabindex$="[[tabIndex]]" aria-label$="Select/Deselect [[item.file]]" class$="[[_computedClass(selected)]]">
           <div class="cell check">
             <!-- iron list bug prevents checkbox events to propogate back so using my hack now -->
             <!-- https://github.com/PolymerElements/iron-list/issues/163 -->
             <!-- https://github.com/PolymerElements/iron-list/issues/199 -->
             <!-- https://github.com/PolymerElements/iron-list/issues/111 -->
-            <paper-checkbox class="check" checked="[[selected]]"></paper-checkbox>
+            <iron-icon class="tableicon" icon="[[_convertToFormat(item.file, '-1')]]"></iron-icon>
+            <paper-checkbox class="check" checked="{{selected}}"></paper-checkbox>
           </div>
           <div class="flex cell">
             [[_convertToFormat(item.file, '0')]]
@@ -213,27 +266,69 @@
 
       // convert to last tried or bytes, etc.
       _convertToFormat(value, index) {
-        let conversion = '';
+        let conversion = '',
+          ext;
         // find the conversion method
-        if (this.tableheaders[index].hasOwnProperty('conversion')) {
+        if (index < 0) {
+          // check extension of the file
+          ext = path.extname(value);
+          if ([
+            '.avi',
+            '.mp4',
+            '.mpg',
+            '.mpeg',
+            '.m2p',
+            '.ps',
+            '.m4a',
+            '.m4p',
+            '.m4b',
+            '.m4r',
+            '.m4v',
+            '.mov',
+            '.qt',
+            '.webm',
+            '.flv',
+            '.f4v',
+            '.f4p',
+            '.f4a',
+            '.f4b',
+            '.ogv',
+            '.ogg',
+            '.mkv',
+            '.mk3d',
+            '.mka',
+            '.mks',
+            '.swf'
+          ].indexOf(ext) > -1) {
+            value = 'av:movie';
+          } else if (['.3gp', '.3g2', '.mp3', '.ogg', '.oga'].indexOf(ext) > -1) {
+            value = 'av:music-video';
+          } else {
+            value = 'folder';
+          }
+        } else if (this.tableheaders[index].hasOwnProperty('conversion')) {
           conversion = this.tableheaders[index].conversion;
         }
         // do the conversion if found
         if (conversion === 'recent') {
           let moment = require('moment');
           value = moment(value).fromNow();
-        }
-        if (conversion === 'size' && value !== '&mdash;') {
+        } else if (conversion === 'size' && value !== '—') {
           value = bytes(value);
         }
         return value;
       },
-
+      _computedClass: function (isSelected) {
+        let classes = 'layout horizontal row center tablerow';
+        if (isSelected) {
+          classes += ' selected';
+        }
+        return classes;
+      },
       _setMinWidth: function (width) {
         this.customStyle['--min-width'] = `${width}px`;
         this.updateStyles();
       },
-
       _onClearAll: function (clearAll) {
         if (clearAll) {
           // un select all
@@ -242,7 +337,6 @@
           this.allCheck = false;
         }
       },
-
       _allCheckedChanged: function (checked) {
         if (checked) {
           // select all items
@@ -256,7 +350,6 @@
           this.$.list.clearSelection();
         }
       },
-
       _itemsChanged: function (items) {
         this.toolbaritems = items;
       }
