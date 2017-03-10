@@ -9,15 +9,63 @@
 <dom-module id="file-info">
   <template>
     <style is="custom-style" include="iron-flex iron-flex-alignment iron-flex-factors shared-styles">
+      :host {
+        color: var(--primary-text-color);
+      }
+
+      .fileinfo {
+        height: 100%;
+      }
+
       app-toolbar {
         margin-top: 32px;
       }
 
+      div[main-title] {
+        text-align: left;
+        padding-left: 12px;
+      }
+
+      .content {
+        overflow-y: auto;
+        text-align: left;
+        height: calc(100% - 120px);
+        padding: 12px 12px 64px 16px;
+      }
+
+      .divider {
+        width: 100%;
+        height: 1px;
+        margin: 8px 0;
+        background-color: var(--divider-color);
+      }
+
     </style>
-    <paper-material elevation="1">
-      <app-toolbar>
-        <div main-title>Details</div>
-      </app-toolbar>
+    <paper-material class="fileinfo" elevation="1">
+      <paper-material elevation="1">
+        <app-toolbar>
+          <div main-title>Details</div>
+        </app-toolbar>
+      </paper-material>
+      <div class="content">
+        Full Path : [[fileinfo.file]]
+        <div class="divider"></div>
+        Url : [[fileinfo.url]]
+        <div class="divider"></div>
+        Download Url : [[fileinfo.dUrl]]
+        <div class="divider"></div>
+        Format : [[fileinfo.format]]
+        <div class="divider"></div>
+        Downloaded Size : [[fileinfo.downloaded]]
+        <div class="divider"></div>
+        File Size : [[fileinfo.size]]
+        <div class="divider"></div>
+        Status : [[fileinfo.status]]
+        <div class="divider"></div>
+        First Try : [[fileinfo.firsttry]]
+        <div class="divider"></div>
+        Last Try : [[fileinfo.lasttry]]
+      </div>
     </paper-material>
     <theme-manager></theme-manager>
   </template>
@@ -25,20 +73,10 @@
     Polymer({
       is: 'file-info',
 
-      ready: function () {
-        // this.$.shutdownDialog.open();
-      },
-
-      attached: function () {
-        // this.listen(this.$.yes, 'tap', 'onYes');
-      },
-
-      detached: function () {
-        // this.unlisten(this.$.yes, 'tap', 'onYes');
-      },
-
-      onYes: function () {
-        console.log('yes');
+      properties: {
+        fileinfo: {
+          type: Object
+        }
       }
     });
   </script>

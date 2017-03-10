@@ -9,6 +9,7 @@
     <app-indexeddb-mirror id="indexeddb" key="downloads" online="{{online}}" data="{{downloadsindex}}" persisted-data="{{downloadsindex}}"></app-indexeddb-mirror>
     <!-- persisted-data="{{persistedData}}"> -->
     <app-localstorage-document key="lastdownloadindex" data="{{lastdownloadindex}}"></app-localstorage-document>
+    <app-localstorage-document key="flashwindowcomplete" data="{{flashwindowcomplete}}"></app-localstorage-document>
   </template>
 
   <script>
@@ -68,12 +69,30 @@
           type: Boolean,
           notify: true
         },
+        flashwindowcomplete: {
+          type: Boolean,
+          value: true
+        },
         downloadinfo: {
           type: Object,
           notify: true
+        },
+        progress: {
+          type: Number,
+          notify: true,
+          computed: 'computeProgress(currentprogress, progresslength)',
+          value: -1
+        },
+        currentprogress: {
+          type: Number,
+          value: 0
+        },
+        progresslength: {
+          type: Number,
+          value: 0
         }
       },
-
+      
       // generate new download entry and add it to the top of the list
       addDownload: function () {
         this.unshift('downloads', {
@@ -106,6 +125,15 @@
           console.error(error);
         });
       },
+      
+      computeProgress: function (currentprogress, progresslength) {
+        if (currentprogress > 0 && progresslength > 0) {
+          return currentprogress / progresslength;
+        }
+        else {
+          return -1;
+        }
+      },
 
       _requestDownloadChange: function (requestdownload) {
         // if there is a new download only then do something
@@ -131,7 +159,8 @@
         // request file info
         // TODO add more parameters from settings and the dialog here e.g. username and password
         let args = Object.assign({}, this.requestdownload),
-          size;
+          size,
+          win = nw.Window.get();
         args.dirname = nw.__dirname;
         args.index = cIndex;
         downloadProcess.send({type: 'info', args: Object.assign({}, args)});
@@ -141,14 +170,31 @@
             // TODO add Information to data array downloadProcess.send({type: 'start'}) send back the info to the dialog
             this.addDownload();
             this.downloadinfo = message.message;
+            // if the current download has a size
+            if (this.get('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.size') !== '—') {
+              this.progresslength += this.get('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.size');
+            }
           } else if (message.type === 'data') {
             this.set('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.status', 'Downloading');
             size = this.get('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.downloaded');
             this.set('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.lasttry', moment().toISOString());
             this.set('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.downloaded', size + message.message);
+            // if the current download has a size
+            if (this.get('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.size') !== '—') {
+              this.currentprogress += message.message;
+            }
           } else if (message.type === 'end') {
             this.set('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.status', 'Downloaded');
             this.set('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.lasttry', moment().toISOString());
+            // show confirm flash dialog
+            if (this.flashwindowcomplete) {
+              // Get the current window
+              win.requestAttention(true)
+            }
+            // if the current download has a size
+            if (this.get('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.size') !== '—') {
+              this.currentprogress -= this.get('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.size');
+            }
           } else {
             console.log(message);
           }

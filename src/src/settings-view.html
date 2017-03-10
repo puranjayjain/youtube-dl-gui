@@ -37,11 +37,11 @@
     <app-localstorage-document key="confirmclose" data="{{confirmclose}}"></app-localstorage-document>
     <app-localstorage-document key="autoupdate" data="{{autoupdate}}"></app-localstorage-document>
     <app-localstorage-document key="recentsearch" data="{{recent}}"></app-localstorage-document>
+    <app-localstorage-document key="flashwindowcomplete" data="{{flashwindowcomplete}}"></app-localstorage-document>
 
     <div class="card">
       <div class="cardTitle">Core</div>
       <paper-checkbox checked="{{autoupdate}}">Auto update</paper-checkbox>
-      <paper-checkbox checked="{{confirmclose}}">Show confirm close dialog</paper-checkbox>
       <paper-button id="clearButton" raised>Clear recently searched</paper-button>
     </div>
     <div class="card">
@@ -66,7 +66,9 @@
     </div>
     <div class="card">
       <div class="cardTitle">Desktop</div>
-      <paper-toggle-button checked="{{showprogressbar}}">Show download progress in taskbar</paper-toggle-button>
+      <paper-checkbox checked="{{confirmclose}}">Show confirm close dialog</paper-checkbox>
+      <paper-checkbox checked="{{showprogressbar}}">Show download progress in taskbar</paper-checkbox>
+      <paper-checkbox checked="{{flashwindowcomplete}}">Flash window when download completes</paper-checkbox>
     </div>
     <div class="card">
       <div class="cardTitle">Workarounds</div>
@@ -89,6 +91,9 @@
         lastdownloadindex: {
           type: Number,
           readOnly: true
+        },
+        flashwindowcomplete: {
+          type: Boolean
         },
         isdarktheme: {
           type: Boolean

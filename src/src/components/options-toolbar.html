@@ -65,7 +65,7 @@
     Polymer({
       is: 'options-toolbar',
 
-      behaviors: [Polymer.NeonAnimationRunnerBehavior],
+      behaviors: [Polymer.NeonAnimationRunnerBehavior, DomutilBehavior],
 
       properties: {
         opened: {
@@ -160,24 +160,22 @@
         }
       },
 
-      onClose: function () {
+      onCloseTap: function () {
         this.items = 0;
         this.tableclearall = true;
       },
 
-      onFileInfo: function () {
+      onFileinfoTap: function () {
         // open the dialog
         this.fileinfodialog = true;
       },
 
       attached: function () {
-        this.listen(this.$.close, 'tap', 'onClose');
-        this.listen(this.$.fileinfo, 'tap', 'onFileInfo');
+        this.addListen('tap', ['close', 'fileinfo']);
       },
 
       detached: function () {
-        this.unlisten(this.$.close, 'tap', 'onClose');
-        this.unlisten(this.$.fileinfo, 'tap', 'onFileInfo');
+        this.removeListen('tap', ['close', 'fileinfo']);
       }
     });
   </script>

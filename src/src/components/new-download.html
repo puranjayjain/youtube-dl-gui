@@ -48,134 +48,130 @@
       </iron-collapse>
       <div class="buttons">
         <paper-button dialog-dismiss>cancel</paper-button>
-        <paper-button id="next">next</paper-button>
+        <paper-button id="nextButton">next</paper-button>
       </div>
     </paper-dialog>
     <theme-manager></theme-manager>
   </template>
+  <script>
+    Polymer({
+      is: 'new-download',
 
-</dom-module>
+      behaviors: [
+        Polymer.NeonAnimationRunnerBehavior, DomutilBehavior
+      ],
 
-<script>
-  Polymer({
-    is: 'new-download',
+      properties: {
+        auth: {
+          type: Boolean
+        },
+        nextaction: {
+          type: Boolean
+        },
+        newdownloaddialog: {
+          type: Boolean,
+          notify: true,
+          observer: '_dialogChange'
+        },
+        finaldownloaddialog: {
+          type: Boolean,
+          notify: true
+        },
+        url: {
+          type: String,
+          notify: true,
+          observer: '_onDropUrl'
+        },
+        username: {
+          type: String
+        },
+        password: {
+          type: String
+        },
+        requestdownload: {
+          type: Object,
+          notify: true
+        }
+      },
 
-    behaviors: [Polymer.NeonAnimationRunnerBehavior],
+      ready: function () {
+        // add event listeners to trigger file download if necessary
+        window.ondragover = window.ondragleave = window.ondragend = () => false;
+        window.ondrop = (event) => {
+          event.preventDefault();
+          // capture dropped urls and start download process if a url
+          const dropUrl = event.dataTransfer.getData("text/plain");
+          if (urlPattern.test(dropUrl)) {
+            // copy text to the url input of the dialog
+            this.url = dropUrl;
+            // open the dialog
+            this.nextaction = true;
+            this.newdownloaddialog = true;
+          }
+        }
+      },
 
-    properties: {
-      auth: {
-        type: Boolean
+      attached: function () {
+        this.addListen('tap', ['infoButton', 'pasteButton', 'nextButton']);
       },
-      nextaction: {
-        type: Boolean
-      },
-      newdownloaddialog: {
-        type: Boolean,
-        notify: true,
-        observer: '_dialogChange'
-      },
-      finaldownloaddialog: {
-        type: Boolean,
-        notify: true
-      },
-      url: {
-        type: String,
-        notify: true,
-        observer: '_onDropUrl'
-      },
-      username: {
-        type: String
-      },
-      password: {
-        type: String
-      },
-      requestdownload: {
-        type: Object,
-        notify: true
-      }
-    },
 
-    ready: function () {
-      // add event listeners to trigger file download if necessary
-      window.ondragover = window.ondragleave = window.ondragend = () => false;
-      window.ondrop = (event) => {
-        event.preventDefault();
-        // capture dropped urls and start download process if a url
-        const dropUrl = event.dataTransfer.getData("text/plain");
-        if (urlPattern.test(dropUrl)) {
-          // copy text to the url input of the dialog
-          this.url = dropUrl;
-          // open the dialog
+      detached: function () {
+        this.removeListen('tap', ['infoButton', 'pasteButton', 'nextButton']);
+      },
+
+      _dialogChange: function (opened) {
+        // clear to defaults if not already
+        if (opened && !this.nextaction) {
+          this.auth = false;
+          this.username = '';
+          this.password = '';
+          this.url = '';
+        } else {
+          this.nextaction = false;
+        }
+      },
+
+      onNextButtonTap: function () {
+        if (this.$.url.validate()) {
+          // call the download manager
+          let prepDownload = {
+            url: this.url,
+            mode: 'normal'
+          }
+          // if auth add them as well
+          if (this.auth) {
+            prepDownload.username = this.username;
+            prepDownload.password = this.password;
+          }
+          // now send them via requestdownload https://www.polymer-project.org/1.0/docs/devguide/model-data#override-dirty-check
+          this.requestdownload = {};
+          this.requestdownload = Object.assign({}, prepDownload);
           this.nextaction = true;
-          this.newdownloaddialog = true;
+          this.newdownloaddialog = false;
+          this.finaldownloaddialog = true;
+        }
+      },
+
+      _onDropUrl: function (url) {
+        this.url = url;
+      },
+
+      onInfoButtonTap: function () {
+        // Open URL with default browser.
+        nw.Shell.openExternal('https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md');
+      },
+
+      onPasteButtonTap: function () {
+        // get clipboard from nw
+        let clipboard = nw.Clipboard.get();
+        if (urlPattern.test(clipboard.get())) {
+          this.$.url.focus();
+          // now paste the text to the element
+          this.url = clipboard.get();
         }
       }
-    },
-
-    attached: function () {
-      this.listen(this.$.infoButton, 'tap', 'onInfo');
-      this.listen(this.$.pasteButton, 'tap', 'onPaste');
-      this.listen(this.$.next, 'tap', 'onNext');
-    },
-
-    detached: function () {
-      this.unlisten(this.$.infoButton, 'tap', 'onInfo');
-      this.unlisten(this.$.pasteButton, 'tap', 'onPaste');
-      this.unlisten(this.$.next, 'tap', 'onNext');
-    },
-
-    _dialogChange: function (opened) {
-      // clear to defaults if not already
-      if (opened && !this.nextaction) {
-        this.auth = false;
-        this.username = '';
-        this.password = '';
-        this.url = '';
-      } else {
-        this.nextaction = false;
-      }
-    },
-
-    onNext: function () {
-      if (this.$.url.validate()) {
-        // call the download manager
-        let prepDownload = {
-          url: this.url,
-          mode: 'normal'
-        }
-        // if auth add them as well
-        if (this.auth) {
-          prepDownload.username = this.username;
-          prepDownload.password = this.password;
-        }
-        // now send them via requestdownload https://www.polymer-project.org/1.0/docs/devguide/model-data#override-dirty-check
-        this.requestdownload = {};
-        this.requestdownload = Object.assign({}, prepDownload);
-        this.nextaction = true;
-        this.newdownloaddialog = false;
-        this.finaldownloaddialog = true;
-      }
-    },
-
-    _onDropUrl: function (url) {
-      this.url = url;
-    },
-
-    onInfo: function () {
-      // Open URL with default browser.
-      nw.Shell.openExternal('https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md');
-    },
-
-    onPaste: function () {
-      // get clipboard from nw
-      let clipboard = nw.Clipboard.get();
-      if (urlPattern.test(clipboard.get())) {
-        this.$.url.focus();
-        // now paste the text to the element
-        this.url = clipboard.get();
-      }
-    }
-  });
-  // standard regex for matching the urls see https://gist.github.com/dperini/729294
-  const urlPattern = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i
-</script>
+    });
+    // standard regex for matching the urls see https://gist.github.com/dperini/729294
+    const urlPattern = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i
+  </script>
+</dom-module>

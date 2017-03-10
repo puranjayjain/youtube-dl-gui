@@ -27,14 +27,14 @@
 
       _hideProgressbar: function () {
         if (!this.showprogressbar) {
-          let win = nw.Window.get();
+          const win = nw.Window.get();
           win.setProgressBar(-1);
         }
       },
 
       _setProgressbar: function (progress) {
         if (this.showprogressbar) {
-          let win = nw.Window.get();
+          const win = nw.Window.get();
           win.setProgressBar(progress);
         }
       }

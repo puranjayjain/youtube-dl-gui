@@ -161,7 +161,7 @@
       }
 
     </style>
-    <div class="layout horizontal row header tablerow" style="top: [[appscrolltop]]px;">
+    <div class="layout horizontal row header tablerow" style$="top: [[appscrolltop]]px;">
       <div class="cell check">
         <paper-checkbox checked="{{allCheck}}"></paper-checkbox>
       </div>
@@ -318,6 +318,7 @@
         }
         return value;
       },
+
       _computedClass: function (isSelected) {
         let classes = 'layout horizontal row center tablerow';
         if (isSelected) {
@@ -325,10 +326,12 @@
         }
         return classes;
       },
+
       _setMinWidth: function (width) {
         this.customStyle['--min-width'] = `${width}px`;
         this.updateStyles();
       },
+
       _onClearAll: function (clearAll) {
         if (clearAll) {
           // un select all
@@ -337,6 +340,7 @@
           this.allCheck = false;
         }
       },
+
       _allCheckedChanged: function (checked) {
         if (checked) {
           // select all items
@@ -350,6 +354,7 @@
           this.$.list.clearSelection();
         }
       },
+
       _itemsChanged: function (items) {
         this.toolbaritems = items;
       }

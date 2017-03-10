@@ -1,0 +1,20 @@
+<script>
+  DomutilBehavior = {
+    // capitalize first letter
+    capitalize: function (string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    },
+
+    addListen: function (event, elements) {
+      for (let element of elements) {
+        this.listen(this.$[element], event, 'on' + this.capitalize(element) + this.capitalize(event));
+      }
+    },
+
+    removeListen: function (event, elements) {
+      for (let element of elements) {
+        this.unlisten(this.$[element], event, 'on' + this.capitalize(element) + this.capitalize(event));
+      }
+    }
+  };
+</script>
