@@ -19,7 +19,7 @@
 <link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 
-<link rel="import" href="components/domutil-behavior.html">
+<link rel="import" href="behaviors/domutil-behavior.html">
 
 <link rel="import" href="components/ytdl-fab-container.html">
 <link rel="import" href="components/new-download.html">
@@ -246,6 +246,8 @@
     Polymer({
       is: 'youtube-dl',
 
+      behaviors: [DomutilBehavior],
+      
       properties: {
         page: {
           type: String,
@@ -319,7 +321,7 @@
 
       _pageChanged: function (page) {
         // Load page import on demand. Show 404 page if fails
-        var resolvedPageUrl = this.resolveUrl(`${page}-view.html`);
+        var resolvedPageUrl = this.resolveUrl(`views/${page}-view.html`);
         this.importHref(resolvedPageUrl, null, this._showPage404, true);
       },
 
@@ -340,16 +342,14 @@
 
       // https://www.polymer-project.org/1.0/docs/devguide/registering-elements https://www.polymer-project.org/1.0/docs/devguide/events#annotated-listeners
       attached: function () {
-        this.listen(this.$.mainMenu, 'tap', 'onMenuTap');
-        this.listen(this.$.searchButton, 'tap', 'onSearchButton');
+        this.addListen('tap', ['mainMenu', 'searchButton']);
         this.listen(this.$.mainMenu, 'keydown', 'onMenuEnter');
         // read scroll changes
         this.listen(Polymer.dom(this.$.headerLayout.$.contentContainer).node, 'scroll', '_onScrollApp');
       },
 
       detached: function () {
-        this.unlisten(this.$.mainMenu, 'tap', 'onMenuTap');
-        this.unlisten(this.$.searchButton, 'tap', 'onSearchButton');
+        this.removeListen('tap', ['mainMenu', 'searchButton']);
         this.unlisten(this.$.mainMenu, 'keydown', 'onMenuEnter');
         // read scroll changes
         this.unlisten(Polymer.dom(this.$.headerLayout.$.contentContainer).node, 'scroll', '_onScrollApp');
@@ -370,7 +370,7 @@
       },
 
       // handle tap events of all kinds and purposes
-      onMenuTap: function (e) {
+      onMainMenuTap: function (e) {
         // for main menu
         if (e.target.nodeName === 'PAPER-ICON-ITEM') {
           let me = e.target;
@@ -380,7 +380,7 @@
         }
       },
 
-      onSearchButton: function () {
+      onSearchButtonTap: function () {
         this.searchopened = true;
       }
     });

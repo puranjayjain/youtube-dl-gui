@@ -23,7 +23,7 @@
         --highlight-text-color: var(--primary-inverted-text-color);
         --highlight-color: var(--light-primary-color);
         --table-highlight-color: var(--light-theme-highlight-color);
-        --table-selected-color: var(--light-primary-color); 
+        --table-selected-color: var(--light-primary-color);
         --input-focus-color: var(--primary-color);
         --utility-text-color: var(--primary-inverted-text-color);
 
@@ -71,6 +71,12 @@
     * selection color
     */
         --selection-color: var(--dark-primary-color);
+        
+        /*
+        * More colors
+         */
+         --table-checkbox-color: var(--utility-text-color);
+         --table-checkbox-checkmark-color: var(--accent-color);
       }
 
       .card {
@@ -116,7 +122,7 @@
         border: none;
         background-color: var(--divider-color);
       }
-      
+
       iron-collapse {
         margin-top: 0 !important;
       }
@@ -128,7 +134,7 @@
           padding: 16px;
         };
       }
-      
+
       paper-button {
         --paper-button: {
           color: var(--complementary-text-color);

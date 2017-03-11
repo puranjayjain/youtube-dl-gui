@@ -2,13 +2,13 @@
   "entrypoint": "index.html",
   "shell": "src/youtube-dl.html",
   "fragments": [
-    "src/all-view.html",
-    "src/downloading-view.html",
-    "src/unfinished-view.html",
-    "src/downloaded-view.html",
-    "src/settings-view.html",
-    "src/about-view.html",
-    "src/view404-view.html"
+    "src/views/all-view.html",
+    "src/views/downloading-view.html",
+    "src/views/unfinished-view.html",
+    "src/views/downloaded-view.html",
+    "src/views/settings-view.html",
+    "src/views/about-view.html",
+    "src/views/view404-view.html"
   ],
   "sourceGlobs": [
    "src/**/*",

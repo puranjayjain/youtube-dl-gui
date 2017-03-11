@@ -1,14 +1,14 @@
-<link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
-<link rel="import" href="../bower_components/paper-styles/typography.html">
-<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
-<link rel="import" href="../bower_components/iron-collapse/iron-collapse.html">
-<link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
-<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
-<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
-<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
 
-<link rel="import" href="shared-styles.html">
+<link rel="import" href="../shared-styles.html">
 
 <dom-module id="settings-view">
   <template>
@@ -86,6 +86,8 @@
   <script>
     Polymer({
       is: 'settings-view',
+      
+      behaviors: [DomutilBehavior],
 
       properties: {
         lastdownloadindex: {
@@ -121,15 +123,13 @@
       },
 
       attached: function () {
-        this.listen(this.$.selectButton, 'tap', 'onSelect');
+        this.addListen('tap', ['selectButton', 'clearButton']);
         this.listen(this.$.file, 'change', 'onFile');
-        this.listen(this.$.clearButton, 'tap', 'onClearButton');
       },
 
-      detached: function () {
-        this.unlisten(this.$.selectButton, 'tap', 'onSelect');
+      detached: function () {//
+        this.removeListen('tap', ['selectButton', 'clearButton']);
         this.unlisten(this.$.file, 'change', 'onFile');
-        this.unlisten(this.$.clearButton, 'tap', 'onClearButton');
       },
 
       _onDefaultfolderpathChange: function () {
@@ -138,7 +138,7 @@
         }
       },
 
-      onSelect: function () {
+      onSelectButtonTap: function () {
         this.$.file.click();
       },
 
@@ -150,7 +150,7 @@
         }
       },
 
-      onClearButton: function () {
+      onClearButtonTap: function () {
         // clear search hostory
         this.set('recent', []);
       }

@@ -75,7 +75,7 @@
     Polymer({
       is: 'final-download',
 
-      behaviors: [Polymer.NeonAnimationRunnerBehavior],
+      behaviors: [Polymer.NeonAnimationRunnerBehavior, DomutilBehavior],
 
       properties: {
         auth: {
@@ -151,18 +151,16 @@
       },
 
       attached: function () {
-        this.listen(this.$.start, 'tap', 'onStart');
-        this.listen(this.$.selectButton, 'tap', 'onSelect');
+        this.addListen('tap', ['start', 'selectButton']);
         this.listen(this.$.file, 'change', 'onFile');
       },
 
       detached: function () {
-        this.unlisten(this.$.start, 'tap', 'onStart');
-        this.unlisten(this.$.selectButton, 'tap', 'onSelect');
+        this.removeListen('tap', ['start', 'selectButton']);
         this.unlisten(this.$.file, 'change', 'onFile');
       },
 
-      onStart: function () {
+      onStartTap: function () {
         downloadProcesses[this.currentdownloadindex].process.send({type: 'init'});
         // clear user name and password as well
         this.username = '';
@@ -171,7 +169,7 @@
         this.finaldownloaddialog = false;
       },
 
-      onSelect: function () {
+      onSelectButtonTap: function () {
         this.$.file.click();
       },
 
