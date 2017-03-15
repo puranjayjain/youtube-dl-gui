@@ -15,6 +15,10 @@
       for (let element of elements) {
         this.unlisten(this.$[element], event, 'on' + this.capitalize(element) + this.capitalize(event));
       }
+    },
+    
+    matchSelectedStatus: function (prop) {
+      return lodash.findIndex(this.selecteditems, {'status': prop});
     }
   };
 </script>

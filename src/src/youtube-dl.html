@@ -174,7 +174,7 @@
         </paper-material>
       </app-drawer>
       <app-drawer class="fileinfo" id="fileInfo" align="end" opened="{{fileinfodialog}}">
-        <file-info></file-info>
+        <file-info toolbaritems="{{toolbaritems}}" selecteditems="{{selecteditems}}"></file-info>
       </app-drawer>
 
       <!-- Main content -->
@@ -186,7 +186,7 @@
             <paper-icon-button id="searchButton" icon="search"></paper-icon-button>
             <paper-tooltip position="left" for="searchButton">Search</paper-tooltip>
           </app-toolbar>
-          <options-toolbar class="fit" page="[[page]]" items="{{toolbaritems}}" tableclearall="{{tableclearall}}" fileinfodialog="{{fileinfodialog}}"></options-toolbar>
+          <options-toolbar class="fit" page="[[page]]" items="{{toolbaritems}}" selecteditems="{{selecteditems}}" tableclearall="{{tableclearall}}" fileinfodialog="{{fileinfodialog}}"></options-toolbar>
         </app-header>
         <neon-animated-pages id="pages" class="flex" selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
           <all-view
@@ -197,7 +197,8 @@
             appscrolltop="[[appscrolltop]]"
             tableclearall="{{tableclearall}}"
             requestdownload="{{requestdownload}}"
-            downloadinfo="{{downloadinfo}}"></all-view>
+            downloadinfo="{{downloadinfo}}"
+            selecteditems="{{selecteditems}}"></all-view>
           <downloading-view name="downloading" toolbaritems="{{toolbaritems}}"></downloading-view>
           <unfinished-view name="unfinished" toolbaritems="{{toolbaritems}}"></unfinished-view>
           <downloaded-view name="downloaded" toolbaritems="{{toolbaritems}}"></downloaded-view>
@@ -212,7 +213,7 @@
     <!-- ui layouts -->
     <search-element searchopened="{{searchopened}}"></search-element>
     <!-- dialogs -->
-    <new-download url="{{url}}" newdownloaddialog="{{newdownloaddialog}}" finaldownloaddialog="{{finaldownloaddialog}}" requestdownload="{{requestdownload}}"></new-download>
+    <new-download url="{{url}}" selecteditems="{{selecteditems}}" newdownloaddialog="{{newdownloaddialog}}" finaldownloaddialog="{{finaldownloaddialog}}" requestdownload="{{requestdownload}}"></new-download>
     <final-download
       downloads="{{downloads}}"
       lastdownloadindex="{{lastdownloadindex}}"
@@ -229,6 +230,7 @@
       url="{{url}}"
       progress="{{progress}}"
       indexeddbready="{{indexeddbready}}"
+      selecteditems="{{selecteditems}}"
       downloads="{{downloads}}"
       lastdownloadindex="{{lastdownloadindex}}"
       requestdownload="{{requestdownload}}"
@@ -247,7 +249,7 @@
       is: 'youtube-dl',
 
       behaviors: [DomutilBehavior],
-      
+
       properties: {
         page: {
           type: String,
@@ -297,6 +299,9 @@
         },
         progress: {
           type: Number
+        },
+        selecteditems: {
+          type: Array
         },
         downloads: {
           type: Array,

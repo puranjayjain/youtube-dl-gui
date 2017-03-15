@@ -55,6 +55,9 @@
         downloadsindex: {
           type: Array
         },
+        selecteditems: {
+          type: Array
+        },
         downloads: {
           type: Array,
           notify: true,
@@ -92,7 +95,7 @@
           value: 0
         }
       },
-      
+
       // generate new download entry and add it to the top of the list
       addDownload: function () {
         this.unshift('downloads', {
@@ -105,7 +108,7 @@
           url: this.url,
           dUrl: this.url,
           status: 'Starting',
-          firstTry: moment().toISOString(),
+          firsttry: moment().toISOString(),
           lasttry: moment().toISOString()
         });
         // update data in the indexeddb
@@ -125,12 +128,11 @@
           console.error(error);
         });
       },
-      
+
       computeProgress: function (currentprogress, progresslength) {
         if (currentprogress > 0 && progresslength > 0) {
           return currentprogress / progresslength;
-        }
-        else {
+        } else {
           return -1;
         }
       },

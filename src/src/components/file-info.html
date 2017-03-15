@@ -48,23 +48,68 @@
         </app-toolbar>
       </paper-material>
       <div class="content">
-        Full Path : [[fileinfo.file]]
+        <div>
+          Full Path :
+        </div>
+        <div>
+          [[fileinfo.file]]
+        </div>
         <div class="divider"></div>
-        Url : [[fileinfo.url]]
+        <div>
+          Url :
+        </div>
+        <div>
+          [[fileinfo.url]]
+        </div>
         <div class="divider"></div>
-        Download Url : [[fileinfo.dUrl]]
+        <div>
+          Download Url :
+        </div>
+        <div>
+          [[fileinfo.dUrl]]
+        </div>
         <div class="divider"></div>
-        Format : [[fileinfo.format]]
+        <div>
+          Format :
+        </div>
+        <div>
+          [[fileinfo.format]]
+        </div>
         <div class="divider"></div>
-        Downloaded Size : [[fileinfo.downloaded]]
+        <div>
+          Downloaded Size :
+        </div>
+        <div>
+          [[toSize(fileinfo.downloaded)]]
+        </div>
         <div class="divider"></div>
-        File Size : [[fileinfo.size]]
+        <div>
+          File Size :
+        </div>
+        <div>
+          [[toSize(fileinfo.size)]]
+        </div>
         <div class="divider"></div>
-        Status : [[fileinfo.status]]
+        <div>
+          Status :
+        </div>
+        <div>
+          [[fileinfo.status]]
+        </div>
         <div class="divider"></div>
-        First Try : [[fileinfo.firsttry]]
+        <div>
+          First Try :
+        </div>
+        <div>
+          [[toTime(fileinfo.firsttry)]]
+        </div>
         <div class="divider"></div>
-        Last Try : [[fileinfo.lasttry]]
+        <div>
+          Last Try :
+        </div>
+        <div>
+          [[toTime(fileinfo.lasttry)]]
+        </div>
       </div>
     </paper-material>
     <theme-manager></theme-manager>
@@ -76,6 +121,35 @@
       properties: {
         fileinfo: {
           type: Object
+        },
+        toolbaritems: {
+          type: Number
+        },
+        selecteditems: {
+          type: Array
+        }
+      },
+
+      observers: ['_itemsChanged(toolbaritems, selecteditems)'],
+
+      toTime: function (time) {
+        return moment(time).format("dddd, MMMM Do YYYY, h:mm:ss a");
+      },
+
+      toSize: function (size) {
+        if (size === '—') {
+          return '—';
+        } else {
+          return bytes(size);
+        }
+      },
+
+      _itemsChanged: function (length, items) {
+        if (length === 1) {
+          this.set('fileinfo', {});
+          this.set('fileinfo', items[0]);
+        } else if (length > 1) {
+          console.log(items);
         }
       }
     });

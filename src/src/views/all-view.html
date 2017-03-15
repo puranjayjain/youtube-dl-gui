@@ -6,7 +6,7 @@
 
 <dom-module id="all-view">
   <template>
-    <custom-datatable toolbaritems="{{toolbaritems}}" appscrolltop="[[appscrolltop]]" tableclearall="{{tableclearall}}" tableheaders="{{tableheaders}}" minwidth="[[minwidth]]" tabledata="[[tabledata]]"></custom-datatable>
+    <custom-datatable toolbaritems="{{toolbaritems}}" appscrolltop="[[appscrolltop]]" tableclearall="{{tableclearall}}" tableheaders="{{tableheaders}}" minwidth="[[minwidth]]" selecteditems="{{selecteditems}}" tabledata="[[tabledata]]"></custom-datatable>
     <all-placeholder opened="{{opened}}"></all-placeholder>
   </template>
 
@@ -17,6 +17,10 @@
       properties: {
         toolbaritems: {
           type: Number,
+          notify: true
+        },
+        selecteditems: {
+          type: Array,
           notify: true
         },
         appscrolltop: {

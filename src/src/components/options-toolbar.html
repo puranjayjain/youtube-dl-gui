@@ -42,7 +42,7 @@
       <paper-tooltip for="close" position="right">clear selection</paper-tooltip>
       <div class="title flex-1">[[items]] &mdash; Selected</div>
       <!-- use dom if statements to check if we need to add some buttons or not -->
-      <template is="dom-if" if="{{_showResumePause(page)}}">
+      <template is="dom-if" if="{{currentactions}}">
         <paper-icon-button id="resume" icon="mdi:play" alt="resume download"></paper-icon-button>
         <paper-tooltip for="resume">resume download</paper-tooltip>
         <paper-icon-button id="pause" icon="mdi:pause" alt="pause file download"></paper-icon-button>
@@ -65,18 +65,26 @@
     Polymer({
       is: 'options-toolbar',
 
-      behaviors: [Polymer.NeonAnimationRunnerBehavior, DomutilBehavior],
+      behaviors: [
+        Polymer.NeonAnimationRunnerBehavior, DomutilBehavior
+      ],
 
       properties: {
         opened: {
           type: Boolean,
           value: true
         },
+        currentactions: {
+          type: Boolean
+        },
         items: {
           type: Number,
           value: 0,
           notify: true,
           observer: '_itemCountChanged'
+        },
+        selecteditems: {
+          type: Array
         },
         page: {
           type: String,
@@ -116,15 +124,26 @@
         'neon-animation-finish': '_onAnimationFinish'
       },
 
+      observers: ['_showResumePause(page)'],
+
       _onAnimationFinish: function () {
         if (!this.opened) {
           this.style.display = 'none';
         }
       },
 
+      _allowActions: function () {
+        console.log(this.selecteditems);
+        if ((this.matchSelectedStatus('Downloaded') > -1) || (this.matchSelectedStatus('Error') > -1) || (this.matchSelectedStatus('Canceled') > -1)) {
+          this.currentactions = false;
+        }
+      },
+
       _show: function () {
         // if not shown
         if (!this.opened) {
+          // calculate allowed actions
+          this._allowActions();
           this.opened = true;
           this.style.display = '';
           this.playAnimation('entry');
@@ -154,9 +173,9 @@
 
       _showResumePause(page) {
         if (['all', 'downloading'].indexOf(page) > -1) {
-          return true;
+          this.currentactions = true;
         } else {
-          return false;
+          this.currentactions = false;
         }
       },
 

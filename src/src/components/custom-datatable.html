@@ -173,7 +173,7 @@
         </div>
       </template>
     </div>
-    <iron-list id="list" items="[[tabledata]]" as="item" selected-items="{{selectedItems}}" selection-enabled multi-selection>
+    <iron-list id="list" items="[[tabledata]]" as="item" selected-items="{{selecteditems}}" selection-enabled multi-selection>
       <template>
         <div tabindex$="[[tabIndex]]" aria-label$="Select/Deselect [[item.file]]" class$="[[_computedClass(selected)]]">
           <div class="cell check">
@@ -202,7 +202,6 @@
           <paper-ripple></paper-ripple>
         </div>
       </template>
-      <script></script>
     </iron-list>
     <!-- manages the app's theme -->
     <theme-manager></theme-manager>
@@ -235,8 +234,9 @@
         headerLeft: {
           type: String
         },
-        selectedItems: {
-          type: Object
+        selecteditems: {
+          type: Array,
+          notify: true
         },
         toolbaritems: {
           type: Number,
@@ -262,7 +262,7 @@
         }
       },
 
-      observers: ['_itemsChanged(selectedItems.length)'],
+      observers: ['_itemsChanged(selecteditems.length)'],
 
       // convert to last tried or bytes, etc.
       _convertToFormat(value, index) {
@@ -340,7 +340,7 @@
           this.allCheck = false;
         }
       },
-
+      
       _allCheckedChanged: function (checked) {
         if (checked) {
           // select all items
@@ -354,7 +354,7 @@
           this.$.list.clearSelection();
         }
       },
-
+      
       _itemsChanged: function (items) {
         this.toolbaritems = items;
       }
