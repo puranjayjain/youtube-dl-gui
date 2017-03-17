@@ -5,6 +5,8 @@
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
+<link rel="import" href="../../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
 
 <link rel="import" href="../font/mdi.html">
 <link rel="import" href="../shared-styles.html">
@@ -37,6 +39,7 @@
       }
 
     </style>
+    <app-indexeddb-mirror id="indexeddb" key="downloads" data="{{downloadsindex}}" persisted-data="{{downloadsindex}}"></app-indexeddb-mirror>
     <paper-toolbar class="horizontal center layout">
       <paper-icon-button id="close" icon="clear" alt="clear selection"></paper-icon-button>
       <paper-tooltip for="close" position="right">clear selection</paper-tooltip>
@@ -77,6 +80,9 @@
         currentactions: {
           type: Boolean
         },
+        downloadsindex: {
+          type: Array
+        },
         items: {
           type: Number,
           value: 0,
@@ -85,6 +91,11 @@
         },
         selecteditems: {
           type: Array
+        },
+        downloads: {
+          type: Array,
+          value: [],
+          notify: true
         },
         page: {
           type: String,
@@ -133,7 +144,6 @@
       },
 
       _allowActions: function () {
-        console.log(this.selecteditems);
         if ((this.matchSelectedStatus('Downloaded') > -1) || (this.matchSelectedStatus('Error') > -1) || (this.matchSelectedStatus('Canceled') > -1)) {
           this.currentactions = false;
         }
@@ -189,12 +199,28 @@
         this.fileinfodialog = true;
       },
 
+      onClearTap: function () {
+        let downloadscopy = lodash.clone(this.downloads),
+          index;
+        for (let item of this.selecteditems) {
+          index = lodash.findIndex(downloadscopy, {'index': item.index});
+          if (index > -1) {
+            downloadscopy.splice(index, 1);
+          }
+        }
+        // update the downloadsindex to update the data upstream
+        this.set('downloads', []);
+        this.set('downloads', downloadscopy);
+        this.set('downloadsindex', []);
+        this.set('downloadsindex', downloadscopy);
+      },
+
       attached: function () {
-        this.addListen('tap', ['close', 'fileinfo']);
+        this.addListen('tap', ['close', 'clear', 'fileinfo']);
       },
 
       detached: function () {
-        this.removeListen('tap', ['close', 'fileinfo']);
+        this.removeListen('tap', ['close', 'clear', 'fileinfo']);
       }
     });
   </script>

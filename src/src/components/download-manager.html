@@ -7,7 +7,6 @@
 <dom-module id="download-manager">
   <template>
     <app-indexeddb-mirror id="indexeddb" key="downloads" online="{{online}}" data="{{downloadsindex}}" persisted-data="{{downloadsindex}}"></app-indexeddb-mirror>
-    <!-- persisted-data="{{persistedData}}"> -->
     <app-localstorage-document key="lastdownloadindex" data="{{lastdownloadindex}}"></app-localstorage-document>
     <app-localstorage-document key="flashwindowcomplete" data="{{flashwindowcomplete}}"></app-localstorage-document>
   </template>
@@ -173,29 +172,29 @@
             this.addDownload();
             this.downloadinfo = message.message;
             // if the current download has a size
-            if (this.get('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.size') !== '—') {
-              this.progresslength += this.get('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.size');
+            if (this.get(`downloads.${lodash.findIndex(this.downloads, {'index': this.lastdownloadindex})}.size`) !== '—') {
+              this.progresslength += this.get(`downloads.${lodash.findIndex(this.downloads, {'index': this.lastdownloadindex})}.size`);
             }
           } else if (message.type === 'data') {
-            this.set('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.status', 'Downloading');
-            size = this.get('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.downloaded');
-            this.set('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.lasttry', moment().toISOString());
-            this.set('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.downloaded', size + message.message);
+            this.set(`downloads.${lodash.findIndex(this.downloads, {'index': this.lastdownloadindex})}.status`, 'Downloading');
+            size = this.get(`downloads.${lodash.findIndex(this.downloads, {'index': this.lastdownloadindex})}.downloaded`);
+            this.set(`downloads.${lodash.findIndex(this.downloads, {'index': this.lastdownloadindex})}.lasttry`, moment().toISOString());
+            this.set(`downloads.${lodash.findIndex(this.downloads, {'index': this.lastdownloadindex})}.downloaded`, size + message.message);
             // if the current download has a size
-            if (this.get('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.size') !== '—') {
+            if (this.get(`downloads.${lodash.findIndex(this.downloads, {'index': this.lastdownloadindex})}.size`) !== '—') {
               this.currentprogress += message.message;
             }
           } else if (message.type === 'end') {
-            this.set('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.status', 'Downloaded');
-            this.set('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.lasttry', moment().toISOString());
+            this.set(`downloads.${lodash.findIndex(this.downloads, {'index': this.lastdownloadindex})}.status`, 'Downloaded');
+            this.set(`downloads.${lodash.findIndex(this.downloads, {'index': this.lastdownloadindex})}.lasttry`, moment().toISOString());
             // show confirm flash dialog
             if (this.flashwindowcomplete) {
               // Get the current window
               win.requestAttention(true)
             }
             // if the current download has a size
-            if (this.get('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.size') !== '—') {
-              this.currentprogress -= this.get('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.size');
+            if (this.get(`downloads.${lodash.findIndex(this.downloads, {'index': this.lastdownloadindex})}.size`) !== '—') {
+              this.currentprogress -= this.get(`downloads.${lodash.findIndex(this.downloads, {'index': this.lastdownloadindex})}.size`);
             }
           } else {
             console.log(message);
@@ -208,7 +207,7 @@
         downloadProcess.on('error', (message) => {
           console.error(message);
           if (message.hasOwnProperty('index')) {
-            this.set('downloads.' + lodash.findIndex(this.downloads, {'index': this.lastdownloadindex}) + '.status', 'Error');
+            this.set(`downloads.${lodash.findIndex(this.downloads, {'index': this.lastdownloadindex})}.status`, 'Error');
           }
         });
         downloadProcess.on('exit', (message, signal) => {

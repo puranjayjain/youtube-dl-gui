@@ -234,6 +234,9 @@
         headerLeft: {
           type: String
         },
+        opened: {
+          type: Boolean
+        },
         selecteditems: {
           type: Array,
           notify: true
@@ -262,7 +265,9 @@
         }
       },
 
-      observers: ['_itemsChanged(selecteditems.length)'],
+      observers: [
+        '_itemsChanged(selecteditems.length)', 'onOpenedChanged(opened)'
+      ],
 
       // convert to last tried or bytes, etc.
       _convertToFormat(value, index) {
@@ -327,6 +332,14 @@
         return classes;
       },
 
+      onOpenedChanged: function (opened) {
+        if (opened) {
+          this.style.display = 'none';
+        } else {
+          this.style.display = '';
+        }
+      },
+
       _setMinWidth: function (width) {
         this.customStyle['--min-width'] = `${width}px`;
         this.updateStyles();
@@ -340,7 +353,7 @@
           this.allCheck = false;
         }
       },
-      
+
       _allCheckedChanged: function (checked) {
         if (checked) {
           // select all items
@@ -354,7 +367,7 @@
           this.$.list.clearSelection();
         }
       },
-      
+
       _itemsChanged: function (items) {
         this.toolbaritems = items;
       }
